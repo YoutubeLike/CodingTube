@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+  front:
+    image: "node"
+    command: npm run start
+    volumes:
+      - ./client/:/app/front
+    working_dir: /app/front
+    links:
+      - "back"
+    ports:
+      - "3000:3000"
+  back:
+    build: ./server
+    working_dir: /app/back
+    command: npm run dev
+    volumes:
+      - type: bind
+        source: ./server
+        target: /app/back
+    networks:
+      - bdd-back
+    ports:
+      - "5000:5000"
+  bdd:
+    image: mariadb
+    networks:
+      - bdd-back
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: coditube
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+networks:
+  bdd-back:
+    driver: bridge
+  
