@@ -32,8 +32,12 @@ And run it in app folder
 ```bash
     docker compose up 
 ``` 
-
 ### ⚠️Warning the first launch can take a few minutes⚠️
+If you encouter any issue with 5000 port and you are on a mac you need to change your mac settings
+
+This issue is due to Apple protocol who use port 5000 and port 7000
+
+Open your settings go to general -> Airdrop and Handoff -> uncheck Airplay receiver
 
 ## How to access
 You can access to the homepage with 
