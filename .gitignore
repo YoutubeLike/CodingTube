@@ -214,6 +214,6 @@ data/aria*
 # data/ib_log*
 # data/undo*
 
-# data/mysql
+data/mysql
 # data/sys
 # data/performance_shema
