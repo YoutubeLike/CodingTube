@@ -212,7 +212,7 @@ $RECYCLE.BIN/
 
 data/aria*
 # data/ib_log*
-data/undo*
+# data/undo*
 
 # data/mysql
 # data/sys
