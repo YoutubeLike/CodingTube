@@ -209,3 +209,11 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,phpstorm,react,windows
+
+data/aria*
+data/ib*
+data/undo*
+
+data/mysql
+data/sys
+data/performance_shema
