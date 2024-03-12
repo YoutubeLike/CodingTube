@@ -211,7 +211,7 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,phpstorm,react,windows
 
 data/aria*
-data/ib*
+data/ib_log*
 data/undo*
 
 # data/mysql
