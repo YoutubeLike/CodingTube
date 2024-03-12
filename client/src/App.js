@@ -13,7 +13,6 @@ function App() {
   return (
     <div>
       <h1 className="text-3xl font-bold underline">{message} et vous êtes sur mon site</h1>
-      <p>Salam</p>
     </div>
   );
 }

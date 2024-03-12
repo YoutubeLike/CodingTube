@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   front:
-    image: "node"
+    image: "node:20-alpine"
     command: npm run start
     volumes:
       - ./client/:/app/front
@@ -11,7 +11,7 @@ services:
     ports:
       - "3000:3000"
   back:
-    build: ./server
+    image: "node:20-alpine"
     working_dir: /app/back
     command: npm run dev
     volumes:

@@ -12,11 +12,8 @@ app.listen(5000, () => {
 })
 
 app.get('/', (req, res) => {
-        // mariadb.pool.getConnection().then(async conn => {
-            mariadb.pool.query("SELECT * FROM test").then((value) => {
-                res.send(value[0]["description"])
-            })
-        // })
-    // res.send();
+    mariadb.pool.query("SELECT * FROM test").then((value) => {
+        res.send(value[0]["description"])
+    })
 })
 

@@ -9,11 +9,6 @@ These features are : \
 - Shorts
 - Search bar
 - Live
- 
--
-
-
-
 
 ## Installation
 
@@ -38,7 +33,20 @@ And run it in app folder
     docker compose up 
 ``` 
 
-## ⚠️Warning the first launch can take a few minutes⚠️
+### ⚠️Warning the first launch can take a few minutes⚠️
+
+## How to access
+You can access to the homepage with 
+```bash
+  http://localhost:3000/
+``` 
+
+You can access to the bdd with a mysql client
+```
+  mysql -u admin -p coditube
+```
+The password is the same as username
+
 ## Tech Stack
 
 **Client:** React, TailwindCSS
