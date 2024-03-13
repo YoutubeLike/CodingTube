@@ -2,7 +2,7 @@ import React from "react";
 import FormLogin from "../Forms/FormLogin";
 import FormSignup from "../Forms/FormSignup";
 
-class Authentifaction extends React.Component {
+class Authentification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,4 +94,4 @@ class Authentifaction extends React.Component {
   }
 }
 
-export default Authentifaction;
+export default Authentification;
