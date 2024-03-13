@@ -11,7 +11,7 @@ class FormSignup extends React.Component {
           Nom:
           <input
             type="text"
-            name="name"
+            name="username"
             required
             value={this.props.RegisterData.username}
             onChange={this.props.onRegisterChange}
@@ -21,7 +21,7 @@ class FormSignup extends React.Component {
           Email:
           <input
             type="email"
-            name="email"
+            name="mail"
             required
             value={this.props.RegisterData.mail}
             onChange={this.props.onRegisterChange}

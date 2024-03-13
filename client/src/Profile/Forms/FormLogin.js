@@ -11,7 +11,7 @@ class FormLogin extends React.Component {
           <input
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             type="email"
-            name="email"
+            name="usernameOrMail"
             placeholder="Email"
             required
             value={this.props.LoginData.usernameOrMail}

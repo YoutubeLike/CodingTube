@@ -65,7 +65,7 @@ class Authentifaction extends React.Component {
                   onRegisterChange={this.onChange}
                 />
               )}
-              <button type="submit">
+              <button type="submit" onClick={this.handleSubmit}>
                 {this.state.isLogin ? "Se connecter" : "S'inscrire"}
               </button>
             </form>
