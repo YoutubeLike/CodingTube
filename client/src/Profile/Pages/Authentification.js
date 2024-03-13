@@ -1,6 +1,6 @@
 import React from 'react';
-import FormLogin from './Forms/FormLogin'; 
-import FormSignup from './Forms/FormSignup'; 
+import FormLogin from '../Forms/FormLogin'; 
+import FormSignup from '../Forms/FormSignup'; 
 
 class Authentifaction extends React.Component {
   constructor(props) {
