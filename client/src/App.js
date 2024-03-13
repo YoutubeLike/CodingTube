@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-
+import Header from './header';
 
 function App() {
   const [message, setMessage] = useState('');
@@ -12,7 +12,7 @@ function App() {
   }, []);
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">{message} Bonjour </h1>
+      <Header />
     </div>
   );
 }
