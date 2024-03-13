@@ -13,20 +13,20 @@ export default function Header() {
         <div class="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg">
           <form class="flex w-[100%]">
             <input
-              class="w-[90%] text-xs bg-gray-400 rounded-s-lg"
+              class="w-[90%] text-xs bg-gray-200 rounded-s-lg"
               type="text"
               text="Recherche"
             ></input>
             <button type="submit">
               <img
-                class="h-7 bg-gray-400 rounded-e-lg"
+                class="h-7 bg-gray-200 rounded-e-lg"
                 src="search.png"
                 alt="search"
               ></img>
             </button>
             <button>
               <img
-                class="ml-2 h-7 bg-gray-400 rounded-full"
+                class="ml-2 h-7 bg-gray-200 rounded-full"
                 src="mic.png"
                 alt="vocal-search"
               ></img>
@@ -34,13 +34,13 @@ export default function Header() {
           </form>
         </div>
         <div class="flex justify-end space-x-2 w-[33%]">
-          <button class="flex justify-center items-center ml-2 h-7 w-7 bg-gray-400 rounded-full">
+          <button class="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
             <img class="h-5 w-5" src="create.png"></img>
           </button>
-          <button class="flex justify-center items-center ml-2 h-7 w-7 bg-gray-400 rounded-full">
+          <button class="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
             <img class="h-5 w-5" src="notification-bell.png"></img>
           </button>
-          <button class="flex  items-center ml-2 h-7 w-7 bg-gray-400 rounded-full space-x-1"></button>
+          <button class="flex  items-center ml-2 h-7 w-7 bg-gray-200 rounded-full space-x-1"></button>
         </div>
       </div>
     );

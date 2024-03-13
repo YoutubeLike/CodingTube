@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import Header from './header';
+import Header from './component/header.js';
 
 function App() {
   const [message, setMessage] = useState('');
