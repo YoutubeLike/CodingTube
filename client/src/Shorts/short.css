@@ -1,0 +1,11 @@
+#largeThing {
+    display: flex;
+    justify-content: center;
+}
+
+#videoRectangle {
+    height: 80vh;
+    width: 45vh;
+    border: 1px solid black;
+    padding-top: 60%
+}
