@@ -1,18 +1,24 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import Channel from "./pages/Channel.js";
+import Upload from "./pages/Upload.js";
+import Video from "./pages/Video.js";
+import Header from './components/Header/Header.js';
 
 function App() {
-  const [message, setMessage] = useState('');
-  useEffect(() => {
-    fetch('http://localhost:5000/')
-      .then((res) => res.text())
-      .then((data) => setMessage(data))
-      .catch((err) => console.log(err));
-  }, []);
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">{message} Bonjour </h1>
+      <BrowserRouter>
+        <Routes>
+          <Route  path = "/" element={<Header/>}>
+          <Route  path = "/channel" element={<Channel/>}/>
+          <Route  path = "/upload" element={<Upload/>}/>
+          <Route  path = "/video" element={<Video/>}/>
+          
+        </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
