@@ -1,9 +1,12 @@
 const mariadb = require('mariadb');
+const dotenv = require('dotenv');
+dotenv.config();
 
 var pool = mariadb.createPool({
     host: 'bdd', 
-    user:'admin', 
-    password: 'admin',
+    user: process.env.BDD_USER, 
+    password: process.env.BDD_PASSWORD,
+    
     database: "coditube"
 });
 
