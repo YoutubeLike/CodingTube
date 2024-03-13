@@ -1,0 +1,20 @@
+#largeThing {
+    display: flex;
+    justify-content: center;
+}
+
+#videoRectangle {
+    height: 80vh;
+    width: 45vh;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 10px;
+}
+
+#rightBar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
