@@ -4,7 +4,8 @@ services:
     build: "./client"
     command: npm run start
     volumes:
-      - ./client/:/app/front
+      - ./client/src:/app/front/src
+      - ./client/public:/app/front/public
     working_dir: /app/front
     links:
       - "back"
@@ -16,8 +17,9 @@ services:
     command: npm run dev
     volumes:
       - type: bind
-        source: ./server
-        target: /app/back
+        source: ./server/src
+        target: /app/back/src
+      - ./server/env:/app/back/.env
     networks:
       - bdd-back
     ports:

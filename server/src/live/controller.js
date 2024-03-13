@@ -1,6 +1,3 @@
-const dotenv = require('dotenv');
-dotenv.config();
-
 const livetest = ((req, res) =>  
 {
     const name = req.params.user
