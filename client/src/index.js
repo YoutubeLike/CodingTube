@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Authentifaction from './Profile/Authentification';
+import Authentifaction from './Profile/Pages/Authentification';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Authentifaction/>
+    <Authentifaction />
   </React.StrictMode>
 );
 
