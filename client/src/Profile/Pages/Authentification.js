@@ -56,6 +56,13 @@ class Authentifaction extends React.Component {
             <form className="">
               {this.state.isLogin ? (
                 <FormLogin
+
+
+
+
+
+
+                
                   LoginData={this.state.LoginData}
                   onLoginChange={this.onChange}
                 />
