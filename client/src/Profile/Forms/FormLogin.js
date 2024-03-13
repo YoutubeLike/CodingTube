@@ -8,12 +8,10 @@ class FormLogin extends React.Component {
       return (
         <>
           <label>
-            Email:
-            <input type="email" name="email" required />
+            <input className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' type="email" name="email" placeholder='Email' required />
           </label>
           <label>
-            Mot de passe:
-            <input type="password" name="password" required />
+            <input className='block mb-2 text-sm font-medium text-gray-900 dark:text-white' type="password" name="password" placeholder='Password' required />
           </label>
         </>
       );
