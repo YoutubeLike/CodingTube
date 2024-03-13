@@ -1,20 +1,32 @@
-#largeThing {
+#all {
     display: flex;
     justify-content: center;
 }
 
-#videoRectangle {
-    height: 80vh;
-    width: 45vh;
-    border: 1px solid black;
+#videoContainer {
+    margin-top:1vh;
+    height: calc(95vh - 56px);
+    background-color: rgba(0,0,0,0);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    border-radius: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative
 }
 
-#rightBar {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+#short {
+    height: calc(100vh - 56px);
+    width: auto;
+    object-fit: cover;
+}
+
+#metadataContainer {
+    padding: 1vh;
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+    color: white;
+    font-size: 30px;
+      
 }
