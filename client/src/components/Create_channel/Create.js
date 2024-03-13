@@ -1,6 +1,6 @@
 import React, { useState } from 'react';  
 import './create.css';  
-import logo from "./logo.jpg"
+import logo from "../../assets/logo.jpg"
 
 export default function Create() {  
   const [imagePreview, setImagePreview] = useState(null);  // Déclaration d'un état local imagePreview pour stocker l'URL de l'image sélectionnée, initialisé à null.
@@ -21,7 +21,7 @@ export default function Create() {
       {imagePreview ? ( // Si imagePreview est défini
         <img src={imagePreview}  className="bonhomme-logo" />// Affiche l'aperçu de l'image
       ) : (
-        <img src= {logo} alt="Logo" className="bonhomme-logo" />// Affiche le logo par défaut si sa veut bien marcher 
+        <img src={logo} alt="Logo" className="bonhomme-logo" />// Affiche le logo par défaut si sa veut bien marcher 
       )}
       <form className="create-form">
         <label htmlFor="photo">Importez une photo</label>
@@ -35,7 +35,7 @@ export default function Create() {
         En cliquant sur "Créer une chaîne", vous acceptez les Conditions d'utilisation de Youflute. Les modifications apportées à votre nom et à votre photo de profil ne sont visibles que sur YouFlute (pas sur les autres services Google). En savoir plus
         
         <input type="submit" value="Annuler" className='annuler' />
-        <input type="submit" value="Créer un chaine" className='creer' />
+        <input type="submit" value="Créer une chaine" className='creer' />
       </form>
     </div>
   )

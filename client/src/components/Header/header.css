@@ -1,6 +1,6 @@
 /* Style de l'en-tête */
 .header {
-  background-color: hsl(293, 100%, 74%); /* Violet */
+  background: linear-gradient(180deg , Violet ,transparent ); /* Violet */
   color: #fff; /* Texte en blanc */
   padding: 10px 20px;
   display: flex;
