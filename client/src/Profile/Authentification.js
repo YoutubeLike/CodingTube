@@ -1,46 +1,46 @@
-// Authentification.js
-import React, { useState } from 'react';
+import React from 'react';
+import FormLogin from './Forms/FormLogin'; 
+import FormSignup from './Forms/FormSignup'; 
 
-const Authentification = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+class Authentifaction extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLogin: true,
+      formData: {
+        email: '',
+        password: '',
+        name: ''
+      }
+    };
+  }
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  toggleForm = () => {
+    this.setState((prevState) => ({
+      isLogin: !prevState.isLogin,
+    }));
   };
 
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <form className="max-w-md mx-auto m-8 p-6 bg-white rounded shadow-md">
-        <label className="block mb-4">
-          <span className="text-gray-700">Username:</span>
-          <input
-            type="text"
-            className="mt-1 p-2 border rounded w-full"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </label>
+  render() {
+    return (
+      <div>
+        <h2>{this.state.isLogin ? 'Connexion' : 'Inscription'}</h2> {/* A enlever plus tard */}
 
-        <label className="block mb-4">
-          <span className="text-gray-700">Password:</span>
-          <input
-            type="password"
-            className="mt-1 p-2 border rounded w-full"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
 
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          Se connecter
-        </button>
-      </form>
-    </div>
-  );
-};
+        <form>
+          {this.state.isLogin ? <FormLogin /> : <FormSignup />}
+          <button type="submit">{this.state.isLogin ? 'Se connecter' : 'S\'inscrire'}</button>
+        </form>
 
-export default Authentification;
+        <p>
+
+          <button onClick={this.toggleForm}>
+            {this.state.isLogin ? "Vous n'avez pas de compte ?" : "Vous avez déjà un compte ?"}
+          </button>
+        </p>
+      </div>
+    );
+  }
+}
+
+export default Authentifaction;
