@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 class FormSignup extends React.Component {
   constructor(props) {
@@ -6,38 +6,52 @@ class FormSignup extends React.Component {
   }
   render() {
     return (
-      <>
+      <div className="flex flex-col space-y-4">
         <label>
-          Nom:
           <input
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
             type="text"
             name="username"
+            placeholder="Username"
             required
             value={this.props.RegisterData.username}
             onChange={this.props.onRegisterChange}
           />
         </label>
         <label>
-          Email:
           <input
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
             type="email"
             name="mail"
+            placeholder="Mail"
             required
             value={this.props.RegisterData.mail}
             onChange={this.props.onRegisterChange}
           />
         </label>
         <label>
-          Mot de passe:
           <input
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
             type="password"
             name="password"
+            placeholder="Password"
             required
             value={this.props.RegisterData.password}
             onChange={this.props.onRegisterChange}
           />
         </label>
-      </>
+        <label>
+          <input
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            required
+            value={this.props.RegisterData.confirmPassword}
+            onChange={this.props.onRegisterChange}
+          />
+        </label>
+      </div>
     );
   }
 }

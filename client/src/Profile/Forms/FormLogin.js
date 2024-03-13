@@ -9,10 +9,10 @@ class FormLogin extends React.Component {
       <>
         <label>
           <input
-            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            type="email"
+            className='block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200'
+            type="text"
             name="usernameOrMail"
-            placeholder="Email"
+            placeholder="Email or Username"
             required
             value={this.props.LoginData.usernameOrMail}
             onChange={this.props.onLoginChange}
@@ -20,7 +20,7 @@ class FormLogin extends React.Component {
         </label>
         <label>
           <input
-            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+            className='block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200'
             type="password"
             name="password"
             placeholder="Password"
