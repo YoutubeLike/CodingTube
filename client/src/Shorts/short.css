@@ -4,9 +4,9 @@
 }
 
 #videoContainer {
+    height: calc(100vh - 56px);
+    width: calc((100vh - 56px)*9/16);
     margin-top:1vh;
-    height: calc(95vh - 56px);
-    background-color: rgba(0,0,0,0);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -16,17 +16,21 @@
 }
 
 #short {
-    height: calc(100vh - 56px);
-    width: auto;
-    object-fit: cover;
+    object-fit: contain;
+    position: absolute;
+    z-index:-1;
 }
 
 #metadataContainer {
     padding: 1vh;
-    position: absolute;
     bottom: 8px;
     left: 16px;
     color: white;
     font-size: 30px;
       
+}
+
+.gradient{
+    background: rgb(2,0,36);
+    background: linear-gradient(180deg, rgb(19, 19, 19) 0%, rgba(0, 0, 0, 0) 100%);
 }
