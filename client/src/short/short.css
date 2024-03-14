@@ -1,24 +1,35 @@
-#videoContainer {
-    height: calc(100vh - 56px);
-    width: calc((100vh - 56px)*9/16);
-    margin-top:1vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
+#allVideosContainer {
+  height: calc(100vh - 56px);
+  width: calc((100vh - 56px) * 9 / 16);
+  overflow: auto;
+  scroll-snap-type: y mandatory;
 }
 
-#short {
-    height: calc(100vh - 56px);
-    width: calc((100vh - 56px)*9/16);
-    object-fit: cover;
-    position: absolute;
-    z-index:-1;
+.videoContainer {
+  height: 100%;
+  width: 100%;
+  margin-top: 1vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: 20px;
+  position: relative;
+  scroll-snap-align: center;
 }
 
-.gradient{
-    background: rgb(2,0,36);
-    background: linear-gradient(180deg, rgb(19, 19, 19) 0%, rgba(0, 0, 0, 0) 100%);
+.short {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+}
+
+.gradient {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    180deg,
+    rgb(19, 19, 19) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
