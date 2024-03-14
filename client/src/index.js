@@ -9,6 +9,7 @@ import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 
 import App from "./App" 
+import Short from "./short/index"
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {/* <RouterProvider router={router} /> */}
+    <Short />
   </React.StrictMode>
 );
