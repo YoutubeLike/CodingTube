@@ -1,18 +1,15 @@
-import './App.css';
-import React, { useEffect, useState } from 'react';
-import Autre from "./Autre"
-import { Outlet, Route, Routes} from "react-router-dom"
-import "./index.css"
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import Header from "./channel/components/Header/Header";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 function App() {
-  return (
-    <>
-      <div>
-        <Outlet />
-        <p className="text-3xl font-bold underline"> HEADER </p>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<div>{/* <Outlet /> */}</div>
+		</>
+	);
 }
 
 export default App;
