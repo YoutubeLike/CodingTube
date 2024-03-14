@@ -6,6 +6,7 @@ services:
     volumes:
       - ./client/src:/app/front/src
       - ./client/public:/app/front/public
+      - ./client/tailwind.config.js:/app/front/tailwind.config.js
     working_dir: /app/front
     links:
       - "back"
