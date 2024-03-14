@@ -9,7 +9,6 @@ function App() {
     <>
       <div>
         <Outlet />
-        <p className="text-3xl font-bold underline"> HEADER </p>
       </div>
     </>
   );

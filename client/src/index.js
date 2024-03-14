@@ -7,6 +7,7 @@ import {
 import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 import App from "./App" 
+import Mainpage from "./timeline/pages/mainpage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "contact/",
         element: <App />
+      },
+      {
+        path: "/",
+        element: <Mainpage />
       }
     ]
   },
