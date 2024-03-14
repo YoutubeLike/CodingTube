@@ -12,11 +12,13 @@
     justify-content: flex-end;
     border-radius: 20px;
     overflow: hidden;
-    position: relative
+    position: relative;
 }
 
 #short {
-    object-fit: contain;
+    height: calc(100vh - 56px);
+    width: calc((100vh - 56px)*9/16);
+    object-fit: cover;
     position: absolute;
     z-index:-1;
 }
