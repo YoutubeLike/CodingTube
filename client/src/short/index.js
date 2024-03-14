@@ -19,6 +19,7 @@ function Short() {
             <button className="h-[5vh] w-[5vh]">
               <img src="images/whitePlayButton.png" />
             </button>
+
             <button className="h-[5vh] w-[5vh]">
               <img src="images/whiteSoundButton.png" />
             </button>
@@ -33,6 +34,7 @@ function Short() {
                   className="h-[5.7vh] w-[5.7vh]"
                 />
               </button>
+
               <button className="ml-[0.95vh] font-semibold text-[2.5vh]">
                 @ZachChoi
               </button>
@@ -40,6 +42,7 @@ function Short() {
                 Subscribe
               </button>
             </div>
+
             <p className="text-[2.5vh]">Would you eat this? #shorts</p>
           </div>
         </div>
@@ -52,27 +55,32 @@ function Short() {
           </button>
           <p className="text-[1.9vh]">342124</p>
         </div>
+
         <div className="m-[0.95vh] flex flex-col items-center">
           <button className="h-[5.7vh] w-[5.7vh] flex items-center justify-center rounded-full bg-gray-light hover:bg-gray">
             <img className="scale-50" src="images/dislike.png" />
           </button>
           <p className="text-[1.9vh]">Dislike</p>
         </div>
+
         <div className="m-[0.95vh] flex flex-col items-center">
           <button className="h-[5.7vh] w-[5.7vh] flex items-center justify-center rounded-full bg-gray-light hover:bg-gray">
             <img className="scale-50" src="images/comment.png" />
           </button>
           <p className="text-[1.9vh]">1432</p>
         </div>
+
         <div className="m-[0.95vh] flex flex-col items-center">
           <button className="h-[5.7vh] w-[5.7vh] flex items-center justify-center rounded-full bg-gray-light hover:bg-gray">
             <img className="scale-50" src="images/share.png" />
           </button>
           <p className="text-[1.9vh]">Share</p>
         </div>
+
         <button className="m-[0.95vh] h-[5.7vh] w-[5.7vh] flex items-center justify-center rounded-full bg-gray-light hover:bg-gray">
           <img className="scale-50" src="images/3dots.png" />
         </button>
+
         <button className="m-[0.95vh] h-[5.7vh] w-[5.7vh] flex items-center justify-center rounded bg-gray-light">
           {" "}
         </button>
