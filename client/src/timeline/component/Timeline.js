@@ -12,13 +12,13 @@ function getTimeElapsed(uploadDateTime) {
   const elapsedDays = Math.floor(elapsedHours / 24);
 
   if (elapsedDays > 0) {
-    return `${elapsedDays} jours`;
+    return `${elapsedDays} days`;
   } else if (elapsedHours > 0) {
-    return `${elapsedHours} heures`;
+    return `${elapsedHours} hours`;
   } else if (elapsedMinutes > 0) {
     return `${elapsedMinutes} minutes`;
   } else {
-    return `${elapsedSeconds} secondes`;
+    return `${elapsedSeconds} seconds`;
   }
 }
 
@@ -30,7 +30,36 @@ function timeOfVideo(totalSeconds) {
   totalSeconds %= 3600;
   minutes = Math.floor(totalSeconds / 60);
   seconds = totalSeconds % 60;
-  return `${hours}:${minutes}:${seconds}`
+  var result = "";
+  var resultSeconds = "";
+  var resultMinutes = "";
+  var resultHours = "";
+
+  // Seconds
+  if (seconds < 10) {
+    resultSeconds =  `0${seconds}`
+  } else {
+    resultSeconds =  `${seconds}`
+  }
+  // Minutes
+  if (minutes < 10) {
+    resultMinutes =  `0${minutes}:`
+  } else {
+    resultMinutes =  `${minutes}:`
+  }
+  // Hours
+  if (hours > 0) {
+    if (hours < 10) {
+      resultHours =  `0${hours}:`
+    } else {
+      resultHours =  `${hours}:`
+    }
+  } else {
+    resultHours =  ``
+  }
+  
+  result = `${resultHours}${resultMinutes}${resultSeconds}`
+  return result;
 }
 
 export default function TimeLine() {
@@ -71,8 +100,8 @@ export default function TimeLine() {
                 {videosInfos[i]["pseudo"]}
               </h4>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} vues - il y a{" "}
-                {getTimeElapsed(videosInfos[i]["upload_date_time"])}
+                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                
               </h4>
             </div>
           </div>

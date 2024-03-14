@@ -12,14 +12,54 @@ function getTimeElapsed(uploadDateTime) {
   const elapsedDays = Math.floor(elapsedHours / 24);
 
   if (elapsedDays > 0) {
-    return `${elapsedDays} jours`;
+    return `${elapsedDays} days`;
   } else if (elapsedHours > 0) {
-    return `${elapsedHours} heures`;
+    return `${elapsedHours} hours`;
   } else if (elapsedMinutes > 0) {
     return `${elapsedMinutes} minutes`;
   } else {
-    return `${elapsedSeconds} secondes`;
+    return `${elapsedSeconds} seconds`;
   }
+}
+
+function timeOfVideo(totalSeconds) {
+  var hours;
+  var minutes;
+  var seconds;
+  hours = Math.floor(totalSeconds / 3600);
+  totalSeconds %= 3600;
+  minutes = Math.floor(totalSeconds / 60);
+  seconds = totalSeconds % 60;
+  var result = "";
+  var resultSeconds = "";
+  var resultMinutes = "";
+  var resultHours = "";
+
+  // Seconds
+  if (seconds < 10) {
+    resultSeconds =  `0${seconds}`
+  } else {
+    resultSeconds =  `${seconds}`
+  }
+  // Minutes
+  if (minutes < 10) {
+    resultMinutes =  `0${minutes}:`
+  } else {
+    resultMinutes =  `${minutes}:`
+  }
+  // Hours
+  if (hours > 0) {
+    if (hours < 10) {
+      resultHours =  `0${hours}:`
+    } else {
+      resultHours =  `${hours}:`
+    }
+  } else {
+    resultHours =  ``
+  }
+  
+  result = `${resultHours}${resultMinutes}${resultSeconds}`
+  return result;
 }
 
 export default function TimelineRightSide() {
@@ -35,6 +75,7 @@ export default function TimelineRightSide() {
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
+    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
 
     indents.push(
       <div key={i} className="h-auto mb-2 ">
@@ -47,7 +88,7 @@ export default function TimelineRightSide() {
                 alt="Thumbnail"
               />
               <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
-                {videosInfos[i]["video_duration"]}s
+                {videoLenght}
               </p>
             </div>
 
@@ -59,8 +100,7 @@ export default function TimelineRightSide() {
                 {videosInfos[i]["pseudo"]}
               </h4>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} vues - il y a{" "}
-                {getTimeElapsed(videosInfos[i]["upload_date_time"])}
+                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
             </div>
           </div>
