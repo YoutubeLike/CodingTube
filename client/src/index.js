@@ -5,9 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import "./index.css";
-
 import Autre, {loader as appLoader} from './Autre'
-
 import App from "./App" 
 
 const router = createBrowserRouter([
@@ -17,6 +15,7 @@ const router = createBrowserRouter([
     children : [
       {
         path: "contact/:test",
+        
         element: <Autre />,
         loader: appLoader
       },
