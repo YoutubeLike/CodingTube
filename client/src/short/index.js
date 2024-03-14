@@ -25,11 +25,11 @@ function Short() {
             </button>
           </div>
 
-          <div id="metadataContainer" className="mb-[2vh] items-end">
+          <div className="mb-[2vh] p-[1vh] mb-[1vh] ml-[2vh] text-white">
             <div className="mb-[1vh] flex items-center">
               <button className="h-[5.7vh] w-[5.7vh] rounded-full overflow-hidden">
                 <img
-                  src="picture.png"
+                  src="images/picture.png"
                   alt="photo"
                   className="h-[5.7vh] w-[5.7vh]"
                 />
