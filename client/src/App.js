@@ -1,19 +1,16 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-
+import Autre from "./Autre"
+import { Outlet, Route, Routes} from "react-router-dom"
 
 function App() {
-  const [message, setMessage] = useState('');
-  useEffect(() => {
-    fetch('http://localhost:5000/')
-      .then((res) => res.text())
-      .then((data) => setMessage(data))
-      .catch((err) => console.log(err));
-  }, []);
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">{message} Bonjour </h1>
-    </div>
+    <>
+      <div>
+        <Outlet />
+        <p> HEADER </p>
+      </div>
+    </>
   );
 }
 

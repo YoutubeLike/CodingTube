@@ -6,6 +6,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+.env
 
 # Icon must end with two \r
 Icon
@@ -210,7 +211,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,phpstorm,react,windows
 
-data/aria*
+data/
 # data/ib_log*
 # data/undo*
 

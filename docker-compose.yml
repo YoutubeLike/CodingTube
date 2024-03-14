@@ -1,23 +1,25 @@
 version: '3.4'
 services:
   front:
-    image: "node:20-alpine"
+    build: "./client"
     command: npm run start
     volumes:
-      - ./client/:/app/front
+      - ./client/src:/app/front/src
+      - ./client/public:/app/front/public
     working_dir: /app/front
     links:
       - "back"
     ports:
       - "3000:3000"
   back:
-    image: "node:20-alpine"
+    build: "./server"
     working_dir: /app/back
     command: npm run dev
     volumes:
       - type: bind
-        source: ./server
-        target: /app/back
+        source: ./server/src
+        target: /app/back/src
+      - ./server/env:/app/back/.env
     networks:
       - bdd-back
     ports:
@@ -35,6 +37,12 @@ services:
       - ./data:/var/lib/mysql
     ports:
       - "3306:3306"
+  adminer:
+    image: adminer
+    networks:
+      - bdd-back
+    ports:
+      - 8080:8080
 
 networks:
   bdd-back:
