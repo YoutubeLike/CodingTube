@@ -27,26 +27,36 @@ export default function UploadVideo() {
       )} */}
 
 			<form className="w-full">
+				<h2 className="font-bold text-2xl mb-4">Détails</h2>
 				<div className="border-solid border-2 border-gray-600 rounded-md w-full mb-4">
 					<label htmlFor="nom" className="flex flex-cols pl-2">
 						Titre
 					</label>
-					<input name="nom" type="text" className="p-2 w-full" />
+					<input name="nom" type="text" className="outline-0 p-2 w-full" />
 				</div>
 
-				<div className="border-solid border-2 border-gray-600 rounded-md w-full h-28">
+				<div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
 					<label htmlFor="identifiant" className="flex flex-cols pl-2">
 						Descritpion
 					</label>
 					<textarea
 						name="identifiant"
 						type="text"
-						className="p-2 h-full w-full resize-none"
+						className="outline-0 p-2 h-[80%] w-full resize-none"
 					/>
 				</div>
-
-				<input type="submit" value="Annuler" />
-				<input type="submit" value="Importer" />
+				<div className="mt-4 ">
+					<input className="pr-4" type="submit" value="Annuler" />
+					<input type="submit" value="Importer" />
+				</div>
+				<div className="mt-4 ">
+					<h2 className="font-bold text-2xl mb-4">Miniature</h2>
+					<h2>
+						Sélectionnez ou importez une image qui donne un aperçu du contenu de
+						votre vidéo. Une bonne image se remarque et attire l'attention des
+						spectateurs
+					</h2>
+				</div>
 			</form>
 
 			<div>
