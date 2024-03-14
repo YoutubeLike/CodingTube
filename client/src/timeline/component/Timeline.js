@@ -23,14 +23,12 @@ function getTimeElapsed(uploadDateTime) {
 }
 
 export default function TimeLine() {
-
-  // Get infos onto the request SQL
   const [videosInfos, setvideosInfos] = useState("");
   useEffect(() => {
     fetch("http://localhost:5000/timeline-request/")
-      .then((resVideo) => resVideo.json())
-      .then((dataVideo) => setvideosInfos(dataVideo))
-      .catch((errVideo) => console.log(errVideo));
+      .then((res) => res.json())
+      .then((data) => setvideosInfos(data))
+      .catch((err) => console.log(err));
   }, []);
 
   var indents = [];
