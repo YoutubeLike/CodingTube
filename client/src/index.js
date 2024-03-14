@@ -7,8 +7,7 @@ import {
 import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 import App from "./App" 
-import Mainpage from "./timeline/pages/mainpage";
-
+import NonDisplayedBurgerMenu from "./timeline /component/nonDisplayedBurgerMenu";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,8 +24,8 @@ const router = createBrowserRouter([
         element: <App />
       },
       {
-        path: "/",
-        element: <Mainpage />
+        path: "nonDisplayedBurgerMenu/",
+        element: <NonDisplayedBurgerMenu />
       }
     ]
   },
