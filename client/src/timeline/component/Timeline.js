@@ -22,6 +22,17 @@ function getTimeElapsed(uploadDateTime) {
   }
 }
 
+function timeOfVideo(totalSeconds) {
+  var hours;
+  var minutes;
+  var seconds;
+  hours = Math.floor(totalSeconds / 3600);
+  totalSeconds %= 3600;
+  minutes = Math.floor(totalSeconds / 60);
+  seconds = totalSeconds % 60;
+  return `${hours}:${minutes}:${seconds}`
+}
+
 export default function TimeLine() {
   const [videosInfos, setvideosInfos] = useState("");
   useEffect(() => {
@@ -34,9 +45,10 @@ export default function TimeLine() {
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
+    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
       <div key={i} className="max-w-[30%] h-auto mb-2">
-        <a href="/watch">
+        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
         <div class="relative">
             <img
@@ -44,7 +56,7 @@ export default function TimeLine() {
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
             />
-            <p class="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videosInfos[i]["video_duration"]}s</p>
+            <p class="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
         </div>
 
 

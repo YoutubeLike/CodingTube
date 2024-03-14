@@ -38,13 +38,18 @@ export default function TimelineRightSide() {
 
     indents.push(
       <div key={i} className="h-auto mb-2 ">
-        <a href="/watch">
+        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
           <div class="flex flex-row">
-            <img
-              className="h-20 rounded-lg"
-              src={videosInfos[i]["thumbnail"]}
-              alt="Thumbnail"
-            />
+            <div class="relative">
+              <img
+                class="h-20 rounded-lg"
+                src={videosInfos[i]["thumbnail"]}
+                alt="Thumbnail"
+              />
+              <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+                {videosInfos[i]["video_duration"]}s
+              </p>
+            </div>
 
             <div className="ml-2.5">
               <h3 className="text-black font-bold text-[100%]">

@@ -1,4 +1,5 @@
 import TimeLine from "../component/Timeline";
+import TimelineRightSide from "../component/timelineRightSide";
 import "../styles/Timeline.css";
 
 export default function Mainpage() {
