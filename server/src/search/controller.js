@@ -1,4 +1,4 @@
-const mariadb = require('./src/database');
+const mariadb = require('../src/database');
 
 const submit = (req, res) => {
     const submitValue = req.params.submit;
