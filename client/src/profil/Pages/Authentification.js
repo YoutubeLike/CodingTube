@@ -4,6 +4,7 @@ import FormSignup from "../Forms/FormSignup";
 import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
 import axios from 'axios';
+import "../../index.css"
 
 class Authentification extends React.Component {
   constructor(props) {

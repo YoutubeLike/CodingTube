@@ -14,8 +14,13 @@ import CreateChannel from "./channel/pages/Channel";
 import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/PageChannel";
+import Authentification from "./profil/Pages/Authentification";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Authentification />
+  },
   {
     path: "/",
     element: <App />,

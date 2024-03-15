@@ -5,30 +5,19 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    fontFamily: {
-      'roboto': ['Roboto', 'sans-serif'],
-    }
-  },
   plugins: [],
-}
+
     screens: {
       sm: '512px',
       md: '768px',
       lg: '1024',
       xl: '1280px',
     },
-
-    colors: {
-      'white': '#FFFFFF',
-      'gray-dark': '#404040',
-      'gray': '#a1a1a1',
-      'gray-light': '#e3e4e6',
-      'black': '#000000',
-    },
     
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif'],
+      roboto: ['Roboto', 'sans-serif'],
     },
 
     extend: {
