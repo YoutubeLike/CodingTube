@@ -7,6 +7,7 @@ import {
 import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 import App from "./App" 
+import NonDisplayedBurgerMenu from "./timeline /component/nonDisplayedBurgerMenu";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import Shorts from "./timeline/pages/shorts";
@@ -31,6 +32,9 @@ const router = createBrowserRouter([
         element: <App />
       },
       {
+        path: "nonDisplayedBurgerMenu/",
+        element: <NonDisplayedBurgerMenu />
+      },
         path: "/",
         element: <Mainpage />
       },
