@@ -98,7 +98,7 @@ class Authentification extends React.Component {
               className={`flex flex-col justify-center space-y-10 items-center absolute left-0
             w-1/2 h-full bg-gray-50 shadow-inner rounded-l-2xl p-4`}
             >
-              <h2 className="flex justify-center items-center text-4xl mb-8">
+              <h2 className="flex justify-center items-center text-4xl">
                 Sign in
               </h2>
 
@@ -135,7 +135,7 @@ class Authentification extends React.Component {
               className={`flex flex-col justify-center space-y-10 items-center absolute right-0
             w-1/2 h-full bg-gray-50 shadow-inner rounded-r-2xl p-4`}
             >
-              <h2 className="flex justify-center items-center text-4xl mb-8">
+              <h2 className="flex justify-center items-center text-4xl">
                 Sign up
               </h2>
 
