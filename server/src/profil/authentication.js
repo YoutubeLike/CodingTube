@@ -51,7 +51,7 @@ async function CheckIfPasswordMatch(password1, password2){
         return true;
     }
     else{
-        console.log('password not match')
+        console.log('password do not match')
         return false;
     }
 }

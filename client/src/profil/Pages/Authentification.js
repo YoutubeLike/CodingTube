@@ -3,6 +3,7 @@ import FormLogin from "../Forms/FormLogin";
 import FormSignup from "../Forms/FormSignup";
 import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
+import axios from 'axios';
 
 class Authentification extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class Authentification extends React.Component {
         usernameOrMail: "",
         password: "",
       },
+      error: null,
     };
   }
 
@@ -39,13 +41,28 @@ class Authentification extends React.Component {
     }));
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
+    console.log('submit');
     e.preventDefault();
-    const formData = this.state.isLogin
-      ? this.state.LoginData
-      : this.state.RegisterData;
-    console.log(formData);
+    const formData = {
+      login: this.state.isLogin,
+      data: this.state.LoginData,
+      register: this.state.RegisterData
+    };
     // Back de l'inscription ici
+    if (!this.state.isLogin) {
+      try {
+        const response = await axios.post('http://localhost:5000/api/profil/register', formData);
+        console.log('Utilisateur inséré avec succès');
+      } catch (error) {
+        this.setState({ error: error.response.data.error });
+        /*
+        console.error('Erreur lors de l\'inscription de l\'utilisateur :', error.response.data.error);
+        this.setState({ error: error.response.data.error });
+        */
+        
+      }
+    }
   };
 
   render() {
@@ -102,6 +119,8 @@ class Authentification extends React.Component {
                 <FormLogin
                   LoginData={this.state.LoginData}
                   onLoginChange={this.onChange}
+                  usernameError={this.state.usernameError}
+                  passwordError={this.state.passwordError}
                 />
               </form>
 
@@ -139,8 +158,13 @@ class Authentification extends React.Component {
                 <FormSignup
                   RegisterData={this.state.RegisterData}
                   onRegisterChange={this.onChange}
+                  usernameError={this.state.usernameError}
+                  emailError={this.state.emailError}
+                  passwordError={this.state.passwordError}
+                  confirmPasswordError={this.state.confirmPasswordError}
                 />
               </form>
+              {this.state.error && <p className="!mt-2 text-red-600">{this.state.error}</p>}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
@@ -150,7 +174,6 @@ class Authentification extends React.Component {
                     I have a Account
                   </button>
                 </p>
-
                 <button
                   className="w-full md:w-auto h-10 md:min-w-[130px] text-white px-2 py-1 font-bold cursor-pointer transition-all duration-300 relative inline-block outline-none rounded-full border-2 border-red-600 bg-red-600 hover:bg-white hover:text-red-600"
                   type="submit"
@@ -159,7 +182,6 @@ class Authentification extends React.Component {
                   SIGN UP
                 </button>
               </div>
-              {/* 2eme Form */}
             </div>
           </div>
         </div>
