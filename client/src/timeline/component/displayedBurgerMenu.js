@@ -14,7 +14,7 @@ const DisplayedBurgerMenu = () => {
         <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
         <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
       </div>
-      <div className="w-[19%] flex flex-col items-center">
+      <div>
         <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
           <div
             className="HAMBURGER-ICON space-y-2"
@@ -24,26 +24,33 @@ const DisplayedBurgerMenu = () => {
             <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
             <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
           </div>
-          <div>
-            <Link to="/">Mainpage</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+            <img className="h-12 w-12" src="homeytb1.png" />
+            <Link to="/" className="pl-4"> Home</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/shorts">Shorts</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="shorts1.png" />
+            <Link to="/shorts" className="pl-4">Shorts</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/history">History</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="homeytb1.png" />
+            <Link to="/history" className="pl-4">History</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/subscribe">Subscription</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="subscriptions1.png" />
+            <Link to="/subscribe" className="pl-4">Subscription</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/channel">Your channel</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="you1.png" />
+            <Link to="/channel" className="pl-4">Your channel</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/videos">Your videos</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="you1.png" />
+            <Link to="/videos" className="pl-4">Your videos</Link>
           </div>
-          <div className="hover:bg-gray-100">
-            <Link to="/trends">Trending</Link>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
+          <img className="h-12 w-12" src="homeytb1.png" />
+            <Link to="/trends" className="pl-4">Trending</Link>
           </div>
         </div>
         <style>{`
@@ -53,15 +60,14 @@ const DisplayedBurgerMenu = () => {
       .showMenuNav {
         display: block;
         position: absolute;
-        width: 19%;
+        width: 15%;
         height: 100vh;
         top: 0;
         left: 0;
         background: white;
-        z-index: 10;
+        z-index: 11;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
         align-items: center;
       }
     `}</style>
