@@ -5,9 +5,10 @@ import "./index.css";
 
 import Autre, { loader as appLoader } from "./Autre";
 
-import Channel from "./channel/pages/Channel";
+import CreateChannel from "./channel/pages/Channel";
 import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
+import Channel from "./channel/pages/PageChannel";
 
 import App from "./App";
 
@@ -17,8 +18,8 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: "channel",
-				element: <Channel />,
+				path: "new-channel",
+				element: <CreateChannel />,
 				loader: appLoader,
 			},
 			{
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
 			{
 				path: "upload",
 				element: <Upload />,
+				loader: appLoader,
+			},
+			{
+				path: "channel",
+				element: <Channel />,
 				loader: appLoader,
 			},
 		],
