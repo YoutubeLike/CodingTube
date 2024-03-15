@@ -10,7 +10,7 @@ export default function Mainpage() {
       <DisplayedBurgerMenu />
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div class="flex ml-[15%] flex-wrap">
+        <div class="flex ml-[3%] flex-wrap">
           <TimeLine />
         </div>
       </div>
