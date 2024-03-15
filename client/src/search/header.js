@@ -7,7 +7,7 @@ export default function Header() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("http://localhost:5000/api/search/" + searchValue)
+      const response = await axios.get("http://localhost:5000/api/search/request/" + searchValue)
 
       console.log(response.data);
       setSearchValue('')
