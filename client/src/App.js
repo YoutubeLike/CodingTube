@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 import Autre from "./Autre"
 import { Outlet, Route, Routes} from "react-router-dom"
 import "./index.css"
+import Header from './search/header';
+import DisplayedBurgerMenu from './timeline/component/displayedBurgerMenu';
 
 function App() {
   return (
     <>
       <div>
+        <Header />
         <Outlet />
-        <p className="text-3xl font-bold underline"> HEADER </p>
       </div>
     </>
   );
