@@ -1,11 +1,13 @@
 .videoContainer {
-  height: 95vh;
-  width: 53.4375vh;
+  height: 80vh;
+  width: 45vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
   scroll-snap-align: center;
+  border-radius: 0.7vh;
+  overflow: hidden;
 }
 
 .short {
