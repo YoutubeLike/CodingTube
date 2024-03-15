@@ -11,10 +11,9 @@ const channel = require('./channel/router')
 const profil = require('./profil/router')
 
 
-
 console.log("router src");
 router.use('/live', live)
-router.use('/profil', live)
+router.use('/profil', profil)
 router.use('/channel', live)
 router.use('/timeline', timeline)
 router.use('/short', short)
@@ -22,4 +21,4 @@ router.use('/search', search)
 
 
 
-module.exports = router
+module.exports = router;
