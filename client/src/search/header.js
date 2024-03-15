@@ -8,7 +8,6 @@ export default function Header() {
     e.preventDefault();
     try {
       const response = await axios.get("http://localhost:5000/api/search/request/" + searchValue)
-
       console.log(response.data);
       setSearchValue('')
 
@@ -16,6 +15,19 @@ export default function Header() {
       console.error("Une erreur s'est produite lors de la recherche : ", error);
     }
   };
+  
+  const [displayHistory, setDisplayHistory] = useState([]);
+  const history = async (e) => {
+    e.preventDefault();
+    try{
+  const queryHistory = await axios.get("http://localhost:5000/api/search/search_history")
+  console.log(queryHistory.data)
+  setDisplayHistory(queryHistory.data)
+    }catch (error){
+      console.error("Une erreur s'est produite lors de la recherche de l'historique: ", error);
+    }
+  };
+
   return (
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2">
       <div className="flex w-[33%] h-7 ">
@@ -33,6 +45,7 @@ export default function Header() {
             text="Recherche"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
+            onClick={history}
           ></input>
           <button type="submit">
             <img
@@ -49,6 +62,13 @@ export default function Header() {
             ></img>
           </button>
         </form>
+        <div>
+          <ul>
+        {displayHistory.map((result, index) => (
+          <li key={index}>{result.name_search}</li>
+        ))}
+        </ul>
+      </div>
       </div>
       <div className="flex justify-end space-x-2 w-[33%]">
         <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
