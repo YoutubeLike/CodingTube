@@ -50,7 +50,7 @@ class Authentification extends React.Component {
 
   render() {
     return (
-      <div className="flex justify-center items-center h-screen min-h-screen min-w-screen min-h-[750px] min-w-[700px]">
+      <div className="flex justify-center items-center h-screen min-h-screen min-w-screen min-h-[770px] min-w-[700px]">
         {" "}
         {/* Div qui englobe tout */}
         <div className="relative w-3/4 h-3/4 shadow-2xl rounded-2xl flex">

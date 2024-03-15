@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 class FormLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPassword: true,
+      showPassword: false,
     };
   }
 
@@ -17,7 +17,7 @@ class FormLogin extends React.Component {
   render() {
     return (
       <>
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 relative">
           <label>
             <input
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
@@ -29,22 +29,19 @@ class FormLogin extends React.Component {
               onChange={this.props.onLoginChange}
             />
           </label>
-          <div className="flex">
-            <label>
-              <input
-                className="zblock mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
-                type={this.state.showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                required
-                value={this.props.LoginData.password}
-                onChange={this.props.onLoginChange}
-              />
-            </label>
+          <label className="relative">
+            <input
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200 pr-12"
+              type={this.state.showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              required
+              value={this.props.LoginData.password}
+              onChange={this.props.onLoginChange}
+            />
             <span
-              className="flex justify-around items-center relative"
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
               onClick={this.togglePasswordVisibility}
-              size={25}
             >
               {this.state.showPassword ? (
                 <svg
@@ -88,7 +85,7 @@ class FormLogin extends React.Component {
                 </svg>
               )}
             </span>
-          </div>
+          </label>
         </div>
       </>
     );
