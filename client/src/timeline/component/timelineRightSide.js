@@ -63,7 +63,7 @@ function timeOfVideo(totalSeconds) {
 }
 
 export default function TimelineRightSide() {
-  // Get infos onto the request SQL
+  // Get the informations of the SQL Request by the URL
   const [videosInfos, setvideosInfos] = useState("");
   useEffect(() => {
     fetch("http://localhost:5000/api/timeline/timeline-request")

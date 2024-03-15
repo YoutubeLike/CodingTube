@@ -9,6 +9,7 @@ export default function Watch() {
   const searchParams = new URLSearchParams(location.search);
   const videoId = searchParams.get("video_id");
   
+  // Execute the SQL Request whitch adds one to the video's count
   const [videosInfos, setVideosInfos] = useState("");
   console.log("request");
   useEffect(() => {
