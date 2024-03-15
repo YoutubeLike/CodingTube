@@ -10,9 +10,7 @@ const DisplayedBurgerMenu = () => {
         className="HAMBURGER-ICON space-y-2"
         onClick={() => setIsNavOpen((prev) => !prev)} // toggle isNavOpen state on click so the menu will open
       >
-        <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-        <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-        <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+        <img className="w-6 h-6 " src="./menu.png" alt="menu"></img>
       </div>
       <div>
         <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
@@ -20,9 +18,7 @@ const DisplayedBurgerMenu = () => {
             className="HAMBURGER-ICON space-y-2"
             onClick={() => setIsNavOpen(false)} // toggle isNavOpen state on click so the menu will close
           >
-            <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-            <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
-            <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
+            <img className="w-6 h-6 " src="./menu.png" alt="menu"></img>
           </div>
           <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
             <img className="h-12 w-12" src="homeytb1.png" />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 
 export default function Header() {
   // State to manage the value of the search input
@@ -27,7 +28,7 @@ export default function Header() {
     // Header component containing search bar and buttons
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2">
       <div className="flex w-[33%] h-7 ">
-        <img className="w-6 h-6 " src="./menu.png" alt="menu"></img>
+        <DisplayedBurgerMenu />
         <div className="flex w-[99%] h-6 ml-2 mt-0.5">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
           <p>CODITUBE</p>

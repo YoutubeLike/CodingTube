@@ -2,7 +2,6 @@ import TimelineRightSide from "../component/timelineRightSide";
 import "../styles/Timeline.css";
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 
 export default function Watch() {
   const location = useLocation();
@@ -23,7 +22,6 @@ export default function Watch() {
 
   return (
     <>
-    <DisplayedBurgerMenu />
     <div>
       <h1 className="text-3xl font-bold underline">Video page</h1>
       <div class="flex inset-y-0 left-0 flex-col">

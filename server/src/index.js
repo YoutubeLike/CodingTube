@@ -7,6 +7,8 @@ bodyParser = require("body-parser");
 
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded());
 
 app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
 

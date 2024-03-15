@@ -7,6 +7,10 @@ const live = require('./live/router')
 const short = require('./short/router')
 const search = require('./search/router')
 const timeline = require('./timeline/router')
+const channel = require('./channel/router')
+const profil = require('./profil/router')
+
+
 
 console.log("router src");
 router.use('/live', live)
