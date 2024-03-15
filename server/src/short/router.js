@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const { shortRequest } = require('./controller.js')
+const { shortRequest } = require("./controller.js");
 
-router.get('/short-request', shortRequest)
+router.get("/short-request", shortRequest);
 
-module.exports = router
+module.exports = router;
