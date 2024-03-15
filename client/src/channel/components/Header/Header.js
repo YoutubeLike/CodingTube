@@ -23,14 +23,17 @@ export default function Header() {
 					YouFlute
 				</Link>
 				<div className={`menu ${open ? "menu-mobile active" : ""}`}>
-					<Link className="text-white m-5" to="/channel">
-						Chaîne
+					<Link className="text-white m-5" to="/new-channel">
+						Create channel
 					</Link>
 					<Link className="text-white m-5" to="/video">
 						Vidéo
 					</Link>
 					<Link className="text-white m-5" to="/upload">
 						Importer
+					</Link>
+					<Link className="text-white m-5" to="/channel">
+						Chaine
 					</Link>
 				</div>
 				<div>
