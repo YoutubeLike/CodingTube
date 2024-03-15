@@ -66,7 +66,7 @@ export default function TimelineRightSide() {
   // Get infos onto the request SQL
   const [videosInfos, setvideosInfos] = useState("");
   useEffect(() => {
-    fetch("http://localhost:5000/timeline-request/")
+    fetch("http://localhost:5000/api/timeline/timeline-request")
       .then((resVideo) => resVideo.json())
       .then((dataVideo) => setvideosInfos(dataVideo))
       .catch((errVideo) => console.log(errVideo));

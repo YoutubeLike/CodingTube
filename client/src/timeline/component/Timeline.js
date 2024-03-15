@@ -65,7 +65,7 @@ function timeOfVideo(totalSeconds) {
 export default function TimeLine() {
   const [videosInfos, setvideosInfos] = useState("");
   useEffect(() => {
-    fetch("http://localhost:5000/timeline-request/")
+    fetch("http://localhost:5000/api/timeline/timeline-request")
       .then((res) => res.json())
       .then((data) => setvideosInfos(data))
       .catch((err) => console.log(err));
@@ -79,13 +79,13 @@ export default function TimeLine() {
       <div key={i} className="max-w-[30%] h-auto mb-2">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
-        <div class="relative">
+        <div className="relative">
             <img
-                class="max-w-[90%] h-auto rounded-lg"
+                className="max-w-[90%] h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
             />
-            <p class="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
+            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
         </div>
 
 

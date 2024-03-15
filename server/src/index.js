@@ -20,28 +20,3 @@ app.listen(5000, () => {
 
 app.use("/api", urlencodedParser, routes);
 
-app.get("/timeline-request/", (req, res) => {
-  mariadb.pool
-    .query(
-      "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id ORDER BY video.number_view DESC;"
-    )
-    .then((value) => {
-      res.send(value);
-    });
-});
-
-// Add a view in video's views count
-app.get("/addView-request/:videoId", (req, res) => {
-  const videoId = req.params.videoId;
-  mariadb.pool
-    .query("UPDATE video SET number_view = number_view + 1 WHERE id = ?", [
-      videoId,
-    ])
-    .then((value) => {
-      res.send(value);
-    })
-    .catch((error) => {
-      console.error("Error updating view count:", error);
-      res.status(500).send("Error updating view count");
-    });
-});

@@ -12,7 +12,7 @@ export default function Watch() {
   console.log("request");
   useEffect(() => {
     if (videoId) {
-      fetch(`http://localhost:5000/addView-request/${videoId}`)
+      fetch(`http://localhost:5000/api/timeline/addView-request/${videoId}`)
         .then((res) => res.json())
         .then((data) => setVideosInfos(data))
         .catch((err) => console.log(err));
