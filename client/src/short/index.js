@@ -3,6 +3,7 @@ import React from "react";
 import ShortRequest from "./shortRequest";
 
 function Short() {
+  const videoInfos = ShortRequest();
   return (
     <div className="h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar">
       {/* Contains video and right bar */}
@@ -329,7 +330,7 @@ function Short() {
         </div>
       </div>
 
-      {/* <ShortRequest /> */}
+      <ShortRequest />
     </div>
   );
 }
