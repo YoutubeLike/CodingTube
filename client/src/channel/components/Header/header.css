@@ -1,0 +1,53 @@
+/* Style de l'en-tête */
+.header {
+  background: linear-gradient(180deg , Violet ,transparent ); /* Violet */
+  color: #fff; /* Texte en blanc */
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000000;
+}
+
+.header .menu {
+  display: flex;
+}
+
+.header .menu a {
+  color: #000000;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+.header .menu a:hover {
+  text-decoration: underline;
+}
+
+/* Style du menu mobile */
+.menu-mobile {
+  display: none;
+}
+
+.menu-mobile.active {
+  display: block;
+}
+
+.menu-mobile ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-mobile ul li {
+  padding: 10px;
+}
+
+.menu-mobile ul li a {
+  color: #fff;
+  text-decoration: none;
+}
