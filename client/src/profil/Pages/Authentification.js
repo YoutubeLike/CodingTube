@@ -45,10 +45,11 @@ class Authentification extends React.Component {
     console.log('submit');
     e.preventDefault();
     const formData = {
-      login: this.state.isLogin,
-      data: this.state.LoginData,
-      register: this.state.RegisterData
+      isLogin: this.state.isLogin,
+      loginData: this.state.LoginData,
+      registerData: this.state.RegisterData,
     };
+    console.log(formData)
     // Back de l'inscription ici
     if (!this.state.isLogin) {
       try {
@@ -56,11 +57,13 @@ class Authentification extends React.Component {
         console.log('Utilisateur inséré avec succès');
       } catch (error) {
         this.setState({ error: error.response.data.error });
-        /*
-        console.error('Erreur lors de l\'inscription de l\'utilisateur :', error.response.data.error);
+      }
+    } else{
+      try {
+        const response = await axios.post('http://localhost:5000/api/profil/login', formData);
+        console.log('Utilisateur connecté avec succès');
+      } catch (error) {
         this.setState({ error: error.response.data.error });
-        */
-        
       }
     }
   };
@@ -119,11 +122,9 @@ class Authentification extends React.Component {
                 <FormLogin
                   LoginData={this.state.LoginData}
                   onLoginChange={this.onChange}
-                  usernameError={this.state.usernameError}
-                  passwordError={this.state.passwordError}
                 />
               </form>
-
+              {this.state.error && <p className="!mt-2 text-red-600">{this.state.error}</p>}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
@@ -158,10 +159,6 @@ class Authentification extends React.Component {
                 <FormSignup
                   RegisterData={this.state.RegisterData}
                   onRegisterChange={this.onChange}
-                  usernameError={this.state.usernameError}
-                  emailError={this.state.emailError}
-                  passwordError={this.state.passwordError}
-                  confirmPasswordError={this.state.confirmPasswordError}
                 />
               </form>
               {this.state.error && <p className="!mt-2 text-red-600">{this.state.error}</p>}

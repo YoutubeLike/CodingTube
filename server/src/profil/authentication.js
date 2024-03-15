@@ -19,10 +19,10 @@ async function InsertUser(registerData) {
     }
 }
 
-async function CheckIfUsernameExist(registerData) {
+async function CheckIfUsernameExist(data) {
     try {
         const conn = await mariadb.pool.getConnection();
-        const result = await conn.query("SELECT COUNT(*) as count FROM user WHERE username = ?", [registerData.username]);
+        const result = await conn.query("SELECT COUNT(*) as count FROM user WHERE username = ?", [data]);
         conn.release();
         return result[0].count > 0; 
     } catch (err) {
@@ -31,10 +31,10 @@ async function CheckIfUsernameExist(registerData) {
     }
 }
 
-async function CheckIfMailExist(registerData) {
+async function CheckIfMailExist(data) {
     try {
         const conn = await mariadb.pool.getConnection();
-        const result = await conn.query("SELECT COUNT(*) as count FROM user WHERE mail = ?", [registerData.mail]);
+        const result = await conn.query("SELECT COUNT(*) as count FROM user WHERE mail = ?", [data]);
         conn.release();
         return result[0].count > 0;
     } catch (err) {
@@ -43,54 +43,28 @@ async function CheckIfMailExist(registerData) {
     }
 }
 
-
-async function CheckIfPasswordMatch(password1, password2){
-
-    if (password1 == password2){
-        console.log('password match')
-        return true;
-    }
-    else{
-        console.log('password do not match')
-        return false;
-    }
-}
-
-async function CheckIfUserExistAndIfPasswordMatch(loginData){
+async function GetPasswordFromUsernameOrEmail(data){
     try {
         const conn = await mariadb.pool.getConnection();
-        const result = await conn.query("SELECT password FROM user WHERE username = ? OR mail = ?", [loginData.usernameOrMail, loginData.usernameOrMail]);
+        const result = await conn.query("SELECT password FROM user WHERE username = ? OR mail = ?", [data, data]);
         conn.release();
-
-        const isPasswordMatch = await bcrypt.compare(loginData.password, result[0].password);
-        if (isPasswordMatch) {
-            console.log('Mot de passe correct');
-            return true;
-        } else {
-            console.log('Mot de passe incorrect');
-            return false;
-        }
-
+        return result[0].password;
     } catch (err) {
         console.log("Error in retrieving password", err);
         return false; // ou une autre valeur par défaut
     }
 }
 
-
-const loginData = {
-    usernameOrMail:'elwan@gmail.com',
-    password:'Elwan123'
+async function CheckIfPasswordMatch(password, hashedPasswordFromDB) {
+    try {
+        const isPasswordMatch = await bcrypt.compare(password, hashedPasswordFromDB);
+        return isPasswordMatch;
+    } catch (error) {
+        console.error("Erreur lors de la comparaison des mots de passe :", error);
     }
-
-const registerData = {
-    username:'Elwan',
-    mail:'elwan@gmail.com',
-    password:'Elwan123'
 }
 
-
-module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, CheckIfUserExistAndIfPasswordMatch};
+module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, CheckIfPasswordMatch};
 
 //InsertUser(registerData)
 // CheckIfUserExistAndIfPasswordMatch(loginData);
