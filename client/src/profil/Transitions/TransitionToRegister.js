@@ -6,7 +6,7 @@ class TransitionToRegister extends React.Component {
   }
   render() {
     return (
-      <div className="flex justify-center items-center text-center w-full h- w-4/5">
+      <div className="flex justify-center items-center text-center w-4/5">
         <div className="text-white">
           <h1 className="text-4xl font-sans font-bold mb-8">
             Hello, Friends !
