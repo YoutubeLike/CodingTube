@@ -6,7 +6,12 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
-import App from "./App" 
+import App from "./App"
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import reportWebVitals from './reportWebVitals';
+import Authentifaction from './Profile/Pages/Authentification';
+
 
 const router = createBrowserRouter([
   {
@@ -29,6 +34,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+
     <RouterProvider router={router} />
+
+    <Authentifaction />
+
   </React.StrictMode>
 );
