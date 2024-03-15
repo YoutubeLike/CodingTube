@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 import App from "./App" 
+import Short from "./short/index"
 import NonDisplayedBurgerMenu from "./timeline/component/nonDisplayedBurgerMenu";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
@@ -22,12 +23,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children : [
+    children: [
       {
         path: "contact/:test",
-        
+
         element: <Autre />,
-        loader: appLoader
+        loader: appLoader,
       },
       {
         path: "contact/",
