@@ -1,15 +1,20 @@
-import "./App.css";
-import React, { useEffect, useState } from "react";
-import Header from "./channel/components/Header/Header";
-import { Outlet, Route, Routes } from "react-router-dom";
+import './App.css';
+import React, { useEffect, useState } from 'react';
+import Autre from "./Autre"
+import { Outlet, Route, Routes} from "react-router-dom"
+import "./index.css"
+import Header from './search/header';
+import DisplayedBurgerMenu from './timeline/component/displayedBurgerMenu';
 
 function App() {
-	return (
-		<>
-			<Header />
-			<div>{/* <Outlet /> */}</div>
-		</>
-	);
+  return (
+    <>
+      <div>
+        <Header />
+        <Outlet />
+      </div>
+    </>
+  );
 }
 
 export default App;
