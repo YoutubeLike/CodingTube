@@ -8,6 +8,8 @@ import "./index.css";
 import Autre, {loader as appLoader} from './Autre'
 import App from "./App" 
 import Mainpage from "./timeline/pages/mainpage";
+import History from "./timeline/pages/history"
+import Watch from "./timeline/pages/watch"
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Mainpage />
+      },
+      {
+        path: "/history",
+        element: <History />
+      },
+      {
+        path: "/watch",
+        element: <Watch />
       }
     ]
   },
