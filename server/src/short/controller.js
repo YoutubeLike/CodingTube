@@ -1,7 +1,7 @@
 const mariadb = require('../src/database')
 
 const shortRequest = (req, res) => {
-  mariadb.pool.query("SELECT id FROM short").then((value) => {
+  mariadb.pool.query("SELECT channel_id, title, description FROM short").then((value) => {
     res.send(value[0]);
   });
 };

@@ -1,11 +1,13 @@
 import "./short.css";
 import React from "react";
 import ShortRequest from "./shortRequest";
+import StartShorts from "./startShorts";
 
 function Short() {
   const videoInfos = ShortRequest();
+  StartShorts();
   return (
-    <div className="h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar">
+    <div id="shortSection" className="h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar">
       {/* Contains video and right bar */}
       <div className="mb-[1vh] flex justify-center">
         {/* Contains video and its informations */}
