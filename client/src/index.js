@@ -15,6 +15,7 @@ import Subscribe from "./timeline/pages/subscribe";
 import Trends from "./timeline/pages/trends";
 import Yourchannel from "./timeline/pages/yourChannel";
 import Yourvideos from "./timeline/pages/yourVideos";
+import Watch from "./timeline/pages/watch";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
         path: "/videos",
         element: <Yourvideos />,
       },
+      {
+        path: "/watch",
+        element: <Watch />
+      }
     ]
   },
 ]);
