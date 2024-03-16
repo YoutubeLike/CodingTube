@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -63,13 +64,17 @@ function timeOfVideo(totalSeconds) {
 }
 
 export default function TimelineRightSide() {
-  // Get the informations of the SQL Request by the URL
-  const [videosInfos, setvideosInfos] = useState("");
+  const [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/timeline/timeline-request")
-      .then((resVideo) => resVideo.json())
-      .then((dataVideo) => setvideosInfos(dataVideo))
-      .catch((errVideo) => console.log(errVideo));
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/timeline/timeline-request');
+        setVideosInfos(response.data);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
+    fetchVideos();
   }, []);
 
   var indents = [];
