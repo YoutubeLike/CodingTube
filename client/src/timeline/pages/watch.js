@@ -2,6 +2,7 @@ import TimelineRightSide from "../component/timelineRightSide";
 import "../styles/Timeline.css";
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Watch() {
   const location = useLocation();
@@ -9,15 +10,20 @@ export default function Watch() {
   const videoId = searchParams.get("video_id");
   
   // Execute the SQL Request whitch adds one to the video's count
-  const [videosInfos, setVideosInfos] = useState("");
-  console.log("request");
+  const [error, setError] = useState([]);
   useEffect(() => {
-    if (videoId) {
-      fetch(`http://localhost:5000/api/timeline/addView-request/${videoId}`)
-        .then((res) => res.json())
-        .then((data) => setVideosInfos(data))
-        .catch((err) => console.log(err));
-    }
+    const fetchData = async () => {
+      try {
+        if (videoId) {
+          await axios.get(`http://localhost:5000/api/timeline/addView-request/${videoId}`);
+          console.log('View added successfully');
+        }
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchData();
   }, [videoId]);
 
   return (
