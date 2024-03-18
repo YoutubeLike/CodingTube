@@ -14,7 +14,7 @@ const profil = require('./profil/router')
 console.log("router src");
 router.use('/live', live)
 router.use('/profil', profil)
-router.use('/channel', live)
+router.use('/channel', channel)
 router.use('/timeline', timeline)
 router.use('/short', short)
 router.use('/search', search)

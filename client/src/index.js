@@ -10,10 +10,10 @@ import Subscribe from "./timeline/pages/subscribe";
 import Trends from "./timeline/pages/trends";
 import Yourvideos from "./timeline/pages/yourVideos";
 import Watch from "./timeline/pages/watch";
-import CreateChannel from "./channel/pages/Channel";
+import CreateChannel from "./channel/pages/NewChannel";
 import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
-import Channel from "./channel/pages/PageChannel";
+import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
 
 const router = createBrowserRouter([

@@ -42,22 +42,17 @@ export default function UploadVideo() {
     }
   
 	return (
-		<div className="flex flex-col items-center w-2/3 bg-white p-8 rounded-lg shadow-lg hover:bg-white-300 transition-colors hover:scale-105">
-			{/* {imagePreview ? ( // Si imagePreview est défini
-        <img src={imagePreview} /> // Affiche l'aperçu de l'image
-      ) : (
-        <img src={logo} alt="Logo"/> // Affiche le logo par défaut si sa veut bien marcher
-      )} */}
+		<div className="flex flex-col items-center w-full px-[15vw] bg-white p-8 rounded-lg shadow-xl hover:bg-white-300 transition-colors my-4">
 
 			<form className="w-full">
 				<h2 className="font-bold text-2xl mb-4">Détails</h2>
 				<div className="flex">
-					<div className="w-2/3">
-						<div className="border-solid border-2 border-gray-600 rounded-md w-full mb-4">
+					<div className="w-3/5">
+						<div className="border-solid border-2 border-gray-500 rounded-md w-full mb-4">
 							<label htmlFor="nom" className="flex flex-cols pl-2">
 								Titre
 							</label>
-							<input name="nom" type="text" className="outline-none p-2 w-full rounded-md" />
+							<input name="nom" type="text" className="outline-none p-2 w-full rounded-md font-bold text-xl" />
 						</div>
 
 						<div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
@@ -67,12 +62,12 @@ export default function UploadVideo() {
 							<textarea
 								name="identifiant"
 								type="text"
-								className="outline-none p-2 h-[80%] w-full resize-none"
+								className="outline-none p-2 h-[80%] w-full resize-none font-bold"
 							/>
 						</div>
 					</div>
 
-					<div className=" w-1/3 h-1/1 ml-4 ">
+					<div className=" w-2/5 h-1/1 ml-4 ">
 
 						{videoPreview ? ( // Si videoPreview est défini
 							<div className="h-full flex flex-col justify-around">
@@ -81,8 +76,9 @@ export default function UploadVideo() {
 								<input name="video" type='file' onChange={handleImageChange} className="border-none cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors" />
 							</label>
 							</div> 
-						) : (<div className="h-full flex flex-col justify-around">
+						) : (<div className="h-full flex flex-col justify-between">
 								<div className="text-white flex items-center justify-center font-bold bg-black w-full aspect-[16/9] cursor-pointer" onClick={handleFirstImageImportButtonClick}><p className="text-6xl mb-4 mr-2">+</p></div>
+								<p>Nom du fichier :</p>
 								<label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
 								Importer
 								<input

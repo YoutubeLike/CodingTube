@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import img from '../../assets/logo.jpg'
 import dislike from '../../assets/dislike.png'
 import like from '../../assets/like.png'
 import share from '../../assets/share.png'
 
 export default function Video() {
+
   return (
    <>
     <div className="pl-40 mt-8 w-4/5">
