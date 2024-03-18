@@ -21,7 +21,10 @@ class Authentification extends React.Component {
         usernameOrMail: "",
         password: "",
       },
-      error: null,
+      errorLogin: null,
+      errorRegister: null,
+      goodLogin: null,
+      goodRegister: null,
     };
   }
 
@@ -56,15 +59,47 @@ class Authentification extends React.Component {
       try {
         const response = await axios.post('http://localhost:5000/api/profil/register', formData);
         console.log('Utilisateur inséré avec succès');
+        this.setState({
+          goodRegister: response.data.message,
+          errorRegister: null,
+          goodLogin: null,
+          errorLogin: null,
+          RegisterData:{
+            mail: "",
+            username: "",
+            password: "",
+            confirmPassword: ""
+          }
+         });
       } catch (error) {
-        this.setState({ error: error.response.data.error });
+        this.setState({ 
+          errorRegister: error.response.data.error,
+          goodRegister: null,
+          goodLogin: null,
+          errorLogin: null,
+        });
       }
     } else{
       try {
         const response = await axios.post('http://localhost:5000/api/profil/login', formData);
         console.log('Utilisateur connecté avec succès');
+        this.setState({
+          goodLogin: response.data.message, 
+          errorLogin: null,
+          errorRegister: null,
+          goodRegister: null,
+          LoginData: {
+            usernameOrMail: "",
+            password: "",
+          }
+        });
       } catch (error) {
-        this.setState({ error: error.response.data.error });
+        this.setState({ 
+          errorLogin  : error.response.data.error, 
+          goodRegister : null,
+          errorRegister: null,
+          goodLogin: null,
+        });
       }
     }
   };
@@ -129,7 +164,8 @@ class Authentification extends React.Component {
                   onLoginChange={this.onChange}
                 />
               </form>
-              {this.state.error && <p className="!mt-2 text-red-600">{this.state.error}</p>}
+              {this.state.errorLogin && <p className="!mt-2 text-red-600">{this.state.errorLogin}</p>}
+              {this.state.goodLogin && <p className="!mt-2 text-green-600">{this.state.goodLogin}</p>}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
@@ -166,7 +202,8 @@ class Authentification extends React.Component {
                   onRegisterChange={this.onChange}
                 />
               </form>
-              {this.state.error && <p className="!mt-2 text-red-600">{this.state.error}</p>}
+              {this.state.errorRegister && <p className="!mt-2 text-red-600">{this.state.errorRegister}</p>}
+              {this.state.goodRegister && <p className="!mt-2 text-green-600">{this.state.goodRegister}</p>}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button

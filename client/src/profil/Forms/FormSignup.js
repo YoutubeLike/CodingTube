@@ -117,7 +117,7 @@ class FormSignup extends React.Component {
             className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
             onClick={this.toggleConfirmPasswordVisibility}
           >
-            {this.state.showPassword ? (
+            {this.state.showConfirmPassword ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32"
