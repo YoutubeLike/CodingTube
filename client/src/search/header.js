@@ -6,6 +6,7 @@ export default function Header() {
   // State to manage the value of the search input
   const [searchValue, setSearchValue] = useState("");
   const [mostView, setMostView] = useState([]);
+  const [searchHistory, setSearchHistory] = useState([]);
 
 
   // Function to handle form submission
@@ -25,12 +26,24 @@ export default function Header() {
   const mostResearch = async (e) => {
   e.preventDefault();
   try{
-  const resultsMostView =await axios.get("http://localhost:5000/api/search/mostResearch");
+  const resultsMostView = await axios.get("http://localhost:5000/api/search/mostResearch");
   setMostView(resultsMostView.data);
   }catch (error) {
     console.error("An error occurred while searching research most view: ", error); // Handling errors if any
   }
   }
+
+
+  const history = async (e) => {
+    e.preventDefault();
+    try{
+      const resultHistory = await axios.get("http://localhost:5000/api/search/history")
+      setSearchHistory(resultHistory.data);
+    }catch (error) {
+      console.error("An error occurred while searching research most view: ", error);
+    }
+  }
+
   // Function to handle changes in the search input
   const handleInputChange = (e) => {
     setSearchValue(e.target.value); // Updating the search value as the user types
@@ -38,6 +51,7 @@ export default function Header() {
 
   const suppressDisplayResearch = (e) => {
     setMostView([]);
+    setSearchHistory([]);
   };
   return (
     // Header component containing search bar and buttons
