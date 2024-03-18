@@ -41,7 +41,7 @@ export default function Header() {
   };
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-11 absolute">
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-11 fixed">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <div className="flex w-[99%] h-6 ml-2 mt-0.5">
@@ -63,10 +63,10 @@ export default function Header() {
               onClick={mostResearch}
               onBlur={suppressDisplayResearch}
             />
-            <div className="w-[100%]">
-              <ul>
+            <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 ">
+              <ul role="listbox" className="">
                 {mostView.map((result, index) => (
-                  <li key={index}>{result.name_search}</li>))}
+                  <div className="flex hover:bg-gray-100 py-3"> <img className="h-6" src="search.png"></img><li key={index}>{result.name_search}</li></div>))}
               </ul>
             </div>
           </div>
