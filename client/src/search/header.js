@@ -42,20 +42,20 @@ export default function Header() {
   return (
     // Header component containing search bar and buttons
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 absolute">
-      <div className="flex w-[33%] h-7 ">
+      <div className="flex w-[33%] h-7">
         <DisplayedBurgerMenu />
-        <div className="flex w-[99%] h-6 ml-2 mt-0.5">
+        <div className="flex w-[99%] h-6 ml-2 mt-0.5 z-20 relative">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
           <p>CODITUBE</p>
         </div>
       </div>
-      <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg">
+      <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
         {/* Form for searching */}
         <form className="flex w-[100%]" onSubmit={submit}>
           {/* Search input field */}
-          <div className="display-block w-[100%] h-7">
+          <div className="display-block w-[100%] h-7 z-20 relative">
             <input
-              className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg"
+              className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
               placeholder="Search"
               value={searchValue}
@@ -63,17 +63,17 @@ export default function Header() {
               onClick={mostResearch}
               onBlur={suppressDisplayResearch}
             />
-            <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 ">
-              <ul role="listbox" className="">
+            <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
+              <ul role="listbox" className="z-20 relative">
                 {mostView.map((result, index) => (
-                  <div className="flex hover:bg-gray-100 py-3"> <img className="h-6" src="search.png"></img><li key={index}>{result.name_search}</li></div>))}
+                  <div className="flex hover:bg-gray-100 py-3"> <img className="h-6 z-20 relative" src="search.png"></img><li key={index}>{result.name_search}</li></div>))}
               </ul>
             </div>
           </div>
           {/* Search button */}
           <button type="submit">
             <img
-              className="h-7 bg-gray-200 rounded-e-lg"
+              className="h-7 bg-gray-200 rounded-e-lg z-20 relative"
               src="search.png"
               alt="search"
             ></img>
@@ -81,7 +81,7 @@ export default function Header() {
           {/* Microphone button (for voice search) */}
           <button>
             <img
-              className="ml-2 h-7 bg-gray-200 rounded-full"
+              className="ml-2 h-7 bg-gray-200 rounded-full z-20 relative"
               src="mic.png"
               alt="vocal-search"
             ></img>
