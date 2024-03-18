@@ -155,19 +155,6 @@ class Short extends React.Component {
   render() {
     const comments = this.state.comments.map((comment) => <li>{comment}</li>);
 
-<<<<<<< Updated upstream
-    const comments = this.state.comments.map(comment => (<li>{comment}</li>));
-    const infos = ShortRequest();
-    return(
-
-      <div id='shortContainer' className={shortContainer}>
-
-        <div>
-          {infos.title}
-          {infos.description}
-          {infos.upload_video_url}
-        </div>
-=======
     return (
       <div
         id="shortSection"
@@ -193,7 +180,6 @@ class Short extends React.Component {
                   <img src="whiteSoundButton.png" />
                 </button>
               </div>
->>>>>>> Stashed changes
 
               {/* Contains uploader's informations and video's title */}
               <div className="mb-[2vh] p-[1vh] mb-[1vh] ml-[2vh] text-white">
