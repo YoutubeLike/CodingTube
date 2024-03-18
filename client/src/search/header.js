@@ -41,7 +41,7 @@ export default function Header() {
   };
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-11">
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-11 absolute">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <div className="flex w-[99%] h-6 ml-2 mt-0.5">
@@ -53,16 +53,23 @@ export default function Header() {
         {/* Form for searching */}
         <form className="flex w-[100%]" onSubmit={submit}>
           {/* Search input field */}
-          <input
-            className="w-[90%] text-xs bg-gray-200 rounded-s-lg"
-            type="text"
-            placeholder="Search"
-            value={searchValue}
-            onChange={handleInputChange} // Handling input changes
-            onClick={mostResearch}
-            onBlur={suppressDisplayResearch}
-          
-          />
+          <div className="display-block w-[90%] h-7">
+            <input
+              className="w-[90%] h-[100%] text-xs bg-gray-200 rounded-s-lg"
+              type="text"
+              placeholder="Search"
+              value={searchValue}
+              onChange={handleInputChange} // Handling input changes
+              onClick={mostResearch}
+              onBlur={suppressDisplayResearch}
+            />
+            <div className="w-[90%]">
+              <ul>
+                {mostView.map((result, index) => (
+                  <li key={index}>{result.name_search}</li>))}
+              </ul>
+            </div>
+          </div>
           {/* Search button */}
           <button type="submit">
             <img
@@ -80,12 +87,6 @@ export default function Header() {
             ></img>
           </button>
         </form>
-      </div>
-      <div>
-        <ul>
-          {mostView.map((result, index) => (
-            <li key={index}>{result.name_search}</li>))}
-        </ul>
       </div>
       {/* Buttons on the right side of the header */}
       <div className="flex justify-end space-x-2 w-[33%]">
