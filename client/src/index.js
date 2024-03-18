@@ -15,6 +15,8 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/PageChannel";
 import Authentification from "./profil/Pages/Authentification";
+import Live from './live/index'
+import UserLive, { loader as LoaderLive } from "./live/UserLive";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,15 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Mainpage />
+      },
+      {
+        path: "live",
+        element: <Live />
+      },
+      {
+        path: "live/:user",
+        element: <UserLive />,
+        loader: LoaderLive
       },
       {
         path: "/history",
