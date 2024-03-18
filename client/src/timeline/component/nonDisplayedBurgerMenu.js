@@ -11,7 +11,7 @@ export default function NonDisplayedBurgerMenu() {
             </a>
         </div>
         <div className="relative top-[-150px]">
-            <a href="/shorts">
+            <a href="/short">
             <img className="relative left-[-3px]" src="shorts1.png"></img>
             <button className="relative left-[9px]">
             Shorts

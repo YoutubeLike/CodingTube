@@ -6,22 +6,15 @@ export default function ShortRequest() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/short/short-request');
+        const response = await axios.get(
+          "http://localhost:5000/api/short/short-request"
+        );
         setVideosInfos(response.data);
-        console.log(response.data);
+        return response.data;
       } catch (error) {
-        console.error('Error fetching videos:', error);
+        console.error("Error fetching videos:", error);
       }
     };
     fetchVideos();
   }, []);
-    return (
-      <div>
-        {videosInfos.channel_id} <br/>
-        {videosInfos.title} <br/>
-        {videosInfos.description} <br/>
-      </div>
-    );
 }
-
-

@@ -80,11 +80,16 @@ class Short extends React.Component {
   render(){
 
     const comments = this.state.comments.map(comment => (<li>{comment}</li>));
-
+    const infos = ShortRequest();
     return(
 
       <div id='shortContainer' className={shortContainer}>
-        <ShortRequest />
+
+        <div>
+          {infos.title}
+          {infos.description}
+          {infos.upload_video_url}
+        </div>
 
         <div id='shortRenderer' className={shortRenderer}>
         </div>
