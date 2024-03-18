@@ -1,7 +1,6 @@
 import "./short.css";
 import React from "react";
 import ShortRequest from "./shortRequest";
-import StartShorts from "./startShorts";
 import ReactDOM from "react-dom";
 
 /*
