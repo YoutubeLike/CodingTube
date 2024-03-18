@@ -53,9 +53,9 @@ export default function Header() {
         {/* Form for searching */}
         <form className="flex w-[100%]" onSubmit={submit}>
           {/* Search input field */}
-          <div className="display-block w-[90%] h-7">
+          <div className="display-block w-[100%] h-7">
             <input
-              className="w-[90%] h-[100%] text-xs bg-gray-200 rounded-s-lg"
+              className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg"
               type="text"
               placeholder="Search"
               value={searchValue}
@@ -63,7 +63,7 @@ export default function Header() {
               onClick={mostResearch}
               onBlur={suppressDisplayResearch}
             />
-            <div className="w-[90%]">
+            <div className="w-[100%]">
               <ul>
                 {mostView.map((result, index) => (
                   <li key={index}>{result.name_search}</li>))}
