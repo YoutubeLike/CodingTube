@@ -27,6 +27,7 @@ class Short extends React.Component {
       comment: "",
       comments: [],
       commentCount: 0,
+      sound: false,
     };
     this.like = this.like.bind(this);
     this.dislike = this.dislike.bind(this);
@@ -43,31 +44,80 @@ class Short extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
-  }
 
-  like() {
     const likeButton = document.getElementById("like");
 
-    if (likeButton.getAttribute("listener") != "true") {
-      likeButton.addEventListener("mouseover", () => {
-        // Change the button's background color
-        if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-          likeButton.style.backgroundColor = "rgb(229, 229, 229)";
+    likeButton.addEventListener("mouseover", () => {
+      // if background color is not black, set it gray
+      if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
+        likeButton.style.backgroundColor = "rgb(229, 229, 229)";
+      }
+    });
+
+    likeButton.addEventListener("mouseout", () => {
+      // if background color is not black, set it white
+      if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
+        likeButton.style.backgroundColor = "rgb(245, 245, 245)";
+      }
+    });
+
+    const dislikeButton = document.getElementById("dislike");
+
+    if (dislikeButton.getAttribute("listener") != "true") {
+      dislikeButton.addEventListener("mouseover", () => {
+        // if background color is not black, set it gray
+        if (dislikeButton.style.backgroundColor != "rgb(23, 23, 23)") {
+          dislikeButton.style.backgroundColor = "rgb(229, 229, 229)";
         }
       });
 
-      // Add a mouseout event listener
-      likeButton.addEventListener("mouseout", () => {
-        // Change the button's background color back to its original color
-        if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-          likeButton.style.backgroundColor = "rgb(245, 245, 245)";
+      dislikeButton.addEventListener("mouseout", () => {
+        // if background color is not black, set it white
+        if (dislikeButton.style.backgroundColor != "rgb(23, 23, 23)") {
+          dislikeButton.style.backgroundColor = "rgb(245, 245, 245)";
         }
       });
     }
 
+    const video = document.getElementById("video");
+    document.getElementById("soundButton").addEventListener("click", () => {
+      if (video.muted) {
+        video.muted = false;
+        document.getElementById("soundButtonImg").src = "soundButton.png";
+      } else {
+        video.muted = true;
+        document.getElementById("soundButtonImg").src = "muteButton.png";
+      }
+    });
+
+    document.addEventListener('keyup', event => {
+      if (event.code === 'Space') {
+        if (video.paused) {
+          video.play();
+          document.getElementById("playButtonImg").src = "playButton.png";
+        } else {
+          video.pause();
+          document.getElementById("playButtonImg").src = "pauseButton.png";
+        }
+      }
+    })
+
+    document.getElementById("playButton").addEventListener("click", () => {
+      const video = document.getElementById("video");
+      if (video.paused) {
+        video.play();
+        document.getElementById("playButtonImg").src = "playButton.png";
+      } else {
+        video.pause();
+        document.getElementById("playButtonImg").src = "pauseButton.png";
+      }
+    })
+  }
+
+  like() {
     if (!this.state.isLiked) {
       this.setState((state) => ({ likes: state.likes + 1, isLiked: true }));
-      likeButton.style.backgroundColor =
+      document.getElementById("like").style.backgroundColor =
         "#171717"; /* LIKE BUTTON : white -> black */
       document.getElementById("likeImg").style.filter =
         "invert(1)"; /* invert LIKE icon colors */
@@ -85,38 +135,19 @@ class Short extends React.Component {
         likes: state.likes - 1,
         isLiked: false,
       })); /* LIKE button unpressed */
-      likeButton.style.backgroundColor =
+      document.getElementById("like").style.backgroundColor =
         "#f5f5f5"; /* LIKE BUTTON : black -> white */
       document.getElementById("likeImg").style.filter = "none";
     }
   }
 
   dislike() {
-    const dislikeButton = document.getElementById("dislike");
-
-    if (dislikeButton.getAttribute("listener") != "true") {
-      dislikeButton.addEventListener("mouseover", () => {
-        // Change the button's background color
-        if (dislikeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-          dislikeButton.style.backgroundColor = "rgb(229, 229, 229)";
-        }
-      });
-
-      // Add a mouseout event listener
-      dislikeButton.addEventListener("mouseout", () => {
-        // Change the button's background color back to its original color
-        if (dislikeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-          dislikeButton.style.backgroundColor = "rgb(245, 245, 245)";
-        }
-      });
-    }
-
     if (!this.state.isDisliked) {
       this.setState((state) => ({
         dislikes: state.dislikes + 1,
         isDisliked: true,
       }));
-      dislikeButton.style.backgroundColor =
+      document.getElementById("dislike").style.backgroundColor =
         "#171717"; /* DISLIKE BUTTON : white -> black */
       document.getElementById("dislikeImg").style.filter =
         "invert(1)"; /* invert DISLIKE icon colors */
@@ -134,7 +165,7 @@ class Short extends React.Component {
         dislikes: state.dislikes - 1,
         isDisliked: false,
       })); /* DISLIKE button unpressed */
-      dislikeButton.style.backgroundColor =
+      document.getElementById("dislike").style.backgroundColor =
         "#f5f5f5"; /* DISLIKE BUTTON : black -> white */
       document.getElementById("dislikeImg").style.filter = "none";
     }
@@ -148,6 +179,11 @@ class Short extends React.Component {
       console.log(this.state.userInput);
       document.getElementById("commentsInputField").value = "";
     }
+  }
+
+  changeAudioState() {
+    const video = document.getElementById("video");
+    video.muted = !video.muted;
   }
 
   handleChange(event) {
@@ -166,20 +202,20 @@ class Short extends React.Component {
         <div className="mb-[1vh] flex justify-center">
           {/* Contains video and its informations */}
           <div class="videoContainer">
-            <video class="short" src="1.mp4" muted autoPlay loop />
+            <video src="1.mp4" id="video" class="short" muted autoPlay loop />
 
             {/* Contains video's informations */}
             <div className="flex flex-col justify-between h-full w-full group">
               {/* Contains pause button and sound button */}
               <div className="p-[1.5vh] flex justify-between items-start bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition ease-in-out">
                 {/* Play button */}
-                <button className="h-[4vh] w-[4vh]">
-                  <img src="whitePlayButton.png" />
+                <button id="playButton" className="h-[4vh] w-[4vh]">
+                  <img src="playButton.png" id="playButtonImg" />
                 </button>
 
                 {/* Sound button */}
-                <button className="h-[4vh] w-[4vh]">
-                  <img src="whiteSoundButton.png" />
+                <button id="soundButton" className="h-[4vh] w-[4vh]">
+                  <img src="muteButton.png" id="soundButtonImg" />
                 </button>
               </div>
 
@@ -208,7 +244,9 @@ class Short extends React.Component {
                 </div>
 
                 {/* Video's title */}
-                <p className="text-[2vh]"> {this.state.videosInfos.description} </p>
+                <p className="text-[2vh]">
+                  {this.state.videosInfos.description}
+                </p>
               </div>
             </div>
           </div>
@@ -244,7 +282,10 @@ class Short extends React.Component {
               </button>
 
               {/* Name */}
-              <p className={buttonTextStyle}> {this.state.videosInfos.nb_dislike} </p>
+              <p className={buttonTextStyle}>
+                {" "}
+                {this.state.videosInfos.nb_dislike}{" "}
+              </p>
             </div>
 
             {/* Contains comment button and comments count */}
@@ -254,7 +295,9 @@ class Short extends React.Component {
                 <img src="comment.png" className={buttonImageStyle} />
               </button>
               {/* Comments count */}
-              <p className={buttonTextStyle}>{this.state.videosInfos.nb_comment}</p>
+              <p className={buttonTextStyle}>
+                {this.state.videosInfos.nb_comment}
+              </p>
             </div>
 
             {/* Contains share button and its name */}
