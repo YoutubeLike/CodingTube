@@ -36,7 +36,9 @@ class Short extends React.Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get("http://localhost:5000/api/short/short-request");
+      const response = await axios.get(
+        "http://localhost:5000/api/short/short-request"
+      );
       this.setState({ videosInfos: response.data });
     } catch (error) {
       console.error("Error fetching videos:", error);
@@ -196,7 +198,7 @@ class Short extends React.Component {
 
                   {/* Uploader's channel */}
                   <button className="ml-[0.95vh] font-semibold text-[2vh]">
-                    @ZachChoi
+                    @{this.state.videosInfos.pseudo}
                   </button>
 
                   {/* Subscribe button */}
@@ -206,7 +208,7 @@ class Short extends React.Component {
                 </div>
 
                 {/* Video's title */}
-                <p className="text-[2vh]">Would you eat this? #shorts</p>
+                <p className="text-[2vh]"> {this.state.videosInfos.description} </p>
               </div>
             </div>
           </div>
@@ -221,7 +223,9 @@ class Short extends React.Component {
               </button>
 
               {/* Likes count */}
-              <p className={buttonTextStyle}> {this.state.videosInfos['nb_likes']} 342124</p>
+              <p className={buttonTextStyle}>
+                {this.state.videosInfos.nb_like}
+              </p>
             </div>
 
             {/* Contains dislike button and its name */}
@@ -240,7 +244,7 @@ class Short extends React.Component {
               </button>
 
               {/* Name */}
-              <p className={buttonTextStyle}>Dislike</p>
+              <p className={buttonTextStyle}> {this.state.videosInfos.nb_dislike} </p>
             </div>
 
             {/* Contains comment button and comments count */}
@@ -250,7 +254,7 @@ class Short extends React.Component {
                 <img src="comment.png" className={buttonImageStyle} />
               </button>
               {/* Comments count */}
-              <p className={buttonTextStyle}>1432</p>
+              <p className={buttonTextStyle}>{this.state.videosInfos.nb_comment}</p>
             </div>
 
             {/* Contains share button and its name */}
@@ -270,7 +274,7 @@ class Short extends React.Component {
             </button>
 
             {/* Sound used */}
-            <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vw] h-[5vw] rounded-[20]">
+            <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vh] h-[5vh] rounded-[20]">
               {" "}
             </button>
           </div>
