@@ -5,11 +5,14 @@ const express = require('express');
 const router = express.Router();
 
 // Import des fonctions
-const { test, selectChannel, submit } = require('./controller')
+const { test, selectChannel, submit, submitData} = require('./controller')
 
-// Configuration de la route
-router.get('/test', test)
-router.get('/infos', selectChannel)
-router.get('/request/:submit', submit)
+// Configuration de la route POST pour la soumission des données
+router.post('/submitData', submitData);
 
-module.exports = router
+// Autres routes...
+router.get('/test', test);
+router.get('/infos', selectChannel);
+router.get('/request/:submit', submit);
+
+module.exports = router;

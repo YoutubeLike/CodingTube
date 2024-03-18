@@ -12,6 +12,22 @@ const selectChannel = ((_,res) => {
   })
 })
 
+
+const submitData = (req, res) => {
+  const { title, description} = req.body;
+  console.log('Données reçues :', title, description); // Ajoutez cette ligne pour vérifier les données reçues
+
+  mariadb.pool.query('INSERT INTO video (title, description) VALUES (?, ?)', [title, description])
+      .then(() => {
+          res.status(200).send("Données soumises avec succès !");
+      })
+      .catch(error => {
+          console.error("Erreur lors de la soumission des données :", error);
+          res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+      });
+};
+
+
 const submit = ((req, res) => {
   const submitValue = req.params.submit;
 
@@ -23,21 +39,5 @@ module.exports = {
   test,
   selectChannel,
   submit,
+  submitData,
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
