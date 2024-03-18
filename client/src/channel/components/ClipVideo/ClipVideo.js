@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import img from '../../assets/logo.jpg'
 import dislike from '../../assets/dislike.png'
 import like from '../../assets/like.png'
 import share from '../../assets/share.png'
 
 export default function Video() {
+
+  const [test, setTest] = useState("Coucou");
+
+    const submit = async () => {
+      try {
+        const response = await axios.post("http://localhost:5000/api/channel/request", {
+          testData: test 
+        });
+        console.log(response.data); // Logging the response data to the console
+      } catch (error) {
+        console.error("An error occurred while searching: ", error); // Handling errors if any
+      }
+    };
+
   return (
    <>
+    <button onClick={submit}>Clique</button>
     <div className="pl-40 mt-8 w-4/5">
       <iframe
         width="100%"
