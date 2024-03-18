@@ -1,6 +1,7 @@
 import "./short.css";
 import React from "react";
 import ShortRequest from "./shortRequest";
+import StartShorts from "./startShorts";
 import ReactDOM from "react-dom";
 
 /*
@@ -93,31 +94,31 @@ class Short extends React.Component {
         <div id='sideButtons' className={allButtonsAlignStyle}>
           <div className={buttonAlignStyle}>
             <button id='like' className={buttonStyle} onClick={this.like}>
-              <img id='likeImg' src="../like.png" className={innerButtonStyle} alt="I like this content"></img>
+              <img id='likeImg' src="like.png" className={innerButtonStyle} alt="I like this content"></img>
             </button>
             <span className={sideButtonsText}> Likes  {/* {this.state.likes} */} </span>
           </div>
           <div className={buttonAlignStyle}>
             <button id='dislike' className={buttonStyle} onClick={this.dislike}>
-              <img id='dislikeImg' src="../dislike.png" className={innerButtonStyle} alt="I dislike this content"></img>
+              <img id='dislikeImg' src="dislike.png" className={innerButtonStyle} alt="I dislike this content"></img>
             </button>
             <span> Dislikes {/* {this.state.dislikes} */} </span>
           </div>
           <div className={buttonAlignStyle}>
             <button className={buttonStyle} onClick=''>
-              <img src="../comment.png" className={innerButtonStyle} alt="Comments"></img>
+              <img src="comment.png" className={innerButtonStyle} alt="Comments"></img>
             </button>
             <span> Comments {} </span>
           </div>
           <div className={buttonAlignStyle}>
             <button className={buttonStyle} onClick=''>
-              <img src="../share.png" className={innerButtonStyle} alt="Share"></img>
+              <img src="share.png" className={innerButtonStyle} alt="Share"></img>
             </button>
             <span> Share {} </span>
           </div>
           <div className={buttonAlignStyle}>
             <button className={buttonStyle} onClick=''>
-              <img src="../3dots.png" className={innerButtonStyle}></img>
+              <img src="3dots.png" className={innerButtonStyle}></img>
             </button>
             <span> More {} </span>
           </div>
@@ -145,18 +146,20 @@ class Short extends React.Component {
   }
 }
 
-const audioButtonStyle = "flex items-center justify-center bg-[#f5f5f5] w-[3.5vw] h-[3.5vw] rounded-[20]";
-const buttonStyle = "flex items-center justify-center p-4 bg-[#f5f5f5] w-[3.5vw] h-[3.5vw] rounded-full hover:bg-[#e5e5e5]";
-const allButtonsAlignStyle = "h-[80vh] flex justify-end items-center flex-col";
+const audioButtonStyle = "flex items-center justify-center bg-[#f5f5f5] w-[3vw] h-[3vw] rounded-[20]";
+const buttonStyle = "flex items-center justify-center p-4 bg-[#f5f5f5] w-[5vh] h-[5vh] rounded-full hover:bg-[#e5e5e5]";
+const allButtonsAlignStyle = "flex justify-end items-center flex-col";
 const buttonAlignStyle = "flex items-center justify-center flex-col mb-[0.7vw] ml-[1vw]";
+
+const innerButtonStyle = "w-[2.5vh] h-[2.5vh]";
+const sideButtonsText = "text-ellipsis";
 
 const inputStyle = "bg-white border-solid border-2 rounded-md";
 
-const innerButtonStyle = "w-[80%] h-[80%] object-cover";
-const sideButtonsText = "text-ellipsis";
 
-const shortContainer = "flex items-center justify-center flex-row";
-const shortRenderer = "h-[80vh] w-[45vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar rounded-lg bg-[#f5f5f5]";
+
+const shortContainer = "flex justify-center items-center";
+const shortRenderer = "h-[560px] w-[315px] min-h-[560px] min-w-[315px] w-full overflow-auto snap-y snap-mandatory no-scrollbar rounded-lg bg-[#f5f5f5]"
 
 /*filter:var(--tw-invert)*/
 
