@@ -1,21 +1,27 @@
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function ShortRequest() {
-  axios.post('http://localhost:5000/api/short/short-request')
-  .then(function (response) {
-    // handle success
-    console.log(response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
-  });
-  // return (
-  //   [videosInfos.channel_id, videosInfos.title, videosInfos.description]
-  // );
+  const [videosInfos, setVideosInfos] = useState([]);
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/short/short-request');
+        setVideosInfos(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
+    fetchVideos();
+  }, []);
+    return (
+      <div>
+        {videosInfos.channel_id} <br/>
+        {videosInfos.title} <br/>
+        {videosInfos.description} <br/>
+      </div>
+    );
 }
 
 

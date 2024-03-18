@@ -13,8 +13,6 @@ function Short() {
 }
 */
 
-// ShortRequest();
-
 class Short extends React.Component {
   constructor(props) {
     super(props);
@@ -86,6 +84,7 @@ class Short extends React.Component {
     return(
 
       <div id='shortContainer' className={shortContainer}>
+        <ShortRequest />
 
         <div id='shortRenderer' className={shortRenderer}>
         </div>
