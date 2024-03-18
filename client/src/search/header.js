@@ -5,6 +5,8 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 export default function Header() {
   // State to manage the value of the search input
   const [searchValue, setSearchValue] = useState("");
+  const [mostView, setMostView] = useState([]);
+
 
   // Function to handle form submission
   const submit = async (e) => {
@@ -19,14 +21,27 @@ export default function Header() {
     }
   };
 
+
+  const mostResearch = async (e) => {
+  e.preventDefault();
+  try{
+  const resultsMostView =await axios.get("http://localhost:5000/api/search/mostResearch");
+  setMostView(resultsMostView.data);
+  }catch (error) {
+    console.error("An error occurred while searching research most view: ", error); // Handling errors if any
+  }
+  }
   // Function to handle changes in the search input
   const handleInputChange = (e) => {
     setSearchValue(e.target.value); // Updating the search value as the user types
   };
 
+  const suppressDisplayResearch = (e) => {
+    setMostView([]);
+  };
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2">
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-11">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <div className="flex w-[99%] h-6 ml-2 mt-0.5">
@@ -44,6 +59,9 @@ export default function Header() {
             placeholder="Search"
             value={searchValue}
             onChange={handleInputChange} // Handling input changes
+            onClick={mostResearch}
+            onBlur={suppressDisplayResearch}
+          
           />
           {/* Search button */}
           <button type="submit">
@@ -62,6 +80,12 @@ export default function Header() {
             ></img>
           </button>
         </form>
+      </div>
+      <div>
+        <ul>
+          {mostView.map((result, index) => (
+            <li key={index}>{result.name_search}</li>))}
+        </ul>
       </div>
       {/* Buttons on the right side of the header */}
       <div className="flex justify-end space-x-2 w-[33%]">
