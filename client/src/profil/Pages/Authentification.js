@@ -113,7 +113,7 @@ class Authentification extends React.Component {
           {" "}
           {/* Partie Rouge */}
           <div
-            className={`absolute w-1/2 h-full flex-col bg-red-700 shadow-inner ${
+            className={`absolute w-1/2 h-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner ${
               this.state.isLogin
                 ? "transform translate-x-full"
                 : "transform translate-x-0"
