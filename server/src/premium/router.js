@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const { shortRequest } = require("./controller.js");
+const { premium } = require("./controller.js");
 
-router.get("/short-request", shortRequest);
+router.get("/premium", premium);
 
 module.exports = router;

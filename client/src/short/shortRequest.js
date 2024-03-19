@@ -10,9 +10,5 @@ export default function ShortRequest() {
       .catch((err) => console.log(err));
   }, []);
   // UTILISEZ AXIOS
-  return (
-    [videosInfos.channel_id, videosInfos.title, videosInfos.description]
-  );
+  return [videosInfos.channel_id, videosInfos.title, videosInfos.description];
 }
-
-

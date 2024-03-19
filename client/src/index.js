@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App" 
-import Short from "./short/index"
+import App from "./App";
+import Short from "./short/index";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import Subscribe from "./timeline/pages/subscribe";
@@ -15,11 +15,13 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/PageChannel";
 import Authentification from "./profil/Pages/Authentification";
+import YoutubePremium from "./premium/YoutubePremiumView";
+// import Authentification from "./profil/Pages/Authentification";
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Authentification />
+    element: <Authentification />,
   },
   {
     path: "/",
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Mainpage />
+        element: <Mainpage />,
       },
       {
         path: "/history",
@@ -55,26 +57,30 @@ const router = createBrowserRouter([
       },
       {
         path: "/watch",
-        element: <Watch />
+        element: <Watch />,
       },
       {
-				path: "new-channel",
-				element: <CreateChannel />,
-			},
-			{
-				path: "video",
-				element: <Video />,
-			},
-			{
-				path: "upload",
-				element: <Upload />,
-			},
-    ]
+        path: "new-channel",
+        element: <CreateChannel />,
+      },
+      {
+        path: "video",
+        element: <Video />,
+      },
+      {
+        path: "upload",
+        element: <Upload />,
+      },
+      {
+        path: "premium",
+        element: <YoutubePremium />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
-		<RouterProvider router={router} />
-	</React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
