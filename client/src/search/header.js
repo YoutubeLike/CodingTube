@@ -8,6 +8,7 @@ export default function Header() {
   const [userhistory, setUserHistory] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  
 
   const submit = async () => {
     try {
@@ -36,6 +37,26 @@ export default function Header() {
       setUserHistory(resultHistory.data);
     } catch (error) {
       console.error("An error occurred while searching research most view: ", error);
+    }
+  }
+
+  const history_onChange = async (e) => {
+    e.preventDefault();
+    try {
+      const resultHistory_onChange = await axios.get("http://localhost:5000/api/search/history_onChange/1/" + searchValue)
+      setSearchValue(resultHistory_onChange.data);
+    } catch (error) {
+      console.error("An error in history_onChange: ", error);
+    }
+  }
+
+  const mostResearch_onChange = async (e) => {
+    e.preventDefault();
+    try {
+      const resultMostResearch_onChange = await axios.get("http://localhost:5000/api/search/mostResearch_onChange/" + searchValue )
+      setSearchValue(resultMostResearch_onChange.data);
+    } catch (error) {
+      console.error("An error in mostResearch_onChange: ", error);
     }
   }
 
@@ -85,7 +106,11 @@ export default function Header() {
               type="text"
               placeholder="Search"
               value={searchValue}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                handleInputChange(e);
+                mostResearch_onChange(e);
+                history_onChange(e);
+              }}
               onClick={(e) => {
                 setMenuOpen(true);
                 mostResearch(e);
