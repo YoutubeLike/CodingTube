@@ -5,8 +5,7 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 export default function Header() {
   // State to manage the value of the search input
   const [searchValue, setSearchValue] = useState("");
-  const [mostView, setMostView] = useState([]);
-  const [searchHistory, setSearchHistory] = useState([]);
+  const [results, setResults] = useState([]);
 
 
   // Function to handle form submission
@@ -27,7 +26,7 @@ export default function Header() {
   e.preventDefault();
   try{
   const resultsMostView = await axios.get("http://localhost:5000/api/search/mostResearch");
-  setMostView(resultsMostView.data);
+  setResults(resultsMostView.data);
   }catch (error) {
     console.error("An error occurred while searching research most view: ", error); // Handling errors if any
   }
@@ -37,8 +36,8 @@ export default function Header() {
   const history = async (e) => {
     e.preventDefault();
     try{
-      const resultHistory = await axios.get("http://localhost:5000/api/search/history")
-      setSearchHistory(resultHistory.data);
+      const resultHistory = await axios.get("http://localhost:5000/api/search/history/1")
+      setResults(resultHistory.data);
     }catch (error) {
       console.error("An error occurred while searching research most view: ", error);
     }
@@ -50,8 +49,7 @@ export default function Header() {
   };
 
   const suppressDisplayResearch = (e) => {
-    setMostView([]);
-    setSearchHistory([]);
+    setResults([]);
   };
   return (
     // Header component containing search bar and buttons
@@ -74,17 +72,24 @@ export default function Header() {
               placeholder="Search"
               value={searchValue}
               onChange={handleInputChange} // Handling input changes
-              onClick={mostResearch}
+              onClick={history}
               onBlur={suppressDisplayResearch}
             />
-            <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
-              <ul role="listbox" className="z-20 relative">
-                {mostView.map((result, index) => (
-                  <div className="flex hover:bg-gray-100 py-3"> <img className="h-6 z-20 relative" src="search.png"></img><li key={index}>{result.name_search}</li></div>))}
-              </ul>
-            </div>
+              <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
+                <ul role="listbox" className="z-20 relative">
+                    {results.map((result, index) => (
+                      <div className="flex hover:bg-gray-100 py-3" key={index}>
+                        <img className="h-6 z-20 relative" src="search.png" alt="search"></img>
+                        <li>{result.name_search}</li>
+                      </div>
+                    ))}
+                  
+                </ul>
+              </div>
+
           </div>
           {/* Search button */}
+
           <button type="submit">
             <img
               className="h-7 bg-gray-200 rounded-e-lg z-20 relative"

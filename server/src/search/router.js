@@ -7,6 +7,6 @@ const {history} = require('./history.js')
 
 router.get('/request/:submit', submit)
 router.get("/mostResearch", mostResearch)
-router.get('history', history)
+router.get('/history/:history', history)
 
 module.exports = router
