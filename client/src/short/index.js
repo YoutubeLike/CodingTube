@@ -1,9 +1,8 @@
-import "./short.css";
 import React from "react";
 import ShortRequest from "./shortRequest";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import Short from './short.js'
+import Short from "./short.js";
 
 /*
 function Short() {
@@ -26,7 +25,13 @@ class TempShort extends React.Component {
       isDisliked: false,
       dislikes: 0,
       comment: "",
-      comments: ["SMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK G", "cock and balls !", "i love cummies", "cock and ball TORTURE!!! I FUCKING LOVE THAT STUFF!!!!!!", "KC le KK xD"],
+      comments: [
+        "SMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK G",
+        "cock and balls !",
+        "i love cummies",
+        "cock and ball TORTURE!!! I FUCKING LOVE THAT STUFF!!!!!!",
+        "KC le KK xD",
+      ],
       commentCount: 0,
       commentsShown: false,
       sound: false,
@@ -76,8 +81,8 @@ class TempShort extends React.Component {
       }
     });
 
-    document.addEventListener('keyup', event => {
-      if (event.code === 'Space') {
+    document.addEventListener("keyup", (event) => {
+      if (event.code === "Space") {
         if (video.paused) {
           video.play();
           document.getElementById("playButtonImg").src = "playButton.png";
@@ -86,7 +91,7 @@ class TempShort extends React.Component {
           document.getElementById("playButtonImg").src = "pauseButton.png";
         }
       }
-    })
+    });
 
     document.getElementById("playButton").addEventListener("click", () => {
       const video = document.getElementById("video");
@@ -97,9 +102,8 @@ class TempShort extends React.Component {
         video.pause();
         document.getElementById("playButtonImg").src = "pauseButton.png";
       }
-    })
+    });
   }
-
 
   dislike() {
     if (!this.state.isDisliked) {
@@ -138,8 +142,8 @@ class TempShort extends React.Component {
       });
       console.log(this.state.userInput);
       document.getElementById("commentsInputField").value = "";
-      this.setState({userInput: ''});
-      let comments = document.getElementById("comments")
+      this.setState({ userInput: "" });
+      let comments = document.getElementById("comments");
       comments.scrollTop = comments.scrollHeight;
     }
   }
@@ -154,7 +158,7 @@ class TempShort extends React.Component {
   }
 
   toggleComments() {
-    this.setState(state => ({commentsShown: !state.commentsShown}))
+    this.setState((state) => ({ commentsShown: !state.commentsShown }));
   }
 
   render() {
@@ -166,8 +170,15 @@ class TempShort extends React.Component {
         {/* Contains video and right bar */}
         <div className="mb-[1vh] flex justify-center">
           {/* Contains video and its informations */}
-          <div class="videoContainer">
-            <video src="1.mp4" id="video" class="short" muted autoPlay loop />
+          <div className="h-[80vh] w-[45vh] flex flex-col justify-between relative snap-center rounded-[0.7vh] overflow-hidden">
+            <video
+              src="1.mp4"
+              id="video"
+              className="h-full w-full object-cover absolute behind"
+              muted
+              autoPlay
+              loop
+            />
 
             {/* Contains video's informations */}
             <div className="flex flex-col justify-between h-full w-full group">
@@ -215,81 +226,101 @@ class TempShort extends React.Component {
               </div>
             </div>
           </div>
-          {this.state.commentsShown ?
-          <div className="commentsContainer bg-gray-300 rounded-r-xl">
-            <div>
-              <h1>hello, {this.props.test}</h1>
-            </div>
-            <div id='comments' className="flex-col-reverse p-[1vh] overflow-scroll">
+          {this.state.commentsShown ? (
+            <div className="commentsContainer bg-gray-300 rounded-r-xl">
+              <div>
+                <h1>hello, {this.props.test}</h1>
+              </div>
+              <div
+                id="comments"
+                className="flex-col-reverse p-[1vh] overflow-scroll"
+              >
                 <div>
-                  {this.state.comments.map(comment => (<div className="rounded-sm bg-white m-1">{comment}</div>))}
+                  {this.state.comments.map((comment) => (
+                    <div className="rounded-sm bg-white m-1">{comment}</div>
+                  ))}
                 </div>
-            </div>
+              </div>
               <div>
                 <div className="m-2">
-                  <input id='commentsInputField' className='border border-purple border-50 rounded-sm text-gray' maxLength="1024" type='text' onChange={this.handleChange}></input>
+                  <input
+                    id="commentsInputField"
+                    className="border border-purple border-50 rounded-sm text-gray"
+                    maxLength="1024"
+                    type="text"
+                    onChange={this.handleChange}
+                  ></input>
                 </div>
                 <div className="m-2">
-                  <button onClick={this.postComment} className='rounded-full bg-blue-300 p-1'>Post comment</button>
+                  <button
+                    onClick={this.postComment}
+                    className="rounded-full bg-blue-300 p-1"
+                  >
+                    Post comment
+                  </button>
                 </div>
               </div>
             </div>
-            : <div />
-            }{/* Right bar */}
-            <div id="sideBar" className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
-              {/* Contains like button and likes count */}
-              
-  
-              {/* Contains dislike button and its name */}
-              <div className={buttonContainerStyle}>
-                {/* Dislike button */}
-                <button
-                  id="dislike"
-                  className={buttonStyle}
-                  onClick={this.dislike}
-                >
-                  <img
-                    src="dislike.png"
-                    id="dislikeImg"
-                    className={buttonImageStyle}
-                  />
-                </button>
-  
-                {/* Name */}
-                <p className={buttonTextStyle}>Dislike</p>
-              </div>
-  
-              {/* Contains comment button and comments count */}
-              <div className={buttonContainerStyle}>
-                {/* Comment button */}
-                <button className={buttonStyle} onClick={this.toggleComments}>
-                  <img src="comment.png" className={buttonImageStyle} />
-                </button>
-                {/* Comments count */}
-                <p className={buttonTextStyle}>1432</p>
-              </div>
-  
-              {/* Contains share button and its name */}
-              <div className={buttonContainerStyle}>
-                {/* Share button */}
-                <button className={buttonStyle}>
-                  <img src="share.png" className={buttonImageStyle} />
-                </button>
-  
-                {/* Name */}
-                <p className={buttonTextStyle}>Share</p>
-              </div>
-  
-              {/* More options button */}
-              <button className={buttonStyle}>
-                <img src="3dots.png" className={buttonImageStyle} />
+          ) : (
+            <div />
+          )}
+          {/* Right bar */}
+          <div
+            id="sideBar"
+            className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center"
+          >
+            {/* Contains like button and likes count */}
+
+            {/* Contains dislike button and its name */}
+            <div className={buttonContainerStyle}>
+              {/* Dislike button */}
+              <button
+                id="dislike"
+                className={buttonStyle}
+                onClick={this.dislike}
+              >
+                <img
+                  src="dislike.png"
+                  id="dislikeImg"
+                  className={buttonImageStyle}
+                />
               </button>
-  
-              {/* Sound used */}
-              <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vw] h-[5vw] rounded-[20]">
-                {" "}
-              </button>
+
+              {/* Name */}
+              <p className={buttonTextStyle}>Dislike</p>
             </div>
+
+            {/* Contains comment button and comments count */}
+            <div className={buttonContainerStyle}>
+              {/* Comment button */}
+              <button className={buttonStyle} onClick={this.toggleComments}>
+                <img src="comment.png" className={buttonImageStyle} />
+              </button>
+              {/* Comments count */}
+              <p className={buttonTextStyle}>1432</p>
+            </div>
+
+            {/* Contains share button and its name */}
+            <div className={buttonContainerStyle}>
+              {/* Share button */}
+              <button className={buttonStyle}>
+                <img src="share.png" className={buttonImageStyle} />
+              </button>
+
+              {/* Name */}
+              <p className={buttonTextStyle}>Share</p>
+            </div>
+
+            {/* More options button */}
+            <button className={buttonStyle}>
+              <img src="3dots.png" className={buttonImageStyle} />
+            </button>
+
+            {/* Sound used */}
+            <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vw] h-[5vw] rounded-[20]">
+              {" "}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -378,7 +409,6 @@ const buttonTextStyle = "text-[1.5vh]";
 
 /*  width: calc(56.25vh - 72px - var(--ytd-shorts-top-spacing, 0px)* .5625);
     height: calc(100vh - 128px - var(--ytd-shorts-top-spacing, 0px)); */
-
 
 /* ReactDOM.render(short, document.getElementById("root"));  */
 

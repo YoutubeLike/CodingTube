@@ -20,4 +20,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .behind {
+    z-index: -1;
+  }
 }

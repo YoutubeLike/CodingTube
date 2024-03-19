@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App" 
-import Short from "./short/index"
+import Short from "./short/short"
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import Subscribe from "./timeline/pages/subscribe";
