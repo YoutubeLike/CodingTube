@@ -5,7 +5,8 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 export default function Header() {
   // State to manage the value of the search input
   const [searchValue, setSearchValue] = useState("");
-  const [results, setResults] = useState([]);
+  const [mostview, setMostView] = useState([]);
+  const [userhistory, setUserHistory] = useState([]);
 
 
   // Function to handle form submission
@@ -26,7 +27,7 @@ export default function Header() {
   e.preventDefault();
   try{
   const resultsMostView = await axios.get("http://localhost:5000/api/search/mostResearch");
-  setResults(resultsMostView.data);
+  setMostView(resultsMostView.data);
   }catch (error) {
     console.error("An error occurred while searching research most view: ", error); // Handling errors if any
   }
@@ -37,7 +38,7 @@ export default function Header() {
     e.preventDefault();
     try{
       const resultHistory = await axios.get("http://localhost:5000/api/search/history/1")
-      setResults(resultHistory.data);
+      setUserHistory(resultHistory.data);
     }catch (error) {
       console.error("An error occurred while searching research most view: ", error);
     }
@@ -49,7 +50,8 @@ export default function Header() {
   };
 
   const suppressDisplayResearch = (e) => {
-    setResults([]);
+    setMostView([]);
+    setUserHistory([]);
   };
   return (
     // Header component containing search bar and buttons
@@ -77,10 +79,19 @@ export default function Header() {
                 history(e);
               }}
               onBlur={suppressDisplayResearch}
+              
             />
+
               <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
-                    {results.map((result, index) => (
+                    {userhistory.map((result, index) => (
+                      <div className="flex hover:bg-gray-100 py-3 hover:rounded-lg" key={index}>
+                        <img className="h-6 z-20 relative" src="rewind_icon.png" alt="search"></img>
+                        <li>{result.name_search}</li>
+                      </div>
+                    ))}
+                  
+                    {mostview.map((result, index) => (
                       <div className="flex hover:bg-gray-100 py-3 hover:rounded-lg" key={index}>
                         <img className="h-6 z-20 relative" src="search.png" alt="search"></img>
                         <li>{result.name_search}</li>
@@ -89,6 +100,8 @@ export default function Header() {
                   
                 </ul>
               </div>
+
+
 
           </div>
           {/* Search button */}
