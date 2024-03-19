@@ -56,6 +56,15 @@ export default function Header() {
     };
   }, []);
 
+  async function deleteHistory(id, e) {
+    e.preventDefault();
+    try {
+      await axios.get("http://localhost:5000/api/search/deleteHistory/" + id);
+    } catch (error) {
+      console.error("An error occurred while deleting: ", error);
+    }
+  }
+
   return (
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 absolute">
       <div className="flex w-[33%] h-7">
@@ -82,23 +91,26 @@ export default function Header() {
                 mostResearch(e);
                 history(e);
               }}
-              //onBlur={suppressDisplayResearch}
             />
             {menuOpen && (
               <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
-                  {userhistory.map((result, index) => (
-                    <button
-                      className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
-                      key={index}
-                      onClick={() => {
-                        setSearchValue(result.name_search);
-                        submit(result.name_search); 
-                      }}
-                    >
-                      <img className="h-6 z-20 relative" src="rewind_icon.png" alt="search"></img>
-                      <span>{result.name_search}</span>
-                    </button>
+                {userhistory.map((result, index) => (
+                    <div key={index} className="flex justify-between">
+                      <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
+                        <div onClick={() => {
+                          setSearchValue(result.name_search);
+                          submit(result.name_search); 
+                            }}>
+                          <img className="h-6 z-20 relative" src="rewind_icon.png" alt="search"></img>
+                          <span>{result.name_search}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="w-[100%]"
+                        onClick={(e) => {deleteHistory(result.id, e)}}>supprimer</button>
+                    </div>
                   ))}
                   {mostview.map((result, index) => (
                     <button
