@@ -1,39 +1,78 @@
-import React, { useState } from 'react';  
+import React, { useState, useRef } from 'react';  
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import './create.css';  
 import logo from "../../assets/logo.jpg"
 
 export default function Create() {  
-  const [imagePreview, setImagePreview] = useState(null);  // Déclaration d'un état local imagePreview pour stocker l'URL de l'image sélectionnée, initialisé à null.
+  const redirectLinkRef = useRef(); // Créez une référence useRef pour le lien de redirection
+  const [imagePreview, setImagePreview] = useState(null);  
+  const [name, setName] = useState("");
+  const [identifier, setIdentifier] = useState("@");
+  const [bio, setBio] = useState("");
 
-  function handleImageChange(event) {  // Définition de la fonction handleImageChange qui sera appelée lorsque l'utilisateur sélectionne une image.
-    const file = event.target.files[0];  // Récupération du fichier sélectionné par l'utilisateur.
-    if (file) {  // Vérification si un fichier a été sélectionné.
-      const reader = new FileReader();  // Création d'un objet FileReader pour lire le contenu du fichier.
-      reader.onloadend = () => {  // Définition d'une fonction de rappel pour être appelée lorsque la lecture du fichier est terminée.
-        setImagePreview(reader.result);  // Mise à jour de l'état imagePreview avec l'URL de l'image
-      };
-      reader.readAsDataURL(file);  // Lecture du contenu du fichier en tant qu'URL de données.
+  const submit = async (event) => {
+    event.preventDefault();
+    try {
+        await axios.post("http://localhost:5000/api/channel/submitChannel", { 
+            name: name,
+            identifier: identifier, 
+            bio: bio,
+        });
+        console.log('Requête envoyée');
+        redirectLinkRef.current.click(); // Déclenchez un clic sur le lien de redirection
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de l'envoi : ", error); 
+    }
+  };
+
+  function handleIdentifier(event) {
+    const newValue = event.target.value.trim();
+    if (newValue.includes("@")) {
+      const atIndex = newValue.indexOf("@");
+      const formattedValue = newValue.substring(atIndex);
+      setIdentifier(formattedValue);
+    } else {
+      const formattedValue = "@" + newValue;
+      setIdentifier(formattedValue);
     }
   }
+
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   return (
     <div className="create-container">
+      	<Link ref={redirectLinkRef} className="logo" to="/channel">
+					YouFlute
+				</Link>
       <h1>Voici comment les autres vous verront</h1>
-      {imagePreview ? ( // Si imagePreview est défini
-        <img src={imagePreview}  className="bonhomme-logo" />// Affiche l'aperçu de l'image
+      {imagePreview ? (
+        <img src={imagePreview}  className="bonhomme-logo rounded-full w-[250px] object-cover" />
       ) : (
-        <img src={logo} alt="Logo" className="bonhomme-logo" />// Affiche le logo par défaut si sa veut bien marcher 
+        <img src={logo} alt="Logo" className="bonhomme-logo rounded-full w-[250px] object-cover" />
       )}
-      <form className="create-form">
+      <form className="create-form" onSubmit={submit}>
         <label htmlFor="photo">Importez une photo</label>
         <input name="photo" type='file' onChange={handleImageChange} />
 
         <label htmlFor="nom">Nom</label>
-        <input name="nom" type="text" />
+        <input name="nom" type="text" value={name} onChange={(e)=>setName(e.target.value)} />
 
         <label htmlFor="identifiant">Identifiant</label>
-        <input name="identifiant" type="text" />
-        En cliquant sur "Créer une chaîne", vous acceptez les Conditions d'utilisation de Youflute. Les modifications apportées à votre nom et à votre photo de profil ne sont visibles que sur YouFlute (pas sur les autres services Google). En savoir plus
-        
+        <input name="identifiant" type="text" value={identifier} onChange={handleIdentifier} />
+
+        <label htmlFor="Bio">Bio</label>
+        <input name="bio" type="text" value={bio} onChange={(e)=>setBio(e.target.value)} />
+
         <input type="submit" value="Annuler" className='annuler' />
         <input type="submit" value="Créer une chaine" className='creer' />
       </form>

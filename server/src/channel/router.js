@@ -10,6 +10,6 @@ const { test, selectChannel, submit } = require('./controller')
 // Configuration de la route
 router.get('/test', test)
 router.get('/infos', selectChannel)
-router.get('/request/:submit', submit)
+router.post('/submitChannel', submit)
 
 module.exports = router
