@@ -10,6 +10,18 @@
   overflow: hidden;
 }
 
+.commentsContainer {
+  height: 80vh;
+  width: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  scroll-snap-align: center;
+  border-radius: 0.7vh;
+  overflow-wrap: break-word;
+}
+
 .short {
   height: 100%;
   width: 100%;

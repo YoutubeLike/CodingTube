@@ -25,13 +25,15 @@ class Short extends React.Component {
       isDisliked: false,
       dislikes: 0,
       comment: "",
-      comments: [],
+      comments: ["SMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK G", "cock and balls !", "i love cummies", "cock and ball TORTURE!!! I FUCKING LOVE THAT STUFF!!!!!!", "KC le KK xD"],
       commentCount: 0,
+      commentsShown: false,
     };
     this.like = this.like.bind(this);
     this.dislike = this.dislike.bind(this);
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.toggleComments = this.toggleComments.bind(this);
   }
 
   async componentDidMount() {
@@ -145,6 +147,9 @@ class Short extends React.Component {
       });
       console.log(this.state.userInput);
       document.getElementById("commentsInputField").value = "";
+      this.setState({userInput: ''});
+      let comments = document.getElementById("comments")
+      comments.scrollTop = comments.scrollHeight;
     }
   }
 
@@ -152,9 +157,11 @@ class Short extends React.Component {
     this.setState({ userInput: event.target.value });
   }
 
-  render() {
-    const comments = this.state.comments.map((comment) => <li>{comment}</li>);
+  toggleComments() {
+    this.setState(state => ({commentsShown: !state.commentsShown}))
+  }
 
+  render() {
     return (
       <div
         id="shortSection"
@@ -210,70 +217,89 @@ class Short extends React.Component {
               </div>
             </div>
           </div>
-
-          {/* Right bar */}
-          <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
-            {/* Contains like button and likes count */}
-            <div className={buttonContainerStyle}>
-              {/* Like button */}
-              <button id="like" className={buttonStyle} onClick={this.like}>
-                <img src="like.png" id="likeImg" className={buttonImageStyle} />
-              </button>
-
-              {/* Likes count */}
-              <p className={buttonTextStyle}> {this.state.videosInfos['nb_likes']} 342124</p>
+          {this.state.commentsShown ?
+          <div className="commentsContainer bg-gray-300 rounded-r-xl">
+            <div>
+              <h1>hello, {this.props.test}</h1>
             </div>
-
-            {/* Contains dislike button and its name */}
-            <div className={buttonContainerStyle}>
-              {/* Dislike button */}
-              <button
-                id="dislike"
-                className={buttonStyle}
-                onClick={this.dislike}
-              >
-                <img
-                  src="dislike.png"
-                  id="dislikeImg"
-                  className={buttonImageStyle}
-                />
-              </button>
-
-              {/* Name */}
-              <p className={buttonTextStyle}>Dislike</p>
+            <div id='comments' className="flex-col-reverse p-[1vh] overflow-scroll">
+                <div>
+                {this.state.comments.map(comment => (<div className="rounded-sm bg-white m-1">{comment}</div>))}
+                </div>
             </div>
-
-            {/* Contains comment button and comments count */}
-            <div className={buttonContainerStyle}>
-              {/* Comment button */}
+              <div>
+                <div className="m-2">
+                  <input id='commentsInputField' className='border border-purple border-50 rounded-sm text-gray' maxLength="1024" type='text' onChange={this.handleChange}></input>
+                </div>
+                <div className="m-2">
+                  <button onClick={this.postComment} className='rounded-full bg-blue-300 p-1'>Post comment</button>
+                </div>
+              </div>
+            </div>
+            : <div />
+            }{/* Right bar */}
+            <div id="optionBar" className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
+              {/* Contains like button and likes count */}
+              <div className={buttonContainerStyle}>
+                {/* Like button */}
+                <button id="like" className={buttonStyle} onClick={this.like}>
+                  <img src="like.png" id="likeImg" className={buttonImageStyle} />
+                </button>
+  
+                {/* Likes count */}
+                <p className={buttonTextStyle}> {this.state.videosInfos['nb_likes']} 342124</p>
+              </div>
+  
+              {/* Contains dislike button and its name */}
+              <div className={buttonContainerStyle}>
+                {/* Dislike button */}
+                <button
+                  id="dislike"
+                  className={buttonStyle}
+                  onClick={this.dislike}
+                >
+                  <img
+                    src="dislike.png"
+                    id="dislikeImg"
+                    className={buttonImageStyle}
+                  />
+                </button>
+  
+                {/* Name */}
+                <p className={buttonTextStyle}>Dislike</p>
+              </div>
+  
+              {/* Contains comment button and comments count */}
+              <div className={buttonContainerStyle}>
+                {/* Comment button */}
+                <button className={buttonStyle} onClick={this.toggleComments}>
+                  <img src="comment.png" className={buttonImageStyle} />
+                </button>
+                {/* Comments count */}
+                <p className={buttonTextStyle}>1432</p>
+              </div>
+  
+              {/* Contains share button and its name */}
+              <div className={buttonContainerStyle}>
+                {/* Share button */}
+                <button className={buttonStyle}>
+                  <img src="share.png" className={buttonImageStyle} />
+                </button>
+  
+                {/* Name */}
+                <p className={buttonTextStyle}>Share</p>
+              </div>
+  
+              {/* More options button */}
               <button className={buttonStyle}>
-                <img src="comment.png" className={buttonImageStyle} />
+                <img src="3dots.png" className={buttonImageStyle} />
               </button>
-              {/* Comments count */}
-              <p className={buttonTextStyle}>1432</p>
-            </div>
-
-            {/* Contains share button and its name */}
-            <div className={buttonContainerStyle}>
-              {/* Share button */}
-              <button className={buttonStyle}>
-                <img src="share.png" className={buttonImageStyle} />
+  
+              {/* Sound used */}
+              <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vw] h-[5vw] rounded-[20]">
+                {" "}
               </button>
-
-              {/* Name */}
-              <p className={buttonTextStyle}>Share</p>
             </div>
-
-            {/* More options button */}
-            <button className={buttonStyle}>
-              <img src="3dots.png" className={buttonImageStyle} />
-            </button>
-
-            {/* Sound used */}
-            <button className="flex items-center justify-center bg-[#f5f5f5] w-[5vw] h-[5vw] rounded-[20]">
-              {" "}
-            </button>
-          </div>
         </div>
       </div>
     );
@@ -326,10 +352,6 @@ class Short extends React.Component {
     //         </div>
 
     //         {/* COMMENTS
-    //         <div className="p-[1vh]">
-    //             <input id='commentsInputField' className={inputStyle} type='text' onChange={this.handleChange}></input>
-    //             <button onClick={this.postComment}className={buttonStyle}>Post comment</button>
-    //         </div>
     //         <div>
     //           <ul>
     //             {comments}
@@ -367,6 +389,9 @@ const buttonTextStyle = "text-[1.5vh]";
 /*  width: calc(56.25vh - 72px - var(--ytd-shorts-top-spacing, 0px)* .5625);
     height: calc(100vh - 128px - var(--ytd-shorts-top-spacing, 0px)); */
 
-ReactDOM.render(<Short />, document.getElementById("root"));
+
+const short = <Short test={"cock and ball torture"}/>
+
+ReactDOM.render(short, document.getElementById("root"));
 
 export default Short;
