@@ -34,7 +34,7 @@ const DisplayedBurgerMenu = () => {
           </div>
           <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
           <img className="h-12 w-12" src="subscriptions1.png" />
-            <Link to="/subscribe" className="pl-4">Subscription</Link>
+            <Link to="/feed/subscriptions/grid" className="pl-4">Subscription</Link>
           </div>
           <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1">
           <img className="h-12 w-12" src="you1.png" />
