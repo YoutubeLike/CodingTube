@@ -26,6 +26,7 @@ class Authentification extends React.Component {
       goodLogin: null,
       goodRegister: null,
       heightBiggerThanWidth: true,
+      darkMode: false,
     };
   }
 
@@ -46,6 +47,12 @@ class Authentification extends React.Component {
   toggleForm = () => {
     this.setState((prevState) => ({
       isLogin: !prevState.isLogin,
+    }));
+  };
+
+  toggleDarkMode = () => {
+    this.setState((prevState) => ({
+      darkMode: !prevState.darkMode,
     }));
   };
 
@@ -126,10 +133,15 @@ class Authentification extends React.Component {
   };
 
   render() {
+    const { darkMode } = this.state; // Récupération de l'état du mode sombre
     return (
       <div
         className={`flex justify-center items-center h-screen min-h-screen min-w-screen ${
-          this.state.heightBiggerThanWidth ? "min-h-[1100px] min-w-[200px]" : "min-h-[800px] min-w-[768px]"
+          darkMode ? "bg-gray-900" : "bg-white"
+        } ${
+          this.state.heightBiggerThanWidth
+            ? `min-h-[1100px] min-w-[200px]`
+            : `min-h-[800px] min-w-[768px]`
         }`}
       >
         {" "}
@@ -137,8 +149,12 @@ class Authentification extends React.Component {
         <div
           className={`${
             this.state.heightBiggerThanWidth
-              ? "relative w-full h-full shadow-2xl rounded-2xl flex flex-col"
-              : "relative w-4/5 h-3/4 shadow-2xl rounded-2xl flex"
+              ? `relative w-full h-full shadow-2xl flex flex-col ${
+                  darkMode ? "dark-mode" : ""
+                }`
+              : `relative w-4/5 h-3/4 shadow-2xl rounded-2xl flex ${
+                  darkMode ? "dark-mode" : ""
+                }`
           }`}
         >
           {" "}
@@ -146,8 +162,16 @@ class Authentification extends React.Component {
           <div
             className={`${
               this.state.heightBiggerThanWidth
-                ? "relative h-1/2 w-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner"
-                : "relative w-1/2 h-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner"
+                ? `relative h-1/2 w-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner ${
+                    darkMode
+                      ? "bg-gradient-to-r from-red-900 via-red-800 to-red-900 "
+                      : "bg-gradient-to-r from-red-700 via-red-600 to-red-700 "
+                  }`
+                : `relative w-1/2 h-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner ${
+                    darkMode
+                      ? "bg-gradient-to-r from-red-900 via-red-800 to-red-900 "
+                      : "bg-gradient-to-r from-red-700 via-red-600 to-red-700 "
+                  }`
             } ${
               this.state.isLogin
                 ? `${
@@ -162,16 +186,8 @@ class Authentification extends React.Component {
                   }`
             } ${
               this.state.isLogin
-                ? `${
-                    this.state.heightBiggerThanWidth
-                      ? ""
-                      : "rounded-r-2xl"
-                  }`
-                : `${
-                    this.state.heightBiggerThanWidth
-                      ? ""
-                      : "rounded-l-2xl"
-                  }`
+                ? `${this.state.heightBiggerThanWidth ? "" : "rounded-r-2xl"}`
+                : `${this.state.heightBiggerThanWidth ? "" : "rounded-l-2xl"}`
             } flex justify-center items-center z-50 transition-all duration-1000`}
           >
             {this.state.isLogin ? (
@@ -207,11 +223,15 @@ class Authentification extends React.Component {
               className={`flex flex-col justify-center space-y-10 items-center absolute ${
                 this.state.heightBiggerThanWidth
                   ? "top-0 h-1/2 w-full"
-                  : "left-0 w-1/2 h-full"
-              }
-            bg-gray-50 shadow-inner rounded-l-2xl p-4`}
+                  : "rounded-l-2xl left-0 w-1/2 h-full"
+              } ${darkMode ? "bg-gray-800" : "bg-white"}
+            bg-gray-50 shadow-inner p-4`}
             >
-              <h2 className="flex justify-center items-center text-4xl">
+              <h2
+                className={`flex justify-center items-center text-4xl ${
+                  darkMode ? "text-white" : "text-black"
+                }`}
+              >
                 Sign in
               </h2>
 
@@ -219,6 +239,7 @@ class Authentification extends React.Component {
                 <FormLogin
                   LoginData={this.state.LoginData}
                   onLoginChange={this.onChange}
+                  darkMode={this.state.darkMode}
                 />
               </form>
               {this.state.errorLogin && (
@@ -253,11 +274,15 @@ class Authentification extends React.Component {
               className={`flex flex-col justify-center space-y-10 items-center absolute ${
                 this.state.heightBiggerThanWidth
                   ? "bottom-0 h-1/2 w-full"
-                  : "right-0 w-1/2 h-full"
-              }
-            bg-gray-50 shadow-inner rounded-r-2xl p-4`}
+                  : "rounded-r-2xl right-0 w-1/2 h-full"
+              } ${darkMode ? "bg-gray-800" : "bg-white"}
+            bg-gray-50 shadow-inner p-4`}
             >
-              <h2 className="flex justify-center items-center text-4xl">
+              <h2
+                className={`flex justify-center items-center text-4xl ${
+                  darkMode ? "text-white" : "text-black"
+                }`}
+              >
                 Sign up
               </h2>
 
@@ -265,6 +290,7 @@ class Authentification extends React.Component {
                 <FormSignup
                   RegisterData={this.state.RegisterData}
                   onRegisterChange={this.onChange}
+                  darkMode={this.state.darkMode}
                 />
               </form>
               {this.state.errorRegister && (
@@ -295,6 +321,14 @@ class Authentification extends React.Component {
             </div>
           </div>
         </div>
+        {/* Bouton Dark Mode */}
+        <button
+          className="absolute top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-md z-50"
+          onClick={this.toggleDarkMode}
+        >
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+        {/* Bouton Dark Mode */}
       </div>
     );
   }
