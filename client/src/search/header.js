@@ -72,13 +72,16 @@ export default function Header() {
               placeholder="Search"
               value={searchValue}
               onChange={handleInputChange} // Handling input changes
-              onClick={history}
+              onClick={(e) => {
+                mostResearch(e);
+                history(e);
+              }}
               onBlur={suppressDisplayResearch}
             />
               <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
                     {results.map((result, index) => (
-                      <div className="flex hover:bg-gray-100 py-3" key={index}>
+                      <div className="flex hover:bg-gray-100 py-3 hover:rounded-lg" key={index}>
                         <img className="h-6 z-20 relative" src="search.png" alt="search"></img>
                         <li>{result.name_search}</li>
                       </div>
