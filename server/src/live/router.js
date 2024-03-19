@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { livetest } = require('./controller.js')
+const { saveThumbnail, sendThumbnail } = require('./controller.js')
 
-router.get('/test/:user', livetest)
+router.post('/save', saveThumbnail)
+router.get("/thumbnail", sendThumbnail)
+
 
 module.exports = router
