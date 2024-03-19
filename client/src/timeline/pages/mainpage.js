@@ -8,7 +8,7 @@ export default function Mainpage() {
     <>
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div class="flex ml-[3%] flex-wrap">
+        <div class="flex ml-[3%] flex-wrap mt-3">
           <TimeLine />
         </div>
       </div>

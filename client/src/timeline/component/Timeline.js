@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -66,7 +67,7 @@ function timeOfVideo(totalSeconds) {
 export default function TimeLine() {
 
   // Get the informations of the SQL Request by the URL
-  const [videosInfos, setVideosInfos] = useState([]);
+  var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -79,12 +80,16 @@ export default function TimeLine() {
     fetchVideos();
   }, []);
 
+  
+  videosInfos = SetScores(videosInfos);
+  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
+
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-2">
+      <div key={i} className="max-w-[25%] h-auto mb-0">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
@@ -111,6 +116,7 @@ export default function TimeLine() {
                 {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
                 
               </h4>
+              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
             </div>
           </div>
         </a>
