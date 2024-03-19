@@ -3,8 +3,8 @@ import FormLogin from "../Forms/FormLogin";
 import FormSignup from "../Forms/FormSignup";
 import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
-import axios from 'axios';
-import "../../index.css"
+import axios from "axios";
+import "../../index.css";
 
 class Authentification extends React.Component {
   constructor(props) {
@@ -25,7 +25,22 @@ class Authentification extends React.Component {
       errorRegister: null,
       goodLogin: null,
       goodRegister: null,
+      heightBiggerThanWidth: true,
     };
+  }
+
+  checkHeightWidthRatio = () => {
+    const heightBiggerThanWidth = window.innerHeight > window.innerWidth;
+    this.setState({ heightBiggerThanWidth });
+  };
+
+  componentDidMount() {
+    window.addEventListener("resize", this.checkHeightWidthRatio);
+    this.checkHeightWidthRatio();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.checkHeightWidthRatio);
   }
 
   toggleForm = () => {
@@ -46,57 +61,63 @@ class Authentification extends React.Component {
   };
 
   handleSubmit = async (e) => {
-    console.log('submit');
+    console.log("submit");
     e.preventDefault();
     const formData = {
       isLogin: this.state.isLogin,
       loginData: this.state.LoginData,
       registerData: this.state.RegisterData,
     };
-    console.log(formData)
+    console.log(formData);
     // Back de l'inscription ici
     if (!this.state.isLogin) {
       try {
-        const response = await axios.post('http://localhost:5000/api/profil/register', formData);
-        console.log('Utilisateur inséré avec succès');
+        const response = await axios.post(
+          "http://localhost:5000/api/profil/register",
+          formData
+        );
+        console.log("Utilisateur inséré avec succès");
         this.setState({
           goodRegister: response.data.message,
           errorRegister: null,
           goodLogin: null,
           errorLogin: null,
-          RegisterData:{
+          RegisterData: {
             mail: "",
             username: "",
             password: "",
-            confirmPassword: ""
-          }
-         });
+            confirmPassword: "",
+          },
+        });
       } catch (error) {
-        this.setState({ 
+        this.setState({
           errorRegister: error.response.data.error,
           goodRegister: null,
           goodLogin: null,
           errorLogin: null,
         });
       }
-    } else{
+    } else {
       try {
-        const response = await axios.post('http://localhost:5000/api/profil/login', formData);
-        console.log('Utilisateur connecté avec succès');
+        const response = await axios.post(
+          "http://localhost:5000/api/profil/login",
+          formData
+        );
+        console.log("Utilisateur connecté avec succès");
         this.setState({
-          goodLogin: response.data.message, 
+          goodLogin: response.data.message,
           errorLogin: null,
           errorRegister: null,
           goodRegister: null,
           LoginData: {
             usernameOrMail: "",
             password: "",
-          }
+          },
         });
       } catch (error) {
-        this.setState({ 
-          errorLogin  : error.response.data.error, 
-          goodRegister : null,
+        this.setState({
+          errorLogin: error.response.data.error,
+          goodRegister: null,
           errorRegister: null,
           goodLogin: null,
         });
@@ -106,19 +127,51 @@ class Authentification extends React.Component {
 
   render() {
     return (
-      <div className="flex justify-center items-center h-screen min-h-screen min-w-screen min-h-[770px] min-w-[700px]">
+      <div
+        className={`flex justify-center items-center h-screen min-h-screen min-w-screen ${
+          this.state.heightBiggerThanWidth ? "min-h-[1100px] min-w-[200px]" : "min-h-[800px] min-w-[768px]"
+        }`}
+      >
         {" "}
         {/* Div qui englobe tout */}
-        <div className="relative w-3/4 h-3/4 shadow-2xl rounded-2xl flex">
+        <div
+          className={`${
+            this.state.heightBiggerThanWidth
+              ? "relative w-full h-full shadow-2xl rounded-2xl flex flex-col"
+              : "relative w-4/5 h-3/4 shadow-2xl rounded-2xl flex"
+          }`}
+        >
           {" "}
           {/* Partie Rouge */}
           <div
-            className={`absolute w-1/2 h-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner ${
-              this.state.isLogin
-                ? "transform translate-x-full"
-                : "transform translate-x-0"
+            className={`${
+              this.state.heightBiggerThanWidth
+                ? "relative h-1/2 w-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner"
+                : "relative w-1/2 h-full flex-col bg-gradient-to-r from-red-700 via-red-600 to-red-700 shadow-inner"
             } ${
-              this.state.isLogin ? "rounded-r-2xl" : "rounded-l-2xl"
+              this.state.isLogin
+                ? `${
+                    this.state.heightBiggerThanWidth
+                      ? "transform translate-y-full"
+                      : "transform translate-x-full"
+                  }`
+                : `${
+                    this.state.heightBiggerThanWidth
+                      ? "transform translate-y-0"
+                      : "transform translate-x-0"
+                  }`
+            } ${
+              this.state.isLogin
+                ? `${
+                    this.state.heightBiggerThanWidth
+                      ? ""
+                      : "rounded-r-2xl"
+                  }`
+                : `${
+                    this.state.heightBiggerThanWidth
+                      ? ""
+                      : "rounded-l-2xl"
+                  }`
             } flex justify-center items-center z-50 transition-all duration-1000`}
           >
             {this.state.isLogin ? (
@@ -151,8 +204,12 @@ class Authentification extends React.Component {
           <div>
             {/* 1er Form */}
             <div
-              className={`flex flex-col justify-center space-y-10 items-center absolute left-0
-            w-1/2 h-full bg-gray-50 shadow-inner rounded-l-2xl p-4`}
+              className={`flex flex-col justify-center space-y-10 items-center absolute ${
+                this.state.heightBiggerThanWidth
+                  ? "top-0 h-1/2 w-full"
+                  : "left-0 w-1/2 h-full"
+              }
+            bg-gray-50 shadow-inner rounded-l-2xl p-4`}
             >
               <h2 className="flex justify-center items-center text-4xl">
                 Sign in
@@ -164,8 +221,12 @@ class Authentification extends React.Component {
                   onLoginChange={this.onChange}
                 />
               </form>
-              {this.state.errorLogin && <p className="!mt-2 text-red-600">{this.state.errorLogin}</p>}
-              {this.state.goodLogin && <p className="!mt-2 text-green-600">{this.state.goodLogin}</p>}
+              {this.state.errorLogin && (
+                <p className="!mt-2 text-red-600">{this.state.errorLogin}</p>
+              )}
+              {this.state.goodLogin && (
+                <p className="!mt-2 text-green-600">{this.state.goodLogin}</p>
+              )}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
@@ -189,8 +250,12 @@ class Authentification extends React.Component {
 
             {/* 2eme Form */}
             <div
-              className={`flex flex-col justify-center space-y-10 items-center absolute right-0
-            w-1/2 h-full bg-gray-50 shadow-inner rounded-r-2xl p-4`}
+              className={`flex flex-col justify-center space-y-10 items-center absolute ${
+                this.state.heightBiggerThanWidth
+                  ? "bottom-0 h-1/2 w-full"
+                  : "right-0 w-1/2 h-full"
+              }
+            bg-gray-50 shadow-inner rounded-r-2xl p-4`}
             >
               <h2 className="flex justify-center items-center text-4xl">
                 Sign up
@@ -202,8 +267,14 @@ class Authentification extends React.Component {
                   onRegisterChange={this.onChange}
                 />
               </form>
-              {this.state.errorRegister && <p className="!mt-2 text-red-600">{this.state.errorRegister}</p>}
-              {this.state.goodRegister && <p className="!mt-2 text-green-600">{this.state.goodRegister}</p>}
+              {this.state.errorRegister && (
+                <p className="!mt-2 text-red-600">{this.state.errorRegister}</p>
+              )}
+              {this.state.goodRegister && (
+                <p className="!mt-2 text-green-600">
+                  {this.state.goodRegister}
+                </p>
+              )}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
