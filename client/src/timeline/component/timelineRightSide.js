@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -64,7 +65,7 @@ function timeOfVideo(totalSeconds) {
 }
 
 export default function TimelineRightSide() {
-  const [videosInfos, setVideosInfos] = useState([]);
+  var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -76,6 +77,9 @@ export default function TimelineRightSide() {
     };
     fetchVideos();
   }, []);
+
+  videosInfos = SetScores(videosInfos);
+  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
@@ -107,6 +111,7 @@ export default function TimelineRightSide() {
               <h4 className="text-gray text-[90%]">
                 {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
+              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
             </div>
           </div>
         </a>
