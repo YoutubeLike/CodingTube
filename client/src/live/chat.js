@@ -12,7 +12,8 @@ const bannedWords = [
   "neg",
   "nig",
   "whore",
-  "Enzo",
+  "rape",
+  "rapist",
   "enzo",
 ];
 
@@ -85,6 +86,7 @@ function Chat() {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
+        const userId = 1;
         const newMessage = {
           message: inputMessage,
           sender: "You",
@@ -92,10 +94,11 @@ function Chat() {
             hour: "2-digit",
             minute: "2-digit",
           }),
+          userId,
         };
         console.log(
           `Emitting chat-message event with message: ${inputMessage}`
-        ); // Add this line
+        );
         console.log(newMessage);
         socket.emit("chat-message", newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -131,6 +134,20 @@ function Chat() {
           {console.log(messages)}
           {messages.map((message, index) => (
             <li key={index} className="bg-white p-4 rounded-lg flex">
+              <div className="relative mr-4">
+                {message.pp && (
+                  <img
+                    src={message.pp}
+                    alt={`${message.sender}'s profile picture`}
+                    className="w-10 h-10 rounded-full"
+                  />
+                )}
+                {!message.pp && (
+                  <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-xl">
+                    ?
+                  </div>
+                )}
+              </div>
               <span className="font-bold w-16">{message.sender}:</span>
               <span className="flex-1 ml-4">
                 {message.message &&

@@ -44,11 +44,16 @@ io.on("connection", (socket) => {
       }
     } else {
       // Broadcast the message to all connected clients except the sender
+      const senderProfilePicture = getProfilePicture(90000).then((imageUrl) => {
+        console.log("Profile picture:", imageUrl);
+      });
+      console.log(`Sender profile picture: ${senderProfilePicture}`); // Add this line
       console.log(msg.time);
       socket.broadcast.emit("chat-message", {
         sender: msg.sender,
         time: msg.time,
         message: msg.message,
+        profilePicture: senderProfilePicture,
       });
     }
     console.log("Message received: " + msg.message);
@@ -58,6 +63,26 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
+  async function getProfilePicture(userId) {
+    try {
+      const connection = await mariadb.pool.getConnection();
+      const result = await connection.query(
+        "SELECT pp FROM user WHERE id = ?",
+        [userId]
+      );
+      connection.release();
+      if (result.length > 0) {
+        console.log("Profile picture result:", result);
+        return result[0].pp;
+      } else {
+        console.log("No profile picture found for user ID:", userId);
+        return null;
+      }
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
 });
 
 app.use(cors());
@@ -66,8 +91,4 @@ console.log(app);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");
-});
-
-app.get("/", (req, res) => {
-  res.send("caca");
 });
