@@ -3,8 +3,8 @@ import FormLogin from "../Forms/FormLogin";
 import FormSignup from "../Forms/FormSignup";
 import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
-import axios from 'axios';
-import "../../index.css"
+import axios from "axios";
+import "../../index.css";
 
 class Authentification extends React.Component {
   constructor(props) {
@@ -46,57 +46,64 @@ class Authentification extends React.Component {
   };
 
   handleSubmit = async (e) => {
-    console.log('submit');
+    console.log("submit");
     e.preventDefault();
     const formData = {
       isLogin: this.state.isLogin,
       loginData: this.state.LoginData,
       registerData: this.state.RegisterData,
     };
-    console.log(formData)
+    console.log(formData);
     // Back de l'inscription ici
     if (!this.state.isLogin) {
       try {
-        const response = await axios.post('http://localhost:5000/api/profil/register', formData);
-        console.log('Utilisateur inséré avec succès');
+        const response = await axios.post(
+          "http://localhost:5000/api/profil/register",
+          formData
+        );
+        console.log("Utilisateur inséré avec succès");
         this.setState({
           goodRegister: response.data.message,
           errorRegister: null,
           goodLogin: null,
           errorLogin: null,
-          RegisterData:{
+          RegisterData: {
             mail: "",
             username: "",
             password: "",
-            confirmPassword: ""
-          }
-         });
+            confirmPassword: "",
+          },
+        });
       } catch (error) {
-        this.setState({ 
+        this.setState({
           errorRegister: error.response.data.error,
           goodRegister: null,
           goodLogin: null,
           errorLogin: null,
         });
       }
-    } else{
+    } else {
       try {
-        const response = await axios.post('http://localhost:5000/api/profil/login', formData);
-        console.log('Utilisateur connecté avec succès');
+        const response = await axios.post(
+          "http://localhost:5000/api/profil/login",
+          formData
+        );
+        window.location.href = response.data.redirectTo;
+        console.log("Utilisateur connecté avec succès");
         this.setState({
-          goodLogin: response.data.message, 
+          goodLogin: response.data.message,
           errorLogin: null,
           errorRegister: null,
           goodRegister: null,
           LoginData: {
             usernameOrMail: "",
             password: "",
-          }
+          },
         });
       } catch (error) {
-        this.setState({ 
-          errorLogin  : error.response.data.error, 
-          goodRegister : null,
+        this.setState({
+          errorLogin: error.response.data.error,
+          goodRegister: null,
           errorRegister: null,
           goodLogin: null,
         });
@@ -164,8 +171,12 @@ class Authentification extends React.Component {
                   onLoginChange={this.onChange}
                 />
               </form>
-              {this.state.errorLogin && <p className="!mt-2 text-red-600">{this.state.errorLogin}</p>}
-              {this.state.goodLogin && <p className="!mt-2 text-green-600">{this.state.goodLogin}</p>}
+              {this.state.errorLogin && (
+                <p className="!mt-2 text-red-600">{this.state.errorLogin}</p>
+              )}
+              {this.state.goodLogin && (
+                <p className="!mt-2 text-green-600">{this.state.goodLogin}</p>
+              )}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button
@@ -202,8 +213,14 @@ class Authentification extends React.Component {
                   onRegisterChange={this.onChange}
                 />
               </form>
-              {this.state.errorRegister && <p className="!mt-2 text-red-600">{this.state.errorRegister}</p>}
-              {this.state.goodRegister && <p className="!mt-2 text-green-600">{this.state.goodRegister}</p>}
+              {this.state.errorRegister && (
+                <p className="!mt-2 text-red-600">{this.state.errorRegister}</p>
+              )}
+              {this.state.goodRegister && (
+                <p className="!mt-2 text-green-600">
+                  {this.state.goodRegister}
+                </p>
+              )}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
                 <p>
                   <button

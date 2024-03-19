@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 
+
 // Middleware for enabling CORS
 app.use(cors());
 
@@ -115,5 +116,25 @@ async function CheckIfPasswordMatch(password, hashedPasswordFromDB) {
     }
 }
 
+async function GetUserId(data){
+    try {
+        // Establishing a database connection
+        const conn = await mariadb.pool.getConnection();
+        // Executing the SQL query to retrieve the user Id
+        const result = await conn.query("SELECT id FROM user WHERE username = ? OR mail = ?", [data, data]);
+        // Releasing the database connection
+        conn.release();
+        // Returning the id if found
+        return result[0].id;
+    } catch (err) {
+        // Handling errors if any occur during the database operation
+        console.log("Error retrieving id:", err);
+        // Returning false in case of an error
+        return false;
+    }
+}
+
+
+
 // Exporting all functions for use in other modules
-module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail};
+module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, GetUserId};

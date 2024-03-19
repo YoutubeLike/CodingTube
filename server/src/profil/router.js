@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const sessionData = require('../index')
 const {
   // Importing functions from authentication module
   InsertUser,
@@ -7,6 +8,7 @@ const {
   CheckIfUsernameExist,
   CheckIfPasswordMatch,
   GetPasswordFromUsernameOrEmail,
+  GetUserId,
 } = require("./authentication");
 
 // Route for user registration
@@ -69,10 +71,9 @@ router.post("/register", async (req, res) => {
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
-          console.log("User inserted successfully");
-          return res
-            .status(200)
-            .json({ message: "User registered successfully" });
+          sessionData.userId = userId;
+            console.log(sessionData.userId + " logged in");
+            return res.status(200).json({ redirectTo: '/' });
         } else {
           return res.status(400).json({ error: "Passwords do not match" });
         }
@@ -89,11 +90,11 @@ router.post("/register", async (req, res) => {
 // Route for user login
 router.post("/login", async (req, res) => {
   const loginData = req.body.loginData; // Extracting login data from request body
-  console.log(loginData);
   try {
     // Check if username or email exists in the database
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
+    const userId = await GetUserId(loginData.usernameOrMail);
 
     // Get password associated with username or email from the database
     const passwordFromDb = await GetPasswordFromUsernameOrEmail(
@@ -105,20 +106,13 @@ router.post("/login", async (req, res) => {
       loginData.password,
       passwordFromDb
     );
-
-    console.log(loginData.password);
-    console.log(passwordFromDb);
-    console.log(isPasswordMatch);
-
-    console.log(usernameExist, mailExist);
-
     if (loginData.usernameOrMail != "" || loginData.password != "") {
       if (usernameExist || mailExist) {
         if (isPasswordMatch) {
-          console.log("User signed in successfully");
-          return res
-            .status(200)
-            .json({ message: "User signed in successfully" });
+            sessionData.userId = userId;
+            console.log(sessionData.userId + " logged in");
+            return res.status(200).json({ redirectTo: '/' });
+
         } else {
           return res.status(400).json({ error: "Incorrect password" });
         }
@@ -129,9 +123,24 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Fields can't be empty" });
     }
   } catch (error) {
-    console.error("Error during user registration:", error);
     return res.sendStatus(500);
   }
 });
+
+router.post("/check-session", async (req, res) => {
+  try {
+    console.log(sessionData.userId);
+    if (sessionData.userId) {
+      return res.status(200).json({ loggedIn: true, userId: sessionData.userId });
+    } else {
+      return res.status(200).json({ loggedIn: false });
+    }
+  } catch (error) {
+    console.error("Error checking session:", error);
+    return res.sendStatus(500);
+  }
+});
+
+
 
 module.exports = router; // Exporting the router module
