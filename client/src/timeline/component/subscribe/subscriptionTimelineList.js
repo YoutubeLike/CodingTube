@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -38,42 +38,43 @@ function timeOfVideo(totalSeconds) {
 
   // Seconds
   if (seconds < 10) {
-    resultSeconds =  `0${seconds}`
+    resultSeconds = `0${seconds}`;
   } else {
-    resultSeconds =  `${seconds}`
+    resultSeconds = `${seconds}`;
   }
   // Minutes
   if (minutes < 10) {
-    resultMinutes =  `0${minutes}:`
+    resultMinutes = `0${minutes}:`;
   } else {
-    resultMinutes =  `${minutes}:`
+    resultMinutes = `${minutes}:`;
   }
   // Hours
   if (hours > 0) {
     if (hours < 10) {
-      resultHours =  `0${hours}:`
+      resultHours = `0${hours}:`;
     } else {
-      resultHours =  `${hours}:`
+      resultHours = `${hours}:`;
     }
   } else {
-    resultHours =  ``
+    resultHours = ``;
   }
-  
-  result = `${resultHours}${resultMinutes}${resultSeconds}`
+
+  result = `${resultHours}${resultMinutes}${resultSeconds}`;
   return result;
 }
 
 export default function ListSubscriptionTimeLine() {
-
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/subscription-timeline-request');
+        const response = await axios.get(
+          "http://localhost:5000/api/timeline/subscription-timeline-request"
+        );
         setVideosInfos(response.data);
       } catch (error) {
-        console.error('Error fetching videos:', error);
+        console.error("Error fetching videos:", error);
       }
     };
     fetchVideos();
@@ -83,14 +84,16 @@ export default function ListSubscriptionTimeLine() {
   if (videosInfos.length === 0) {
     indents.push(
       <div>
-        <p className="p-5 bg-red-700 text-white rounded-lg">No video, subscribe to at least one channel that has published videos</p>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No video, subscribe to at least one channel that has published videos
+        </p>
       </div>
     );
   }
 
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
+    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"]);
     indents.push(
       <div key={i} className="mb-10">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
@@ -111,7 +114,8 @@ export default function ListSubscriptionTimeLine() {
                 {videosInfos[i]["title"]}
               </h3>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                {videosInfos[i]["number_view"]} views -{" "}
+                {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
               <div className="flex flex-row mt-2 items-center">
                 <img className="pp mr-2" src={videosInfos[i]["PP"]} alt="PP" />
@@ -119,12 +123,11 @@ export default function ListSubscriptionTimeLine() {
                   {videosInfos[i]["pseudo"]}
                 </h4>
               </div>
-              <p className="mt-2 text-balance truncate text-xs">{videosInfos[i]["description"]}</p>
-              
+              <p className="mt-2 text-balance truncate text-xs">
+                {videosInfos[i]["description"]}
+              </p>
             </div>
           </div>
-
-          
         </a>
       </div>
     );

@@ -1,12 +1,16 @@
-import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
+import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import TimelineHistory from "../component/HistoryTimeline";
 
 export default function History() {
   return (
     <>
-    <DisplayedBurgerMenu />
+      <div className="ml-24 mt-8">
+        <h1 className="text-3xl font-bold">Your history</h1>
+      </div>
+
       <div className="flex">
-        <div class="flex ml-[3%] flex-wrap">
+        <NonDisplayedBurgerMenu />
+        <div class="flex ml-[8%] flex-wrap">
           <TimelineHistory />
         </div>
       </div>
