@@ -30,6 +30,24 @@ export default function You() {
             </div>
             <div className="absolute bottom-[-110px] left-[20%] w-3/4 h-1 bg-black transition-transform duration-300"></div>
           </div>
+          <div className="relative top-[-170px]">
+          <div>
+            <a href="/likedvideo">
+              <img className="relative left-[220px] w-10 h-10" src="likedvideo.png" />
+              <button className="relative left-[265px] relative top-[-32px] font-black">Liked Videos</button>
+            </a>
+          </div>
+          <div className="flex">
+            <NonDisplayedBurgerMenu />
+            <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
+              <TimeLine />
+              <div className="flex flex-wrap relative top-[-120px]">
+                <TimeLine />
+              </div>
+            </div>
+            <div className="absolute bottom-[200px] left-[20%] w-3/4 h-1 bg-black transition-transform duration-300"></div>
+          </div>
+      </div>
       </div>
     );
 }
