@@ -1,6 +1,6 @@
 export default function NonDisplayedBurgerMenu() { 
     return( 
-      <div className="text-black bg-white w-20 h-screen flex flex-col items-center justify-center text-xs space-y-8">
+      <div className="fixed text-black bg-white w-20 h-screen flex flex-col items-center justify-center text-xs space-y-8">
         <div className="absolute inset-y-0 left-20 w-1 bg-black transition-transform duration-300"></div>
         <div className="relative top-[-150px]">
             <a href="/">
