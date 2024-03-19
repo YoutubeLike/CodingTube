@@ -3,6 +3,7 @@ import React from "react";
 import ShortRequest from "./shortRequest";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import Short from './short.js'
 
 /*
 function Short() {
@@ -14,7 +15,7 @@ function Short() {
 }
 */
 
-class Short extends React.Component {
+class TempShort extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +31,6 @@ class Short extends React.Component {
       commentsShown: false,
       sound: false,
     };
-    this.like = this.like.bind(this);
     this.dislike = this.dislike.bind(this);
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -46,22 +46,6 @@ class Short extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
-
-    const likeButton = document.getElementById("like");
-
-    likeButton.addEventListener("mouseover", () => {
-      // if background color is not black, set it gray
-      if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-        likeButton.style.backgroundColor = "rgb(229, 229, 229)";
-      }
-    });
-
-    likeButton.addEventListener("mouseout", () => {
-      // if background color is not black, set it white
-      if (likeButton.style.backgroundColor != "rgb(23, 23, 23)") {
-        likeButton.style.backgroundColor = "rgb(245, 245, 245)";
-      }
-    });
 
     const dislikeButton = document.getElementById("dislike");
 
@@ -116,32 +100,6 @@ class Short extends React.Component {
     })
   }
 
-  like() {
-    if (!this.state.isLiked) {
-      this.setState((state) => ({ likes: state.likes + 1, isLiked: true }));
-      document.getElementById("like").style.backgroundColor =
-        "#171717"; /* LIKE BUTTON : white -> black */
-      document.getElementById("likeImg").style.filter =
-        "invert(1)"; /* invert LIKE icon colors */
-      if (this.state.isDisliked) {
-        this.setState((state) => ({
-          dislikes: state.dislikes - 1,
-          isDisliked: false,
-        })); /* DISLIKE button already pressed */
-        document.getElementById("dislike").style.backgroundColor =
-          "#f5f5f5"; /* DISLIKE BUTTON : black -> white */
-        document.getElementById("dislikeImg").style.filter = "none";
-      }
-    } else {
-      this.setState((state) => ({
-        likes: state.likes - 1,
-        isLiked: false,
-      })); /* LIKE button unpressed */
-      document.getElementById("like").style.backgroundColor =
-        "#f5f5f5"; /* LIKE BUTTON : black -> white */
-      document.getElementById("likeImg").style.filter = "none";
-    }
-  }
 
   dislike() {
     if (!this.state.isDisliked) {
@@ -264,7 +222,7 @@ class Short extends React.Component {
             </div>
             <div id='comments' className="flex-col-reverse p-[1vh] overflow-scroll">
                 <div>
-                {this.state.comments.map(comment => (<div className="rounded-sm bg-white m-1">{comment}</div>))}
+                  {this.state.comments.map(comment => (<div className="rounded-sm bg-white m-1">{comment}</div>))}
                 </div>
             </div>
               <div>
@@ -278,17 +236,9 @@ class Short extends React.Component {
             </div>
             : <div />
             }{/* Right bar */}
-            <div id="optionBar" className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
+            <div id="sideBar" className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
               {/* Contains like button and likes count */}
-              <div className={buttonContainerStyle}>
-                {/* Like button */}
-                <button id="like" className={buttonStyle} onClick={this.like}>
-                  <img src="like.png" id="likeImg" className={buttonImageStyle} />
-                </button>
-  
-                {/* Likes count */}
-                <p className={buttonTextStyle}> {this.state.videosInfos['nb_likes']} 342124</p>
-              </div>
+              
   
               {/* Contains dislike button and its name */}
               <div className={buttonContainerStyle}>
@@ -430,8 +380,6 @@ const buttonTextStyle = "text-[1.5vh]";
     height: calc(100vh - 128px - var(--ytd-shorts-top-spacing, 0px)); */
 
 
-const short = <Short test={"cock and ball torture"}/>
-
-ReactDOM.render(short, document.getElementById("root"));
+/* ReactDOM.render(short, document.getElementById("root"));  */
 
 export default Short;
