@@ -1,8 +1,12 @@
 import NonDisplayedBurgerMenu from "../../component/nonDisplayedBurgerMenu";
 import ListSubscriptionTimeLine from "../../component/subscribe/subscriptionTimelineList";
 import "../../styles/Timeline.css";
+import React, { useEffect, useState } from "react";
 
 export default function ListSubscribe() {
+  useEffect(() => {
+    document.title = "Subscriptions - CodingTube";
+  }, []);
   return (
     <>
       <div className="ml-24 mt-8 mb-8">

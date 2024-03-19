@@ -6,6 +6,9 @@ import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 
 export default function Watch() {
+  useEffect(() => {
+    document.title = "Watch - CodingTube";
+  }, []);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const videoId = searchParams.get("video_id");
