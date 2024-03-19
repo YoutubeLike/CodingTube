@@ -13,6 +13,8 @@ class CommentBar extends React.Component{
         this.handleChange = this.handleChange.bind(this);
     }
 
+    countComments(){}
+
     handleChange(event) {
       this.setState({ userInput: event.target.value });
     }
@@ -30,8 +32,9 @@ class CommentBar extends React.Component{
     render(){
         return(
             <div className="commentsContainer bg-gray-300 rounded-r-xl">
-            <div>
-              <h1>hello, {this.props.test}</h1>
+            <div className='p-2'>
+              Comments <strong>{this.state.comments.length}</strong>
+              <button></button>
             </div>
             <div className='overflow-scroll'>
               <div id='comments' className="flex-col-reverse p-[1vh]">
@@ -41,7 +44,7 @@ class CommentBar extends React.Component{
               </div>
                 <div>
                   <div className="m-2">
-                    <input id='commentsInputField' className='border border-purple border-50 rounded-sm text-gray' maxLength="1024" type='text' onChange={this.handleChange}></input>
+                    <input id='commentsInputField' className='w-full border border-purple border-50 rounded-sm text-gray' maxLength="1024" type='text' onChange={this.handleChange}></input>
                   </div>
                   <div className="m-2">
                     <button onClick={this.postComment} className='rounded-full bg-blue-300 p-1'>Post comment</button>

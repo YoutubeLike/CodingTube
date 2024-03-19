@@ -24,10 +24,7 @@ class Short extends React.Component{
 
     render(){
         return(
-            <div
-              id="shortSection"
-              className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
-            >
+            <div id="shortSection" className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar">
                 <Video videosInfos={this.state.videosInfos}/>
             </div>
         )
