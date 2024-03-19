@@ -4,17 +4,21 @@ import itachi from "../../assets/baniere.webp";
 import img from "../../assets/logo.jpg";
 import Accueil from "./Accueil";
 import Video from "./Videos";
+import Shorts from "./Shorts";
+import Playlists from "./Playlists";
 
 const App = () => {
 	const [pseudo, setPseudo] = useState(""); // Pseudo
 	const [follower, setFollower] = useState(0); // Subscriber number
 	const [bio, setBio] = useState(""); // Bio
+	const [identifier, setIdentifier] = useState(""); // Identifier
+	const [numberVideo, setNumberVideo] = useState(0); // video number
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 
 	useEffect(() => {
-		const fetchTest = async () => {
+		const fetchChannelInfo = async () => {
 			try {
-				// Requête vers les infos de la chaîne
+				// Requête pour récupérer les informations de la chaîne
 				const response = await axios.get(
 					"http://localhost:5000/api/channel/infos"
 				);
@@ -23,28 +27,52 @@ const App = () => {
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
-				setVideo(response.data.bio);
+				setIdentifier(response.data.identifier_channel);
 			} catch (error) {
-				console.error("Erreur :", error);
+				console.error(
+					"Erreur lors de la récupération des informations de la chaîne :",
+					error
+				);
 			}
 		};
 
-		fetchTest();
+		const fetchVideoCount = async () => {
+			try {
+				// Requête pour récupérer le nombre de vidéos de la chaîne
+				const response = await axios.get(
+					"http://localhost:5000/api/channel/nombreVideo"
+				);
+
+				// Attribution du nombre de vidéos
+				setNumberVideo(Number(response.data)); // Convertir en nombre entier
+			} catch (error) {
+				console.error(
+					"Erreur lors de la récupération du nombre de vidéos de la chaîne :",
+					error
+				);
+			}
+		};
+
+		fetchChannelInfo();
+		fetchVideoCount();
 	}, []);
 
+	//Met à jour l'onglet actif en utilisant la fonction setActiveTab
 	const handleTabClick = (tabName) => {
 		setActiveTab(tabName);
 	};
 
+	//Retourne la bon onglet actif
 	const renderContent = () => {
 		switch (activeTab) {
 			case "Accueil":
 				return <Accueil />;
 			case "Vidéos":
 				return <Video />;
-			case "Accueil":
-				return <shorts />;
 			case "Shorts":
+				return <Shorts />;
+			case "Playlists":
+				return <Playlists />;
 			default:
 				return null;
 		}
@@ -75,7 +103,7 @@ const App = () => {
 				<div className="channel-info ml-4 flex flex-col items-start h-48 justify-around">
 					<h1 className="text-start text-5xl font-bold">{pseudo}</h1>
 					<p className="text-start">
-						@Itachi Budoke - {follower} abonnés - 1,6k vidéos
+						@{identifier} - {follower} abonnés - {numberVideo} vidéos
 					</p>
 					<p className="text-start">{bio}</p>
 					<button className="font-bold bg-neutral-900 text-white px-8  rounded-full">
@@ -116,11 +144,23 @@ const App = () => {
 						<a
 							href="#"
 							className={`transition duration-500 ease-in-out hover:text-red-500 ${
-								activeTab === "Vidéos" ? "text-red-500" : ""
+								activeTab === "Shorts" ? "text-red-500" : ""
 							}`}
-							onClick={() => handleTabClick("shorts")}
+							onClick={() => handleTabClick("Shorts")}
 						>
 							Shorts
+						</a>
+						<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500 transition-all duration-300 origin-left scale-x-0"></div>
+					</li>
+					<li className="relative">
+						<a
+							href="#"
+							className={`transition duration-500 ease-in-out hover:text-red-500 ${
+								activeTab === "Playlists" ? "text-red-500" : ""
+							}`}
+							onClick={() => handleTabClick("Playlists")}
+						>
+							Playlists
 						</a>
 						<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500 transition-all duration-300 origin-left scale-x-0"></div>
 					</li>
@@ -129,7 +169,8 @@ const App = () => {
 
 			{activeTab == "Accueil" && <Accueil />}
 			{activeTab == "Vidéos" && <Video />}
-			{activeTab == "shorts" && <shorts />}
+			{activeTab == "Shorts" && <Shorts />}
+			{activeTab == "Playlists" && <Playlists />}
 		</div>
 	);
 };

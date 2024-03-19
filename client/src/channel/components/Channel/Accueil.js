@@ -18,6 +18,10 @@ export default function Accueil() {
 					<h2 className="text-xl font-bold mb-4 flex border-b-2">Shorts</h2>
 					<p className="flex">Affichage des shorts</p>
 				</div>
+				<div>
+					<h2 className="text-xl font-bold mb-4 flex border-b-2">Playlists</h2>
+					<p className="flex">Affichage des playlists</p>
+				</div>
 			</div>
 			{/* Liste des contenus */}
 		</>

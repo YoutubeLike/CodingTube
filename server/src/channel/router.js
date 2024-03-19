@@ -5,11 +5,11 @@ const express = require("express");
 const router = express.Router();
 
 // Import des fonctions
-const { test, selectChannel, video } = require("./controller");
+const { selectChannel, videoOnTab, NumberVideo } = require("./controller");
 
 // Configuration de la route
-router.get("/test", test);
 router.get("/infos", selectChannel);
-router.get("/video", video);
+router.get("/videos", videoOnTab);
+router.get("/nombreVideo", NumberVideo);
 
 module.exports = router;
