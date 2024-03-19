@@ -1,11 +1,14 @@
+import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
+import TimelineHistory from "../component/HistoryTimeline";
 
 export default function History() {
   return (
     <>
-      <div>
-        <h1 className="text-3xl font-bold underline">
-          On teste des trucs rigolo pour l'historique
-        </h1>
+    <DisplayedBurgerMenu />
+      <div className="flex">
+        <div class="flex ml-[3%] flex-wrap">
+          <TimelineHistory />
+        </div>
       </div>
     </>
   );
