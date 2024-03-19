@@ -36,6 +36,7 @@ function Chat() {
         time: data.time,
         message: messagesReceived,
         sender: data.sender,
+        profilePicture: data.profilePicture,
       };
       setMessages((prevMessages) => [...prevMessages, ArrayMessage]);
 
@@ -71,10 +72,22 @@ function Chat() {
       socketInstance.disconnect();
     };
   }, []);
-
-  const send = () => {
+  const getUserProfilePicture = async (userId) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5000/profile-picture?userId=${userId}`
+      );
+      const data = await response.json();
+      return data.profilePicture;
+    } catch (error) {
+      console.error("Error fetching profile picture:", error);
+      return null;
+    }
+  };
+  const send = async () => {
     if (socket && inputMessage.trim() !== "") {
-      console.log(`Sending message: ${inputMessage}`); // Add this line
+      console.log(`Sending message: ${inputMessage}`);
+      console.log(`C'est la pp: ${messages.profilePicture}`);
       const bannedWordFound = bannedWords.some((word) =>
         inputMessage.toLowerCase().includes(word)
       );
@@ -86,7 +99,8 @@ function Chat() {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
-        const userId = 1;
+        const userId = 90000;
+        const profilePicture = await getUserProfilePicture(userId);
         const newMessage = {
           message: inputMessage,
           sender: "You",
@@ -95,11 +109,13 @@ function Chat() {
             minute: "2-digit",
           }),
           userId,
+          profilePicture,
         };
         console.log(
           `Emitting chat-message event with message: ${inputMessage}`
         );
         console.log(newMessage);
+        console.log(`C'est la pp: ${messages.profilePicture}`);
         socket.emit("chat-message", newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
         setInputMessage("");
@@ -135,14 +151,14 @@ function Chat() {
           {messages.map((message, index) => (
             <li key={index} className="bg-white p-4 rounded-lg flex">
               <div className="relative mr-4">
-                {message.pp && (
+                {message.profilePicture && (
                   <img
-                    src={message.pp}
+                    src={message.profilePicture}
                     alt={`${message.sender}'s profile picture`}
                     className="w-10 h-10 rounded-full"
                   />
                 )}
-                {!message.pp && (
+                {!message.profilePicture && (
                   <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-xl">
                     ?
                   </div>

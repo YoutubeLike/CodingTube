@@ -43,11 +43,10 @@ io.on("connection", (socket) => {
         );
       }
     } else {
-      // Broadcast the message to all connected clients except the sender
       const senderProfilePicture = getProfilePicture(90000).then((imageUrl) => {
         console.log("Profile picture:", imageUrl);
       });
-      console.log(`Sender profile picture: ${senderProfilePicture}`); // Add this line
+      console.log(`Sender profile picture: ${senderProfilePicture}`);
       console.log(msg.time);
       socket.broadcast.emit("chat-message", {
         sender: msg.sender,
@@ -91,4 +90,23 @@ console.log(app);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");
+});
+
+app.get("/profile-picture", async (req, res) => {
+  const userId = req.query.userId;
+  try {
+    const connection = await mariadb.pool.getConnection();
+    const result = await connection.query("SELECT pp FROM user WHERE id = ?", [
+      userId,
+    ]);
+    connection.release();
+    if (result.length > 0) {
+      res.json({ profilePicture: result[0].pp });
+    } else {
+      res.json({ profilePicture: null });
+    }
+  } catch (err) {
+    console.error(err);
+    res.json({ profilePicture: null });
+  }
 });
