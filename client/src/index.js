@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App" 
-import Short from "./short/short"
+import App from "./App";
+import Short from "./short/short";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import Subscribe from "./timeline/pages/subscribe";
@@ -19,7 +19,7 @@ import Authentification from "./profil/Pages/Authentification";
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Authentification />
+    element: <Authentification />,
   },
   {
     path: "/",
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Mainpage />
+        element: <Mainpage />,
       },
       {
         path: "/history",
@@ -55,26 +55,24 @@ const router = createBrowserRouter([
       },
       {
         path: "/watch",
-        element: <Watch />
+        element: <Watch />,
       },
       {
-				path: "new-channel",
-				element: <CreateChannel />,
-			},
-			{
-				path: "video",
-				element: <Video />,
-			},
-			{
-				path: "upload",
-				element: <Upload />,
-			},
-    ]
+        path: "new-channel",
+        element: <CreateChannel />,
+      },
+      {
+        path: "video",
+        element: <Video />,
+      },
+      {
+        path: "upload",
+        element: <Upload />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
-		<RouterProvider router={router} />
-	</React.StrictMode>
+  <RouterProvider router={router} />
 );
