@@ -1,9 +1,11 @@
 import React from "react";
+import axios from "axios";
 
 class LikeButton extends React.Component {
   constructor(props) {
     super(props);
     this.like = this.like.bind(this);
+    this.addLike = this.addLike.bind(this);
   }
 
   async componentDidMount() {
@@ -26,6 +28,34 @@ class LikeButton extends React.Component {
     });
   }
 
+  async addLike() {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/check-like",
+        {
+          params: {
+            id: 1,
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      if (response.data.length == 0) {
+        try {
+          await axios.get("http://localhost:5000/api/short/add-like", {
+            params: {
+              id: 1,
+              shortId: this.props.shortInfos.id,
+            },
+          });
+        } catch (error) {
+          console.error("Error fetching videos:", error);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  }
+
   like() {
     const likeButton = document.getElementById(
       "like" + this.props.shortInfos.id
@@ -39,6 +69,7 @@ class LikeButton extends React.Component {
         likes: state.likes + 1,
         isLiked: true,
       }));
+      this.addLike();
 
       likeButton.style.backgroundColor = "#171717"; // LIKE BUTTON : white -> black
       likeButtonImg.style.filter = "invert(1)"; // invert LIKE icon colors

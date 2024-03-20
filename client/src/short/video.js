@@ -51,7 +51,6 @@ class Video extends React.Component {
             <VideoInfos shortInfos={this.state.shortInfos} />
           </div>
         </div>
-        {/* Right bar */}
         <SideBar
           setState={(p) => {
             this.setState(p);

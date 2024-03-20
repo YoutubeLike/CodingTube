@@ -28,7 +28,9 @@ const updateLike = (req) => {
 
 const getDislikes = (req, res) => {
   mariadb.pool
-    .query("SELECT nb_dislike FROM short WHERE short.id = ?;", [req.query.shortId])
+    .query("SELECT nb_dislike FROM short WHERE short.id = ?;", [
+      req.query.shortId,
+    ])
     .then((value) => {
       res.send(value[0]);
     });
