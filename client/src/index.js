@@ -17,11 +17,16 @@ import Channel from "./channel/pages/PageChannel";
 import Authentification from "./profil/Pages/Authentification";
 import Live from './live/index'
 import UserLive, { loader as LoaderLive } from "./live/UserLive";
+import Test from "./live/widget";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Authentification />
+  },
+  {
+    path: "/live/widget",
+    element: <Test />
   },
   {
     path: "/",

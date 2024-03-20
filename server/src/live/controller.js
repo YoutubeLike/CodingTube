@@ -1,5 +1,8 @@
 const ffmpeg = require("fluent-ffmpeg")
 const fs = require ('fs')
+const socketio = require('socket.io')
+const express = require('express')
+const router = express.Router();
 
 const saveThumbnail = ((req, res) => 
 {
@@ -23,7 +26,13 @@ const sendThumbnail = ((req, res) => {
     }
 })
 
+const display = ((req, res) => {
+    res.sendFile("/app/back/src/public/follow.jpg")
+
+})
+
 module.exports = {
     saveThumbnail,
-    sendThumbnail
+    sendThumbnail,
+    display
 }
