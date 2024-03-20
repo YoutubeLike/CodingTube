@@ -1,7 +1,7 @@
 const mariadb = require('../src/database');
 
 const history_onChange = async (req, res) => {
-    const {userId, inputSearch} = req.params.history;
+    const {userId, inputSearch} = req.params;
     console.error(inputSearch)
     try {
         const results = await mariadb.pool.query("SELECT name_search, search_history.id FROM search JOIN search_history ON search.id=search_history.search_id WHERE search_history.user_id = ? AND name_search LIKE '%?%' ORDER BY search_history.research_date LIMIT 10;", [userId, inputSearch]);

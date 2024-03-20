@@ -3,25 +3,23 @@ import axios from "axios";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 
 export default function Header() {
-  const [searchValue, setSearchValue] = useState("");
   const [mostview, setMostView] = useState([]);
   const [userhistory, setUserHistory] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  
+  const [inputValue, setInputValue] = useState(""); // Ajout de l'état pour stocker la valeur saisie dans l'input
 
-  const submit = async () => {
+  const submit = async (value) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/search/request/" + searchValue);
+      const response = await axios.get("http://localhost:5000/api/search/request/" + value);
       console.log(response.data);
-      setSearchValue('');
+      setInputValue(""); // Réinitialiser la valeur de l'input après la soumission
     } catch (error) {
       console.error("An error occurred while searching: ", error);
     }
   };
 
-  const mostResearch = async (e) => {
-    e.preventDefault();
+  const mostResearch = async () => {
     try {
       const resultsMostView = await axios.get("http://localhost:5000/api/search/mostResearch");
       setMostView(resultsMostView.data);
@@ -30,8 +28,7 @@ export default function Header() {
     }
   }
 
-  const history = async (e) => {
-    e.preventDefault();
+  const history = async () => {
     try {
       const resultHistory = await axios.get("http://localhost:5000/api/search/history/1")
       setUserHistory(resultHistory.data);
@@ -40,29 +37,30 @@ export default function Header() {
     }
   }
 
-  const history_onChange = async (e) => {
-    e.preventDefault();
+  const history_onChange = async (value) => {
     try {
-      const resultHistory_onChange = await axios.get("http://localhost:5000/api/search/history_onChange/1/" + searchValue)
-      setSearchValue(resultHistory_onChange.data);
+      const resultHistory_onChange = await axios.get("http://localhost:5000/api/search/history_onChange/1/" + value);
+      if (resultHistory_onChange.data.name_search !== null) {
+        setInputValue(resultHistory_onChange.data.name_search);
+      } else {
+        setInputValue(""); // Réinitialiser la valeur de l'input si le résultat est nul
+      }
     } catch (error) {
       console.error("An error in history_onChange: ", error);
     }
   }
-
-  const mostResearch_onChange = async (e) => {
-    e.preventDefault();
+  const mostResearch_onChange = async (value) => {
     try {
-      const resultMostResearch_onChange = await axios.get("http://localhost:5000/api/search/mostResearch_onChange/" + searchValue )
-      setSearchValue(resultMostResearch_onChange.data);
+      const resultMostResearch_onChange = await axios.get("http://localhost:5000/api/search/mostResearch_onChange/" + value);
+      if (resultMostResearch_onChange.data.name_search !== null) {
+        setInputValue(resultMostResearch_onChange.data.name_search);
+      } else {
+        setInputValue(""); // Réinitialiser la valeur de l'input si le résultat est nul
+      }
     } catch (error) {
       console.error("An error in mostResearch_onChange: ", error);
     }
   }
-
-  const handleInputChange = (e) => {
-    setSearchValue(e.target.value);
-  };
 
   const handleClickOutsideMenu = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -77,8 +75,7 @@ export default function Header() {
     };
   }, []);
 
-  async function deleteHistory(id, e) {
-    e.preventDefault();
+  async function deleteHistory(id) {
     try {
       await axios.get("http://localhost:5000/api/search/deleteHistory/" + id);
     } catch (error) {
@@ -96,25 +93,26 @@ export default function Header() {
         </div>
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
-      <form className="flex w-[100%]" onSubmit={(e) => {
+      <form className="flex w-[100%]" onSubmit={async (e) => {
           e.preventDefault();
-          submit(searchValue);
+          await submit(inputValue); // Utiliser inputValue au lieu de menuRef.current.value
         }}>
           <div className="display-block w-[100%] h-7 z-20 relative" ref={menuRef}>
             <input
               className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
               placeholder="Search"
-              value={searchValue}
-              onChange={(e) => {
-                handleInputChange(e);
-                mostResearch_onChange(e);
-                history_onChange(e);
-              }}
               onClick={(e) => {
                 setMenuOpen(true);
-                mostResearch(e);
-                history(e);
+                mostResearch();
+                history();
+              }}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                console.log(history_onChange(e.target.value))
+                console.log(mostResearch_onChange(e.target.value))
+                console.log(e.target.value)
               }}
             />
             {menuOpen && (
@@ -124,7 +122,7 @@ export default function Header() {
                     <div key={index} className="flex justify-between">
                       <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
                         <div onClick={() => {
-                          setSearchValue(result.name_search);
+                          setInputValue(result.name_search); // Mettre à jour inputValue avec le résultat
                           submit(result.name_search); 
                             }}>
                           <img className="h-6 z-20 relative" src="rewind_icon.png" alt="search"></img>
@@ -134,7 +132,7 @@ export default function Header() {
                       <button
                         type="button"
                         className="w-[100%]"
-                        onClick={(e) => {deleteHistory(result.id, e)}}>supprimer</button>
+                        onClick={() => {deleteHistory(result.id)}}>supprimer</button>
                     </div>
                   ))}
                   {mostview.map((result, index) => (
@@ -142,7 +140,7 @@ export default function Header() {
                       className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
                       key={index}
                       onClick={() => {
-                        setSearchValue(result.name_search);
+                        setInputValue(result.name_search); // Mettre à jour inputValue avec le résultat
                         submit(result.name_search); 
                       }}
                     >
@@ -165,9 +163,6 @@ export default function Header() {
       <div className="flex justify-end space-x-2 w-[33%]">
         <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
           <img className="h-5 w-5" src="create.png" alt="create"></img>
-        </button>
-        <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
-          <img className="h-5 w-5" src="notification-bell.png" alt="notification-bell"></img>
         </button>
         <button className="flex items-center ml-2 h-7 w-7 bg-gray-200 rounded-full space-x-1"></button>
       </div>
