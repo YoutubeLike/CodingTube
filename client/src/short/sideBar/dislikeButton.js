@@ -7,7 +7,9 @@ class DislikeButton extends React.Component {
   }
 
   async componentDidMount() {
-    const dislikeButton = document.getElementById("dislike");
+    const dislikeButton = document.getElementById(
+      "dislike" + this.props.shortInfos.id
+    );
 
     if (dislikeButton.getAttribute("listener") != "true") {
       dislikeButton.addEventListener("mouseover", () => {
@@ -27,28 +29,39 @@ class DislikeButton extends React.Component {
   }
 
   dislike() {
+    const dislikeButton = document.getElementById(
+      "dislike" + this.props.shortInfos.id
+    );
+    const dislikeButtonImg = document.getElementById(
+      "dislikeImg" + this.props.shortInfos.id
+    );
+
     if (!this.props.isDisliked) {
       this.props.setState((state) => ({
         dislikes: state.dislikes + 1,
         isDisliked: true,
       }));
-      document.getElementById("dislike").style.backgroundColor = "#171717"; // DISLIKE BUTTON : white -> black
-      document.getElementById("dislikeImg").style.filter = "invert(1)"; // invert DISLIKE icon colors
+      dislikeButton.style.backgroundColor = "#171717"; // DISLIKE BUTTON : white -> black
+      dislikeButtonImg.style.filter = "invert(1)"; // invert DISLIKE icon colors
       if (this.props.isLiked) {
         this.props.setState((state) => ({
           likes: state.likes - 1,
           isLiked: false,
         })); // LIKE button already pressed
-        document.getElementById("like").style.backgroundColor = "#f5f5f5"; // LIKE BUTTON : black -> white
-        document.getElementById("likeImg").style.filter = "none";
+        document.getElementById(
+          "like" + this.props.shortInfos.id
+        ).style.backgroundColor = "#f5f5f5"; // LIKE BUTTON : black -> white
+        document.getElementById(
+          "likeImg" + this.props.shortInfos.id
+        ).style.filter = "none";
       }
     } else {
       this.props.setState((state) => ({
         dislikes: state.dislikes - 1,
         isDisliked: false,
       })); // DISLIKE button unpressed
-      document.getElementById("dislike").style.backgroundColor = "#f5f5f5"; // DISLIKE BUTTON : black -> white
-      document.getElementById("dislikeImg").style.filter = "none";
+      dislikeButton.style.backgroundColor = "#f5f5f5"; // DISLIKE BUTTON : black -> white
+      dislikeButtonImg.style.filter = "none";
     }
   }
 
@@ -57,15 +70,19 @@ class DislikeButton extends React.Component {
       <div className="flex flex-col items-center">
         {/* Dislike button */}
         <button
-          id="dislike"
+          id={"dislike" + this.props.shortInfos.id}
           className="h-[5vh] w-[5vh] flex items-center justify-center rounded-full bg-[#f5f5f5] hover:bg-[#e5e5e5]"
           onClick={this.dislike}
         >
-          <img src="dislike.png" id="dislikeImg" className="scale-50" />
+          <img
+            src="dislike.png"
+            id={"dislikeImg" + this.props.shortInfos.id}
+            className="scale-50"
+          />
         </button>
 
         {/* Name */}
-        <p className="text-[1.5vh]">{this.props.dislikes}</p>
+        <p className="text-[1.5vh]">{this.props.shortInfos.nb_dislike}</p>
       </div>
     );
   }

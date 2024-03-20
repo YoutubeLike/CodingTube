@@ -21,7 +21,7 @@ class VideoInfos extends React.Component {
 
           {/* Uploader's channel */}
           <button className="ml-[0.95vh] font-semibold text-[2vh]">
-            @{this.props.videosInfos.pseudo}
+            @{this.props.shortInfos.pseudo}
           </button>
 
           {/* Subscribe button */}
@@ -31,7 +31,7 @@ class VideoInfos extends React.Component {
         </div>
 
         {/* Video's title */}
-        <p className="text-[2vh]">{this.props.videosInfos.description}</p>
+        <p className="text-[2vh]">{this.props.shortInfos.description}</p>
       </div>
     );
   }

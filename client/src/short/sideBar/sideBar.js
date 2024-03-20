@@ -6,7 +6,7 @@ import ShareButton from "./shareButton.js";
 import OptionsButton from "./optionsButton.js";
 import SoundButton from "./soundButton.js";
 
-class sideBar extends React.Component {
+class SideBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,17 +18,14 @@ class sideBar extends React.Component {
   }
   render() {
     return (
-      <div
-        id="sideBar"
-        className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center"
-      >
+      <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
         <LikeButton
           isDisliked={this.state.isDisliked}
           dislikes={this.state.dislikes}
           isLiked={this.state.isLiked}
           likes={this.state.likes}
           setState={(p) => this.setState(p)}
-          videosInfos={this.props.videosInfos}
+          shortInfos={this.props.shortInfos}
         />
         <DislikeButton
           isLiked={this.state.isLiked}
@@ -36,9 +33,9 @@ class sideBar extends React.Component {
           isDisliked={this.state.isDisliked}
           dislikes={this.state.dislikes}
           setState={(p) => this.setState(p)}
-          videosInfos={this.props.videosInfos}
+          shortInfos={this.props.shortInfos}
         />
-        <CommentsButton setState={this.props.setState} />
+        <CommentsButton setState={this.props.setState} shortInfos={this.props.shortInfos} />
         <ShareButton />
         <OptionsButton />
         <SoundButton />
@@ -47,5 +44,4 @@ class sideBar extends React.Component {
   }
 }
 
-/* ReactDOM.render(<sideBar />, document.getElementById("root")); */
-export default sideBar;
+export default SideBar;

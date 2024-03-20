@@ -6,36 +6,48 @@ class VideoButtons extends React.Component {
   }
 
   async componentDidMount() {
-    const video = document.getElementById("video");
-    document.getElementById("soundButton").addEventListener("click", () => {
-      if (video.muted) {
-        video.muted = false;
-        document.getElementById("soundButtonImg").src = "soundButton.png";
-      } else {
-        video.muted = true;
-        document.getElementById("soundButtonImg").src = "muteButton.png";
-      }
-    });
+    const video = document.getElementById(
+      "shortPlayer" + this.props.shortInfos.id
+    );
 
+    document
+      .getElementById("soundButton" + this.props.shortInfos.id)
+      .addEventListener("click", () => {
+        if (video.muted) {
+          video.muted = false;
+          document.getElementById(
+            "soundButtonImg" + this.props.shortInfos.id
+          ).src = "soundButton.png";
+        } else {
+          video.muted = true;
+          document.getElementById(
+            "soundButtonImg" + this.props.shortInfos.id
+          ).src = "muteButton.png";
+        }
+      });
+
+    const playButtonImg = document.getElementById(
+      "playButtonImg" + this.props.shortInfos.id
+    );
     document.addEventListener("keyup", (event) => {
       if (event.code === "Space") {
         if (video.paused) {
           video.play();
-          document.getElementById("playButtonImg").src = "playButton.png";
+          playButtonImg.src = "playButton.png";
         } else {
           video.pause();
-          document.getElementById("playButtonImg").src = "pauseButton.png";
+          playButtonImg.src = "pauseButton.png";
         }
       }
     });
 
-    document.getElementById("playButton").addEventListener("click", () => {
+    document.getElementById("playButton" + this.props.shortInfos.id).addEventListener("click", () => {
       if (video.paused) {
         video.play();
-        document.getElementById("playButtonImg").src = "playButton.png";
+        playButtonImg.src = "playButton.png";
       } else {
         video.pause();
-        document.getElementById("playButtonImg").src = "pauseButton.png";
+        playButtonImg.src = "pauseButton.png";
       }
     });
   }
@@ -44,13 +56,13 @@ class VideoButtons extends React.Component {
     return (
       <div className="p-[1.5vh] flex justify-between items-start bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition ease-in-out">
         {/* Play button */}
-        <button id="playButton" className="h-[4vh] w-[4vh]">
-          <img src="playButton.png" id="playButtonImg" />
+        <button id={"playButton" + this.props.shortInfos.id} className="h-[4vh] w-[4vh]">
+          <img src="playButton.png" id={"playButtonImg" + this.props.shortInfos.id} />
         </button>
 
         {/* Sound button */}
-        <button id="soundButton" className="h-[4vh] w-[4vh]">
-          <img src="muteButton.png" id="soundButtonImg" />
+        <button id={"soundButton" + this.props.shortInfos.id} className="h-[4vh] w-[4vh]">
+          <img src="muteButton.png" id={"soundButtonImg" + this.props.shortInfos.id} />
         </button>
       </div>
     );

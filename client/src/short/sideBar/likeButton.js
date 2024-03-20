@@ -7,7 +7,9 @@ class LikeButton extends React.Component {
   }
 
   async componentDidMount() {
-    const likeButton = document.getElementById("like");
+    const likeButton = document.getElementById(
+      "like" + this.props.shortInfos.id
+    );
 
     likeButton.addEventListener("mouseover", () => {
       // if background color is not black, set it gray
@@ -25,28 +27,43 @@ class LikeButton extends React.Component {
   }
 
   like() {
+    const likeButton = document.getElementById(
+      "like" + this.props.shortInfos.id
+    );
+    const likeButtonImg = document.getElementById(
+      "likeImg" + this.props.shortInfos.id
+    );
+
     if (!this.props.isLiked) {
       this.props.setState((state) => ({
         likes: state.likes + 1,
         isLiked: true,
       }));
-      document.getElementById("like").style.backgroundColor = "#171717"; // LIKE BUTTON : white -> black
-      document.getElementById("likeImg").style.filter = "invert(1)"; // invert LIKE icon colors
+
+      likeButton.style.backgroundColor = "#171717"; // LIKE BUTTON : white -> black
+      likeButtonImg.style.filter = "invert(1)"; // invert LIKE icon colors
+
       if (this.props.isDisliked) {
         this.props.setState((state) => ({
           dislikes: state.dislikes - 1,
           isDisliked: false,
         })); // DISLIKE button already pressed
-        document.getElementById("dislike").style.backgroundColor = "#f5f5f5"; // DISLIKE BUTTON : black -> white
-        document.getElementById("dislikeImg").style.filter = "none";
+
+        document.getElementById(
+          "dislike" + this.props.shortInfos.id
+        ).style.backgroundColor = "#f5f5f5"; // DISLIKE BUTTON : black -> white
+        document.getElementById(
+          "dislikeImg" + this.props.shortInfos.id
+        ).style.filter = "none";
       }
     } else {
       this.props.setState((state) => ({
         likes: state.likes - 1,
         isLiked: false,
       })); // LIKE button unpressed
-      document.getElementById("like").style.backgroundColor = "#f5f5f5"; // LIKE BUTTON : black -> white
-      document.getElementById("likeImg").style.filter = "none";
+
+      likeButton.style.backgroundColor = "#f5f5f5"; // LIKE BUTTON : black -> white
+      likeButtonImg.style.filter = "none";
     }
   }
 
@@ -55,16 +72,18 @@ class LikeButton extends React.Component {
       <div className="flex flex-col items-center">
         {/* Like button */}
         <button
-          id="like"
+          id={"like" + this.props.shortInfos.id}
           className="h-[5vh] w-[5vh] flex items-center justify-center rounded-full bg-[#f5f5f5] hover:bg-[#e5e5e5]"
           onClick={this.like}
         >
-          <img src="like.png" id="likeImg" className="scale-50" />
+          <img
+            src="like.png"
+            id={"likeImg" + this.props.shortInfos.id}
+            className="scale-50"
+          />
         </button>
         {/* Likes count */}
-        <p className="text-[1.5vh]">
-          {/*this.props.videosInfos['nb_likes']*/ this.props.likes}
-        </p>
+        <p className="text-[1.5vh]">{this.props.shortInfos.nb_like}</p>
       </div>
     );
   }

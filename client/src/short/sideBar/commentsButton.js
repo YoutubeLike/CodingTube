@@ -4,7 +4,6 @@ class CommentsButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comment: "",
       commentCount: 0,
     };
     this.toggleComments = this.toggleComments.bind(this);
@@ -25,7 +24,7 @@ class CommentsButton extends React.Component {
           <img src="comment.png" className="scale-50" />
         </button>
         {/* Comments count */}
-        <p className="text-[1.5vh]">1432</p>
+        <p className="text-[1.5vh]">{this.props.shortInfos.nb_comment}</p>
       </div>
     );
   }
