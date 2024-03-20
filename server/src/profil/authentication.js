@@ -5,7 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 
 app.use(cors())
-
+ 
 // request for register
 async function InsertUser(registerData) {
     try {
