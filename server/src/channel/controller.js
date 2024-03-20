@@ -50,10 +50,10 @@ const NumberVideo = (_, res) => {
 };
 
 const submitVideo = (req, res) => {
-  const { title, description} = req.body;
+  const { title, description, category} = req.body;
   console.log('Données reçues :', title, description); // Ajoutez cette ligne pour vérifier les données reçues
 
-  mariadb.pool.query('INSERT INTO video (title, description) VALUES (?, ?)', [title, description])
+  mariadb.pool.query('INSERT INTO video (title, description, category) VALUES (?, ?, ?)', [title, description, category])
       .then(() => {
           res.status(200).send("Données soumises avec succès !");
       })
