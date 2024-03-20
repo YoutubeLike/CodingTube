@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import LikeButton from "./likeButton.js";
 import DislikeButton from "./dislikeButton.js";
 import CommentsButton from "./commentsButton.js";
@@ -15,6 +16,42 @@ class SideBar extends React.Component {
       dislikes: 0,
       isDisliked: false,
     };
+  }
+
+  async componentDidMount() {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/check-like",
+        {
+          params: {
+            id: 1,
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      if (response.data.length == 1) { 
+        this.setState({ isLiked: true });
+      } else {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/short/check-dislike",
+            {
+              params: {
+                id: 1,
+                shortId: this.props.shortInfos.id,
+              },
+            }
+          );
+          if (response.data.length == 1) {
+            this.setState({ isDisliked: true });
+          }
+        } catch (error) {
+          console.error("Error fetching videos:", error);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
   }
 
   render() {
