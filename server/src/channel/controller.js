@@ -1,22 +1,21 @@
+
 //Connexion à la Bdd
 const mariadb = require("../src/database");
 
-//Récupérer des infos sur la chaîne
-const selectChannel = (_, res) => {
-	mariadb.pool
-		.query(
-			"SELECT pseudo, nb_follower, bio, identifier_channel FROM channel WHERE user_id = 2"
-		)
-		.then((value) => {
-			res.send(value[0]);
-		});
-};
+// Récupérer des infos sur la chaîne
+const selectChannel = ((_,res) => {
+  mariadb.pool.query('SELECT pseudo, nb_follower, bio FROM channel WHERE user_id = 1').then((value) => {
+    res.send(value[0])
+  })
+})
 
-const submit = (req, res) => {
-	const submitValue = req.params.submit;
-
-	console.error("Valeur soumise :", submitValue);
-};
+const submit = (req, res) => {  
+  const { name, identifier, bio } = req.body
+  mariadb.pool.query("INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio) VALUES (1, ?, ?, 0, ?)", [name, identifier, bio])
+    .then(() => {
+      res.status(200).send('Chaîne créer')
+    })
+}
 
 //Récupère les vidéos postées
 const videoOnTab = (_, res) => {
@@ -50,10 +49,26 @@ const NumberVideo = (_, res) => {
 		});
 };
 
+const submitVideo = (req, res) => {
+  const { title, description} = req.body;
+  console.log('Données reçues :', title, description); // Ajoutez cette ligne pour vérifier les données reçues
+
+  mariadb.pool.query('INSERT INTO video (title, description) VALUES (?, ?)', [title, description])
+      .then(() => {
+          res.status(200).send("Données soumises avec succès !");
+      })
+      .catch(error => {
+          console.error("Erreur lors de la soumission des données :", error);
+          res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+      });
+};
+
+
 //Permet d'exporter les fonctions
 module.exports = {
 	selectChannel,
-	submit,
 	videoOnTab,
 	NumberVideo,
+	submit,
+	submitVideo,
 };
