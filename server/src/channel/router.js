@@ -1,16 +1,21 @@
 // Import de express
-const express = require('express');
+const express = require("express");
 
 // Utilisation du router de Express
 const router = express.Router();
 
 // Import des fonctions
-const { test, selectChannel, submit, selectVideo } = require('./controller')
+const { selectChannel, videoOnTab, NumberVideo, submit, submitVideo, selectVideo } = require("./controller");
+
 
 // Configuration de la route
-router.get('/test', test)
 router.get('/infos', selectChannel)
-router.get('/request/:submit', submit)
 router.get('/video', selectVideo)
+router.post('/submitChannel', submit)
+router.get("/videos", videoOnTab);
+router.get("/nombreVideo", NumberVideo);
 
-module.exports = router
+// Configuration de la route POST pour la soumission des données
+router.post('/submitVideo', submitVideo);
+
+module.exports = router;
