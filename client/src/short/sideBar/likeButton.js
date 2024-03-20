@@ -6,6 +6,8 @@ class LikeButton extends React.Component {
     super(props);
     this.like = this.like.bind(this);
     this.addLike = this.addLike.bind(this);
+    this.removeLike = this.removeLike.bind(this);
+    this.removeDislike = this.removeDislike.bind(this);
   }
 
   async componentDidMount() {
@@ -56,6 +58,32 @@ class LikeButton extends React.Component {
     }
   }
 
+  async removeLike() {
+    try {
+      await axios.get("http://localhost:5000/api/short/remove-like", {
+        params: {
+          id: 1,
+          shortId: this.props.shortInfos.id,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  }
+
+  async removeDislike() {
+    try {
+      await axios.get("http://localhost:5000/api/short/remove-dislike", {
+        params: {
+          id: 1,
+          shortId: this.props.shortInfos.id,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  }
+
   like() {
     const likeButton = document.getElementById(
       "like" + this.props.shortInfos.id
@@ -79,6 +107,7 @@ class LikeButton extends React.Component {
           dislikes: state.dislikes - 1,
           isDisliked: false,
         })); // DISLIKE button already pressed
+        this.removeDislike();
 
         document.getElementById(
           "dislike" + this.props.shortInfos.id
@@ -92,6 +121,7 @@ class LikeButton extends React.Component {
         likes: state.likes - 1,
         isLiked: false,
       })); // LIKE button unpressed
+      this.removeLike();
 
       likeButton.style.backgroundColor = "#f5f5f5"; // LIKE BUTTON : black -> white
       likeButtonImg.style.filter = "none";

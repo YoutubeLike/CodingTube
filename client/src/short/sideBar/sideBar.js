@@ -16,6 +16,7 @@ class SideBar extends React.Component {
       isDisliked: false,
     };
   }
+
   render() {
     return (
       <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
@@ -35,7 +36,10 @@ class SideBar extends React.Component {
           setState={(p) => this.setState(p)}
           shortInfos={this.props.shortInfos}
         />
-        <CommentsButton setState={this.props.setState} shortInfos={this.props.shortInfos} />
+        <CommentsButton
+          setState={this.props.setState}
+          shortInfos={this.props.shortInfos}
+        />
         <ShareButton />
         <OptionsButton />
         <SoundButton />
