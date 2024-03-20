@@ -9,6 +9,18 @@ const selectChannel = ((_,res) => {
   })
 })
 
+
+
+
+// Récupérer des informations sur la vidéo
+
+const selectVideo = ((_, res) => {
+    mariadb.pool.query('SELECT title, description, channel_id, upload_video_url, upload_date_time, number_view, nb_comment, nb_like FROM video WHERE channel_id = 1').then((value) => {
+    res.send(value[0]) 
+})
+})
+
+
 const submit = (req, res) => {  
   const { name, identifier, bio } = req.body
   mariadb.pool.query("INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio) VALUES (1, ?, ?, 0, ?)", [name, identifier, bio])
@@ -71,4 +83,5 @@ module.exports = {
 	NumberVideo,
 	submit,
 	submitVideo,
+  selectVideo,
 };
