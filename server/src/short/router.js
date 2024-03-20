@@ -3,28 +3,34 @@ const router = express.Router();
 
 const {
   getShortInfos,
-} = require("./controller.js");
+  getLikes,
+  getDislikes,
+  getComments,
+} = require("./getShortInfos.js");
 
 const {
-  getLikes,
   checkLike,
   addLike,
   removeLike,
-  getDislikes,
   checkDislike,
   addDislike,
   removeDislike,
 } = require("./likeManager.js");
 
-router.get("/short-request", getShortInfos);
+const { addComment } = require("./commentsManager.js");
 
+router.get("/short-request", getShortInfos);
 router.get("/get-likes", getLikes);
+router.get("/get-dislikes", getDislikes);
+router.get("/get-comments", getComments);
+
 router.get("/check-like", checkLike);
 router.get("/add-like", addLike);
 router.get("/remove-like", removeLike);
-router.get("/get-dislikes", getDislikes);
 router.get("/check-dislike", checkDislike);
 router.get("/add-dislike", addDislike);
 router.get("/remove-dislike", removeDislike);
+
+router.get("/add-comment", addComment);
 
 module.exports = router;

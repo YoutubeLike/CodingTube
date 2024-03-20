@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 class CommentBar extends React.Component {
   constructor(props) {
@@ -12,24 +13,55 @@ class CommentBar extends React.Component {
         "KC le KK xD",
       ],
       userInput: "",
-      likes: 0,
-      dislikes: 0,
     };
     this.postComment = this.postComment.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  countComments() {}
+  async componentDidMount() {
+    // Get comments count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-comments",
+        {
+          params: {
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      this.setState({ commentsCount: response.data.length });
+      response.data.map((comment) =>
+        this.setState((state) => ({
+          comments: state.comments.concat([comment.text]),
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  }
 
   handleChange(event) {
     this.setState({ userInput: event.target.value });
   }
 
-  postComment() {
+  async postComment() {
     if (this.state.userInput != "") {
       this.setState({
         comments: this.state.comments.concat([this.state.userInput]),
       });
+
+      try {
+        await axios.get("http://localhost:5000/api/short/add-comment", {
+          params: {
+            id: 1,
+            shortId: this.props.shortInfos.id,
+            text: this.state.userInput,
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+
       document.getElementById("commentsInputField").value = "";
       this.setState({ userInput: "" });
     }

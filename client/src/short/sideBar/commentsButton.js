@@ -1,12 +1,30 @@
 import React from "react";
+import axios from "axios";
 
 class CommentsButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      commentCount: 0,
+      commentsCount: 0,
     };
     this.toggleComments = this.toggleComments.bind(this);
+  }
+
+  async componentDidMount() {
+    // Get comments count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-comments",
+        {
+          params: {
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      this.setState({ commentsCount: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
   }
 
   toggleComments() {
@@ -24,7 +42,7 @@ class CommentsButton extends React.Component {
           <img src="comment.png" className="scale-50" />
         </button>
         {/* Comments count */}
-        <p className="text-[1.5vh]">{this.props.shortInfos.nb_comment}</p>
+        <p className="text-[1.5vh]">{this.state.commentsCount}</p>
       </div>
     );
   }
