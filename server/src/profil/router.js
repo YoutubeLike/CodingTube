@@ -141,6 +141,17 @@ router.post("/check-session", async (req, res) => {
   }
 });
 
+app.get('/logout', (req, res) => {
+  sessionData.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(sessionData.userId + " logged in");
+      return res.status(200).json({ redirectTo: '/login' });
+    }
+  });
+});
+
 
 
 module.exports = router; // Exporting the router module
