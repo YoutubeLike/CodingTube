@@ -17,7 +17,7 @@ import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
 import You from "./timeline/pages/you";
-import PageChannel from "./channel/pages/PageChannel";
+//import PageChannel from "./channel/pages/Channel";
 
 const router = createBrowserRouter([
   {
@@ -80,10 +80,10 @@ const router = createBrowserRouter([
 				path: "/you",
 				element: <You />,
 			},
-      {
-				path: "/PageChannel",
-				element: <PageChannel />,
-			},
+      // {
+			// 	path: "/PageChannel",
+			// 	element: <PageChannel />,
+			// },
     ]
   },
 ]);
