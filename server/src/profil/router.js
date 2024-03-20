@@ -7,6 +7,11 @@ const {
   CheckIfPasswordMatch,
   GetPasswordFromUsernameOrEmail,
 } = require("./authentication");
+const { userData } = require("./userData.js")
+const {updateUser} = require("./userUpdate.js")
+
+router.get("/userData/:info_user", userData)
+router.post("/updateUser/:updatedUserData", updateUser)
 
 router.post("/register", async (req, res) => {
   const registerData = req.body.registerData;
@@ -15,7 +20,7 @@ router.post("/register", async (req, res) => {
     if (registerData.username.includes("@")) {
         console.log("Username cannot contain '@'");
         return res.status(400).json({ error: "Username cannot contain '@'" });
-    }
+    } 
 
     // Vérification si l'adresse e-mail est valide
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
