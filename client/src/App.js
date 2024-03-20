@@ -12,9 +12,9 @@ function App() {
 	return (
 		<>
 			<div>
-				<Header/>
+				<Header />
 				<Outlet />
-				{/* <Upload /> */}
+				<channel />
 			</div>
 		</>
 	);
