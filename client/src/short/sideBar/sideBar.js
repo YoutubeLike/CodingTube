@@ -19,6 +19,7 @@ class SideBar extends React.Component {
   }
 
   async componentDidMount() {
+    // Set isLiked and isDisliked states with database datas
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-like",
@@ -29,7 +30,7 @@ class SideBar extends React.Component {
           },
         }
       );
-      if (response.data.length == 1) { 
+      if (response.data.length == 1) {
         this.setState({ isLiked: true });
       } else {
         try {
@@ -49,6 +50,36 @@ class SideBar extends React.Component {
           console.error("Error fetching videos:", error);
         }
       }
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Get likes count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-likes",
+        {
+          params: {
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      this.setState({ likes: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Get dislikes count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-dislikes",
+        {
+          params: {
+            shortId: this.props.shortInfos.id,
+          },
+        }
+      );
+      this.setState({ dislikes: response.data.length });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }

@@ -107,7 +107,7 @@ class LikeButton extends React.Component {
           />
         </button>
         {/* Likes count */}
-        <p className="text-[1.5vh]">{this.props.shortInfos.nb_like}</p>
+        <p className="text-[1.5vh]">{this.props.likes}</p>
       </div>
     );
   }

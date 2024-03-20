@@ -1,5 +1,13 @@
 const mariadb = require("../src/database");
 
+const getLikes = (req, res) => {
+  mariadb.pool
+    .query("SELECT * FROM like_short WHERE id_short = ?;", [req.query.shortId])
+    .then((value) => {
+      res.send(value);
+    });
+};
+
 const checkLike = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;", [
@@ -38,6 +46,16 @@ const removeLike = (req, res) => {
     .catch((error) => {
       console.error("Error updating view count:", error);
       res.status(500).send("Error updating view count");
+    });
+};
+
+const getDislikes = (req, res) => {
+  mariadb.pool
+    .query("SELECT * FROM dislike_short WHERE id_short = ?;", [
+      req.query.shortId,
+    ])
+    .then((value) => {
+      res.send(value);
     });
 };
 
@@ -83,10 +101,12 @@ const removeDislike = (req, res) => {
 };
 
 module.exports = {
+  getLikes,
   checkLike,
   addLike,
+  removeLike,
+  getDislikes,
   checkDislike,
   addDislike,
-  removeLike,
   removeDislike,
 };

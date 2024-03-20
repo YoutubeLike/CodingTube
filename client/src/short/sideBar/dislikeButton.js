@@ -108,7 +108,7 @@ class DislikeButton extends React.Component {
         </button>
 
         {/* Dislikes count */}
-        <p className="text-[1.5vh]">{this.props.shortInfos.nb_dislike}</p>
+        <p className="text-[1.5vh]">{this.props.dislikes}</p>
       </div>
     );
   }
