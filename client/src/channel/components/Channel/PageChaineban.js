@@ -14,6 +14,7 @@ const App = () => {
       try {
         // Requête vers les infos de la chaîne
         const response = await axios.get('http://localhost:5000/api/channel/infos');
+        
 
         // Attribution des informations
         setPseudo(response.data.pseudo); 
