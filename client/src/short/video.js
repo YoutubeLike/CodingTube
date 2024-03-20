@@ -27,7 +27,7 @@ class Video extends React.Component {
   }
 
   render() {
-    return (
+    return this.state.shortInfos.id != null ? (
       <div
         id={"short" + this.state.id}
         className="mb-[1vh] flex justify-center"
@@ -61,7 +61,7 @@ class Video extends React.Component {
           <CommentBar shortInfos={this.state.shortInfos} />
         )}
       </div>
-    );
+    ) : <p>Loading...</p>;
   }
 }
 
