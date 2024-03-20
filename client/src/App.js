@@ -12,7 +12,8 @@ function App() {
 	return (
 		<>
 			<div>
-				<PageChaineban />
+				<Header/>
+				<Outlet />
 				{/* <Upload /> */}
 			</div>
 		</>

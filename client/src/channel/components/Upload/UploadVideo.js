@@ -48,7 +48,7 @@ export default function UploadVideo() {
         // Envoi des données vers le backend uniquement si les champs sont remplis
         if (title.trim() !== "" && description.trim() !== "") {
             // Envoi des données vers le backend avec les URL des images et des vidéos
-            axios.post('http://localhost:5000/api/channel/submitData', {
+            axios.post('http://localhost:5000/api/channel/submitVideo', {
 			title: title,
 			description: description,
 			// upload_video_url: upload_Video_Url,

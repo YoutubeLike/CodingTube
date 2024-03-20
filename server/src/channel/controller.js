@@ -49,7 +49,7 @@ const NumberVideo = (_, res) => {
 		});
 };
 
-const submitData = (req, res) => {
+const submitVideo = (req, res) => {
   const { title, description} = req.body;
   console.log('Données reçues :', title, description); // Ajoutez cette ligne pour vérifier les données reçues
 
@@ -69,6 +69,6 @@ module.exports = {
 	selectChannel,
 	videoOnTab,
 	NumberVideo,
-  submit,
-  submitData,
+	submit,
+	submitVideo,
 };
