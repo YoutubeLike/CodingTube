@@ -16,6 +16,8 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/PageChannel";
 import Authentification from "./profil/Pages/Authentification";
+import You from "./timeline/pages/you";
+import PageChannel from "./channel/pages/PageChannel";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
 			{
 				path: "upload",
 				element: <Upload />,
+			},
+      {
+				path: "/you",
+				element: <You />,
+			},
+      {
+				path: "/PageChannel",
+				element: <PageChannel />,
 			},
     ]
   },
