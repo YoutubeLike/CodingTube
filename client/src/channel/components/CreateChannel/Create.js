@@ -5,6 +5,7 @@ import './create.css';
 import logo from "../../assets/logo.jpg"
 
 export default function Create() {  
+  const [showPopup, setShowPopup] = useState(false); // État pour afficher ou masquer le popup
   const redirectLinkRef = useRef(); // Créez une référence useRef pour le lien de redirection
   const [imagePreview, setImagePreview] = useState(null);  
   const [name, setName] = useState("");
@@ -50,32 +51,47 @@ export default function Create() {
   }
 
   return (
-    <div className="create-container">
-      	<Link ref={redirectLinkRef} className="logo" to="/channel">
-					YouFlute
-				</Link>
-      <h1>Voici comment les autres vous verront</h1>
-      {imagePreview ? (
-        <img src={imagePreview}  className="bonhomme-logo rounded-full w-[250px] object-cover" />
-      ) : (
-        <img src={logo} alt="Logo" className="bonhomme-logo rounded-full w-[250px] object-cover" />
+    <div>
+      {/* Bouton pour ouvrir le popup */}
+      <button onClick={() => setShowPopup(true)}>Ouvrir le popup</button>
+
+      {/* Popup */}
+      {showPopup && (
+        <div className="popup-container">
+          <div className="create-container">
+            {/* "X" pour fermer le popup */}
+            <button className="close-btn" onClick={() => setShowPopup(false)}>
+              X
+            </button>
+
+            <Link ref={redirectLinkRef} className="logo" to="/channel">
+              YouFlute
+            </Link>
+            <h1>Voici comment les autres vous verront</h1>
+            {imagePreview ? (
+              <img src={imagePreview} className="bonhomme-logo rounded-full w-[250px] object-cover" />
+            ) : (
+              <img src={logo} alt="Logo" className="bonhomme-logo rounded-full w-[250px] object-cover" />
+            )}
+            <form className="create-form" onSubmit={submit}>
+              <label htmlFor="photo">Importez une photo</label>
+              <input name="photo" type='file' onChange={handleImageChange} />
+
+              <label htmlFor="nom">Nom</label>
+              <input name="nom" type="text" value={name} onChange={(e)=>setName(e.target.value)} />
+
+              <label htmlFor="identifiant">Identifiant</label>
+              <input name="identifiant" type="text" value={identifier} onChange={handleIdentifier} />
+
+              <label htmlFor="Bio">Bio</label>
+              <input name="bio" type="text" value={bio} onChange={(e)=>setBio(e.target.value)} />
+
+              <input type="submit" value="Annuler" className='annuler' />
+              <input type="submit" value="Créer une chaine" className='creer' />
+            </form>
+          </div>
+        </div>
       )}
-      <form className="create-form" onSubmit={submit}>
-        <label htmlFor="photo">Importez une photo</label>
-        <input name="photo" type='file' onChange={handleImageChange} />
-
-        <label htmlFor="nom">Nom</label>
-        <input name="nom" type="text" value={name} onChange={(e)=>setName(e.target.value)} />
-
-        <label htmlFor="identifiant">Identifiant</label>
-        <input name="identifiant" type="text" value={identifier} onChange={handleIdentifier} />
-
-        <label htmlFor="Bio">Bio</label>
-        <input name="bio" type="text" value={bio} onChange={(e)=>setBio(e.target.value)} />
-
-        <input type="submit" value="Annuler" className='annuler' />
-        <input type="submit" value="Créer une chaine" className='creer' />
-      </form>
     </div>
   )
 }
