@@ -71,6 +71,7 @@ router.post("/register", async (req, res) => {
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
+          const  userId = await GetUserId(registerData.username);
           sessionData.userId = userId;
             console.log(sessionData.userId + " logged in");
             return res.status(200).json({ redirectTo: '/' });
