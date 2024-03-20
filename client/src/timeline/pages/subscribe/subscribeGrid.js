@@ -1,8 +1,12 @@
 import NonDisplayedBurgerMenu from "../../component/nonDisplayedBurgerMenu";
 import GridSubscriptionTimeLine from "../../component/subscribe/subscriptionTimelineGrid";
 import "../../styles/Timeline.css";
+import React, { useEffect, useState } from "react";
 
 export default function GridSubscribe() {
+  useEffect(() => {
+    document.title = "Subscriptions - CodingTube";
+  }, []);
   return (
     <>
       <div className="ml-24 mt-8 mb-8">
