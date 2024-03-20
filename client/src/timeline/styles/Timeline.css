@@ -8,3 +8,9 @@
     max-height:30px;
     border-radius: 100%;
 }
+
+.thumbnail-subscribe-list {
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+}

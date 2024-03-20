@@ -292,6 +292,7 @@ const DisplayedBurgerMenu = () => {
             <Link to="/trends" className="pl-4">
               Sports
             </Link>
+
           </div>
           <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-1 mt-2">
             <svg

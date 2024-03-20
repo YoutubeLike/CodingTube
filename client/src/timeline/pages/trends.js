@@ -1,5 +1,9 @@
+import React, { useEffect, useState } from "react";
 
 export default function Trends() {
+  useEffect(() => {
+    document.title = "Trends - CodingTube";
+  }, []);
   return (
     <>
       <div>
