@@ -18,6 +18,7 @@ export default function Live()
         })
         .catch(error => console.log('Server unreachable'))
     }, []) 
+    console.log(UserInLive)
     return (
         <div>
             <p>Voici les utilisateurs en live</p>
@@ -50,16 +51,15 @@ export function UserLink()
             }
         })
         .catch(error => setTest(["Live indisponible"]))
-        // axios.get('http://localhost:5000/api/live/thumbnail').then(response => console.log(response.data.image) )
     }, []) 
     return(
         <>
-            {Test.map(element => <Link key={element} to={"/live/" + element}>{element}</Link>)}
-            {/* {Test.map(element => <img src={"data:image/jpeg;base64," +     axios.get('http://localhost:5000/api/live/thumbnail', {responseType: "text"}).then(response => {  return response.data.image })}/>)} */}
-            <img src="http://localhost:5000/api/live/thumbnail"/>
             {Test.length == 0 &&
                 <p>Personne n'est en direct pour le moment</p>
             }
+            <div className="video-container">
+                {Test.map(element => <Link key={element} to={"/live/" + element}><div className="video"><img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} /> <span>{element}</span></div></Link>)}
+            </div>
 
         </>
     )
