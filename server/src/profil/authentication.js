@@ -5,6 +5,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 
 
+
 // Middleware for enabling CORS
 app.use(cors());
 
