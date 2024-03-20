@@ -141,7 +141,7 @@ router.post("/check-session", async (req, res) => {
   }
 });
 
-app.get('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   sessionData.destroy((err) => {
     if (err) {
       console.log(err);
