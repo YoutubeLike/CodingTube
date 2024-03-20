@@ -2,6 +2,7 @@ import TimeLine from "../component/Timeline";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import PageChannel from "../../channel/pages/PageChannel"
+import { useState,useEffect } from "react";
 
 
 export default function You() {
