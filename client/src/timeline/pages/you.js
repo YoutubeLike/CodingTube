@@ -3,7 +3,11 @@ import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import PageChannel from "../../channel/pages/PageChannel"
 
+
 export default function You() {
+  useEffect(() => {
+    document.title = "You - CodingTube";
+  }, []);
     return (
       <div className="flex">
         <NonDisplayedBurgerMenu />

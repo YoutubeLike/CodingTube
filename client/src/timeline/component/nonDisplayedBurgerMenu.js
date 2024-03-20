@@ -19,7 +19,7 @@ export default function NonDisplayedBurgerMenu() {
             </a>
         </div>
         <div className="relative top-[-150px]">
-            <a href="/subscribe">
+            <a href="/feed/subscriptions/grid">
             <img className="relative left-[12px]" src="subscriptions1.png"></img>
             <button>
             Subscriptions

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
+import axios from "axios";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -39,60 +38,69 @@ function timeOfVideo(totalSeconds) {
 
   // Seconds
   if (seconds < 10) {
-    resultSeconds =  `0${seconds}`
+    resultSeconds = `0${seconds}`;
   } else {
-    resultSeconds =  `${seconds}`
+    resultSeconds = `${seconds}`;
   }
   // Minutes
   if (minutes < 10) {
-    resultMinutes =  `0${minutes}:`
+    resultMinutes = `0${minutes}:`;
   } else {
-    resultMinutes =  `${minutes}:`
+    resultMinutes = `${minutes}:`;
   }
   // Hours
   if (hours > 0) {
     if (hours < 10) {
-      resultHours =  `0${hours}:`
+      resultHours = `0${hours}:`;
     } else {
-      resultHours =  `${hours}:`
+      resultHours = `${hours}:`;
     }
   } else {
-    resultHours =  ``
+    resultHours = ``;
   }
-  
-  result = `${resultHours}${resultMinutes}${resultSeconds}`
+
+  result = `${resultHours}${resultMinutes}${resultSeconds}`;
   return result;
 }
 
-export default function TimelineRightSide() {
-  var [videosInfos, setVideosInfos] = useState([]);
+export default function ListSubscriptionTimeLine() {
+  // Get the informations of the SQL Request by the URL
+  const [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/timeline-request');
+        const response = await axios.get(
+          "http://localhost:5000/api/timeline/subscription-timeline-request"
+        );
         setVideosInfos(response.data);
       } catch (error) {
-        console.error('Error fetching videos:', error);
+        console.error("Error fetching videos:", error);
       }
     };
     fetchVideos();
   }, []);
 
-  videosInfos = SetScores(videosInfos);
-  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
-
   var indents = [];
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No video, subscribe to at least one channel that has published videos
+        </p>
+      </div>
+    );
+  }
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
-
+    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"]);
     indents.push(
-      <div key={i} className="h-auto mb-2 ">
+      <div key={i} className="mb-10">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
           <div class="flex flex-row">
             <div class="relative">
               <img
-                class="h-20 rounded-lg"
+                class="thumbnail-subscribe-list"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />
@@ -101,17 +109,23 @@ export default function TimelineRightSide() {
               </p>
             </div>
 
-            <div className="ml-2.5">
-              <h3 className="text-black font-bold text-[100%]">
+            <div className="ml-2.5 w-[55%]">
+              <h3 className="text-black font-bold text-[120%]">
                 {videosInfos[i]["title"]}
               </h3>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["pseudo"]}
+                {videosInfos[i]["number_view"]} views -{" "}
+                {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
-              <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
-              </h4>
-              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
+              <div className="flex flex-row mt-2 items-center">
+                <img className="pp mr-2" src={videosInfos[i]["PP"]} alt="PP" />
+                <h4 className="text-gray text-[90%] text-center font-medium">
+                  {videosInfos[i]["pseudo"]}
+                </h4>
+              </div>
+              <p className="mt-2 text-balance truncate text-xs">
+                {videosInfos[i]["description"]}
+              </p>
             </div>
           </div>
         </a>
