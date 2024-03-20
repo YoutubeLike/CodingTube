@@ -5,7 +5,7 @@ class DislikeButton extends React.Component {
   constructor(props) {
     super(props);
     this.dislike = this.dislike.bind(this);
-    this.changeDislike = this.changeDislike.bind(this);
+    this.addDislike = this.addDislike.bind(this);
   }
 
   async componentDidMount() {
@@ -30,26 +30,29 @@ class DislikeButton extends React.Component {
     }
   }
 
-  async changeDislike(n) {
+  async addDislike() {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/get-dislikes",
-        { params: { shortId: this.props.shortInfos.id } }
+        "http://localhost:5000/api/short/check-dislike",
+        {
+          params: {
+            id: 1,
+            shortId: this.props.shortInfos.id,
+          },
+        }
       );
-      this.props.setState({
-        dislikes: response.data.nb_dislike,
-      });
-    } catch (error) {
-      console.error("Error fetching videos:", error);
-    }
-
-    try {
-      axios.get("http://localhost:5000/api/short/update-dislike", {
-        params: {
-          updatedDislikes: this.props.dislikes + n,
-          shortId: this.props.shortInfos.id,
-        },
-      });
+      if (response.data.length == 0) {
+        try {
+          await axios.get("http://localhost:5000/api/short/add-dislike", {
+            params: {
+              id: 1,
+              shortId: this.props.shortInfos.id,
+            },
+          });
+        } catch (error) {
+          console.error("Error fetching videos:", error);
+        }
+      }
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -68,7 +71,7 @@ class DislikeButton extends React.Component {
         dislikes: state.dislikes + 1,
         isDisliked: true,
       }));
-      this.changeDislike(1);
+      this.addDislike(1);
 
       dislikeButton.style.backgroundColor = "#171717"; // DISLIKE BUTTON : white -> black
       dislikeButtonImg.style.filter = "invert(1)"; // invert DISLIKE icon colors
@@ -91,7 +94,6 @@ class DislikeButton extends React.Component {
         dislikes: state.dislikes - 1,
         isDisliked: false,
       })); // DISLIKE button unpressed
-      this.changeDislike(-1);
 
       dislikeButton.style.backgroundColor = "#f5f5f5"; // DISLIKE BUTTON : black -> white
       dislikeButtonImg.style.filter = "none";
