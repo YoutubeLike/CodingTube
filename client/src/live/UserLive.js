@@ -14,7 +14,7 @@ export default function LiveFromUser()
     return (
         <>
             <p> {user} </p>
-            <ReactPlayer url={"http://localhost:8090/live/" + user + ".flv"} controls={false} playing={false} pip={false}/>
+            <ReactPlayer url={"http://localhost:8090/live/" + user + ".flv"} controls={true} playing={false} pip={false}/>
         </>
     )
 }

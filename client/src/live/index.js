@@ -1,66 +1,100 @@
-import axios from "axios"
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-export default function Live()
-{
-    const [UserInLive, setUserInLive] = useState([])
-    useEffect(() => {
-        axios.get("http://localhost:8090/api/streams")        
-        .then((response) => {
-            if(response.status)
-            {
-                if(Object.keys(response.data).length > 0)
-                {
-                    setUserInLive(Object.keys(response.data["live"]))
-                }
-            }
-        })
-        .catch(error => console.log('Server unreachable'))
-    }, []) 
-    console.log(UserInLive)
-    return (
-        <div>
-            <p>Voici les utilisateurs en live</p>
-            <p>{UserInLive.length} utilisateurs ont été trouvé</p>
-            <UserLink />
-        </div>
-    )
-}
+export default function Live() {
+    const [UserInLive, setUserInLive] = useState([]);
 
-
-
-export function UserLink()
-{
-    const [Test, setTest] = useState([])
     useEffect(() => {
         axios.get("http://localhost:8090/api/streams")
-        .then(response => {
-            if(response.status)
-            {
-                if(Object.keys(response.data).length > 0)
-                {
-                    Object.keys(response.data["live"]).map(element => {
-                        const data = {
-                                user: element
-                            }
-                        axios.post('http://localhost:5000/api/live/save', data)
-                    })
-                    setTest(Object.keys(response.data["live"]))
+            .then((response) => {
+                if (response.status === 200 && Object.keys(response.data).length > 0) {
+                    setUserInLive(Object.keys(response.data["live"]));
                 }
-            }
-        })
-        .catch(error => setTest(["Live indisponible"]))
-    }, []) 
-    return(
-        <>
-            {Test.length == 0 &&
-                <p>Personne n'est en direct pour le moment</p>
-            }
-            <div className="video-container">
-                {Test.map(element => <Link key={element} to={"/live/" + element}><div className="video"><img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} /> <span>{element}</span></div></Link>)}
-            </div>
+            })
+            .catch(error => console.log('Server unreachable'));
+    }, []);
 
+    return (
+        <div className="flex flex-col">
+            <div className="flex flex-nowrap pl-6 pt-6">
+            <img src="./Live.jpg" className="rounded-full h-20 w-20" alt="" />
+            <h1 className="text-4xl font-bold pl-2 pt-5">Live</h1>
+            </div>
+            <p className="font-bold pl-6 text-2xl flex flex-wrap pt-4">Live Now</p>
+            {UserInLive.length > 0 ? (
+                <>
+                    <p className="pl-6">Il y a actuellement {UserInLive.length} live en cours</p>
+                    <UserLink userList={UserInLive} />
+                </>
+            ) : (
+                <p className="pl-6">Personne n'est en direct pour le moment</p>
+            )}
+        </div>
+    );
+}
+
+export function UserLink({ userList }) {
+    const [usersInLive, setUsersInLive] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8090/api/streams")
+            .then(response => {
+                if (response.status === 200 && Object.keys(response.data).length > 0) {
+                    const liveUsers = Object.keys(response.data["live"]);
+                    setUsersInLive(liveUsers);
+                    liveUsers.forEach(user => {
+                        const data = {
+                            user: user
+                        };
+                        axios.post('http://localhost:5000/api/live/save', data)
+                            .then(response => {
+                                console.log("User data saved successfully:", response.data);
+                            })
+                            .catch(error => {
+                                console.error("Error saving user data:", error);
+                            });
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Failed to fetch live users:", error);
+                setUsersInLive(["Live indisponible"]);
+            });
+    }, []);
+
+    return (
+        <>
+            {usersInLive.length === 0 && <p>Personne n'est en direct pour le moment</p>}
+            <div className="container mx-auto pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+                    {userList.map((element) => (
+                        <div key={element} className="bg-white rounded-md overflow-hidden">
+                           <div className="video-container">
+                {usersInLive.map(element => (
+                    <Link key={element} to={"/live/" + element}>
+                        <div className="video">
+                            <img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} alt="" />
+                        </div>
+                    </Link>
+                ))}
+            </div>
+                            <Link to={"/live/" + element} className="flex items-center">
+                                <img
+                                    src="./live.jpg"
+                                    className="w-12 h-12 rounded-full object-cover"
+                                    alt=""
+                                />
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold mb-2">La revue de presse du mardi 19 mars, c'est jour de grève</h3>
+                                    <p className="text-gray-700">{element}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            
         </>
-    )
+    );
 }
