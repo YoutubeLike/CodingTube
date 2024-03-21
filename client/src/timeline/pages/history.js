@@ -14,7 +14,7 @@ export default function History() {
 
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div class="flex ml-[3%] flex-wrap">
+        <div class="flex ml-[3%] flex-wrap content-center">
           <TimelineHistory />
         </div>
       </div>

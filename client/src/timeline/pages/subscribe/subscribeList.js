@@ -41,7 +41,7 @@ export default function ListSubscribe() {
       </div>
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div class="flex ml-[3%] flex-col">
+        <div class="flex ml-[3%] flex-col content-center">
           <ListSubscriptionTimeLine />
         </div>
       </div>

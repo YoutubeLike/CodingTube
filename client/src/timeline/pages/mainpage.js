@@ -12,7 +12,7 @@ export default function Mainpage() {
     <>
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div class="flex ml-[3%] flex-wrap mt-3">
+        <div class="flex ml-[3%] flex-wrap mt-3 content-center">
           <TimeLine />
         </div>
       </div>
