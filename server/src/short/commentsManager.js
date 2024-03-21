@@ -3,7 +3,7 @@ const mariadb = require("../src/database");
 const addComment = (req, res) => {
   mariadb.pool
     .query(
-      "INSERT INTO short_comment (user_id, short_id, text) VALUES (?, ?, ?);",
+      "INSERT INTO comment_short (user_id, short_id, text) VALUES (?, ?, ?);",
       [req.query.id, req.query.shortId, req.query.text]
     )
     .then((value) => {
