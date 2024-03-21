@@ -10,17 +10,30 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
+      commentsCount: 0,
       commentsShown: false,
     };
   }
 
   async componentDidMount() {
+    // Get short infos
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-short-infos",
         { params: { shortId: this.props.id } }
       );
       this.setState({ shortInfos: response.data });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Get comments count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-comments",
+        { params: { shortId: this.props.id } }
+      );
+      this.setState({ commentsCount: response.data.length });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -58,11 +71,15 @@ class Video extends React.Component {
               this.setState(p);
             }}
             shortInfos={this.state.shortInfos}
-        />
+            commentsCount={this.state.commentsCount}
+          />
         </div>
         {this.state.commentsShown && (
-          <CommentBar setState={p => (this.setState(p))} shortInfos={this.state.shortInfos} />
-
+          <CommentBar
+            setState={(p) => this.setState(p)}
+            shortInfos={this.state.shortInfos}
+            commentsCount={this.state.commentsCount}
+          />
         )}
       </div>
     );
