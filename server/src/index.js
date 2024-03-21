@@ -1,10 +1,17 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
-const mariadb = require("./src/database");
-const routes = require("./router");
-bodyParser = require("body-parser");
 const session = require('express-session');
+const routes = require("./router");
+
+const app = express();
+
+app.use(cors({
+  // better way (browsers are now happy)
+  origin: (origin, callback) => {
+    callback(null, true)
+  },
+  credentials: true, // authorize cookie
+}));
 
 app.use(session({
   secret: 'secret',
@@ -12,26 +19,19 @@ app.use(session({
   saveUninitialized: false,
 }));
 
-app.get('/', (req, res) => {
-  const sessionData = req.session;
-});
 
-app.use(cors());
-app.use(bodyParser.json({ type: "application/*+json" }));
-app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded());
+app.use(express.json({ type: "application/*+json" }));
 
-app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
+/* Handle all POST requests with different kind of bodies */
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.raw({ type: "application/vnd.custom-type" }));
+app.use(express.text({ type: "text/html" }));
 
-
-app.use(bodyParser.text({ type: "text/html" }));
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-console.log(app);
+/* Register all /api routes of differents teams */
+app.use("/api", urlencodedParser, routes);
 
 app.listen(5000, () => {
   console.log("server listening on port 5000");
 });
-
-app.use("/api", urlencodedParser, routes);
-
 

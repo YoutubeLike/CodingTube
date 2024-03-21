@@ -1,7 +1,6 @@
 //Don't touch this file
 
 const express = require("express");
-const app = express();
 const router = express.Router();
 const live = require("./live/router");
 const short = require("./short/router");
