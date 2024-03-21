@@ -1,3 +1,5 @@
+// File containing all the HTML content to be displayed
+
 export default function NonDisplayedBurgerMenu() { 
     return( 
       <div className="text-black bg-white w-20 h-screen flex flex-col items-center justify-center text-xs space-y-8">

@@ -1,3 +1,5 @@
+// File containing all the HTML content to be displayed
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";

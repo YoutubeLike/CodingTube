@@ -1,3 +1,5 @@
+// File containing all the HTML content to be displayed
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 

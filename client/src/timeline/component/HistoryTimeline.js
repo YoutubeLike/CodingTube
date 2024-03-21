@@ -1,3 +1,5 @@
+// File containing all the HTML content to be displayed
+
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -7,7 +9,7 @@ import CheckSession from "../../session"
 
 var userId = 1;
 
-// Fonction pour calculer le temps écoulé depuis la date d'upload
+// Function to calculate time elapsed since upload date
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
   const currentDate = new Date();
@@ -29,6 +31,7 @@ function getTimeElapsed(uploadDateTime) {
   }
 }
 
+// Function that translates time in seconds into HH:MM:SS format
 function timeOfVideo(totalSeconds) {
   var hours;
   var minutes;
