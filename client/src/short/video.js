@@ -52,7 +52,7 @@ class Video extends React.Component {
           </div>
         </div>
         {/* Right bar */}
-        <div className={this.state.commentsShown ? "absolute mr-[90px] b-[30px]" : ""}>
+        <div className={this.state.commentsShown ? "" : ""}>
           <SideBar
             setState={(p) => {
               this.setState(p);
