@@ -1,2 +1,4 @@
 BDD_PASSWORD = admin
 BDD_USER = admin
+SERVER_URL = http://localhost:3000
+STRIPE_PRIVATE_KEY = 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

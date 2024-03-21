@@ -1,29 +1,47 @@
-const stripe = require("stripe")(
-  "sk_test_51OuE4UJis95gsMso4SX5WfWiAOuQ1Uhf38cEGOQjKXNHlQyayDUc8u9gmYqZhsNdWfeDyXKq2TTSpHjPRe6rL54p00hjEthPmf"
-);
-const express = require("express");
-const app = express();
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+require("dotenv").config();
 
-app.use(express.static("."));
-
-app.post("/create-intent", async (req, res) => {
-  const intent = await stripe.paymentIntents.create({
-    amount: 1099,
-    currency: "usd",
-    automatic_payment_methods: { enabled: true },
-  });
-  res.json({ client_secret: intent.client_secret });
-});
-
-app.listen(3000, () => {
-  console.log("Running on port 3000");
-});
-const premium = (req, res) => {
-  const name = req.params.user;
-  res.send(name);
-  // mariadb.pool.query("SELECT * FROM user").then((value) => {
-  //   res.send(value[0]["username"]);
-  // });
+const premium = async (req, res) => {
+  // const name = req.params.user;
+  // res.send(name);
+  const storeItems = new Map([
+    [1, { priceInCents: 1999, name: "Youtube Premium" }],
+  ]);
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      custom_text: {
+        // shipping_address: {
+        //   message:
+        //     "Please note that we can't guarantee 2-day delivery for PO boxes at this time.",
+        // },
+        submit: {
+          message: "We'll email you instructions on how to get started.",
+        },
+      },
+      line_items: req.body.products.items.map((item) => {
+        const storeItem = storeItems.get(item.id);
+        return {
+          price_data: {
+            currency: "EUR",
+            product_data: {
+              name: storeItem.name,
+            },
+            unit_amount: storeItem.priceInCents,
+          },
+          quantity: 1,
+        };
+      }),
+      success_url: `${process.env.SERVER_URL}/`,
+      cancel_url: `${process.env.SERVER_URL}/premium`,
+    });
+    res.json({ url: session.url });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+  // res.json({ id: session.id });
+  // res.send({ url: session.url });
 };
 
 module.exports = {

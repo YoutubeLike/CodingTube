@@ -3,6 +3,6 @@ const router = express.Router();
 
 const { premium } = require("./controller.js");
 
-router.get("/premium", premium);
+router.post("/create-checkout-session", premium);
 
 module.exports = router;

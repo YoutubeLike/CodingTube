@@ -11,9 +11,11 @@ export default function Header() {
     e.preventDefault();
     try {
       // Sending a GET request to the backend API with the search value
-      const response = await axios.get("http://localhost:5000/api/search/request/" + searchValue);
+      const response = await axios.get(
+        "http://localhost:5000/api/search/request/" + searchValue
+      );
       console.log(response.data); // Logging the response data to the console
-      setSearchValue(''); // Clearing the search input after submission
+      setSearchValue(""); // Clearing the search input after submission
     } catch (error) {
       console.error("An error occurred while searching: ", error); // Handling errors if any
     }
@@ -71,7 +73,11 @@ export default function Header() {
         </button>
         {/* Button for notifications */}
         <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
-          <img className="h-5 w-5" src="notification-bell.png" alt="notification-bell"></img>
+          <img
+            className="h-5 w-5"
+            src="notification-bell.png"
+            alt="notification-bell"
+          ></img>
         </button>
         {/* Placeholder button */}
         <button className="flex items-center ml-2 h-7 w-7 bg-gray-200 rounded-full space-x-1"></button>
