@@ -2,37 +2,44 @@ const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 require("dotenv").config();
 
 const premium = async (req, res) => {
-  // const name = req.params.user;
-  // res.send(name);
   const storeItems = new Map([
-    [1, { priceInCents: 1999, name: "Youtube Premium" }],
+    [
+      1,
+      {
+        priceInCents: "price_1Owk3fJis95gsMso6DC57HOy",
+        name: "abonnement-etudiant",
+      },
+    ],
+    [
+      2,
+      {
+        priceInCents: "price_1Owi9cJis95gsMsoAKlf5jRv",
+        name: "particulier",
+      },
+    ],
+    [
+      3,
+      {
+        priceInCents: "price_1Owk33Jis95gsMso2ArtOfyS",
+        name: "abonnement-familial",
+      },
+    ],
   ]);
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      custom_text: {
-        // shipping_address: {
-        //   message:
-        //     "Please note that we can't guarantee 2-day delivery for PO boxes at this time.",
-        // },
-        submit: {
-          message: "We'll email you instructions on how to get started.",
-        },
-      },
-      line_items: req.body.products.items.map((item) => {
-        const storeItem = storeItems.get(item.id);
-        return {
-          price_data: {
-            currency: "EUR",
-            product_data: {
-              name: storeItem.name,
-            },
-            unit_amount: storeItem.priceInCents,
-          },
-          quantity: 1,
-        };
-      }),
+      // type de payments subscription or payments
+      mode: "subscription",
+      line_items:
+        // id de l'api
+        req.body.products.items.map((item) => {
+          const storeItem = storeItems.get(item.id);
+          return {
+            price: storeItem.priceInCents,
+            quantity: 1,
+          };
+        }),
+
+      // redirection page for success and cancel
       success_url: `${process.env.SERVER_URL}/`,
       cancel_url: `${process.env.SERVER_URL}/premium`,
     });
@@ -40,8 +47,6 @@ const premium = async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-  // res.json({ id: session.id });
-  // res.send({ url: session.url });
 };
 
 module.exports = {

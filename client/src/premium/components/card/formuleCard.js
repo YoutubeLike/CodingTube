@@ -4,6 +4,8 @@ export default function FormuleCard({
   nameFormule,
   priceFormule,
   descriptionFormule,
+  formulePrice,
+  descriptionPrice,
 }) {
   return (
     <div className="formule-card  bg-[#212121] w-96	h-90 mx-4 rounded-3xl m-3">
@@ -21,7 +23,7 @@ export default function FormuleCard({
           </div>
         </div>
 
-        <BtnPrice />
+        <BtnPrice formuleIDbtn={formulePrice} description={descriptionPrice} />
       </div>
     </div>
   );

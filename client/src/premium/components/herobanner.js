@@ -11,7 +11,7 @@ export default function HeroBanner() {
               <div className="logo w-70 h-12 bg-[url('./assets/img/logoYtPremium.png')] bg-contain	bg-no-repeat bg-center	"></div>
             </div>
             <div className="hero-banner-heading">
-              <h1 className="heading lg:text-6xl">
+              <h1 className="heading md:text-6xl text-4xl">
                 YouTube and YouTube Music ad-free, offline, and in the
                 background
               </h1>
@@ -28,7 +28,7 @@ export default function HeroBanner() {
               </div>
             </div>
             <div className="hero-banner-btnPremium pt-10 w-full flex justify-center">
-              <BtnPrice />
+              <BtnPrice formuleIDbtn={2} description={"Try 1 month for 0$"} />
             </div>
             <div className="hero-banner-more-information pt-10">
               <div className="premium-formule-premium">
