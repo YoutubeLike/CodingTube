@@ -4,7 +4,7 @@ const mariadb = require("../src/database");
 // Récupérer des infos sur la chaîne
 const selectChannel = (_, res) => {
 	mariadb.pool
-		.query("SELECT pseudo, nb_follower, bio FROM channel WHERE user_id = 1")
+		.query("SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = 1")
 		.then((value) => {
 			res.send(value[0]);
 		});

@@ -13,6 +13,7 @@ const App = () => {
 	const [bio, setBio] = useState(""); // Bio
 	const [identifier, setIdentifier] = useState(""); // Identifier
 	const [numberVideo, setNumberVideo] = useState(0); // video number
+	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -25,6 +26,7 @@ const App = () => {
 				);
 
 				// Attribution des informations
+				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
@@ -96,10 +98,10 @@ const App = () => {
 	return (
 		<div className="App pl-[10vw] pr-[5vw]">
 			{/* Bannière */}
-			<div className="banner">
+			<div>
 				{/* Image de bannière */}
 				<img
-					src={itachi}
+					src={banner}
 					alt="Banner"
 					className="w-full object-cover mt-4 rounded-xl"
 				/>
