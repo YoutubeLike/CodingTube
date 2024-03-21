@@ -14,7 +14,7 @@ app.use(cors());
  * Inserts a new user into the database after hashing the password.
  * @param {Object} registerData - Object containing user registration data.
  */
-async function InsertUser(registerData, tokenId) {
+async function InsertUser(registerData) {
     try {
         // Hashing the user's password
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
@@ -22,7 +22,7 @@ async function InsertUser(registerData, tokenId) {
         // Establishing a database connection
         const conn = await mariadb.pool.getConnection();
         // Executing the SQL query to insert user data into the database
-        await conn.query("INSERT INTO User (username, mail, password, tokenId) VALUES (?, ?, ?, ?)", [registerData.username, registerData.mail, hashedPassword, tokenId]);
+        await conn.query("INSERT INTO User (username, mail, password) VALUES (?, ?, ?)", [registerData.username, registerData.mail, hashedPassword]);
         // Releasing the database connection
         conn.release();
         console.log("User inserted successfully");
@@ -119,44 +119,26 @@ async function CheckIfPasswordMatch(password, hashedPasswordFromDB) {
     }
 }
 
-async function GetUserIdByToken(data){
+async function GetUserId(data) {
     try {
         // Establishing a database connection
         const conn = await mariadb.pool.getConnection();
-        // Executing the SQL query to retrieve the user Id
-        const result = await conn.query("SELECT id FROM user WHERE tokenId = ?" , data);
+        // Executing the SQL query to check if the email address exists
+        const result = await conn.query("SELECT id FROM user WHERE mail = ? OR username = ?", [data, data]);
         // Releasing the database connection
         conn.release();
-        // Returning the id if found
+        // Returning true if the count is greater than 0, indicating the email address exists
         return result[0].id;
-    } catch (err) {
-        // Handling errors if any occur during the database operation
-        console.log("Error retrieving id:", err);
-        // Returning false in case of an error
-        return false;
+    } catch (error) {
+        // Handling errors if any occur during the password comparison
+        console.error("Error comparing passwords:", error);
     }
 }
 
-async function GetToken(data){
-    try{
-        // Establishing a database connection
-        const conn = await mariadb.pool.getConnection();
-        // Executing the SQL query to retrieve the user Id
-        const result = await conn.query("SELECT tokenId FROM user WHERE username = ? OR mail = ?", [data, data]);
-        // Releasing the database connection
-        conn.release();
-        return result[0].tokenId;
 
-    }catch (err){
-         // Handling errors if any occur during the database operation
-         console.log("Error retrieving token:", err);
-         // Returning false in case of an error
-         return false;
-     }
-    }
 
 
 
 
 // Exporting all functions for use in other modules
-module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, GetUserIdByToken, GetToken};
+module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, GetUserId};

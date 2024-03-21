@@ -98,16 +98,8 @@ class Authentification extends React.Component {
         const response = await axios.post(
           "http://localhost:5000/api/profil/register",
           formData
-        ).then(response => {
-          if (response.data.redirectTo) {
-            window.location.href = response.data.redirectTo;
-          } else {
-            console.error("URL de redirection non fournie dans la réponse");
-          }
-        })
-        .catch(error => {
-          console.error("Une erreur s'est produite lors de la requête :", error);
-        });
+        )
+      
         // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodRegister: response.data.message,
@@ -136,16 +128,8 @@ class Authentification extends React.Component {
         const response = await axios.post(
           "http://localhost:5000/api/profil/login",
           formData
-        ).then(response => {
-          if (response.data.redirectTo) {
-            window.location.href = response.data.redirectTo;
-          } else {
-            console.error("URL de redirection non fournie dans la réponse");
-          }
-        })
-        .catch(error => {
-          console.error("Une erreur s'est produite lors de la requête :", error);
-        });
+        )
+          //window.location.href = response.data.redirectTo;
         // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodLogin: response.data.message,
