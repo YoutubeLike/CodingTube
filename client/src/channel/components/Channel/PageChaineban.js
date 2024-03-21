@@ -6,6 +6,7 @@ import Accueil from "./Accueil";
 import Video from "./Videos";
 import Shorts from "./Shorts";
 import Playlists from "./Playlists";
+import CheckSession from '../../../session';
 
 const App = () => {
 	const [pseudo, setPseudo] = useState(""); // Pseudo
@@ -14,6 +15,8 @@ const App = () => {
 	const [identifier, setIdentifier] = useState(""); // Identifier
 	const [numberVideo, setNumberVideo] = useState(0); // video number
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
+
+	
 
 	useEffect(() => {
 		const fetchChannelInfo = async () => {
