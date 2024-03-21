@@ -75,6 +75,7 @@ export function UserLink({ userList }) {
                     <Link key={element} to={"/live/" + element}>
                         <div className="video">
                             <img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} alt="" />
+                            
                         </div>
                     </Link>
                 ))}
@@ -94,6 +95,49 @@ export function UserLink({ userList }) {
                     ))}
                 </div>
             </div>
+            <div className="flex items-center justify-center my-12">
+            <div className="w-80 h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-75 dark:via-neutral-400"></div>
+            <div className="relative">
+                <div className="w-80 h-12 bg-gradient-to-r from-neutral-500 to-neutral-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-lg font-bold">+</span>
+                </div>
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full w-0 h-0 border-solid border-4 border-neutral-500 border-t-0 border-l-0 border-r-0"></div>
+            </div>
+            <div className="w-80 h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-75 dark:via-neutral-400"></div>
+            </div>
+                 <div className="flex flex-col">
+            <div className="flex flex-nowrap pl-6 pt-6">
+            </div>
+            <p className="font-bold pl-6 text-2xl flex flex-wrap pt-4">recent live</p>
+            <div className="container mx-auto pt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+                    {userList.map((element) => (
+                        <div key={element} className="bg-white rounded-md overflow-hidden">
+                           <div className="video-container">
+                {usersInLive.map(element => (
+                    <Link key={element} to={"/live/" + element}>
+                        <div className="video">
+                            <img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} alt="" />
+                        </div>
+                    </Link>
+                ))}
+            </div>
+                            <Link to={"/live/" + element} className="flex items-center">
+                                <img
+                                    src="./live.jpg"
+                                    className="w-12 h-12 rounded-full object-cover"
+                                    alt=""
+                                />
+                                <div className="p-4">
+                                    <h3 className="text-lg font-semibold mb-2">La revue de presse du mardi 19 mars, c'est jour de grève</h3>
+                                    <p className="text-gray-700">{element}</p>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
             
         </>
     );
