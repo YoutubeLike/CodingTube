@@ -31,7 +31,7 @@ class VideoInfos extends React.Component {
         </div>
 
         {/* Video's title */}
-        <p className="text-[2vh]">{this.props.shortInfos.description}</p>
+        <p className="text-[2vh]">{this.props.shortInfos.title}</p>
       </div>
     );
   }
