@@ -19,7 +19,7 @@ class Video extends React.Component {
     // Get short infos
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/short-request",
+        "http://localhost:5000/api/short/get-short-infos",
         { params: { shortId: this.props.id } }
       );
       this.setState({ shortInfos: response.data });

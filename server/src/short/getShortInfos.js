@@ -1,5 +1,11 @@
 const mariadb = require("../src/database");
 
+const getShortsList = (req, res) => {
+  mariadb.pool.query("SELECT id FROM short").then((value) => {
+    res.send(value);
+  });
+};
+
 const getShortInfos = (req, res) => {
   mariadb.pool
     .query(
@@ -40,6 +46,7 @@ const getComments = (req, res) => {
 };
 
 module.exports = {
+  getShortsList,
   getShortInfos,
   getLikes,
   getDislikes,
