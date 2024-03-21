@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import img from '../../assets/logo.jpg'
-import dislike from '../../assets/dislike.png'
-import like from '../../assets/like.png'
-import share from '../../assets/share.png'
+import img from "../../assets/logo.jpg";
+import dislike from "../../assets/dislike.png";
+import like from "../../assets/like.png";
+import share from "../../assets/share.png";
 
 export default function Video() {
 

@@ -1,13 +1,14 @@
-
 //Connexion à la Bdd
 const mariadb = require("../src/database");
 
 // Récupérer des infos sur la chaîne
-const selectChannel = ((_,res) => {
-  mariadb.pool.query('SELECT pseudo, nb_follower, bio FROM channel WHERE user_id = 1').then((value) => {
-    res.send(value[0])
-  })
-})
+const selectChannel = (_, res) => {
+	mariadb.pool
+		.query("SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = 1")
+		.then((value) => {
+			res.send(value[0]);
+		});
+};
 
 
 
@@ -74,7 +75,6 @@ const submitVideo = (req, res) => {
           res.status(500).send("Une erreur est survenue lors de la soumission des données.");
       });
 };
-
 
 //Permet d'exporter les fonctions
 module.exports = {

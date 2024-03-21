@@ -40,6 +40,7 @@ export default function Video() {
 				{video &&
 					video.map((data) => (
 						<Link	
+
 							to={`/video/${data.id}`}
 							className="flex flex-col mr-4 justify-between"
 						>

@@ -14,7 +14,9 @@ const App = () => {
 	const [bio, setBio] = useState(""); // Bio
 	const [identifier, setIdentifier] = useState(""); // Identifier
 	const [numberVideo, setNumberVideo] = useState(0); // video number
+	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
+	const [isOpen, setIsOpen] = useState(false);
 
 	
 
@@ -27,6 +29,7 @@ const App = () => {
 				);
 
 				// Attribution des informations
+				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
@@ -60,6 +63,11 @@ const App = () => {
 		fetchVideoCount();
 	}, []);
 
+	//Met à jour l'onglet actif
+	const togglePopup = () => {
+		setIsOpen(!isOpen);
+	};
+
 	//Met à jour l'onglet actif en utilisant la fonction setActiveTab
 	const handleTabClick = (tabName) => {
 		setActiveTab(tabName);
@@ -81,13 +89,22 @@ const App = () => {
 		}
 	};
 
+	//Activer/désactiver la fenêtre contextuelle
+	function Popup() {
+		const [isOpen, setIsOpen] = useState(false);
+
+		const togglePopup = () => {
+			setIsOpen(!isOpen);
+		};
+	}
+
 	return (
 		<div className="App pl-[10vw] pr-[5vw]">
 			{/* Bannière */}
-			<div className="banner">
+			<div>
 				{/* Image de bannière */}
 				<img
-					src={itachi}
+					src={banner}
 					alt="Banner"
 					className="w-full object-cover mt-4 rounded-xl"
 				/>
@@ -103,12 +120,27 @@ const App = () => {
 						className="rounded-full max-w-40"
 					/>
 				</div>
+				{/*Information de la chaîne*/}
 				<div className="channel-info ml-4 flex flex-col items-start h-48 justify-around">
 					<h1 className="text-start text-5xl font-bold">{pseudo}</h1>
 					<p className="text-start">
 						@{identifier} - {follower} abonnés - {numberVideo} vidéos
 					</p>
-					<p className="text-start">{bio}</p>
+					{/*Pop-up de la bio*/}
+					<div>
+						<button onClick={togglePopup}>
+							{bio}
+							{isOpen && (
+								<div className="z-10 h-[500px] w-[400px] absolute inset-y-0 left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  flex items-center justify-center bg-opacity-50">
+									<div className="bg-gray-600 w-full h-full rounded shadow-lg text-white text-justify pl-4 pt-4">
+										<h2 className="text-xl font-bold mb-4">A propos</h2>
+										<p className="text-lg">{bio}</p>
+									</div>
+								</div>
+							)}
+						</button>
+					</div>
+					{/*Bouton s'abonné*/}
 					<button className="font-bold bg-neutral-900 text-white px-8  rounded-full">
 						S'abonner
 					</button>
