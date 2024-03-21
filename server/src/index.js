@@ -2,14 +2,27 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mariadb = require("./src/database");
-const { createServer } = require("node:http");
-const { Server } = require("socket.io");
-const server = createServer(app);
-const io = new Server(server, {
+const routes = require("./router");
+bodyParser = require("body-parser");
+const { createServer } = require('http')
+const { server } = createServer(app)
+const socketio = require('socket.io');
+
+app.use(cors());
+app.use(bodyParser.json({ type: "application/*+json" }));
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded());
+
+app.use(bodyParser.raw({ type: "application/vnd.custom-type" }));
+
+app.use(bodyParser.text({ type: "text/html" }));
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+const io = new socketio.Server(server, {
   cors: {
     origin: "*",
   },
-});
+})
 
 const bannedWords = ["nigger"];
 const bannedWordCounts = {};
@@ -18,6 +31,14 @@ io.on("connection", (socket) => {
   console.log("New client connected");
   console.log("Listening for chat-message event"); // Add this line
 
+  //WIDGET
+  
+    console.log('user conenctect');
+  socket.on('send', () => {
+     io.emit("widget-message")
+  })
+  
+  //WIDGET 
   // Handle chat messages
   socket.on("chat-message", async (msg) => {
     console.log(
@@ -60,10 +81,6 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(cors());
-
-console.log(app);
-
 server.listen(5000, () => {
   console.log("server listening on port 5000");
 });
@@ -105,3 +122,5 @@ app.get("/username", async (req, res) => {
     res.json({ pseudo: null });
   }
 });
+
+app.use("/api", urlencodedParser, routes);

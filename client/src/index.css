@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base{
+    * {
+        @apply font-roboto;
+    }
+    h1,h2,button{
+        @apply font-bold
+    }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.video-container 
+{
+  /* height: 60px; */
+  /* position: absolute; */
+  display: flex;
+  /* width: 500px; */
+  gap: 20px;
+}
+
+.video img
+{
+  transition: 0.2s;
+  border-radius: 20px;
+}
+
+.video:hover img
+{
+  border-radius: 0px;
+}

@@ -1,73 +1,66 @@
-// const express = require("express");
-// const app = express();
-// const cors = require("cors");
-// const mariadb = require("./src/database");
-// const { createServer } = require("node:http");
-// const { Server } = require("socket.io");
-// const server = createServer(app);
-// const io = new Server(server, {
-//   cors: {
-//     origin: "*",
-//   },
-// });
+import axios from "axios"
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 
-// const bannedWords = ["nigger"];
-// const bannedWordCounts = {};
+export default function Live()
+{
+    const [UserInLive, setUserInLive] = useState([])
+    useEffect(() => {
+        axios.get("http://localhost:8090/api/streams")        
+        .then((response) => {
+            if(response.status)
+            {
+                if(Object.keys(response.data).length > 0)
+                {
+                    setUserInLive(Object.keys(response.data["live"]))
+                }
+            }
+        })
+        .catch(error => console.log('Server unreachable'))
+    }, []) 
+    console.log(UserInLive)
+    return (
+        <div>
+            <p>Voici les utilisateurs en live</p>
+            <p>{UserInLive.length} utilisateurs ont été trouvé</p>
+            <UserLink />
+        </div>
+    )
+}
 
-// io.on("connection", (socket) => {
-//   console.log("New client connected");
-//   console.log("Listening for chat-message event"); // Add this line
 
-//   // Handle chat messages
-//   socket.on("chat-message", async (msg) => {
-//     console.log(
-//       `Received message from ${socket.handshake.query.userId}: ${msg.message}`
-//     );
-//     const bannedWordFound = bannedWords.some((word) =>
-//       msg.message.toLowerCase().includes(word)
-//     );
-//     if (bannedWordFound) {
-//       const userId = socket.handshake.query.userId;
-//       if (bannedWordCounts[userId]) {
-//         bannedWordCounts[userId]++;
-//       } else {
-//         bannedWordCounts[userId] = 1;
-//       }
-//       if (bannedWordCounts[userId] >= 3) {
-//         // Ban the user for 1 minute
-//         socket.emit("ban-message", { banned: true });
-//         bannedWordCounts[userId] = 0;
-//       } else {
-//         console.log(
-//           `User ${userId} said a banned word for the ${bannedWordCounts[userId]}th time`
-//         );
-//       }
-//     } else {
-//       // Broadcast the message to all connected clients except the sender
-//       console.log(msg.time);
-//       socket.broadcast.emit("chat-message", {
-//         sender: msg.sender,
-//         time: msg.time,
-//         message: msg.message,
-//       });
-//     }
-//     console.log("Message received: " + msg.message);
-//   });
 
-//   // Handle disconnections
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//   });
-// });
+export function UserLink()
+{
+    const [Test, setTest] = useState([])
+    useEffect(() => {
+        axios.get("http://localhost:8090/api/streams")
+        .then(response => {
+            if(response.status)
+            {
+                if(Object.keys(response.data).length > 0)
+                {
+                    Object.keys(response.data["live"]).map(element => {
+                        const data = {
+                                user: element
+                            }
+                        axios.post('http://localhost:5000/api/live/save', data)
+                    })
+                    setTest(Object.keys(response.data["live"]))
+                }
+            }
+        })
+        .catch(error => setTest(["Live indisponible"]))
+    }, []) 
+    return(
+        <>
+            {Test.length == 0 &&
+                <p>Personne n'est en direct pour le moment</p>
+            }
+            <div className="video-container">
+                {Test.map(element => <Link key={element} to={"/live/" + element}><div className="video"><img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} /> <span>{element}</span></div></Link>)}
+            </div>
 
-// app.use(cors());
-
-// console.log(app);
-
-// server.listen(5000, () => {
-//   console.log("server listening on port 5000");
-// });
-
-// app.get("/", (req, res) => {
-//   res.send("caca");
-// });
+        </>
+    )
+}
