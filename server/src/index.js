@@ -5,7 +5,7 @@ const mariadb = require("./src/database");
 const routes = require("./router");
 bodyParser = require("body-parser");
 const { createServer } = require('http')
-const { server } = createServer(app)
+const server = createServer(app)
 const socketio = require('socket.io');
 
 app.use(cors());
@@ -33,7 +33,6 @@ io.on("connection", (socket) => {
 
   //WIDGET
   
-    console.log('user conenctect');
   socket.on('send', () => {
      io.emit("widget-message")
   })
@@ -64,12 +63,21 @@ io.on("connection", (socket) => {
         );
       }
     } else {
-      socket.broadcast.emit("chat-message", {
+      const room = socket.rooms.values()
+      room.next();
+      socket.broadcast.to(room.next().value).emit("chat-message", {
         sender: msg.sender,
         time: msg.time,
         message: msg.message,
         profilePicture: msg.profilePicture,
       });
+
+      // socket.broadcast.emit("chat-message", {
+      //   sender: msg.sender,
+      //   time: msg.time,
+      //   message: msg.message,
+      //   profilePicture: msg.profilePicture,
+      // });
     }
     console.log("Message received: " + msg.message);
     console.log("PP of the message received: " + msg.profilePicture);
@@ -79,48 +87,20 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
+
+  console.log(io.engine.clientsCount)
+  console.log(socket.rooms)
+
+  socket.on("connect-to-room", (arg) => {
+    socket.join(arg)
+  })
 });
+
+
+
+
+app.use("/api", urlencodedParser, routes);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");
 });
-
-app.get("/profile-picture", async (req, res) => {
-  const userId = req.query.userId;
-  try {
-    const connection = await mariadb.pool.getConnection();
-    const result = await connection.query("SELECT pp FROM user WHERE id = ?", [
-      userId,
-    ]);
-    connection.release();
-    if (result.length > 0) {
-      res.json({ profilePicture: result[0].pp });
-    } else {
-      res.json({ profilePicture: null });
-    }
-  } catch (err) {
-    console.error(err);
-    res.json({ profilePicture: null });
-  }
-});
-app.get("/username", async (req, res) => {
-  const userId = req.query.userId;
-  try {
-    const connection = await mariadb.pool.getConnection();
-    const result = await connection.query(
-      "SELECT username FROM user WHERE id = ?",
-      [userId]
-    );
-    connection.release();
-    if (result.length > 0) {
-      res.json({ pseudo: result[0].username });
-    } else {
-      res.json({ pseudo: null });
-    }
-  } catch (err) {
-    console.error(err);
-    res.json({ pseudo: null });
-  }
-});
-
-app.use("/api", urlencodedParser, routes);

@@ -26,6 +26,45 @@ const sendThumbnail = ((req, res) => {
     }
 })
 
+const GetProfilPicture = async (req, res) => {
+        const userId = req.query.userId;
+        try {
+          const connection = await mariadb.pool.getConnection();
+          const result = await connection.query("SELECT pp FROM user WHERE id = ?", [
+            userId,
+          ]);
+          connection.release();
+          if (result.length > 0) {
+            res.json({ profilePicture: result[0].pp });
+          } else {
+            res.json({ profilePicture: null });
+          }
+        } catch (err) {
+          console.error(err);
+          res.json({ profilePicture: null });
+        }
+}
+
+const GetUsername = async (req, res) => {
+    const userId = req.query.userId;
+    try {
+      const connection = await mariadb.pool.getConnection();
+      const result = await connection.query(
+        "SELECT username FROM user WHERE id = ?",
+        [userId]
+      );
+      connection.release();
+      if (result.length > 0) {
+        res.json({ pseudo: result[0].username });
+      } else {
+        res.json({ pseudo: null });
+      }
+    } catch (err) {
+      console.error(err);
+      res.json({ pseudo: null });
+    }
+} 
+
 const display = ((req, res) => {
     res.sendFile("/app/back/src/public/follow.jpg")
 
@@ -34,5 +73,7 @@ const display = ((req, res) => {
 module.exports = {
     saveThumbnail,
     sendThumbnail,
+    GetProfilPicture,
+    GetUsername,
     display
 }

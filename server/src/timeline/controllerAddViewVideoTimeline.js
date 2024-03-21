@@ -17,8 +17,6 @@ const addViewTimelineRequest = ((req, res) =>
     });
 })
 
-console.log("router controller add view");
-
 module.exports = {
   addViewTimelineRequest,
 }

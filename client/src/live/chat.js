@@ -17,7 +17,7 @@ const bannedWords = [
   "enzo",
 ];
 
-function Chat() {
+export default function Chat(props) {
   const [response, setResponse] = useState("");
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -27,8 +27,11 @@ function Chat() {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    const socketInstance = io(ENDPOINT);
+
+        const socketInstance = io(ENDPOINT);
     setSocket(socketInstance);
+    
+    socketInstance.emit("connect-to-room", props.user)
 
     socketInstance.on("chat-message", (data) => {
       const messagesReceived = data.message;
@@ -111,7 +114,7 @@ function Chat() {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
-        const userId = 90000;
+        const userId = 2;
         const profilePicture = await getUserProfilePicture(userId);
         const pseudo = await getUserPseudo(userId);
         const newMessage = {
@@ -220,4 +223,3 @@ function Chat() {
   );
 }
 
-export default Chat;
