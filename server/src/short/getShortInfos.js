@@ -31,7 +31,7 @@ const getDislikes = (req, res) => {
 
 const getComments = (req, res) => {
   mariadb.pool
-    .query("SELECT * FROM short_comment WHERE short_id = ?;", [
+    .query("SELECT * FROM comment_short WHERE short_id = ?;", [
       req.query.shortId,
     ])
     .then((value) => {
