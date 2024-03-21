@@ -8,6 +8,8 @@ export default function UploadVideo() {
     const [imagePreview2, setImagePreview2] = useState(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+	const [category, setCategory] = useState("");
+	console.log(category)
     // const [upload_Video_Url, setUploadVideoUrl] = useState(""); 
     // const [thumbnail, setThumbnail] = useState("");
 	
@@ -51,6 +53,7 @@ export default function UploadVideo() {
             axios.post('http://localhost:5000/api/channel/submitVideo', {
 			title: title,
 			description: description,
+			category: category,
 			// upload_video_url: upload_Video_Url,
 			// thumbnail: thumbnail,
 		})
@@ -77,11 +80,26 @@ export default function UploadVideo() {
 				<h2 className="font-bold text-2xl mb-4">Détails</h2>
 				<div className="flex">
 					<div className="w-3/5">
-						<div className="border-solid border-2 border-gray-500 rounded-md w-full mb-4">
-							<label htmlFor="nom" className="flex flex-cols pl-2">
-								Titre
-							</label>
-							<input name="nom" type="text" className="outline-none p-2 w-full rounded-md font-bold text-xl" value={title} onChange={(e) => setTitle(e.target.value)}/>
+						<div className="flex mb-4">
+							<div className="border-solid border-2 border-gray-500 rounded-md w-full mr-4">
+									<label htmlFor="nom" className="pl-2">
+										Titre
+									</label>
+									<input name="nom" type="text" className="outline-none p-2 w-full rounded-md font-bold text-xl" value={title} onChange={(e) => setTitle(e.target.value)}/>
+							</div>
+
+							<div className="border-solid border-2 border-gray-500 rounded-md flex flex-col px-2">
+								<label className="">Category</label>
+								<select name="pets" id="pet-select" className="h-full bg-transparent even:font-bold" onChange={(e)=>{setCategory(e.target.value)}}>
+									<option value="">None</option>
+									<option value="Music">Music</option>
+									<option value="Video Games">Video games</option>
+									<option value="News">News</option>
+									<option value="Sport">Sport</option>
+									<option value="Culture">Culture</option>
+									<option value="Podcasts">Podcasts</option>
+								</select>
+							</div>
 						</div>
 
 						<div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
@@ -111,15 +129,15 @@ export default function UploadVideo() {
 								<div className="text-white flex items-center justify-center font-bold bg-black w-full aspect-[16/9] cursor-pointer" onClick={handleFirstImageImportButtonClick}><p className="text-6xl mb-4 mr-2">+</p></div>
 								<p>Nom du fichier :</p>
 								<label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
-								Importer
-								<input
-									type="file"
-									accept="image/*,video/*"
-									className="hidden"
-									onChange={handleImageChange}
-									id="firstFileInput"
-								/>
-							</label>
+									Importer
+									<input
+										type="file"
+										accept="image/*,video/*"
+										className="hidden"
+										onChange={handleImageChange}
+										id="firstFileInput"
+									/>
+								</label>
 							</div>// Affiche le logo par défaut si sa veut bien marcher
 
 							

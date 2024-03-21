@@ -7,6 +7,7 @@ export default function Video() {
 	const [uploadVideoUrl, setUploadVideoUrl] = useState([]); // Video number
 	const [title, setTitle] = useState([]); // Title
 	const [video, setVideo] = useState(); // Title
+	const [idVideo, setIdVideo] = useState();
 
 	useEffect(() => {
 		const fetchVideos = async () => {
@@ -27,6 +28,10 @@ export default function Video() {
 		fetchVideos();
 	}, []);
 
+	const sendVideo = () => {
+
+	}
+
 	video && console.log(video);
 
 	return (
@@ -34,7 +39,8 @@ export default function Video() {
 			<div className="flex flex-wrap w-auto">
 				{video &&
 					video.map((data) => (
-						<Link
+						<Link	
+
 							to={`/video/${data.id}`}
 							className="flex flex-col mr-4 justify-between"
 						>
@@ -44,7 +50,7 @@ export default function Video() {
 							/>
 							<div className="h-full flex flex-col justify-between">
 								<p className="w-[270px] text-start font-bold">
-									Titre : {data.title}
+									{data.title}
 								</p>
 								<p className="w-[270px] text-start text-xs">
 									{data.number_view} vues - {data.upload_date_time}

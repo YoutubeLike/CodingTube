@@ -4,7 +4,17 @@ const cors = require("cors");
 const mariadb = require("./src/database");
 const routes = require("./router");
 bodyParser = require("body-parser");
+const session = require('express-session');
 
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+}));
+
+app.get('/', (req, res) => {
+  const sessionData = req.session;
+});
 
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
@@ -23,4 +33,5 @@ app.listen(5000, () => {
 });
 
 app.use("/api", urlencodedParser, routes);
+
 
