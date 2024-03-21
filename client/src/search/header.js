@@ -6,8 +6,6 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState("");
   const [mostview, setMostView] = useState([]);
   const [userhistory, setUserHistory] = useState([]);
-  const [userhistory_onChange, setuserhistory_onChange] = useState([]);
-  const [MostResearch_onChange, setMostResearch_onChange] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const inputRef = useRef("");
@@ -54,27 +52,37 @@ export default function Header() {
 
   const history_onChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
-    try {
-      console.log(inputRef.current)
-      console.log("http://localhost:5000/api/search/history_onChange/1/" + inputRef.current)
-      const resultHistory_onChange = await axios.get(
-        "http://localhost:5000/api/search/history_onChange/1/" + inputRef.current
-      );
-        setuserhistory_onChange(resultHistory_onChange.data)
-    } catch (error) {
-      console.error("An error in history_onChange: ", error);
+    if (inputRef.current === "") {
+      history()
+    }
+    else {
+      try {
+        console.log(inputRef.current)
+        console.log("http://localhost:5000/api/search/history_onChange/1/" + inputRef.current)
+        const resultHistory_onChange = await axios.get(
+          "http://localhost:5000/api/search/history_onChange/1/" + inputRef.current
+        );
+        setUserHistory(resultHistory_onChange.data)
+      } catch (error) {
+        console.error("An error in history_onChange: ", error);
+      }
     }
   };
 
   const mostResearch_onChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
-    try {
-      const resultMostResearch_onChange = await axios.get(
-        "http://localhost:5000/api/search/mostResearch_onChange/" + inputRef.current
-      );
-      setMostResearch_onChange(resultMostResearch_onChange.data)
-    } catch (error) {
-      console.error("An error in mostResearch_onChange: ", error);
+    if (inputRef.current === "") {
+      mostResearch()
+    }
+    else {
+      try {
+        const resultMostResearch_onChange = await axios.get(
+          "http://localhost:5000/api/search/mostResearch_onChange/" + inputRef.current
+        );
+        setMostView(resultMostResearch_onChange.data)
+      } catch (error) {
+        console.error("An error in mostResearch_onChange: ", error);
+      }
     }
   };
 
