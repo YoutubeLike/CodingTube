@@ -2,7 +2,6 @@ const mariadb = require('../src/database');
 
 const deleteHistory = async (req, res) => {
     const searchValue = req.params.deleteHistory;
-    console.error(searchValue)
 try {
         const results = await mariadb.pool.query("DELETE FROM search_history WHERE id = ?;",[searchValue]);
     } catch (error) {
