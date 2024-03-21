@@ -6,18 +6,17 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState("");
   const [mostview, setMostView] = useState([]);
   const [userhistory, setUserHistory] = useState([]);
+  const [userhistory_onChange, setuserhistory_onChange] = useState([]);
+  const [MostResearch_onChange, setMostResearch_onChange] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [lastSearchValue, setLastSearchValue] = useState(""); // Ajout d'un état pour stocker la dernière valeur de searchValue
   const menuRef = useRef(null);
   const inputRef = useRef("");
 
   const submit = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/search/request/" + searchValue
+        "http://localhost:5000/api/search/request/" + inputRef.current
       );
-      console.log(response.data);
-      setSearchValue("");
     } catch (error) {
       console.error("An error occurred while searching: ", error);
     }
@@ -57,9 +56,11 @@ export default function Header() {
     // Suppression de l'argument e car il n'est pas utilisé
     try {
       console.log(inputRef.current)
+      console.log("http://localhost:5000/api/search/history_onChange/1/" + inputRef.current)
       const resultHistory_onChange = await axios.get(
         "http://localhost:5000/api/search/history_onChange/1/" + inputRef.current
-      ); // Utilisation de lastSearchValue
+      );
+        setuserhistory_onChange(resultHistory_onChange.data)
     } catch (error) {
       console.error("An error in history_onChange: ", error);
     }
@@ -70,13 +71,15 @@ export default function Header() {
     try {
       const resultMostResearch_onChange = await axios.get(
         "http://localhost:5000/api/search/mostResearch_onChange/" + inputRef.current
-      ); // Utilisation de lastSearchValue
+      );
+      setMostResearch_onChange(resultMostResearch_onChange.data)
     } catch (error) {
       console.error("An error in mostResearch_onChange: ", error);
     }
   };
 
   const handleInputChange =  (e) => {
+    setSearchValue(e.target.value)
     inputRef.current = e.target.value;
   };
 
@@ -116,7 +119,7 @@ export default function Header() {
           className="flex w-[100%]"
           onSubmit={(e) => {
             e.preventDefault();
-            submit(inputRef.current);
+            submit(searchValue);
           }}
         >
           <div
@@ -130,8 +133,8 @@ export default function Header() {
               value={inputRef.current}
               onChange={(e) => {
                 handleInputChange(e);
-                history_onChange(e);
-                mostResearch_onChange(e);
+                history_onChange();
+                mostResearch_onChange();
 
               }}
               onClick={(e) => {
