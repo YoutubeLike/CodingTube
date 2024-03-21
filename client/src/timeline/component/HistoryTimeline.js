@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+import CheckSession from "../../session"
+//const { isLoggedIn, userId } = CheckSession();
+
+var userId = 1;
+
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
@@ -71,7 +76,13 @@ export default function TimelineHistory() {
     useEffect(() => {
       const fetchVideos = async () => {
         try {
-          const response = await axios.get('http://localhost:5000/api/timeline/history-request');
+          const response = await axios.get(
+            `http://localhost:5000/api/timeline/history-request`,{
+              params: {
+                userIdParam: userId,
+              },
+            }
+          );
           setVideosInfos(response.data);
         } catch (error) {
           console.error('Error fetching history:', error);

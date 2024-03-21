@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 
+
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
@@ -71,7 +72,9 @@ export default function TimeLine() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/timeline-request');
+        const response = await axios.get(
+          `http://localhost:5000/api/timeline/timeline-request`
+        );
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching videos:', error);

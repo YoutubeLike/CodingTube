@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import CheckSession from "../../session"
+//const { isLoggedIn, userId } = CheckSession();
+
+var userId = 1;
+
 function isChannelSubscribed(id_channel, subscriptionList) {
   if (subscriptionList.includes(id_channel)) {
     return true;
@@ -17,7 +22,11 @@ function GetMostViewedCategories() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/timeline/viewed-categories-list-request"
+          `http://localhost:5000/api/timeline/viewed-categories-list-request`,{
+            params: {
+              userIdParam: userId,
+            },
+          }
         );
         setViewedCategorieInfos(response.data);
       } catch (error) {
@@ -26,6 +35,8 @@ function GetMostViewedCategories() {
     };
     fetch();
   }, []);
+
+  console.log("cat",viewedCategoriesInfos);
 
   // Count all the categories viewed
   var counter = {};
@@ -42,7 +53,6 @@ function GetMostViewedCategories() {
     arrayViewedCategories.push([key, value]);
   }
   arrayViewedCategories.sort((b, a) => a[1] - b[1]);
-
   return arrayViewedCategories;
 }
 
@@ -55,6 +65,11 @@ export function SetScores(videosInfos) {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscribe-list-request"
+          ,{
+            params: {
+              userIdParam: userId,
+            },
+          }
         );
         setSubscribeListInfos(response.data);
       } catch (error) {
@@ -92,29 +107,36 @@ export function SetScores(videosInfos) {
       videosInfos[i]["score"] += 10;
     }
 
-    if (mostViewedCategories.length >= 1) {
-      // If the video is on the 1st most viewed category
-      if (videosInfos[i]["category"] == mostViewedCategories[0][0]) {
-        videosInfos[i]["score"] += 15;
+    // If you're not loged-in
+    if (userId > 0) {
+
+      if (mostViewedCategories.length >= 1) {
+        // If the video is on the 1st most viewed category
+        if (videosInfos[i]["category"] == mostViewedCategories[0][0]) {
+          videosInfos[i]["score"] += 15;
+        }
       }
-    }
-    if (mostViewedCategories.length >= 2) {
-      // If the video is on the 2nd most viewed category
-      if (videosInfos[i]["category"] == mostViewedCategories[1][0]) {
-        videosInfos[i]["score"] += 10;
+      if (mostViewedCategories.length >= 2) {
+        // If the video is on the 2nd most viewed category
+        if (videosInfos[i]["category"] == mostViewedCategories[1][0]) {
+          videosInfos[i]["score"] += 10;
+        }
       }
-    }
-    if (mostViewedCategories.length >= 3) {
-      // If the video is on the 3rd most viewed category
-      if (videosInfos[i]["category"] == mostViewedCategories[2][0]) {
-        videosInfos[i]["score"] += 5;
+      if (mostViewedCategories.length >= 3) {
+        // If the video is on the 3rd most viewed category
+        if (videosInfos[i]["category"] == mostViewedCategories[2][0]) {
+          videosInfos[i]["score"] += 5;
+        }
       }
+  
+      // If the video it's yours
+      if (videosInfos[i]["channel_id"] == userId) {
+        videosInfos[i]["score"] -= 100;
+      }
+
     }
 
-    // If the video it's yours
-    if (videosInfos[i]["channel_id"] == 1) {
-      videosInfos[i]["score"] -= 100;
-    }
+   
 
   }
 
