@@ -9,6 +9,7 @@ const {
   CheckIfPasswordMatch,
   GetPasswordFromUsernameOrEmail,
   GetUserId,
+  GetToken
 } = require("./authentication");
 
 // Route for user registration
@@ -71,9 +72,13 @@ router.post("/register", async (req, res) => {
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
-          const  userId = await GetUserId(registerData.username);
-          sessionData.userId = userId;
-            console.log(sessionData.userId + " logged in");
+
+          const tokenId = await GetToken(registerData.username);
+          console.log(tokenId);
+          console.log('dfghnnbvcdfghj')
+          sessionData.tokenId = tokenId;
+
+            console.log(sessionData.tokenId + " logged in");
             return res.status(200).json({ redirectTo: '/' });
         } else {
           return res.status(400).json({ error: "Passwords do not match" });
@@ -95,7 +100,9 @@ router.post("/login", async (req, res) => {
     // Check if username or email exists in the database
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
-    const userId = await GetUserId(loginData.usernameOrMail);
+    const tokenId = await GetToken(loginData.usernameOrMail);
+    console.log(tokenId);
+    console.log('dfghnnbvcdfghj')
 
     // Get password associated with username or email from the database
     const passwordFromDb = await GetPasswordFromUsernameOrEmail(
@@ -110,8 +117,8 @@ router.post("/login", async (req, res) => {
     if (loginData.usernameOrMail != "" || loginData.password != "") {
       if (usernameExist || mailExist) {
         if (isPasswordMatch) {
-            sessionData.userId = userId;
-            console.log(sessionData.userId + " logged in");
+            sessionData.tokenId = tokenId;
+            console.log(sessionData.tokenId + " logged in");
             return res.status(200).json({ redirectTo: '/' });
 
         } else {
@@ -130,9 +137,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/check-session", async (req, res) => {
   try {
-    console.log(sessionData.userId);
-    if (sessionData.userId) {
-      return res.status(200).json({ loggedIn: true, userId: sessionData.userId });
+    if (sessionData.tokenId) {
+      return res.status(200).json({ loggedIn: true, tokenId: tokenId });
     } else {
       return res.status(200).json({ loggedIn: false });
     }
