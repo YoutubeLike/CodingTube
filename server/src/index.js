@@ -29,7 +29,7 @@ app.use(express.raw({ type: "application/vnd.custom-type" }));
 app.use(express.text({ type: "text/html" }));
 
 /* Register all /api routes of differents teams */
-app.use("/api", urlencodedParser, routes);
+app.use("/api", routes);
 
 app.listen(5000, () => {
   console.log("server listening on port 5000");
