@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [searchValue, setSearchValue] = useState("");
@@ -10,6 +10,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const inputRef = useRef("");
+  const navigate = useNavigate();
 
   const submit = async () => {
     if (inputRef.current != "") {
@@ -131,6 +132,7 @@ export default function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             submit(searchValue);
+            navigate("search/")
           }}
         >
           <div
