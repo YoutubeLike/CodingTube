@@ -12,12 +12,14 @@ export default function Header() {
   const inputRef = useRef("");
 
   const submit = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/search/request/" + inputRef.current
-      );
-    } catch (error) {
-      console.error("An error occurred while searching: ", error);
+    if (inputRef.current != "") {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/search/request/" + inputRef.current
+        );
+      } catch (error) {
+        console.error("An error occurred while searching: ", error);
+      }
     }
   };
 
@@ -37,7 +39,6 @@ export default function Header() {
   };
 
   const history = async () => {
-    // Suppression de l'argument e car il n'est pas utilisé
     try {
       const resultHistory = await axios.get(
         "http://localhost:5000/api/search/history/1"
@@ -52,7 +53,6 @@ export default function Header() {
   };
 
   const history_onChange = async () => {
-    // Suppression de l'argument e car il n'est pas utilisé
     if (inputRef.current === "") {
       history()
     }
@@ -146,7 +146,6 @@ export default function Header() {
                 handleInputChange(e);
                 history_onChange();
                 mostResearch_onChange();
-
               }}
               onClick={(e) => {
                 setMenuOpen(true);
@@ -169,9 +168,7 @@ export default function Header() {
                       <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
                         <div
                           onClick={() => {
-                            console.error(result.name_search)
                             handleClickSearch(result.name_search);
-                            submit(result.name_search);
                           }}
                         >
                           <img
@@ -197,9 +194,7 @@ export default function Header() {
                       className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
                       key={index}
                       onClick={() => {
-                        console.error(result.name_search)
                         handleClickSearch(result.name_search);
-                        submit(result.name_search);
                       }}
                     >
                       <img
