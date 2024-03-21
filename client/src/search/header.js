@@ -58,8 +58,6 @@ export default function Header() {
     }
     else {
       try {
-        console.log(inputRef.current)
-        console.log("http://localhost:5000/api/search/history_onChange/1/" + inputRef.current)
         const resultHistory_onChange = await axios.get(
           "http://localhost:5000/api/search/history_onChange/1/" + inputRef.current
         );
@@ -152,8 +150,15 @@ export default function Header() {
               }}
               onClick={(e) => {
                 setMenuOpen(true);
-                mostResearch(e);
-                history(e);
+                if (e.target.value === "") {
+                  mostResearch(e);
+                  history(e);
+                }
+                else {
+                  history_onChange()
+                  mostResearch_onChange()
+                }
+                
               }}
             />
             {menuOpen && (
