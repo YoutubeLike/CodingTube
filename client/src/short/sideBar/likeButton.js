@@ -66,12 +66,6 @@ class LikeButton extends React.Component {
 
   like() {
     if (!this.props.isLiked) {
-      this.props.setState((state) => ({
-        likes: state.likes + 1,
-        isLiked: true,
-      }));
-      this.addLike();
-
       if (this.props.isDisliked) {
         this.props.setState((state) => ({
           dislikes: state.dislikes - 1,
@@ -79,6 +73,12 @@ class LikeButton extends React.Component {
         })); // DISLIKE button already pressed
         this.removeDislike();
       }
+
+      this.props.setState((state) => ({
+        likes: state.likes + 1,
+        isLiked: true,
+      }));
+      this.addLike();
     } else {
       this.props.setState((state) => ({
         likes: state.likes - 1,
@@ -96,7 +96,9 @@ class LikeButton extends React.Component {
           id={"like" + this.props.shortInfos.id}
           className={
             "h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
-            (this.props.isLiked ? " bg-[#171717]" : " bg-[#f5f5f5] hover:bg-[#e5e5e5]")
+            (this.props.isLiked
+              ? " bg-[#171717]"
+              : " bg-[#f5f5f5] hover:bg-[#e5e5e5]")
           }
           onClick={this.like}
         >
