@@ -5,6 +5,11 @@ import { useLocation } from "react-router-dom";
 import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 
+import CheckSession from "../../session"
+//const { isLoggedIn, userId } = CheckSession();
+
+var userId = 1;
+
 export default function Watch() {
   useEffect(() => {
     document.title = "Watch - CodingTube";
@@ -19,8 +24,12 @@ export default function Watch() {
     const fetchData = async () => {
       try {
         if (videoId) {
-          await axios.get(
-            `http://localhost:5000/api/timeline/addView-request/${videoId}`
+          const response = await axios.get(
+            `http://localhost:5000/api/timeline/addView-request`,{
+              params: {
+                videoIdParam: videoId,
+              },
+            }
           );
           console.log("View added successfully");
         }
@@ -31,28 +40,21 @@ export default function Watch() {
 
     fetchData();
   }, [videoId]);
-  const [videosInfos, setVideosInfos] = useState("");
-  console.log("request");
-  useEffect(() => {
-    console.log("Call watch");
-    if (videoId) {
-      fetch(`http://localhost:5000/api/timeline/addView-request/${videoId}`)
-        .then((res) => res.json())
-        .then((data) => setVideosInfos(data))
-        .then(() => {
-          console.log("Call watch end");
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [videoId]);
+
 
   const [errorHistory, setErrorHistory] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (videoId) {
-          await axios.get(
-            `http://localhost:5000/api/timeline/addHistory-request/${videoId}`
+
+          const response = await axios.get(
+            `http://localhost:5000/api/timeline/addHistory-request`,{
+              params: {
+                videoIdParam: videoId,
+                userIdParam: userId,
+              },
+            }
           );
           console.log("History added successfully");
         }

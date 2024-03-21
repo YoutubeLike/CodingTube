@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import CheckSession from "../../../session"
+//const { isLoggedIn, userId } = CheckSession();
+
+var userId = 1;
+
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
@@ -69,9 +74,16 @@ export default function GridSubscriptionTimeLine() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
+
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscription-timeline-request"
+          ,{
+            params: {
+              userIdParam: userId,
+            },
+          }
         );
+
         setVideosInfos(response.data);
       } catch (error) {
         console.error("Error fetching videos:", error);
