@@ -1,7 +1,8 @@
 import TimeLine from "../component/Timeline";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
-import PageChannel from "../../channel/pages/Channel"
+import PageChannel from "../../channel/pages/Channel";
+import TimelineHistory from "../component/HistoryTimeline";
 import { useState,useEffect } from "react";
 
 
@@ -22,33 +23,39 @@ export default function You() {
             alt="Channel Avatar"
             className="rounded-full w-21 h-40 relative left-[230px]"
           />
-          <div className="">
+          <div className="leading-9">
             <a href="/history">
-              <img className="relative left-[220px] w-10 h-10" src="history.png" />
+              <img className="relative left-[220px] relative top-[5px] w-10 h-10" src="history.png" />
               <button className="relative left-[265px] relative top-[-32px] font-black">History</button>
             </a>
           </div>
           <div className="flex">
-            <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
-              <TimeLine />
-              <div className="flex flex-wrap">
-                <TimeLine />
-              </div>
+            <div className="flex ml-[10%] relative left-[40px] flex-wrap relative top-[-20px]">
+            <TimelineHistory />
             </div>
           </div>
           <div className="">
-          <div>
+          <div className="leading-9">
             <a href="/likedvideo">
-              <img className="relative left-[220px] w-10 h-10" src="likedvideo.png" />
+              <img className="relative left-[220px] relative top-[5px] w-10 h-10" src="likedvideo.png" />
               <button className="relative left-[265px] relative top-[-32px] font-black">Liked Videos</button>
             </a>
           </div>
           <div className="flex">
-            <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
+            <div className="flex ml-[10%] relative left-[40px] flex-wrap relative top-[-20px]">
               <TimeLine />
-              <div className="flex flex-wrap">
-                <TimeLine />
-              </div>
+              
+            </div>
+          </div>
+          <div className="leading-9">
+            <a href="/history">
+              <img className="relative left-[220px] relative top-[5px] w-10 h-10" src="playlist.png" />
+              <button className="relative left-[265px] relative top-[-32px] font-black">Playlists</button>
+            </a>
+          </div>
+          <div className="flex">
+            <div className="flex ml-[10%] relative left-[40px] flex-wrap relative top-[-20px]">
+            <TimelineHistory />
             </div>
           </div>
       </div>
