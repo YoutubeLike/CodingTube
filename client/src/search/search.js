@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Header from "./header";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
