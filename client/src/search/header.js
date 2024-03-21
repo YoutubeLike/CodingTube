@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
+import { useHistory } from 'react-router-dom';
 
 export default function Header() {
   const [searchValue, setSearchValue] = useState("");
@@ -91,6 +92,10 @@ export default function Header() {
     inputRef.current = e.target.value;
   };
 
+  const handleClickSearch = (search) => {
+    setSearchValue(search)
+    inputRef.current = search
+  }
   const handleClickOutsideMenu = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
       setMenuOpen(false);
@@ -159,7 +164,8 @@ export default function Header() {
                       <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
                         <div
                           onClick={() => {
-                            setSearchValue(result.name_search);
+                            console.error(result.name_search)
+                            handleClickSearch(result.name_search);
                             submit(result.name_search);
                           }}
                         >
@@ -176,8 +182,7 @@ export default function Header() {
                         className="w-[100%]"
                         onClick={(e) => {
                           deleteHistory(result.id, e);
-                        }}
-                      >
+                        }}>
                         supprimer
                       </button>
                     </div>
@@ -187,7 +192,8 @@ export default function Header() {
                       className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
                       key={index}
                       onClick={() => {
-                        setSearchValue(result.name_search);
+                        console.error(result.name_search)
+                        handleClickSearch(result.name_search);
                         submit(result.name_search);
                       }}
                     >
