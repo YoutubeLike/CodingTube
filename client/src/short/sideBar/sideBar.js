@@ -107,6 +107,7 @@ class SideBar extends React.Component {
         <CommentsButton
           setState={this.props.setState}
           shortInfos={this.props.shortInfos}
+          commentsCount={this.props.commentsCount}
         />
         <ShareButton />
         <OptionsButton />

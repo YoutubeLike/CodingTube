@@ -10,11 +10,13 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
+      commentsCount: 0,
       commentsShown: false,
     };
   }
 
   async componentDidMount() {
+    // Get short infos
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/short-request",
@@ -24,19 +26,30 @@ class Video extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    // Get comments count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-comments",
+        { params: { shortId: this.props.id } }
+      );
+      this.setState({ commentsCount: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
   }
 
   render() {
     return this.state.shortInfos.id != null ? (
       <div
-        id={"short" + this.state.id}
+        id={"short" + this.state.shortInfos.id}
         className="mb-[1vh] flex justify-center"
       >
         {/* Contains video and its informations */}
         <div className="h-[80vh] w-[45vh] flex flex-col justify-between relative snap-center rounded-[0.7vh] overflow-hidden">
           <video
             src="1.mp4"
-            id={"shortPlayer" + this.state.id}
+            id={"shortPlayer" + this.state.shortInfos.id}
             className="h-full w-full object-cover absolute behind"
             muted
             autoPlay
@@ -56,12 +69,20 @@ class Video extends React.Component {
             this.setState(p);
           }}
           shortInfos={this.state.shortInfos}
+          commentsCount={this.state.commentsCount}
         />
         {this.state.commentsShown && (
-          <CommentBar shortInfos={this.state.shortInfos} />
+          <CommentBar
+            setState={(p) => {
+              this.setState(p);
+            }}
+            shortInfos={this.state.shortInfos}
+          />
         )}
       </div>
-    ) : <p>Loading...</p>;
+    ) : (
+      <p>Loading...</p>
+    );
   }
 }
 

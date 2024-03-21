@@ -6,11 +6,11 @@ class CommentBar extends React.Component {
     super(props);
     this.state = {
       comments: [
-        "SMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK G",
-        "cock and balls !",
-        "i love cummies",
-        "cock and ball TORTURE!!! I FUCKING LOVE THAT STUFF!!!!!!",
-        "KC le KK xD",
+        // "SMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK GSMOFGKNSDMGLK SDMGLK DSMGLKDS GMKLS DGMLKSD GMLKSD GMLDSK G",
+        // "cock and balls !",
+        // "i love cummies",
+        // "cock and ball TORTURE!!! I FUCKING LOVE THAT STUFF!!!!!!",
+        // "KC le KK xD",
       ],
       userInput: "",
     };
@@ -49,6 +49,9 @@ class CommentBar extends React.Component {
       this.setState({
         comments: this.state.comments.concat([this.state.userInput]),
       });
+      this.props.setState((state) => ({
+        commentsCount: state.commentsCount + 1,
+      }));
 
       try {
         await axios.get("http://localhost:5000/api/short/add-comment", {
