@@ -37,37 +37,19 @@ class Video extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+  }
 
+  componentDidUpdate() {
     const shortPlayer = document.getElementById(
       "shortPlayer" + this.state.shortInfos.id
     );
-
-    if (this.props.isFirstShort) shortPlayer.play();
-
-    document
-      .getElementById("shortsSection")
-      .addEventListener("scrollend", () => {
-        const short = document.getElementById(
-          "short" + this.state.shortInfos.id
-        );
-
-        if (short) {
-          const position = short.getBoundingClientRect();
-
-          if (position.top > 0 && position.top < window.innerHeight / 2) {
-            this.props.setState((state) => ({
-              currentIndex: state.loadedVideos.indexOf(
-                this.state.shortInfos.id
-              ),
-            }));
-            shortPlayer.play();
-            shortPlayer.muted = this.props.isMuted;
-          } else {
-            shortPlayer.pause();
-            shortPlayer.currentTime = 0;
-          }
-        }
-      });
+    if (this.props.isPlaying) {
+      shortPlayer.play();
+      shortPlayer.muted = this.props.isMuted;
+    } else {
+      shortPlayer.pause();
+      shortPlayer.currentTime = 0;
+    }
   }
 
   render() {

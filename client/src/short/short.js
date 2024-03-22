@@ -39,6 +39,16 @@ class Short extends React.Component {
     document
       .getElementById("shortsSection")
       .addEventListener("scrollend", () => {
+        const position = document
+          .getElementById(
+            "short" + this.state.loadedVideos[this.state.currentIndex]
+          )
+          .getBoundingClientRect();
+        if (position.top > window.innerHeight / 2) {
+          this.setState((state) => ({ currentIndex: state.currentIndex - 1 }));
+        } else if (position.top < 0) {
+          this.setState((state) => ({ currentIndex: state.currentIndex + 1 }));
+        }
         this.loadShorts();
       });
   }
@@ -82,7 +92,6 @@ class Short extends React.Component {
           this.state.loadedVideos[this.state.currentIndex + 1]
         );
     }
-
     return (
       <div
         id="shortsSection"
@@ -93,7 +102,9 @@ class Short extends React.Component {
             key={element}
             id={element}
             isMuted={this.state.isMuted}
-            isFirstShort={this.state.loadedVideos[0] == element}
+            isPlaying={
+              this.state.loadedVideos[this.state.currentIndex] == element
+            }
             setState={(p) => this.setState(p)}
           />
         ))}
