@@ -3,6 +3,7 @@ const mariadb = require('../src/database');
 const app = express();
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const crypto = require("crypto");
 
 
 
@@ -17,6 +18,7 @@ async function InsertUser(registerData) {
     try {
         // Hashing the user's password
         const hashedPassword = await bcrypt.hash(registerData.password, 10);
+        const tokenId = crypto.randomBytes(32).toString('hex');
         // Establishing a database connection
         const conn = await mariadb.pool.getConnection();
         // Executing the SQL query to insert user data into the database
@@ -117,23 +119,24 @@ async function CheckIfPasswordMatch(password, hashedPasswordFromDB) {
     }
 }
 
-async function GetUserId(data){
+async function GetUserId(data) {
     try {
         // Establishing a database connection
         const conn = await mariadb.pool.getConnection();
-        // Executing the SQL query to retrieve the user Id
-        const result = await conn.query("SELECT id FROM user WHERE username = ? OR mail = ?", [data, data]);
+        // Executing the SQL query to check if the email address exists
+        const result = await conn.query("SELECT id FROM user WHERE mail = ? OR username = ?", [data, data]);
         // Releasing the database connection
         conn.release();
-        // Returning the id if found
+        // Returning true if the count is greater than 0, indicating the email address exists
         return result[0].id;
-    } catch (err) {
-        // Handling errors if any occur during the database operation
-        console.log("Error retrieving id:", err);
-        // Returning false in case of an error
-        return false;
+    } catch (error) {
+        // Handling errors if any occur during the password comparison
+        console.error("Error comparing passwords:", error);
     }
 }
+
+
+
 
 
 
