@@ -66,6 +66,7 @@ class Video extends React.Component {
             className="h-full w-full object-cover absolute behind"
             muted
             loop
+            autoPlay
           />
 
           {/* Contains video's informations */}

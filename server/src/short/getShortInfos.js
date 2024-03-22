@@ -1,7 +1,10 @@
 const mariadb = require("../src/database");
 
-const getShortsList = (req, res) => {
-  mariadb.pool.query("SELECT id FROM short ORDER BY id DESC").then((value) => {
+const getTenNextShorts = (req, res) => {
+  mariadb.pool.query(
+    "SELECT id FROM short WHERE id > ? ORDER BY id ASC LIMIT 10",
+    [req.query.currentIndex]
+  ).then((value) => {
     res.send(value);
   });
 };
@@ -46,7 +49,7 @@ const getComments = (req, res) => {
 };
 
 module.exports = {
-  getShortsList,
+  getTenNextShorts,
   getShortInfos,
   getLikes,
   getDislikes,

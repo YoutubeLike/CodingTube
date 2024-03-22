@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getShortsList,
+  getTenNextShorts,
   getShortInfos,
   getLikes,
   getDislikes,
@@ -20,7 +20,7 @@ const {
 
 const { addComment } = require("./commentsManager.js");
 
-router.get("/get-shorts-list", getShortsList);
+router.get("/get-ten-next-shorts", getTenNextShorts);
 router.get("/get-short-infos", getShortInfos);
 router.get("/get-likes", getLikes);
 router.get("/get-dislikes", getDislikes);
