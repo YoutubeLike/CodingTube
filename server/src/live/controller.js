@@ -71,8 +71,8 @@ const display = ((req, res) => {
 })
 
 const test = ((req, res) => {
-  console.log(req.session.userId)
-  res.send("" + req.session.userUsername)
+  console.log("Utilisateur" + req.session.userId)
+  res.send("" + req.session.userId)
 })
 
 module.exports = {

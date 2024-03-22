@@ -1,6 +1,5 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom"
 
 export default function Live()

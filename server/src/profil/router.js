@@ -119,7 +119,7 @@ router.post("/login", async (req, res) => {
             console.log(req.sessionID)
             console.log(req.session.userId + " logged in");
             console.log(req.session)
-            res.cookie("CodingTube", req.session)
+            res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
             return res.json(req.session);
 
             //return res.status(400).json({ error: "User logged In Successfully!" });
