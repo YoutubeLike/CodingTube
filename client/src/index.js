@@ -16,6 +16,8 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
+
+import Search from "./search/search";
 import Live from './live/index'
 import UserLive, { loader as LoaderLive } from "./live/UserLive";
 import Test from "./live/widget";
@@ -94,6 +96,10 @@ const router = createBrowserRouter([
 				path: "upload",
 				element: <Upload />,
 			},
+      {
+				path: "/search",
+				element: <Search />,
+      },
       {
 				path: "/you",
 				element: <You />,

@@ -42,7 +42,7 @@ export default function TimeLine() {
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
             />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
         </div>
 
 
