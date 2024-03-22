@@ -20,7 +20,6 @@ import You from "./timeline/pages/you";
 import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
-//import PageChannel from "./channel/pages/Channel";
 
 const router = createBrowserRouter([
   {
@@ -84,9 +83,6 @@ const router = createBrowserRouter([
 				element: <You />,
 			},
       {
-			 	path: "/PageChannel",
-			 	element: <PageChannel />,
-			},
 				path: "/playlist",
 				element: <PlaylistPage />,
 			},
