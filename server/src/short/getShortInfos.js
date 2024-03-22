@@ -3,7 +3,7 @@ const mariadb = require("../src/database");
 const getTenNextShorts = (req, res) => {
   mariadb.pool.query(
     "SELECT id FROM short WHERE id > ? ORDER BY id ASC LIMIT 10",
-    [req.query.currentIndex]
+    [req.query.currentId]
   ).then((value) => {
     res.send(value);
   });

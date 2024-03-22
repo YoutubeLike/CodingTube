@@ -7,12 +7,10 @@ class Short extends React.Component {
     super(props);
     this.state = {
       loadedVideos: [],
-      renderedElements: [],
       currentIndex: 0,
-      maxIndex: 1,
       isMuted: true,
     };
-    this.renderVideos = this.renderVideos.bind(this);
+    this.loadShorts = this.loadShorts.bind(this);
   }
 
   async componentDidMount() {
@@ -20,7 +18,7 @@ class Short extends React.Component {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-ten-next-shorts",
-        { params: { currentIndex: 0 } }
+        { params: { currentId: 0 } }
       );
       const videos = [];
       for (let i = 0; i < 3; i++) {
@@ -33,8 +31,6 @@ class Short extends React.Component {
 
       this.setState({
         loadedVideos: response.data.map((element) => element.id),
-        currentIndex: response.data[0].id,
-        renderedElements: videos,
       });
     } catch (error) {
       console.error("Error fetching videos:", error);
@@ -42,29 +38,59 @@ class Short extends React.Component {
 
     document
       .getElementById("shortsSection")
-      .addEventListener("scrollend", () => {});
+      .addEventListener("scrollend", () => {
+        this.loadShorts();
+      });
   }
 
-  renderVideos() {
-    const videos = [];
-    for (let i = 0; i < 3; i++) {
+  async loadShorts() {
+    // Get 10 next shorts
+    if (this.state.currentIndex == this.state.loadedVideos.length - 1) {
       try {
-        videos.push(this.state.loadedVideos[this.state.currentIndex + i]);
+        const response = await axios.get(
+          "http://localhost:5000/api/short/get-ten-next-shorts",
+          {
+            params: {
+              currentId: this.state.loadedVideos[this.state.currentIndex],
+            },
+          }
+        );
+        this.setState((state) => ({
+          loadedVideos: state.loadedVideos.concat(
+            response.data.map((element) => element.id)
+          ),
+        }));
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching videos:", error);
       }
     }
-    this.setState({ renderedElements: videos });
   }
 
   render() {
+    const renderedShortsIds = [];
+
+    if (this.state.loadedVideos.length > 0) {
+      if (this.state.currentIndex > 0)
+        renderedShortsIds.push(
+          this.state.loadedVideos[this.state.currentIndex - 1]
+        );
+
+      renderedShortsIds.push(this.state.loadedVideos[this.state.currentIndex]);
+
+      if (this.state.currentIndex < this.state.loadedVideos.length - 1)
+        renderedShortsIds.push(
+          this.state.loadedVideos[this.state.currentIndex + 1]
+        );
+    }
+
     return (
       <div
         id="shortsSection"
         className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
       >
-        {this.state.renderedElements.map((element) => (
+        {renderedShortsIds.map((element) => (
           <Video
+            key={element}
             id={element}
             isMuted={this.state.isMuted}
             isFirstShort={this.state.loadedVideos[0] == element}
