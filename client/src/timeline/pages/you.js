@@ -2,6 +2,7 @@ import TimeLine from "../component/Timeline";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import PageChannel from "../../channel/pages/Channel"
+import Playlist from "../component/Playlist";
 import { useState,useEffect } from "react";
 
 
@@ -51,7 +52,7 @@ export default function You() {
               <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
                 <TimeLine />
                 <div className="flex flex-wrap">
-                  <TimeLine />
+                  <Playlist />
                 </div>
               </div>
             </div>

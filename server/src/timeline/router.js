@@ -9,6 +9,8 @@ const { addHistoryRequest } = require('./controllerAddHistory.js');
 const { historyRequest } = require('./controllerHistory.js');
 const { subscriptionList } = require('./controllerSubscriptionList.js');
 const { viewedCategoriesList } = require('./controllerViewedCategoriesList.js');
+const { playlistRequest } = require('./controllerPlaylist.js');
+const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
 console.log("router timeline");
 
 // Get the videos infos to show timeline
@@ -32,5 +34,9 @@ router.get('/subscribe-list-request-menu', subscriptionListMenu)
 router.get('/addHistory-request', addHistoryRequest)
 
 router.get('/history-request', historyRequest)
+
+router.get('/playlist-request', playlistRequest)
+
+router.get('/showPlaylist-request', showPlaylistRequest)
 
 module.exports = router
