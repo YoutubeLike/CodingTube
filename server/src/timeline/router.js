@@ -26,12 +26,12 @@ router.get('/subscribe-list-request', subscriptionList)
 router.get('/viewed-categories-list-request', viewedCategoriesList)
 
 // Add view to video with video_id
-router.get('/addView-request/:videoId', addViewTimelineRequest)
+router.get('/addView-request', addViewTimelineRequest)
 
 // Get the list of subscriptions
 router.get('/subscribe-list-request-menu', subscriptionListMenu)
 
-router.get('/addHistory-request/:videoId', addHistoryRequest)
+router.get('/addHistory-request', addHistoryRequest)
 
 router.get('/history-request', historyRequest)
 
