@@ -6,7 +6,7 @@ const displaySearchPage = async (req, res) =>
     // SQL Request : get the video's informations and send it
     try{
     const results = await mariadb.pool.query(
-        "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id WHERE title LIKE '%on se%' ORDER BY video.number_view DESC;", ['%'+inputSearch+'%'])
+        "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id WHERE title LIKE ? ORDER BY video.number_view DESC;", ['%'+inputSearch+'%'])
         console.log(results)
         res.status(200).send(results); 
     } catch (error){
