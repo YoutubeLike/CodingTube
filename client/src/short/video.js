@@ -37,6 +37,19 @@ class Video extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    document.getElementById("shortsSection").addEventListener("scrollend", () => {
+      const video = document.getElementById(
+        "shortPlayer" + this.state.shortInfos.id
+      );
+
+      const position = document
+        .getElementById("short" + this.state.shortInfos.id)
+        .getBoundingClientRect();
+      if (Math.floor(position.top) == 59) {
+        console.log(this.state.shortInfos.id);
+      }
+    });
   }
 
   render() {
@@ -52,7 +65,6 @@ class Video extends React.Component {
             id={"shortPlayer" + this.state.shortInfos.id}
             className="h-full w-full object-cover absolute behind"
             muted
-            autoPlay
             loop
           />
 

@@ -1,7 +1,7 @@
 const mariadb = require("../src/database");
 
 const getShortsList = (req, res) => {
-  mariadb.pool.query("SELECT id FROM short").then((value) => {
+  mariadb.pool.query("SELECT id FROM short ORDER BY id DESC").then((value) => {
     res.send(value);
   });
 };

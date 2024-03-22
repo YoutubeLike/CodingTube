@@ -8,12 +8,12 @@ class Short extends React.Component {
     this.state = {
       availableIds: [],
       renderedElements: [],
+      shortsMuted: true,
     };
-    this.loadShort = this.loadShort.bind(this);
   }
 
   async componentDidMount() {
-    // Get shorts list and set the two first shorts 
+    // Get shorts list and set the two first shorts
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-shorts-list"
@@ -22,23 +22,37 @@ class Short extends React.Component {
       this.setState({
         availableIds: IdsList.slice(2, IdsList.length),
         renderedElements: [
-          <Video id={IdsList[0]} />,
-          <Video id={IdsList[1]} />,
+          <Video
+            id={IdsList[0]}
+            shortsMuted={this.state.shortsMuted}
+            setState={(p) => this.setState(p)}
+          />,
+          <Video
+            id={IdsList[1]}
+            shortsMuted={this.state.shortsMuted}
+            setState={(p) => this.setState(p)}
+          />,
         ],
       });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
-  }
 
-  loadShort() {
-    if (this.state.availableIds.length > 0) {
-      const videoElement = <Video id={this.state.availableIds[0]} />;
-      this.setState((state) => ({
-        renderedElements: state.renderedElements.concat([videoElement]),
-        availableIds: state.availableIds.slice(1, state.availableIds.length),
-      }));
-    }
+    document
+      .getElementById("shortsSection")
+      .addEventListener("scrollend", () => {
+        if (this.state.availableIds.length > 0) {
+          this.setState((state) => ({
+            renderedElements: state.renderedElements.concat([
+              <Video id={this.state.availableIds[0]} />,
+            ]),
+            availableIds: state.availableIds.slice(
+              1,
+              state.availableIds.length
+            ),
+          }));
+        }
+      });
   }
 
   render() {
@@ -46,7 +60,6 @@ class Short extends React.Component {
       <div
         id="shortsSection"
         className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
-        onScroll={this.loadShort}
       >
         {this.state.renderedElements.map((element) => element)}
       </div>
