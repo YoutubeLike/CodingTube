@@ -1,6 +1,7 @@
 import TimeLine from "../component/Timeline";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
+import TimelineHistory from "../component/HistoryTimeline";
 import PageChannel from "../../channel/pages/Channel"
 import Playlist from "../component/Playlist";
 import { useState,useEffect } from "react";

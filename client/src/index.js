@@ -84,6 +84,9 @@ const router = createBrowserRouter([
 				element: <You />,
 			},
       {
+			 	path: "/PageChannel",
+			 	element: <PageChannel />,
+			},
 				path: "/playlist",
 				element: <PlaylistPage />,
 			},
@@ -91,10 +94,6 @@ const router = createBrowserRouter([
 				path: "/showPlaylist",
 				element: <ShowPlaylistPage />,
 			},
-      // {
-			// 	path: "/PageChannel",
-			// 	element: <PageChannel />,
-			// },
     ]
   },
 ]);
