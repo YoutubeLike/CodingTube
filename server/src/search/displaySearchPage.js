@@ -7,7 +7,6 @@ const displaySearchPage = async (req, res) =>
     try{
     const results = await mariadb.pool.query(
         "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id WHERE title LIKE ? ORDER BY video.number_view DESC;", ['%'+inputSearch+'%'])
-        console.log(results)
         res.status(200).send(results); 
     } catch (error){
         res.status(500).send("Une erreur est survenue lors du chargement des vidéos");

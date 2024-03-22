@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "./header";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
+import NonDisplayedBurgerMenu from "../timeline/component/nonDisplayedBurgerMenu";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -88,36 +89,40 @@ export default function Search() {
   }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
   return (
-    <div>
-      {videosInfos && videosInfos.map((result, index) => (
-        <div key={index} className="h-auto mb-2">
-          <a href={`/watch?video_id=${result.id}`}>
-            <div className="flex flex-row">
-              <div className="relative">
-                <img
-                  className="h-20 rounded-lg"
-                  src={result.thumbnail}
-                  alt="Thumbnail"
-                />
-                <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
-                  {result.video_duration}
-                </p>
+      <div className="flex">
+        <NonDisplayedBurgerMenu />
+        <div className="flex ml-[3%] flex-wrap mt-[5%]">
+          {videosInfos && videosInfos.map((result, index) => (
+              <div key={index}>
+                <a href={`/watch?video_id=${result.id}`}>
+                  <div className="flex flex-row">
+                    <div className="relative w-[20%]">
+                      <img
+                        className="max-w-[90%] h-auto rounded-lg"
+                        src={result.thumbnail}
+                        alt="Thumbnail"
+                      />
+                      <p className="absolute bottom-[5%] right-[12%] z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{timeOfVideo(result.video_duration)}</p>
+                    </div>
+
+                    <div className="flex flew-row mt-2.5">
+                    <img className="pp" src={result.PP} alt="PP" />
+                      <div className="ml-2.5">
+                        <h3 className="text-black font-bold text-[100%]">
+                          {result.title}
+                        </h3>
+                        <h4 className="text-gray text-[90%]">{result.pseudo}</h4>
+                        <h4 className="text-gray text-[90%]">
+                          {result.number_view} views -{" "}
+                          {getTimeElapsed(result.upload_date_time)} ago
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </a>
               </div>
-  
-              <div className="ml-2.5">
-                <h3 className="text-black font-bold text-[100%]">
-                  {result.title}
-                </h3>
-                <h4 className="text-gray text-[90%]">{result.pseudo}</h4>
-                <h4 className="text-gray text-[90%]">
-                  {result.number_view} views -{" "}
-                  {getTimeElapsed(result.upload_date_time)} ago
-                </h4>
-              </div>
-            </div>
-          </a>
+          ))}
         </div>
-      ))}
     </div>
   );
 }

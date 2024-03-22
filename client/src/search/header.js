@@ -129,6 +129,7 @@ export default function Header() {
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
         <form
+          autocomplete="off"
           className="flex w-[100%]"
           onSubmit={(e) => {
             e.preventDefault();
@@ -144,6 +145,7 @@ export default function Header() {
             ref={menuRef}
           >
             <input
+              autocomplete="off"
               className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
               placeholder="Search"
@@ -230,7 +232,7 @@ export default function Header() {
             )}
           </div>
           <button type="submit">
-            <svg
+          <svg
               className="h-7 bg-gray-200 rounded-e-lg z-20 relative"
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
