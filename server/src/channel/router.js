@@ -12,6 +12,7 @@ const {
 	submitChannel,
 	submitVideo,
 	selectVideo,
+	UserChannel,
 } = require("./controller");
 
 // Configuration de la route
@@ -20,6 +21,7 @@ router.get("/video", selectVideo);
 router.post("/submitChannel", submitChannel);
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
+router.get("/userChannel", UserChannel);
 
 // Configuration de la route POST pour la soumission des données
 router.post("/submitVideo", submitVideo);

@@ -23,10 +23,10 @@ const App = () => {
 			try {
 				// Requête pour récupérer les informations de la chaîne
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/infos"
+					"http://localhost:5000/api/channel/infos",
 				);
 
-				// Attribution des informations
+				// Attribution of information
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);

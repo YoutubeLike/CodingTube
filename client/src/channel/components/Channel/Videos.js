@@ -6,18 +6,17 @@ export default function Video() {
 	const [channelId, setChannelId] = useState(0); // Channel id
 	const [uploadVideoUrl, setUploadVideoUrl] = useState([]); // Video number
 	const [title, setTitle] = useState([]); // Title
-	const [video, setVideo] = useState(); // Title
-	const [idVideo, setIdVideo] = useState();
+	const [video, setVideo] = useState(); // Video
 
 	useEffect(() => {
 		const fetchVideos = async () => {
 			try {
-				// Requête vers les infos de la chaîne
+				// Query for channel information
 				const response = await axios.get(
 					"http://localhost:5000/api/channel/videos"
 				);
 
-				// Ajouter le résultat de la requête dans la variable vidéo
+				// Add query result into video variable
 				console.log(response.data);
 				setVideo(response.data);
 			} catch (error) {
@@ -28,9 +27,7 @@ export default function Video() {
 		fetchVideos();
 	}, []);
 
-	const sendVideo = () => {
-
-	}
+	const sendVideo = () => {};
 
 	video && console.log(video);
 
@@ -39,9 +36,8 @@ export default function Video() {
 			<div className="flex flex-wrap w-auto">
 				{video &&
 					video.map((data) => (
-						<Link	
-
-							to={`/video/${data.id}`}
+						<Link
+							to={`/video?id=${data.id}`}
 							className="flex flex-col mr-4 justify-between"
 						>
 							<img
@@ -49,9 +45,7 @@ export default function Video() {
 								className="w-[270px] min-h-[155px] rounded-xl bg-black"
 							/>
 							<div className="h-full flex flex-col justify-between">
-								<p className="w-[270px] text-start font-bold">
-									{data.title}
-								</p>
+								<p className="w-[270px] text-start font-bold">{data.title}</p>
 								<p className="w-[270px] text-start text-xs">
 									{data.number_view} vues - {data.upload_date_time}
 								</p>

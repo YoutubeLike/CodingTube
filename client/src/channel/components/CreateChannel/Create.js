@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import noir from "../../assets/fondNoir.avif";
 import logo from "../../assets/logo.jpg";
+import CheckSession from "../../../session";
 
 export default function Create() {
 	const [showPopup, setShowPopup] = useState(false); // État pour afficher ou masquer le popup
@@ -12,6 +13,9 @@ export default function Create() {
 	const [identifier, setIdentifier] = useState("@");
 	const [bio, setBio] = useState("");
 	const [banner, setBannerPreview] = useState(null);
+	const { userId } = CheckSession();
+
+	console.log("Token Id = ", userId);
 
 	console.log(banner);
 
@@ -19,6 +23,7 @@ export default function Create() {
 		event.preventDefault();
 		try {
 			axios.post("http://localhost:5000/api/channel/submitChannel", {
+				// idUser: userId,
 				name: name,
 				identifier: identifier,
 				bio: bio,
