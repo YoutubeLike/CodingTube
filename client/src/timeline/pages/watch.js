@@ -73,7 +73,6 @@ export default function Watch() {
   return (
     <>
       {/* PAGE CONTENT */}
-      <DisplayedBurgerMenu /> {/* Burger menu */}
       <div>
         <h1 className="text-3xl font-bold underline">Video page</h1>
         <div class="flex inset-y-0 left-0 flex-col">
