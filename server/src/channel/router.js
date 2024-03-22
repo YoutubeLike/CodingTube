@@ -16,6 +16,6 @@ router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
 
 // Configuration de la route POST pour la soumission des données
-router.post('/submitVideo', submitVideo);
+router.post('/submitVideo', submitVideo); // Utilisation de submitVideo comme middleware pour gérer les fichiers envoyés
 
 module.exports = router;
