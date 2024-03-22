@@ -28,7 +28,7 @@ const App = () => {
 					"http://localhost:5000/api/channel/infos", {params: {identifier: urlParams.get("identifier")}}
 				);
 
-				// Attribution des informations
+				// Attribution of information
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);

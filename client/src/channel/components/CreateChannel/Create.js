@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import noir from "../../assets/fondNoir.avif";
 import logo from "../../assets/logo.jpg";
+import CheckSession from "../../../session";
 
 export default function Create() {
 	const [showPopup, setShowPopup] = useState(false); // État pour afficher ou masquer le popup
@@ -13,6 +14,7 @@ export default function Create() {
 	const [bio, setBio] = useState("");
 	const [banner, setBannerPreview] = useState(null);
 	const [message, setMessage] = useState(null);
+
 
 	console.log(banner);
 
