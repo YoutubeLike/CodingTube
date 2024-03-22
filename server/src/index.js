@@ -7,6 +7,17 @@ bodyParser = require("body-parser");
 const { createServer } = require('http')
 const server = createServer(app)
 const socketio = require('socket.io');
+const session = require('express-session');
+
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+}));
+
+app.get('/', (req, res) => {
+  const sessionData = req.session;
+});
 
 app.use(cors());
 app.use(bodyParser.json({ type: "application/*+json" }));
@@ -71,13 +82,6 @@ io.on("connection", (socket) => {
         message: msg.message,
         profilePicture: msg.profilePicture,
       });
-
-      // socket.broadcast.emit("chat-message", {
-      //   sender: msg.sender,
-      //   time: msg.time,
-      //   message: msg.message,
-      //   profilePicture: msg.profilePicture,
-      // });
     }
     console.log("Message received: " + msg.message);
     console.log("PP of the message received: " + msg.profilePicture);
@@ -104,3 +108,4 @@ app.use("/api", urlencodedParser, routes);
 server.listen(5000, () => {
   console.log("server listening on port 5000");
 });
+
