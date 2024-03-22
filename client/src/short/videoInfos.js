@@ -13,7 +13,7 @@ class VideoInfos extends React.Component {
           {/* Profile picture */}
           <button className="h-[4.5vh] w-[4.5vh] rounded-full overflow-hidden">
             <img
-              src="picture.png"
+              src={this.props.shortInfos.PP}
               alt="photo"
               className="h-[4.5vh] w-[4.5vh]"
             />
