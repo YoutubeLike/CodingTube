@@ -17,6 +17,9 @@ import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
 import You from "./timeline/pages/you";
+import Playlist from "./timeline/component/Playlist";
+import PlaylistPage from "./timeline/pages/playlist";
+import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
 //import PageChannel from "./channel/pages/Channel";
 
 const router = createBrowserRouter([
@@ -79,6 +82,14 @@ const router = createBrowserRouter([
       {
 				path: "/you",
 				element: <You />,
+			},
+      {
+				path: "/playlist",
+				element: <PlaylistPage />,
+			},
+      {
+				path: "/showPlaylist",
+				element: <ShowPlaylistPage />,
 			},
       // {
 			// 	path: "/PageChannel",
