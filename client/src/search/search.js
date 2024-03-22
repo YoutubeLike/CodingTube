@@ -83,21 +83,23 @@ export default function Search() {
         console.error("An error occurred while searching: ", error);
       }
     };
-  });
+
+    displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
+  }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
   return (
     <div>
       {videosInfos.map((result, index) => (
         <div key={index} className="h-auto mb-2">
           <a href={`/watch?video_id=${result.id}`}>
-            <div class="flex flex-row">
-              <div class="relative">
+            <div className="flex flex-row">
+              <div className="relative">
                 <img
-                  class="h-20 rounded-lg"
+                  className="h-20 rounded-lg"
                   src={result.thumbnail}
                   alt="Thumbnail"
                 />
-                <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+                <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
                   {result.video_duration}
                 </p>
               </div>
