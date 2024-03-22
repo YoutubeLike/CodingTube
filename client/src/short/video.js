@@ -51,17 +51,13 @@ class Video extends React.Component {
         const position = document
           .getElementById("short" + this.state.shortInfos.id)
           .getBoundingClientRect();
-        
-          if (this.props.id == 2) {
-            console.log(position.top);
-            console.log(window.innerHeight / 2)
-          }
 
         if (position.top > 0 && position.top < window.innerHeight / 2) {
           this.props.setState((state) => ({
             currentIndex: state.loadedVideos.indexOf(this.state.shortInfos.id),
           }));
           video.play();
+          video.muted = this.props.isMuted
         } else {
           video.pause();
           video.currentTime = 0;

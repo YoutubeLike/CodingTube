@@ -13,6 +13,7 @@ class VideoButtons extends React.Component {
     document
       .getElementById("soundButton" + this.props.shortInfos.id)
       .addEventListener("click", () => {
+        video.muted = !this.props.isMuted;
         this.props.setState((state) => ({ isMuted: !state.isMuted }));
       });
 
