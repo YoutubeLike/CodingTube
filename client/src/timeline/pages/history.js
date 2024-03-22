@@ -20,7 +20,7 @@ export default function History() {
       {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
-        <div class="flex ml-[3%] flex-wrap content-center">
+        <div class="flex ml-[3%] flex-wrap">
           <TimelineHistory /> {/* Showing Timeline History */}
         </div>
       </div>

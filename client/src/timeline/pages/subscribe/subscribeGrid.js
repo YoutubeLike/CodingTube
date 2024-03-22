@@ -49,7 +49,7 @@ export default function GridSubscribe() {
       {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
-        <div class="flex ml-[3%] flex-wrap content-center">
+        <div class="flex ml-[3%] flex-wrap">
           <GridSubscriptionTimeLine /> {/* Showing Grid Subscriptions */}
         </div>
       </div>
