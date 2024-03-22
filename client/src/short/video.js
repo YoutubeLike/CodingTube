@@ -76,15 +76,16 @@ class Video extends React.Component {
 
             <div>
               {/* Contains uploader's informations and video's title */}
-              <VideoInfos className='absolute bottom-0' shortInfos={this.state.shortInfos} />
+              <VideoInfos className='absolute' shortInfos={this.state.shortInfos} />
 
               {/* COMMENTS TOGGLED: Right bar */}
-              <div className={this.state.commentsShown ? "" : "hidden"}>
+              <div className={this.state.commentsShown ? "absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl" : "hidden"}>
               <SideBar
                 setState={(p) => {
                   this.setState(p);
                 }}
                 shortInfos={this.state.shortInfos}
+                commentsCount={this.state.commentsCount}
               />
               </div>
             </div>
