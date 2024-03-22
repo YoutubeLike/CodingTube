@@ -38,18 +38,35 @@ class Video extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
-    document.getElementById("shortsSection").addEventListener("scrollend", () => {
-      const video = document.getElementById(
-        "shortPlayer" + this.state.shortInfos.id
-      );
+    if (this.props.isFirstShort)
+      document.getElementById("shortPlayer" + this.state.shortInfos.id).play();
 
-      const position = document
-        .getElementById("short" + this.state.shortInfos.id)
-        .getBoundingClientRect();
-      if (Math.floor(position.top) == 59) {
-        console.log(this.state.shortInfos.id);
-      }
-    });
+    document
+      .getElementById("shortsSection")
+      .addEventListener("scrollend", () => {
+        const video = document.getElementById(
+          "shortPlayer" + this.state.shortInfos.id
+        );
+
+        const position = document
+          .getElementById("short" + this.state.shortInfos.id)
+          .getBoundingClientRect();
+        
+          if (this.props.id == 2) {
+            console.log(position.top);
+            console.log(window.innerHeight / 2)
+          }
+
+        if (position.top > 0 && position.top < window.innerHeight / 2) {
+          this.props.setState((state) => ({
+            currentIndex: state.loadedVideos.indexOf(this.state.shortInfos.id),
+          }));
+          video.play();
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
   }
 
   render() {
@@ -66,34 +83,42 @@ class Video extends React.Component {
             className="h-full w-full object-cover absolute behind"
             muted
             loop
-            autoPlay
           />
 
           {/* Contains video's informations */}
           <div className="flex flex-col justify-between h-full w-full group">
             {/* Contains pause button and sound button */}
-            <VideoButtons shortInfos={this.state.shortInfos} />
-
+            <VideoButtons
+              shortInfos={this.state.shortInfos}
+              isMuted={this.props.isMuted}
+              setState={this.props.setState}
+            />
 
             <div>
               {/* Contains uploader's informations and video's title */}
-              <VideoInfos className='absolute' shortInfos={this.state.shortInfos} />
+              <VideoInfos
+                className="absolute"
+                shortInfos={this.state.shortInfos}
+              />
 
               {/* COMMENTS TOGGLED: Right bar */}
-              <div className={this.state.commentsShown ? "absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl" : "hidden"}>
-              <SideBar
-                setState={(p) => {
-                  this.setState(p);
-                }}
-                shortInfos={this.state.shortInfos}
-                commentsCount={this.state.commentsCount}
-              />
+              <div
+                className={
+                  this.state.commentsShown
+                    ? "absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl"
+                    : "hidden"
+                }
+              >
+                <SideBar
+                  setState={(p) => {
+                    this.setState(p);
+                  }}
+                  shortInfos={this.state.shortInfos}
+                  commentsCount={this.state.commentsCount}
+                />
               </div>
             </div>
-
           </div>
-
-
         </div>
 
         {/* COMMENTS NOT TOGGLED: Right bar */}
