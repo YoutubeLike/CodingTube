@@ -73,12 +73,12 @@ export default function Search() {
     const displaySearchPage = async () => {
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
-      console.error(video);
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/search/displaySearchHistory/" + video
+          "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
+        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
@@ -89,7 +89,7 @@ export default function Search() {
 
   return (
     <div>
-      {videosInfos.map((result, index) => (
+      {videosInfos && videosInfos.map((result, index) => (
         <div key={index} className="h-auto mb-2">
           <a href={`/watch?video_id=${result.id}`}>
             <div className="flex flex-row">
@@ -108,7 +108,7 @@ export default function Search() {
                 <h3 className="text-black font-bold text-[100%]">
                   {result.title}
                 </h3>
-                <h4 className="text-gray text-[90%]">{result.channel.pseudo}</h4>
+                <h4 className="text-gray text-[90%]">{result.pseudo}</h4>
                 <h4 className="text-gray text-[90%]">
                   {result.number_view} views -{" "}
                   {getTimeElapsed(result.upload_date_time)} ago
