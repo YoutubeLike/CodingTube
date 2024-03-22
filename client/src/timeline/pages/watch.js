@@ -1,3 +1,5 @@
+//  PAGE DISPLAYING (THE VIDEO), RIGHT SIDE TIMELINE, (COMMENTARIES)
+
 import TimelineRightSide from "../component/timelineRightSide";
 import "../styles/Timeline.css";
 import { useState, useEffect } from "react";
@@ -11,6 +13,8 @@ import CheckSession from "../../session"
 var userId = 1;
 
 export default function Watch() {
+
+  /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "Watch - CodingTube";
   }, []);
@@ -42,6 +46,7 @@ export default function Watch() {
   }, [videoId]);
 
 
+  // Execute the SQL Request whitch adds the video's history
   const [errorHistory, setErrorHistory] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -67,11 +72,12 @@ export default function Watch() {
 
   return (
     <>
-      <DisplayedBurgerMenu />
+      {/* PAGE CONTENT */}
+      <DisplayedBurgerMenu /> {/* Burger menu */}
       <div>
         <h1 className="text-3xl font-bold underline">Video page</h1>
         <div class="flex inset-y-0 left-0 flex-col">
-          <TimelineRightSide />
+          <TimelineRightSide /> {/* Showing Advanced Timeline Right-Side*/}
         </div>
       </div>
     </>

@@ -1,3 +1,5 @@
+// Page that calculates advanced timeline scores
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -6,6 +8,7 @@ import CheckSession from "../../session"
 
 var userId = 1;
 
+// Function that checks whether 'you have subscribed to a channel using its ID
 function isChannelSubscribed(id_channel, subscriptionList) {
   if (subscriptionList.includes(id_channel)) {
     return true;
@@ -13,6 +16,7 @@ function isChannelSubscribed(id_channel, subscriptionList) {
   return false;
 }
 
+// Function that retrieves all the most viewed categories
 function GetMostViewedCategories() {
   var categoriesViewed = [];
 
@@ -129,7 +133,7 @@ export function SetScores(videosInfos) {
         }
       }
   
-      // If the video it's yours
+      // If the video is yours
       if (videosInfos[i]["channel_id"] == userId) {
         videosInfos[i]["score"] -= 100;
       }
