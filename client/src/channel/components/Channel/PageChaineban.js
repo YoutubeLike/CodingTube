@@ -68,12 +68,13 @@ const App = () => {
 
 	//Met à jour l'onglet actif en utilisant la fonction setActiveTab
 	const handleTabClick = (tabName) => {
-		setActiveTab(tabName);
+		setActiveTab(tabName); 
 	};
 
 	//Retourne la bon onglet actif
 	const renderContent = () => {
 		switch (activeTab) {
+			
 			case "Accueil":
 				return <Accueil />;
 			case "Vidéos":
