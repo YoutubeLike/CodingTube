@@ -3,70 +3,8 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
+import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
-
-// Function to calculate time elapsed since upload date
-function getTimeElapsed(uploadDateTime) {
-  const uploadDate = new Date(uploadDateTime);
-  const currentDate = new Date();
-
-  const elapsedMilliseconds = currentDate - uploadDate;
-  const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
-  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
-  const elapsedHours = Math.floor(elapsedMinutes / 60);
-  const elapsedDays = Math.floor(elapsedHours / 24);
-
-  if (elapsedDays > 0) {
-    return `${elapsedDays} days`;
-  } else if (elapsedHours > 0) {
-    return `${elapsedHours} hours`;
-  } else if (elapsedMinutes > 0) {
-    return `${elapsedMinutes} minutes`;
-  } else {
-    return `${elapsedSeconds} seconds`;
-  }
-}
-
-// Function that translates time in seconds into HH:MM:SS format
-function timeOfVideo(totalSeconds) {
-  var hours;
-  var minutes;
-  var seconds;
-  hours = Math.floor(totalSeconds / 3600);
-  totalSeconds %= 3600;
-  minutes = Math.floor(totalSeconds / 60);
-  seconds = totalSeconds % 60;
-  var result = "";
-  var resultSeconds = "";
-  var resultMinutes = "";
-  var resultHours = "";
-
-  // Seconds
-  if (seconds < 10) {
-    resultSeconds =  `0${seconds}`
-  } else {
-    resultSeconds =  `${seconds}`
-  }
-  // Minutes
-  if (minutes < 10) {
-    resultMinutes =  `0${minutes}:`
-  } else {
-    resultMinutes =  `${minutes}:`
-  }
-  // Hours
-  if (hours > 0) {
-    if (hours < 10) {
-      resultHours =  `0${hours}:`
-    } else {
-      resultHours =  `${hours}:`
-    }
-  } else {
-    resultHours =  ``
-  }
-  
-  result = `${resultHours}${resultMinutes}${resultSeconds}`
-  return result;
-}
 
 export default function TimeLine() {
 
@@ -93,7 +31,7 @@ export default function TimeLine() {
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
       <div key={i} className="max-w-[25%] h-auto mb-0 inline-block">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
@@ -119,7 +57,7 @@ export default function TimeLine() {
                 {videosInfos[i]["pseudo"]}
               </h4>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
                 
               </h4>
               <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
