@@ -73,12 +73,31 @@ class Video extends React.Component {
           <div className="flex flex-col justify-between h-full w-full group">
             {/* Contains pause button and sound button */}
             <VideoButtons shortInfos={this.state.shortInfos} />
-            {/* Contains uploader's informations and video's title */}
-            <VideoInfos shortInfos={this.state.shortInfos} />
+
+
+            <div>
+              {/* Contains uploader's informations and video's title */}
+              <VideoInfos className='absolute' shortInfos={this.state.shortInfos} />
+
+              {/* COMMENTS TOGGLED: Right bar */}
+              <div className={this.state.commentsShown ? "absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl" : "hidden"}>
+              <SideBar
+                setState={(p) => {
+                  this.setState(p);
+                }}
+                shortInfos={this.state.shortInfos}
+                commentsCount={this.state.commentsCount}
+              />
+              </div>
+            </div>
+
           </div>
+
+
         </div>
-        {/* Right bar */}
-        <div className={this.state.commentsShown ? "" : ""}>
+
+        {/* COMMENTS NOT TOGGLED: Right bar */}
+        <div className={this.state.commentsShown ? "hidden" : ""}>
           <SideBar
             setState={(p) => {
               this.setState(p);
@@ -87,6 +106,7 @@ class Video extends React.Component {
             commentsCount={this.state.commentsCount}
           />
         </div>
+
         {this.state.commentsShown && (
           <CommentBar
             setState={(p) => this.setState(p)}
