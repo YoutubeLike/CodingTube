@@ -8,6 +8,7 @@ const ProfilePage = () => {
     birthdate: false,
     country: false,
     gender: false,
+    password: false,
   });
 
   const [profileData, setProfileData] = useState({
@@ -73,11 +74,22 @@ const ProfilePage = () => {
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
 
+  // tabs set
+
+  const [toggleState, setToggleState] = useState(1);
+
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div>
       {/* banner */}
 
-      <div className="bg-gradient-to-r from-lime-300 to-green-500 shadow-inner rounded-md">
+      <div className="bg-gradient-to-r from-lime-300 to-green-500 shadow-inner rounded-t-md ml-56 mr-14 bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto w-auto mt-4">
         <div className="flex justify-end">
           {/* the button that alow us to change the banner and the */}
 
@@ -139,7 +151,8 @@ const ProfilePage = () => {
           <div className=" rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] ">
             <p className=" text-center text-2xl font-bold">CodingTube</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
-              @{profileData.first_name} {profileData.last_name} ·0·
+              @{profileData.first_name}
+              {profileData.last_name} ·0·
             </p>
             <div class=" mt-10 relative inline-flex  group">
               <div class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
@@ -158,382 +171,553 @@ const ProfilePage = () => {
 
       {/* information part */}
 
-      <div className=" mx-20">
-        <div className="p-1 m-5 w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-md bg-white">
-          <h1 className="mt-5 ml-5 text-2xl font-bold">Information</h1>
-
-          <hr className="mt-4 mb-5 mx-5" />
-
-          {/* name */}
-
-          <form
-            className=" mt-5 flex items-center"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEditToggle("fullName");
-              updateUser();
-            }}
-          >
-            <p className="text-xl font-semibold ml-5"> Full Name</p>
-
-            <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-              <button
-                className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                type="submit"
-              >
-                {isEditing.fullName ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-4 h-4"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                )}
-                {/* icon */}
-              </button>
+      <div className="ml-52 mr-10">
+        <div className="p-1 mx-4 w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
+          <div className="flex space-x-4 border-b-2 border-gray-300 sticky mx-5 bg-white top-0">
+            <div
+              className={
+                toggleState === 1
+                  ? "border-b-4 border-red-500"
+                  : "border-b-4 border-white"
+              }
+              onClick={() => toggleTab(1)}
+            >
+              <h1 className="mt-5  text-2xl font-bold cursor-pointer">
+                Information
+              </h1>
             </div>
+            <div
+              className={
+                toggleState === 2
+                  ? "border-b-4 border-red-500"
+                  : "border-b-4 border-white"
+              }
+              onClick={() => toggleTab(2)}
+            >
+              <h1 className="mt-5  text-2xl font-bold cursor-pointer">
+                Password
+              </h1>
+            </div>
+          </div>
+          <div className={toggleState === 1 ? "visible" : "hidden"}>
+            {/* name */}
 
-            <div className="flex mx-5">
-              <div className=" my-5 flex items-center">
-                <lable>
-                  <span class="text-sm text-gray-500">First Name</span>:{""}
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("fullName");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5"> Full Name</p>
+
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button
+                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                  type="submit"
+                >
                   {isEditing.fullName ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className="flex mx-5">
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span class="text-sm text-gray-500">First Name</span>:{""}
+                    {isEditing.fullName ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.first_name}
+                        onChange={(e) => {
+                          handleInputChange(e, "first_name");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.first_name} </b>
+                    )}
+                  </label>
+                </div>
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span class="text-sm text-gray-500">Last Name</span>:{""}
+                    {isEditing.fullName ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.last_name}
+                        onChange={(e) => {
+                          handleInputChange(e, "last_name");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.last_name} </b>
+                    )}
+                  </label>
+                </div>
+              </div>
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
+
+            {/* mail */}
+
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("mail");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5">Mail Address</p>
+
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button
+                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                  type="submit"
+                >
+                  {isEditing.mail ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className=" mx-5 flex items-center">
+                <label>
+                  <span className="text-sm text-gray-500">Mail</span>:
+                  {isEditing.mail ? (
                     <input
-                      type="text"
-                      className=" ml-2 mr-5"
-                      value={profileData.first_name}
+                      type="email"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.mail}
                       onChange={(e) => {
-                        handleInputChange(e, "first_name");
+                        handleInputChange(e, "mail");
                       }}
                     />
                   ) : (
-                    <b className=" ml-2 mr-5">{profileData.first_name} </b>
+                    <b className=" ml-2 mr-5">{profileData.mail} </b>
                   )}
-                </lable>
+                </label>
               </div>
-              <div className=" my-5 flex items-center">
-                <lable>
-                  <span class="text-sm text-gray-500">Last Name</span>:{""}
-                  {isEditing.fullName ? (
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
+
+            {/* birthdate */}
+
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("birthdate");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5">Birthdate</p>
+
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                  {isEditing.birthdate ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className=" mx-5 flex items-center">
+                <label>
+                  <span className="text-sm text-gray-500">Birthdate</span>:
+                  {isEditing.birthdate ? (
                     <input
-                      type="text"
-                      className=" ml-2 mr-5"
-                      value={profileData.last_name}
+                      type="date"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.birthdate}
                       onChange={(e) => {
-                        handleInputChange(e, "last_name");
+                        handleInputChange(e, "birthdate");
                       }}
                     />
                   ) : (
-                    <b className=" ml-2 mr-5">{profileData.last_name} </b>
+                    <b className=" ml-2 mr-5">
+                      {formatDateForDisplay(profileData.birthdate)}{" "}
+                    </b>
                   )}
-                </lable>
+                </label>
               </div>
-            </div>
-            <hr className="mt-4 mb-8 mx-5" />
-          </form>
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
 
-          {/* mail */}
+            {/* country */}
 
-          <form
-            className=" mt-5 flex items-center"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEditToggle("mail");
-              updateUser();
-            }}
-          >
-            <p className="text-xl font-semibold ml-5">Mail Address</p>
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("country");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5">Country</p>
 
-            <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-              <button
-                className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                type="submit"
-              >
-                {isEditing.mail ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                  {isEditing.country ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className=" mx-5 flex items-center">
+                <label>
+                  <span className="text-sm text-gray-500">Country</span>:
+                  {isEditing.country ? (
+                    <input
+                      type="text"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.country}
+                      onChange={(e) => {
+                        handleInputChange(e, "country");
+                      }}
                     />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                )}
-                {/* icon */}
-              </button>
-            </div>
+                  ) : (
+                    <b className=" ml-2 mr-5">{profileData.country} </b>
+                  )}
+                </label>
+              </div>
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
 
-            <div className=" mx-5 flex items-center">
-              <label>
-                <span className="text-sm text-gray-500">Mail</span>:
-                {isEditing.mail ? (
+            {/* gender */}
+
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("gender");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5">Gender</p>
+
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                  {isEditing.gender ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className=" mx-5 flex-col items-center">
+                <label>
+                  <span className="text-sm text-gray-500">Gender</span>:
+                  {isEditing.gender ? (
+                    <input
+                      type="text"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.gender}
+                      onChange={(e) => {
+                        handleInputChange(e, "gender");
+                      }}
+                    />
+                  ) : (
+                    <b className=" ml-2 mr-5">{profileData.gender} </b>
+                  )}
+                </label>
+              </div>
+
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
+          </div>
+
+          {/* password content */}
+          <div className={toggleState === 2 ? "visible" : "hidden"}>
+            <form
+              className="mt-5 flex flex-col"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("password");
+                // Implement the logic to update the password here
+              }}
+            >
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5 mb-0">
+                  Change Password
+                </p>
+
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-8 rounded-md  flex justify-center items-center">
+                    {isEditing.password ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
+              </div>
+
+              <div className="mx-5 flex flex-col mb-3">
+                <label className="text-sm text-gray-500 mb-1">
+                  Current Password
+                </label>
+                {isEditing.password ? (
                   <input
-                    type="email"
-                    className=" ml-2 mr-5"
-                    value={profileData.mail}
-                    onChange={(e) => {
-                      handleInputChange(e, "mail");
-                    }}
+                    type={showPassword ? "text" : "password"}
+                    className="px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                    // Add value and onChange event handler
                   />
                 ) : (
-                  <b className=" ml-2 mr-5">{profileData.mail} </b>
+                  <b className="ml-2">******</b>
                 )}
-              </label>
-            </div>
-            <hr className="mt-4 mb-8 mx-5" />
-          </form>
-
-          {/* birthdate */}
-
-          <form
-            className=" mt-5 flex items-center"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEditToggle("birthdate");
-              updateUser();
-            }}
-          >
-            <p className="text-xl font-semibold ml-5">Birthdate</p>
-
-            <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-              <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                {isEditing.birthdate ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                )}
-                {/* icon */}
-              </button>
-            </div>
-
-            <div className=" mx-5 flex items-center">
-              <label>
-                <span className="text-sm text-gray-500">Birthdate</span>:
-                {isEditing.birthdate ? (
+              </div>
+              <div className="mx-5 flex flex-col mb-3">
+                <label className="text-sm text-gray-500 mb-1">
+                  New Password
+                </label>
+                {isEditing.password ? (
                   <input
-                    type="date"
-                    className=" ml-2 mr-5"
-                    value={profileData.birthdate}
-                    onChange={(e) => {
-                      handleInputChange(e, "birthdate");
-                    }}
+                    type={showPassword ? "text" : "password"}
+                    className="px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                    pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$"
+                    title="Password must be at least 8 characters long and contain at least one number and one special character"
+                    // Add value and onChange event handler
                   />
                 ) : (
-                  <b className=" ml-2 mr-5">{formatDateForDisplay(profileData.birthdate)} </b>
+                  <b className="ml-2">******</b>
                 )}
-              </label>
-            </div>
-            <hr className="mt-4 mb-8 mx-5" />
-          </form>
-
-          {/* country */}
-
-          <form
-            className=" mt-5 flex items-center"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEditToggle("country");
-              updateUser();
-            }}
-          >
-            <p className="text-xl font-semibold ml-5">Country</p>
-
-            <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-              <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                {isEditing.country ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                )}
-                {/* icon */}
-              </button>
-            </div>
-
-            <div className=" mx-5 flex items-center">
-              <label>
-                <span className="text-sm text-gray-500">Country</span>:
-                {isEditing.country ? (
+              </div>
+              <div className="mx-5 flex flex-col mb-3">
+                <label className="text-sm text-gray-500 mb-1">
+                  Confirm New Password
+                </label>
+                {isEditing.password ? (
                   <input
-                    type="text"
-                    className=" ml-2 mr-5"
-                    value={profileData.country}
-                    onChange={(e) => {
-                      handleInputChange(e, "country");
-                    }}
+                    type={showPassword ? "text" : "password"}
+                    className="px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                    // Add value and onChange event handler
                   />
                 ) : (
-                  <b className=" ml-2 mr-5">{profileData.country} </b>
+                  <b className="ml-2">******</b>
                 )}
-              </label>
-            </div>
-            <hr className="mt-4 mb-8 mx-5" />
-          </form>
-
-          {/* gender */}
-
-          <form
-            className=" mt-5 flex items-center"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleEditToggle("gender");
-              updateUser();
-            }}
-          >
-            <p className="text-xl font-semibold ml-5">Gender</p>
-
-            <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-              <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                {isEditing.gender ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                )}
-                {/* icon */}
-              </button>
-            </div>
-
-            <div className=" mx-5 flex-col items-center">
-              <label>
-                <span className="text-sm text-gray-500">Gender</span>:
-                {isEditing.gender ? (
-                  <input
-                    type="text"
-                    className=" ml-2 mr-5"
-                    value={profileData.gender}
-                    onChange={(e) => {
-                      handleInputChange(e, "gender");
-                    }}
+              </div>
+            </form>
+            <button
+              className={
+                isEditing.password
+                  ? "drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md mx-5 flex justify-center items-center"
+                  : "hidden"
+              }
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"
                   />
-                ) : (
-                  <b className=" ml-2 mr-5">{profileData.gender} </b>
-                )}
-              </label>
-            </div>
-
-            <hr className="mt-4 mb-8 mx-5" />
-          </form>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>
