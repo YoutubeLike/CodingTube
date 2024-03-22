@@ -5,7 +5,6 @@ import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
 import axios from "axios";
 import "../../index.css";
-import { Cookies } from "react-cookie";
 
 class Authentification extends React.Component {
   constructor(props) {
