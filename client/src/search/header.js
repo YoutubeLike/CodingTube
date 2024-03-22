@@ -119,8 +119,9 @@ export default function Header() {
 
 
   return (
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 absolute">
-      <div className="flex w-[33%] h-7">
+    // Header component containing search bar and buttons
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white absolute">
+      <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <div className="flex w-[99%] h-6 ml-2 mt-0.5 z-20 relative">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt=""></img>
