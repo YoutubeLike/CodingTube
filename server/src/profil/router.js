@@ -72,7 +72,7 @@ router.post("/register", async (req, res) => {
           await InsertUser(registerData);
           const userId = await GetUserId(registerData.mail);
             req.session.userId = userId;
-
+            req.session.save();
             console.log(req.session.userId + " logged in");
             return res.json({message: 'registered !'});
         } else {
@@ -111,13 +111,16 @@ router.post("/login", async (req, res) => {
         if (isPasswordMatch) {
             // Create a session and save the id of the user to it
             const userId = await GetUserId(loginData.usernameOrMail);
+            res.setHeader('Content-Type', 'text/html')
+            // res.setHeader('Set-Cookie: ')
 
-            req.session.userId = userId;
+            req.session.userId = userId ;
+            await req.session.save()
+            console.log(req.sessionID)
             console.log(req.session.userId + " logged in");
-            return res.json({ message: 'logged in !' });
-
-
-
+            console.log(req.session)
+            res.cookie("CodingTube", req.session)
+            return res.json(req.session);
 
             //return res.status(400).json({ error: "User logged In Successfully!" });
             //return res.status(200).json({ redirectTo: '/' });

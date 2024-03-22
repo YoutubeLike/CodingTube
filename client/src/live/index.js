@@ -1,9 +1,14 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom"
 
 export default function Live()
 {
+    console.log(document)
+    axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
+        console.log(response.data)
+    })
     const [UserInLive, setUserInLive] = useState([])
     useEffect(() => {
         axios.get("http://localhost:8090/api/streams")        

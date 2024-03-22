@@ -5,6 +5,7 @@ import TransitionToLogin from "../Transitions/TransitionToLogin";
 import TransitionToRegister from "../Transitions/TransitionToRegister";
 import axios from "axios";
 import "../../index.css";
+import { Cookies } from "react-cookie";
 
 class Authentification extends React.Component {
   constructor(props) {
@@ -127,9 +128,14 @@ class Authentification extends React.Component {
         // Envoie les données de connexion au serveur
         const response = await axios.post(
           "http://localhost:5000/api/profil/login",
-          formData
+          formData,
+          {
+            withCredentials: true,
+          }
         )
-          //window.location.href = response.data.redirectTo;
+        // const { Cookies } = require('react-cookie')
+        // new Cookies().set("SuperCookie", response.data)
+        //window.location.href = response.data.redirectTo;
         // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodLogin: response.data.message,

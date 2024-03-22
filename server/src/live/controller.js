@@ -70,10 +70,16 @@ const display = ((req, res) => {
 
 })
 
+const test = ((req, res) => {
+  console.log(req.session.userId)
+  res.send("" + req.session.userUsername)
+})
+
 module.exports = {
     saveThumbnail,
     sendThumbnail,
     GetProfilPicture,
     GetUsername,
-    display
+    display,
+    test
 }
