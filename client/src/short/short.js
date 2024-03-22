@@ -13,12 +13,19 @@ class Short extends React.Component {
   }
 
   async componentDidMount() {
-    // Get shorts list
+    // Get shorts list and set the two first shorts 
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-shorts-list"
       );
-      this.setState({ availableIds: response.data.map((object) => object.id) });
+      const IdsList = response.data.map((object) => object.id);
+      this.setState({
+        availableIds: IdsList.slice(2, IdsList.length),
+        renderedElements: [
+          <Video id={IdsList[0]} />,
+          <Video id={IdsList[1]} />,
+        ],
+      });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -28,8 +35,8 @@ class Short extends React.Component {
     if (this.state.availableIds.length > 0) {
       const videoElement = <Video id={this.state.availableIds[0]} />;
       this.setState((state) => ({
-        availableIds: state.availableIds.slice(1, state.availableIds.length),
         renderedElements: state.renderedElements.concat([videoElement]),
+        availableIds: state.availableIds.slice(1, state.availableIds.length),
       }));
     }
   }
@@ -41,8 +48,6 @@ class Short extends React.Component {
         className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
         onScroll={this.loadShort}
       >
-        <Video id={1} />
-        <Video id={2} />
         {this.state.renderedElements.map((element) => element)}
       </div>
     );
