@@ -25,7 +25,7 @@ const App = () => {
 				const urlParams = new URLSearchParams(window.location.search);
 				setIdentifier(urlParams.get("identifier"));
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/infos", {params: {identifier: urlParams.get("identifier")}}
+					"http://localhost:5000/api/channel/infosId", {params: {identifier: urlParams.get("identifier")}}
 				);
 
 				// Attribution of information

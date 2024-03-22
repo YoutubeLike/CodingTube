@@ -7,6 +7,7 @@ const router = express.Router();
 // Import des fonctions
 const {
 	selectChannel,
+	selectChannelIdentifier,
 	selectId,
 	videoOnTab,
 	NumberVideo,
@@ -18,6 +19,7 @@ const {
 
 // Configuration de la route
 router.get("/infos", selectChannel);
+router.get("/infosId", selectChannelIdentifier);
 router.get("/id", selectId);
 router.get("/video", selectVideo);
 router.post("/submitChannel", submitChannel);

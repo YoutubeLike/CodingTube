@@ -37,6 +37,16 @@ const UserChannel = async (_, res) => {
 };
 
 // Récupérer des infos sur la chaîne
+const selectChannel = (req, res) => {
+    const id = req.query.idChannel;
+    mariadb.pool
+        .query("SELECT * FROM channel WHERE id = ?", [id])
+        .then((value) => {
+            res.send(value[0]);
+        });
+};
+
+// Récupérer des infos sur la chaîne à partir d'un identifiant @
 const selectChannelIdentifier= (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool
@@ -151,6 +161,7 @@ const submitVideo = (req, res) => {
 //Permet d'exporter les fonctions
 module.exports = {
 	selectChannel,
+	selectChannelIdentifier,
 	selectId,
 	videoOnTab,
 	NumberVideo,
