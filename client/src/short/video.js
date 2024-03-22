@@ -10,33 +10,46 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
+      commentsCount: 0,
       commentsShown: false,
     };
   }
 
   async componentDidMount() {
+    // Get short infos
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/short-request",
+        "http://localhost:5000/api/short/get-short-infos",
         { params: { shortId: this.props.id } }
       );
       this.setState({ shortInfos: response.data });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    // Get comments count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-comments",
+        { params: { shortId: this.props.id } }
+      );
+      this.setState({ commentsCount: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
   }
 
   render() {
-    return (
+    return this.state.shortInfos.id != null ? (
       <div
-        id={"short" + this.state.id}
+        id={"short" + this.state.shortInfos.id}
         className="mb-[1vh] flex justify-center"
       >
         {/* Contains video and its informations */}
         <div className="h-[80vh] w-[45vh] flex flex-col justify-between relative snap-center rounded-[0.7vh] overflow-hidden">
           <video
             src="1.mp4"
-            id={"shortPlayer" + this.state.id}
+            id={"shortPlayer" + this.state.shortInfos.id}
             className="h-full w-full object-cover absolute behind"
             muted
             autoPlay
@@ -52,19 +65,25 @@ class Video extends React.Component {
           </div>
         </div>
         {/* Right bar */}
-        <div className={this.state.commentsShown ? "absolute mr-[90px] b-[30px]" : ""}>
+        <div className={this.state.commentsShown ? "" : ""}>
           <SideBar
             setState={(p) => {
               this.setState(p);
             }}
             shortInfos={this.state.shortInfos}
-        />
+            commentsCount={this.state.commentsCount}
+          />
         </div>
         {this.state.commentsShown && (
-          <CommentBar setState={p => (this.setState(p))} shortInfos={this.state.shortInfos} />
-
+          <CommentBar
+            setState={(p) => this.setState(p)}
+            shortInfos={this.state.shortInfos}
+            commentsCount={this.state.commentsCount}
+          />
         )}
       </div>
+    ) : (
+      <p>Loading...</p>
     );
   }
 }
