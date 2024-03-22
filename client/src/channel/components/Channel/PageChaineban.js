@@ -22,8 +22,10 @@ const App = () => {
 		const fetchChannelInfo = async () => {
 			try {
 				// Requête pour récupérer les informations de la chaîne
+				const urlParams = new URLSearchParams(window.location.search);
+				setIdentifier(urlParams.get("identifier"));
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/infos"
+					"http://localhost:5000/api/channel/infos", {params: {identifier: urlParams.get("identifier")}}
 				);
 
 				// Attribution des informations
@@ -31,7 +33,6 @@ const App = () => {
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
-				setIdentifier(response.data.identifier_channel);
 			} catch (error) {
 				console.error(
 					"Erreur lors de la récupération des informations de la chaîne :",
@@ -123,7 +124,7 @@ const App = () => {
 				<div className="channel-info ml-4 flex flex-col items-start h-48 justify-around">
 					<h1 className="text-start text-5xl font-bold">{pseudo}</h1>
 					<p className="text-start">
-						@{identifier} - {follower} abonnés - {numberVideo} vidéos
+						{identifier} - {follower} abonnés - {numberVideo} vidéos
 					</p>
 					{/*Pop-up de la bio*/}
 					<div>
