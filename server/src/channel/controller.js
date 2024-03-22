@@ -1,27 +1,57 @@
 //Connexion à la Bdd
 const mariadb = require("../src/database");
 
+const UserChannel = async (_, res) => {
+	try {
+		const userData = "tokenId"; // Remplacez "NomUtilisateur" par la valeur appropriée
+
+		// Obtenez l'ID de l'utilisateur en utilisant GetUserId avec les données fournies
+		const isLoggedIn = await GetUserId(userData);
+
+		// Si l'ID de l'utilisateur est trouvé avec succès
+		if (isLoggedIn) {
+			// Exécutez la requête SQL pour récupérer les informations du canal associé à cet utilisateur
+			const result = await mariadb.pool.query(
+				"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = ?",
+				[isLoggedIn]
+			);
+
+			// Envoyez les informations du canal en réponse
+			res.send(result[0]);
+		} else {
+			// Si aucun ID d'utilisateur n'a été trouvé, renvoyez une réponse appropriée
+			res.send("Aucun utilisateur trouvé avec les informations fournies.");
+		}
+	} catch (error) {
+		// Si une erreur se produit à n'importe quelle étape, capturez-la et envoyez une réponse d'erreur appropriée
+		console.log(
+			"Erreur lors de la récupération des informations du canal:",
+			error
+		);
+		res
+			.status(500)
+			.send(
+				"Une erreur s'est produite lors de la récupération des informations du canal."
+			);
+	}
+};
+
 // Récupérer des infos sur la chaîne
-const selectChannel = (_, res) => {
+const selectChannel = (req, res) => {
+	const id = req.query.idChannel;
 	mariadb.pool
-		.query(
-			"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = 1"
-		)
+		.query("SELECT * FROM channel WHERE id = ?", [id])
 		.then((value) => {
 			res.send(value[0]);
 		});
 };
 
 // Récupérer des informations sur la vidéo
-
-const selectVideo = (_, res) => {
-	mariadb.pool
-		.query(
-			"SELECT title, description, channel_id, upload_video_url, upload_date_time, number_view, nb_comment, nb_like FROM video WHERE channel_id = 1"
-		)
-		.then((value) => {
-			res.send(value[0]);
-		});
+const selectVideo = (req, res) => {
+	const id = req.query.idVideo;
+	mariadb.pool.query("SELECT * FROM video WHERE id = ?", [id]).then((value) => {
+		res.send(value[0]);
+	});
 };
 
 const submitChannel = (req, res) => {
@@ -96,4 +126,5 @@ module.exports = {
 	submitChannel,
 	submitVideo,
 	selectVideo,
+	UserChannel,
 };
