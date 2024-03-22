@@ -117,6 +117,7 @@ export default function Header() {
     }
   }
 
+
   return (
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 absolute">
       <div className="flex w-[33%] h-7">
@@ -132,7 +133,10 @@ export default function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             submit(searchValue);
-            navigate("search/");
+            navigate({
+              pathname: '/search',
+              search: '?videoName=' + searchValue,
+            });
           }}
         >
           <div
