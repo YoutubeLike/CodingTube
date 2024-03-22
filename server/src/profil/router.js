@@ -8,10 +8,10 @@ const {
   GetPasswordFromUsernameOrEmail,
 } = require("./authentication");
 const { userData } = require("./userData.js")
-const {updateUser} = require("./userUpdate.js")
+const{ userUpdate } = require("./userUpdate.js")
 
 router.get("/userData/:info_user", userData)
-router.post("/updateUser/:updatedUserData", updateUser)
+router.post("/userUpdate", userUpdate)
 
 router.post("/register", async (req, res) => {
   const registerData = req.body.registerData;

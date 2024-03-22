@@ -21,22 +21,21 @@ const ProfilePage = () => {
 
   const updateUser = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/profil/updateUser/1", {
-        updatedUserData: {
-          id: profileData.id,
-          firstName: profileData.firstName,
-          lastName: profileData.lastName,
-          email: profileData.email,
-          birthday: profileData.birthday,
-          location: profileData.location,
-          gender: profileData.gender
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/userUpdate",
+        {
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          mail: profileData.mail,
+          birthdate: profileData.birthdate,
+          country: profileData.country,
+          gender: profileData.gender,
         }
-      });
-      console.log(response.data.message);
-      console.log("modification réalisé")
+      );
+      console.log(response.data);
     } catch (error) {
       console.error("Error updating user:", error);
-      console.log("erreur à la connexion avec le back")
+      console.log("erreur à la connexion avec le back");
     }
   };
 
@@ -69,22 +68,23 @@ const ProfilePage = () => {
     }));
   };
 
+  const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
   return (
     <div>
-
       {/* banner */}
 
       <div className="bg-gradient-to-r from-lime-300 to-green-500 shadow-inner rounded-md">
         <div className="flex justify-end">
-
           {/* the button that alow us to change the banner and the */}
 
           <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
             <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md  flex justify-center items-center">
               {" "}
-
               {/* icon */}
-
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -103,7 +103,6 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className=" py-10 flex space-x-10">
-
           {/* profile picture */}
 
           <div className=" ml-10 border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]  w-52 h-52 rounded-full ">
@@ -263,6 +262,7 @@ const ProfilePage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleEditToggle("mail");
+              updateUser();
             }}
           >
             <p className="text-xl font-semibold ml-5">Mail Address</p>
@@ -334,6 +334,7 @@ const ProfilePage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleEditToggle("birthdate");
+              updateUser();
             }}
           >
             <p className="text-xl font-semibold ml-5">Birthdate</p>
@@ -388,7 +389,7 @@ const ProfilePage = () => {
                     }}
                   />
                 ) : (
-                  <b className=" ml-2 mr-5">{profileData.birthdate} </b>
+                  <b className=" ml-2 mr-5">{formatDateForDisplay(profileData.birthdate)} </b>
                 )}
               </label>
             </div>
@@ -402,6 +403,7 @@ const ProfilePage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleEditToggle("country");
+              updateUser();
             }}
           >
             <p className="text-xl font-semibold ml-5">Country</p>
@@ -470,6 +472,7 @@ const ProfilePage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               handleEditToggle("gender");
+              updateUser();
             }}
           >
             <p className="text-xl font-semibold ml-5">Gender</p>
