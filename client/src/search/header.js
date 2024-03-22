@@ -123,10 +123,6 @@ export default function Header() {
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white absolute">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
-        <div className="flex w-[99%] h-6 ml-2 mt-0.5 z-20 relative">
-          <img className="w-6 h-6 mr-0.5" src="favicon.png" alt=""></img>
-          <p>CODITUBE</p>
-        </div>
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
         <form
