@@ -1,58 +1,52 @@
 // File containing all the HTML content to be displayed
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import {GetTimeElapsed, TimeOfVideo} from "../../functions/VideoTiming";
-
-import CheckSession from "../../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
+import axios from 'axios';
+import {SetScoresTrendings} from "../functions/TrendingsScoreCalculator.js";
+import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
 
-export default function ListSubscriptionTimeLine() {
+
+export default function TrendingsTimeLine() {
+
   // Get the informations of the SQL Request by the URL
-  const [videosInfos, setVideosInfos] = useState([]);
+  var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/timeline/subscription-timeline-request"
-          ,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          `http://localhost:5000/api/timeline/timeline-request`
         );
         setVideosInfos(response.data);
       } catch (error) {
-        console.error("Error fetching videos:", error);
+        console.error('Error fetching videos:', error);
       }
     };
     fetchVideos();
   }, []);
 
-  var indents = [];
-  if (videosInfos.length === 0) {
-    indents.push(
-      <div>
-        <p className="p-5 bg-red-700 text-white rounded-lg">
-          No video, subscribe to at least one channel that has published videos
-        </p>
-      </div>
-    );
+  
+  videosInfos = SetScoresTrendings(videosInfos);
+  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
+  
+  if (videosInfos.length > 10) {
+    videosInfos.slice(10, videosInfos.length);
   }
 
+  var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="mb-10">
+      <div key={i} className="mb-10 flex content-center">
+        <div className="bg-orange-500 min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
+          <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">🔥 {i+1}</h1>
+        </div>
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
           <div class="flex flex-row">
             <div class="relative">
               <img
-                class="thumbnail-subscribe-list"
+                class="thumbnail-trendings-list"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />
@@ -61,7 +55,7 @@ export default function ListSubscriptionTimeLine() {
               </p>
             </div>
 
-            <div className="ml-2.5 w-[55%]">
+            <div className="ml-2.5 w-[85%]">
               <h3 className="text-black font-bold text-[120%]">
                 {videosInfos[i]["title"]}
               </h3>
@@ -75,9 +69,6 @@ export default function ListSubscriptionTimeLine() {
                   {videosInfos[i]["pseudo"]}
                 </h4>
               </div>
-              <p className="mt-2 text-balance truncate text-xs">
-                {videosInfos[i]["description"]}
-              </p>
             </div>
           </div>
         </a>

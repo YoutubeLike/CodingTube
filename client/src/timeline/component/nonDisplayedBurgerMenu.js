@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+
 export default function NonDisplayedBurgerMenu() { 
     return( 
       <div className="text-black bg-white w-20 h-screen flex flex-col items-center text-xs space-y-8">

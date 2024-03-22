@@ -1,7 +1,14 @@
+// File containing all the HTML content to be displayed
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+import CheckSession from "../../session"
+//const { isLoggedIn, userId } = CheckSession();
+
+var userId = 1;
 
 const DisplayedBurgerMenu = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -57,7 +64,11 @@ var divContent3 = [];
     const fetch = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/timeline/subscribe-list-request-menu"
+          `http://localhost:5000/api/timeline/subscribe-list-request-menu`,{
+            params: {
+              userIdParam: userId,
+            },
+          }
         );
         setSubscribeListInfos(response.data);
       } catch (error) {
