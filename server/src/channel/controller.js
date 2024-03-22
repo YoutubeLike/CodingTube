@@ -37,7 +37,24 @@ const UserChannel = async (_, res) => {
 };
 
 // Récupérer des infos sur la chaîne
-const selectChannel = (req, res) => {
+const selectChannelIdentifier= (req, res) => {
+	const identifier = req.query.identifier;
+	mariadb.pool
+		.query(
+			"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE identifier_channel = ?", [identifier]
+		)
+		.then((value) => {
+			res.send(value[0]);
+		});
+};
+
+// Récupérer l'id à partir de l'identifier
+const selectId = (req, res) => {
+	const identifier = req.query.identifier;
+	mariadb.pool
+		.query(
+			"SELECT id FROM channel WHERE identifier_channel = ?", [identifier]
+		)
 	const id = req.query.idChannel;
 	mariadb.pool
 		.query("SELECT * FROM channel WHERE id = ?", [id])
@@ -54,16 +71,29 @@ const selectVideo = (req, res) => {
 	});
 };
 
-const submitChannel = (req, res) => {
+const submitChannel = async (req, res) => {
 	const { name, identifier, bio, banner, profile_picture } = req.body;
-	mariadb.pool
+	const isIdentifierAvailable = await mariadb.pool
 		.query(
-			"INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio, banner, profile_picture) VALUES (1, ?, ?, 0, ?, ?, ?)",
-			[name, identifier, bio, banner, profile_picture]
+			"SELECT identifier_channel FROM channel WHERE identifier_channel = ?",
+			[identifier]
 		)
-		.then(() => {
-			res.status(200).send("Chaîne créer");
-		});
+
+	if (isIdentifierAvailable[0] == null){
+		mariadb.pool
+			.query(
+				"INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio, banner, profile_picture) VALUES (1, ?, ?, 0, ?, ?, ?)",
+				[name, identifier, bio, banner, profile_picture]
+			)
+			.then(() => {
+				res.status(200).send("Channel created");
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+		} else {
+			res.status(200).send("Identifiant déjà utilisé");
+		}
 };
 
 //Récupère les vidéos postées
@@ -121,6 +151,7 @@ const submitVideo = (req, res) => {
 //Permet d'exporter les fonctions
 module.exports = {
 	selectChannel,
+	selectId,
 	videoOnTab,
 	NumberVideo,
 	submitChannel,

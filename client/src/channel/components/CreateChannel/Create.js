@@ -13,24 +13,32 @@ export default function Create() {
 	const [identifier, setIdentifier] = useState("@");
 	const [bio, setBio] = useState("");
 	const [banner, setBannerPreview] = useState(null);
-	const { userId } = CheckSession();
+	const [message, setMessage] = useState(null);
 
-	console.log("Token Id = ", userId);
 
 	console.log(banner);
 
 	const submit = async (event) => {
 		event.preventDefault();
 		try {
-			axios.post("http://localhost:5000/api/channel/submitChannel", {
-				// idUser: userId,
+			const message = await axios.post("http://localhost:5000/api/channel/submitChannel", {
 				name: name,
 				identifier: identifier,
 				bio: bio,
 				banner: banner,
 				profile_picture: imagePreview,
 			});
-			console.log("Requête envoyée");
+			if (message.data == "Channel created") {
+				try {
+					const request = await axios.get("http://localhost:5000/api/channel/id", {params: {identifier: identifier}})
+					// session = request.data.id
+					window.location.href = 'http://localhost:3000/channel?identifier=' + identifier;
+				} catch (error) {
+					console.error("Une erreur s'est produite lors de l'envoi : ", error);
+				}
+			} else {
+				setMessage(message.data);
+			}
 			//redirectLinkRef.current.click(); // Déclenchez un clic sur le lien de redirection
 		} catch (error) {
 			console.error("Une erreur s'est produite lors de l'envoi : ", error);
@@ -171,6 +179,8 @@ export default function Create() {
 								onChange={(e) => setBio(e.target.value)}
 								className="w-full p-2 mb-4 border border-gray-300 rounded"
 							/>
+
+							{message != null && <p className="text-red-700">{message}</p>}
 
 							<input
 								type="submit"
