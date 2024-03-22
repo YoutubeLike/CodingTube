@@ -1,15 +1,15 @@
-const mariadb = require('mariadb');
-const dotenv = require('dotenv');
+const mariadb = require("mariadb");
+const dotenv = require("dotenv");
 dotenv.config();
 
 var pool = mariadb.createPool({
-    host: 'bdd', 
-    user: process.env.BDD_USER, 
-    password: process.env.BDD_PASSWORD,
-    
-    database: "coditube"
+  host: "bdd",
+  user: "admin",
+  password: "admin",
+
+  database: "coditube",
 });
 
 module.exports = Object.freeze({
-    pool: pool
-})
+  pool: pool,
+});

@@ -1,7 +1,10 @@
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+const stripe = require("stripe")(
+  "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"
+);
 require("dotenv").config();
 
 const premium = async (req, res) => {
+  // id de l'api
   const storeItems = new Map([
     [
       1,
@@ -26,22 +29,23 @@ const premium = async (req, res) => {
     ],
   ]);
   try {
+    const account = await stripe.accounts.create({
+      type: "express",
+    });
     const session = await stripe.checkout.sessions.create({
-      // type de payments subscription or payments
+      // type de payments subscription ou payments
       mode: "subscription",
-      line_items:
-        // id de l'api
-        req.body.products.items.map((item) => {
-          const storeItem = storeItems.get(item.id);
-          return {
-            price: storeItem.priceInCents,
-            quantity: 1,
-          };
-        }),
+      line_items: req.body.products.items.map((item) => {
+        const storeItem = storeItems.get(item.id);
+        return {
+          price: storeItem.priceInCents,
+          quantity: 1,
+        };
+      }),
 
       // redirection page for success and cancel
-      success_url: `${process.env.SERVER_URL}/`,
-      cancel_url: `${process.env.SERVER_URL}/premium`,
+      success_url: `http://localhost:3000/`,
+      cancel_url: `http://localhost:3000/premium`,
     });
     res.json({ url: session.url });
   } catch (e) {
