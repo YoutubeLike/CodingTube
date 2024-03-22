@@ -94,9 +94,9 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="text-[0.9rem] flex flex-column px-[2vh]">
+        <div className="text-[0.9rem] px-[2vh]">
           {/* Single comment renderer*/}
-          <div id="comment">
+          <div id="comment" className=" flex flex-col-reverse">
             {this.state.comments.map((comment) => (
               <div className="flex flex-row my-2">
                 <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start"></div>
