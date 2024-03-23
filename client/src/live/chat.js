@@ -27,11 +27,10 @@ export default function Chat(props) {
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
-
-        const socketInstance = io(ENDPOINT);
+    const socketInstance = io(ENDPOINT);
     setSocket(socketInstance);
-    
-    socketInstance.emit("connect-to-room", props.user)
+
+    socketInstance.emit("connect-to-room", props.user);
 
     socketInstance.on("chat-message", (data) => {
       const messagesReceived = data.message;
@@ -114,7 +113,7 @@ export default function Chat(props) {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
-        const userId = 2;
+        const userId = 1;
         const profilePicture = await getUserProfilePicture(userId);
         const pseudo = await getUserPseudo(userId);
         const newMessage = {
@@ -156,22 +155,26 @@ export default function Chat(props) {
   }, [messages]);
 
   return (
-    <div className="fixed top-1/2 right-0 w-1/3 h-1/2 bg-gray-200 flex flex-col justify-between p-4 box-border transform -translate-y-1/2">
-      <h1 className="mt-0">Chat</h1>
+    <div className="fixed top-1/2 right-0 w-1/3 h-5/6 rounded-t-lg bg-slate-100 flex flex-col justify-between p-4 box-border transform -translate-y-1/2 divide-y divide-slate-600">
+      <h1 className="mt-0 ">Top Chat</h1>
+
       <div
         ref={chatContainerRef}
-        className="overflow-y-auto flex-grow flex flex-wrap"
+        className="overflow-y-auto flex-grow flex  bg-slate-100"
       >
-        <ul className="list-none p-0 m-0">
+        <ul className="list-none p-0 m-0 w-full">
           {console.log(messages)}
           {messages.map((message, index) => (
-            <li key={index} className="bg-white p-4 rounded-lg flex">
+            <li
+              key={index}
+              className="p-4 rounded-lg flex text-wrap cursor-pointer hover:bg-slate-200	w-full"
+            >
               {console.log(message.profilePicture)}
               <div className="relative mr-4">
                 {message.profilePicture && (
                   <img
                     src={message.profilePicture}
-                    alt={`tg`}
+                    alt={`tg`} // xD
                     className="w-10 h-10 rounded-full"
                   />
                 )}
@@ -181,8 +184,10 @@ export default function Chat(props) {
                   </div>
                 )}
               </div>
-              <span className="font-bold w-16">{message.sender}:</span>
-              <span className="flex-1 ml-4">
+              <span className="font-bold w-16 text-black">
+                {message.sender}:
+              </span>
+              <span className="flex ml-4 w-55 text-black align-middle	">
                 {message.message &&
                   message.message
                     .split("")
@@ -194,7 +199,7 @@ export default function Chat(props) {
                       return acc;
                     }, [])
                     .join("")}
-                <span className="text-gray-600 text-sm ml-4">
+                <span className="text-gray-600 text-sm ml-4 align-middle ">
                   {message.time}
                 </span>
               </span>
@@ -208,7 +213,8 @@ export default function Chat(props) {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-grow mr-4"
+          className="flex-grow mr-4 h-full"
+          placeholder="New Message"
           disabled={isBanned}
         />
         <button
@@ -222,4 +228,3 @@ export default function Chat(props) {
     </div>
   );
 }
-
