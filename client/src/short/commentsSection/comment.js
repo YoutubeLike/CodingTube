@@ -15,6 +15,7 @@ class Comment extends React.Component {
       isLiked: false,
       dislikes: 0,
       isDisliked: false,
+      isSuperLiked: false,
     };
   }
 
@@ -64,12 +65,28 @@ class Comment extends React.Component {
             }
           );
           if (response.data.length == 1) {
-            this.setState({ isDisliked: true });
+            this.setState({ isDisliked: response.data.length == 1 });
           }
         } catch (error) {
           console.error("Error fetching videos:", error);
         }
       }
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Set isSuperLiked state
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/check-short-comment-like",
+        {
+          params: {
+            id: this.props.uploader,
+            commentId: this.props.id,
+          },
+        }
+      );
+      this.setState({ isSuperLiked: response.data.length == 1 });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -132,9 +149,10 @@ class Comment extends React.Component {
           (secondes < 5184000 ? " month ago" : " months ago")
         : Math.floor(secondes / 31536000) +
           (secondes < 63072000 ? " year ago" : " years ago");
+
     return (
       <div className="my-[1vh] flex">
-        <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start">
+        <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]">
           {/* <img src={this.state.senderPP} /> */}
         </div>
 
@@ -146,7 +164,7 @@ class Comment extends React.Component {
 
           <p>{this.state.text}</p>
 
-          <div className="w-[15vh] flex items-center">
+          <div className="flex items-center">
             <div className="flex items-center justify-between space-x-[1vh]">
               <CommentLikeButton
                 id={this.props.id}
@@ -169,6 +187,10 @@ class Comment extends React.Component {
             <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]">
               <strong className="text-[1.75vh]"> Reply </strong>
             </button>
+
+            {this.state.isSuperLiked && (
+              <p className="ml-[1vh] text-[2vh]">❤️superliked</p>
+            )}
           </div>
         </div>
       </div>

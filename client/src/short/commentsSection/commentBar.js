@@ -102,7 +102,11 @@ class CommentBar extends React.Component {
           {/* Single comment renderer*/}
           <div className=" flex flex-col-reverse">
             {this.state.commentsIds.map((id) => (
-              <Comment key={id} id={id} />
+              <Comment
+                key={id}
+                id={id}
+                uploader={this.props.shortInfos.uploader_id}
+              />
             ))}
           </div>
         </div>

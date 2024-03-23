@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import LikeButton from "./likeButton.js";
 import DislikeButton from "./dislikeButton.js";
-import CommentsButton from "./commentButton.js";
+import CommentsButton from "./commentsButton.js";
 import ShareButton from "./shareButton.js";
 import OptionsButton from "./optionsButton.js";
 import SoundButton from "./soundButton.js";
@@ -26,7 +26,7 @@ class SideBar extends React.Component {
         {
           params: {
             id: 1,
-            shortId: this.props.shortInfos.id,
+            shortId: this.props.id,
           },
         }
       );
@@ -39,7 +39,7 @@ class SideBar extends React.Component {
             {
               params: {
                 id: 1,
-                shortId: this.props.shortInfos.id,
+                shortId: this.props.id,
               },
             }
           );
@@ -60,7 +60,7 @@ class SideBar extends React.Component {
         "http://localhost:5000/api/short/get-short-likes",
         {
           params: {
-            shortId: this.props.shortInfos.id,
+            shortId: this.props.id,
           },
         }
       );
@@ -75,7 +75,7 @@ class SideBar extends React.Component {
         "http://localhost:5000/api/short/get-short-dislikes",
         {
           params: {
-            shortId: this.props.shortInfos.id,
+            shortId: this.props.id,
           },
         }
       );
@@ -89,7 +89,7 @@ class SideBar extends React.Component {
     return (
       <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
         <LikeButton
-          id={this.props.shortInfos.id}
+          id={this.props.id}
           isDisliked={this.state.isDisliked}
           dislikes={this.state.dislikes}
           isLiked={this.state.isLiked}
@@ -97,7 +97,7 @@ class SideBar extends React.Component {
           setState={(p) => this.setState(p)}
         />
         <DislikeButton
-          id={this.props.shortInfos.id}
+          id={this.props.id}
           isLiked={this.state.isLiked}
           likes={this.state.likes}
           isDisliked={this.state.isDisliked}
@@ -106,7 +106,6 @@ class SideBar extends React.Component {
         />
         <CommentsButton
           setState={this.props.setState}
-          shortInfos={this.props.shortInfos}
           commentCount={this.props.commentCount}
         />
         <ShareButton />

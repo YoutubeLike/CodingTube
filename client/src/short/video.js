@@ -72,17 +72,14 @@ class Video extends React.Component {
           <div className="flex flex-col justify-between h-full w-full group">
             {/* Contains pause button and sound button */}
             <VideoButtons
-              shortInfos={this.state.shortInfos}
+              id={this.state.shortInfos.id}
               isMuted={this.props.isMuted}
               setState={this.props.setState}
             />
 
             <div>
               {/* Contains uploader's informations and video's title */}
-              <VideoInfos
-                className="absolute"
-                shortInfos={this.state.shortInfos}
-              />
+              <VideoInfos shortInfos={this.state.shortInfos} />
 
               {/* COMMENTS TOGGLED: Right bar */}
               <div
@@ -107,11 +104,11 @@ class Video extends React.Component {
         {/* COMMENTS NOT TOGGLED: Right bar */}
         <div className={this.state.commentsShown ? "hidden" : ""}>
           <SideBar
+            id={this.state.shortInfos.id}
+            commentCount={this.state.commentCount}
             setState={(p) => {
               this.setState(p);
             }}
-            shortInfos={this.state.shortInfos}
-            commentCount={this.state.commentCount}
           />
         </div>
 

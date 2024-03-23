@@ -7,18 +7,18 @@ class VideoButtons extends React.Component {
 
   async componentDidMount() {
     const video = document.getElementById(
-      "shortPlayer" + this.props.shortInfos.id
+      "shortPlayer" + this.props.id
     );
 
     document
-      .getElementById("soundButton" + this.props.shortInfos.id)
+      .getElementById("soundButton" + this.props.id)
       .addEventListener("click", () => {
         video.muted = !this.props.isMuted;
         this.props.setState((state) => ({ isMuted: !state.isMuted }));
       });
 
     const playButtonImg = document.getElementById(
-      "playButtonImg" + this.props.shortInfos.id
+      "playButtonImg" + this.props.id
     );
     document.addEventListener("keyup", (event) => {
       if (event.code === "Space") {
@@ -33,7 +33,7 @@ class VideoButtons extends React.Component {
     });
 
     document
-      .getElementById("playButton" + this.props.shortInfos.id)
+      .getElementById("playButton" + this.props.id)
       .addEventListener("click", () => {
         if (video.paused) {
           video.play();
@@ -50,23 +50,23 @@ class VideoButtons extends React.Component {
       <div className="p-[1.5vh] flex justify-between items-start bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition ease-in-out">
         {/* Play button */}
         <button
-          id={"playButton" + this.props.shortInfos.id}
+          id={"playButton" + this.props.id}
           className="h-[4vh] w-[4vh]"
         >
           <img
             src="playButton.png"
-            id={"playButtonImg" + this.props.shortInfos.id}
+            id={"playButtonImg" + this.props.id}
           />
         </button>
 
         {/* Sound button */}
         <button
-          id={"soundButton" + this.props.shortInfos.id}
+          id={"soundButton" + this.props.id}
           className="h-[4vh] w-[4vh]"
         >
           <img
             src={this.props.isMuted ? "muteButton.png" : "soundButton.png"}
-            id={"soundButtonImg" + this.props.shortInfos.id}
+            id={"soundButtonImg" + this.props.id}
           />
         </button>
       </div>
