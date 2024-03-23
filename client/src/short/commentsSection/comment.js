@@ -110,8 +110,28 @@ class Comment extends React.Component {
   }
 
   render() {
-    const now = new Date().toUTCString()
-    console.log(now)
+    const secondes =
+      (Date.parse(new Date()) - Date.parse(new Date(this.state.date))) / 1000;
+    const time =
+      secondes < 60
+        ? secondes + (secondes < 2 ? " seconde ago" : " secondes ago")
+        : secondes < 3600
+        ? Math.floor(secondes / 60) +
+          (secondes < 120 ? " minute ago" : " minutes ago")
+        : secondes < 86400
+        ? Math.floor(secondes / 3600) +
+          (secondes < 7200 ? " hour ago" : " hours ago")
+        : secondes < 604800
+        ? Math.floor(secondes / 86400) +
+          (secondes < 172800 ? " day ago" : " days ago")
+        : secondes < 2592000
+        ? Math.floor(secondes / 604800) +
+          (secondes < 1209600 ? " week ago" : " weeks ago")
+        : secondes < 31536000
+        ? Math.floor(secondes / 2592000) +
+          (secondes < 5184000 ? " month ago" : " months ago")
+        : Math.floor(secondes / 31536000) +
+          (secondes < 63072000 ? " year ago" : " years ago");
     return (
       <div className="my-[1vh] flex">
         <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start">
@@ -119,13 +139,9 @@ class Comment extends React.Component {
         </div>
 
         <div className="px-[2vh] w-[35vh]">
-          <div className="mb-[0.3vh]">
-            <strong className="text-[2vh]">
-              @{this.state.senderUsername}
-            </strong>
-            <span className="text-[#525252] text-[1.6vh]">
-              {this.state.date}
-            </span>
+          <div className="mb-[0.3vh] space-x-[0.5vh]">
+            <strong className="text-[2vh]">@{this.state.senderUsername}</strong>
+            <span className="text-[#525252] text-[1.5vh]">{time}</span>
           </div>
 
           <p>{this.state.text}</p>
