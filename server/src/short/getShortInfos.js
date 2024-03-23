@@ -20,7 +20,7 @@ const getShortInfos = (req, res) => {
     });
 };
 
-const getLikes = (req, res) => {
+const getShortLikes = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM like_short WHERE id_short = ?;", [req.query.shortId])
     .then((value) => {
@@ -28,7 +28,7 @@ const getLikes = (req, res) => {
     });
 };
 
-const getDislikes = (req, res) => {
+const getShortDislikes = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM dislike_short WHERE id_short = ?;", [
       req.query.shortId,
@@ -51,7 +51,7 @@ const getComments = (req, res) => {
 module.exports = {
   getTenNextShorts,
   getShortInfos,
-  getLikes,
-  getDislikes,
+  getShortLikes,
+  getShortDislikes,
   getComments,
 };

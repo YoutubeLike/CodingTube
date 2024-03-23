@@ -12,27 +12,12 @@ class DislikeButton extends React.Component {
 
   async addDislike() {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/short/check-dislike",
-        {
-          params: {
-            id: 1,
-            shortId: this.props.shortInfos.id,
-          },
-        }
-      );
-      if (response.data.length == 0) {
-        try {
-          await axios.get("http://localhost:5000/api/short/add-dislike", {
-            params: {
-              id: 1,
-              shortId: this.props.shortInfos.id,
-            },
-          });
-        } catch (error) {
-          console.error("Error fetching videos:", error);
-        }
-      }
+      await axios.get("http://localhost:5000/api/short/add-short-dislike", {
+        params: {
+          id: 1,
+          shortId: this.props.id,
+        },
+      });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -40,10 +25,10 @@ class DislikeButton extends React.Component {
 
   async removeDislike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-dislike", {
+      await axios.get("http://localhost:5000/api/short/remove-short-dislike", {
         params: {
           id: 1,
-          shortId: this.props.shortInfos.id,
+          shortId: this.props.id,
         },
       });
     } catch (error) {
@@ -53,10 +38,10 @@ class DislikeButton extends React.Component {
 
   async removeLike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-like", {
+      await axios.get("http://localhost:5000/api/short/remove-short-like", {
         params: {
           id: 1,
-          shortId: this.props.shortInfos.id,
+          shortId: this.props.id,
         },
       });
     } catch (error) {
@@ -93,7 +78,7 @@ class DislikeButton extends React.Component {
       <div className="flex flex-col items-center">
         {/* Dislike button */}
         <button
-          id={"dislike" + this.props.shortInfos.id}
+          id={"dislike" + this.props.id}
           className={
             "h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
             (this.props.isDisliked
@@ -104,7 +89,7 @@ class DislikeButton extends React.Component {
         >
           <img
             src="dislike.png"
-            id={"dislikeImg" + this.props.shortInfos.id}
+            id={"dislikeImg" + this.props.id}
             className={"scale-50" + (this.props.isDisliked ? " invert" : "")}
           />
         </button>

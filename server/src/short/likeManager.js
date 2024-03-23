@@ -1,6 +1,6 @@
 const mariadb = require("../src/database");
 
-const checkLike = (req, res) => {
+const checkShortLike = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;", [
       req.query.id,
@@ -11,7 +11,7 @@ const checkLike = (req, res) => {
     });
 };
 
-const addLike = async (req, res) => {
+const addShortLike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;",
     [req.query.id, req.query.shortId]
@@ -29,9 +29,6 @@ const addLike = async (req, res) => {
           req.query.id,
           req.query.shortId,
         ])
-        .then((value) => {
-          res.send(value);
-        })
         .catch((error) => {
           console.error("Error updating view count:", error);
           res.status(500).send("Error updating view count");
@@ -46,7 +43,7 @@ const addLike = async (req, res) => {
   }
 };
 
-const removeLike = (req, res) => {
+const removeShortLike = (req, res) => {
   mariadb.pool
     .query("DELETE FROM like_short WHERE id_user = ? AND id_short = ?;", [
       req.query.id,
@@ -61,7 +58,7 @@ const removeLike = (req, res) => {
     });
 };
 
-const checkDislike = (req, res) => {
+const checkShortDislike = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM dislike_short WHERE id_user = ? AND id_short = ?;", [
       req.query.id,
@@ -72,7 +69,7 @@ const checkDislike = (req, res) => {
     });
 };
 
-const addDislike = async (req, res) => {
+const addShortDislike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;",
     [req.query.id, req.query.shortId]
@@ -90,9 +87,6 @@ const addDislike = async (req, res) => {
           req.query.id,
           req.query.shortId,
         ])
-        .then((value) => {
-          res.send(value);
-        })
         .catch((error) => {
           console.error("Error updating view count:", error);
           res.status(500).send("Error updating view count");
@@ -107,7 +101,7 @@ const addDislike = async (req, res) => {
   }
 };
 
-const removeDislike = (req, res) => {
+const removeShortDislike = (req, res) => {
   mariadb.pool
     .query("DELETE FROM dislike_short WHERE id_user = ? AND id_short = ?;", [
       req.query.id,
@@ -123,10 +117,10 @@ const removeDislike = (req, res) => {
 };
 
 module.exports = {
-  checkLike,
-  addLike,
-  removeLike,
-  checkDislike,
-  addDislike,
-  removeDislike,
+  checkShortLike,
+  addShortLike,
+  removeShortLike,
+  checkShortDislike,
+  addShortDislike,
+  removeShortDislike,
 };

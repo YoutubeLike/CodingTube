@@ -4,35 +4,48 @@ const router = express.Router();
 const {
   getTenNextShorts,
   getShortInfos,
-  getLikes,
-  getDislikes,
+  getShortLikes,
+  getShortDislikes,
   getComments,
 } = require("./getShortInfos.js");
 
 const {
-  checkLike,
-  addLike,
-  removeLike,
-  checkDislike,
-  addDislike,
-  removeDislike,
+  checkShortLike,
+  addShortLike,
+  removeShortLike,
+  checkShortDislike,
+  addShortDislike,
+  removeShortDislike,
 } = require("./likeManager.js");
 
-const { addComment } = require("./commentsManager.js");
+const {
+  addCommentAndGetId,
+  getCommentInfos,
+  getCommentLikes,
+  checkShortCommentLike,
+  addShortCommentLike,
+  removeShortCommentLike,
+  checkShortCommentDislike,
+} = require("./commentsManager.js");
 
 router.get("/get-ten-next-shorts", getTenNextShorts);
 router.get("/get-short-infos", getShortInfos);
-router.get("/get-likes", getLikes);
-router.get("/get-dislikes", getDislikes);
-router.get("/get-comments", getComments);
+router.get("/get-short-likes", getShortLikes);
+router.get("/get-short-dislikes", getShortDislikes);
+router.get("/get-short-comments", getComments);
 
-router.get("/check-like", checkLike);
-router.get("/add-like", addLike);
-router.get("/remove-like", removeLike);
-router.get("/check-dislike", checkDislike);
-router.get("/add-dislike", addDislike);
-router.get("/remove-dislike", removeDislike);
+router.get("/check-short-like", checkShortLike);
+router.get("/add-short-like", addShortLike);
+router.get("/remove-short-like", removeShortLike);
+router.get("/check-short-dislike", checkShortDislike);
+router.get("/add-short-dislike", addShortDislike);
+router.get("/remove-short-dislike", removeShortDislike);
 
-router.get("/add-comment", addComment);
-
+router.get("/add-short-comment", addCommentAndGetId);
+router.get("/get-short-comment-infos", getCommentInfos);
+router.get("/get-short-comment-likes", getCommentLikes);
+router.get("/check-short-comment-like", checkShortCommentLike);
+router.get("/add-short-comment-like", addShortCommentLike);
+router.get("/remove-short-comment-like", removeShortCommentLike);
+router.get("/check-short-comment-dislike", checkShortCommentDislike);
 module.exports = router;

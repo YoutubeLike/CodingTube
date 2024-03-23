@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import SideBar from "./sideBar/sideBar.js";
-import CommentBar from "./commentBar.js";
+import CommentBar from "./commentsSection/commentBar.js";
 import VideoButtons from "./videoButtons.js";
 import VideoInfos from "./videoInfos.js";
 
@@ -10,7 +10,7 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
-      commentsCount: 0,
+      commentCount: 0,
       commentsShown: false,
     };
   }
@@ -30,10 +30,10 @@ class Video extends React.Component {
     // Get comments count
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/get-comments",
+        "http://localhost:5000/api/short/get-short-comments",
         { params: { shortId: this.props.id } }
       );
-      this.setState({ commentsCount: response.data.length });
+      this.setState({ commentCount: response.data.length });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -97,7 +97,7 @@ class Video extends React.Component {
                     this.setState(p);
                   }}
                   shortInfos={this.state.shortInfos}
-                  commentsCount={this.state.commentsCount}
+                  commentCount={this.state.commentCount}
                 />
               </div>
             </div>
@@ -111,7 +111,7 @@ class Video extends React.Component {
               this.setState(p);
             }}
             shortInfos={this.state.shortInfos}
-            commentsCount={this.state.commentsCount}
+            commentCount={this.state.commentCount}
           />
         </div>
 
@@ -119,7 +119,7 @@ class Video extends React.Component {
           <CommentBar
             setState={(p) => this.setState(p)}
             shortInfos={this.state.shortInfos}
-            commentsCount={this.state.commentsCount}
+            commentCount={this.state.commentCount}
           />
         )}
       </div>

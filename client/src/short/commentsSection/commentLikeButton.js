@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-class LikeButton extends React.Component {
+class CommentLikeButton extends React.Component {
   constructor(props) {
     super(props);
     this.like = this.like.bind(this);
@@ -12,10 +12,10 @@ class LikeButton extends React.Component {
 
   async addLike() {
     try {
-      await axios.get("http://localhost:5000/api/short/add-short-like", {
+      await axios.get("http://localhost:5000/api/short/add-short-comment-like", {
         params: {
           id: 1,
-          shortId: this.props.id,
+          commentId: this.props.id,
         },
       });
     } catch (error) {
@@ -25,10 +25,10 @@ class LikeButton extends React.Component {
 
   async removeLike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-short-like", {
+      await axios.get("http://localhost:5000/api/short/remove-short-comment-like", {
         params: {
           id: 1,
-          shortId: this.props.id,
+          commentId: this.props.id,
         },
       });
     } catch (error) {
@@ -38,10 +38,10 @@ class LikeButton extends React.Component {
 
   async removeDislike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-short-dislike", {
+      await axios.get("http://localhost:5000/api/short/remove-short-comment-dislike", {
         params: {
           id: 1,
-          shortId: this.props.id,
+          commentId: this.props.id,
         },
       });
     } catch (error) {
@@ -75,29 +75,14 @@ class LikeButton extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col items-center">
-        {/* Like button */}
-        <button
-          id={"like" + this.props.id}
-          className={
-            "h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
-            (this.props.isLiked
-              ? " bg-[#171717]"
-              : " bg-[#f5f5f5] hover:bg-[#e5e5e5]")
-          }
-          onClick={this.like}
-        >
-          <img
-            src="like.png"
-            id={"likeImg" + this.props.id}
-            className={"scale-50" + (this.props.isLiked ? " invert" : "")}
-          />
+      <div className="flex flex-row items-center">
+        <button className="h-[3vh] w-[3vh] flex items-center justify-center" onClick={this.like}>
+          <img src={this.props.isLiked ? "like.png" : "commentLikeButton.png"} className="scale-[90%]" />
         </button>
-        {/* Likes count */}
-        <p className="text-[1.5vh]">{this.props.likes}</p>
+        <span className="text-[#525252] ml-[3px]">{this.props.likes}</span>
       </div>
     );
   }
 }
 
-export default LikeButton;
+export default CommentLikeButton;

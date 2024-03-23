@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import LikeButton from "./likeButton.js";
 import DislikeButton from "./dislikeButton.js";
-import CommentsButton from "./commentsButton.js";
+import CommentsButton from "./commentButton.js";
 import ShareButton from "./shareButton.js";
 import OptionsButton from "./optionsButton.js";
 import SoundButton from "./soundButton.js";
@@ -22,7 +22,7 @@ class SideBar extends React.Component {
     // Set isLiked and isDisliked states with database datas
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/check-like",
+        "http://localhost:5000/api/short/check-short-like",
         {
           params: {
             id: 1,
@@ -35,7 +35,7 @@ class SideBar extends React.Component {
       } else {
         try {
           const response = await axios.get(
-            "http://localhost:5000/api/short/check-dislike",
+            "http://localhost:5000/api/short/check-short-dislike",
             {
               params: {
                 id: 1,
@@ -57,7 +57,7 @@ class SideBar extends React.Component {
     // Get likes count
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/get-likes",
+        "http://localhost:5000/api/short/get-short-likes",
         {
           params: {
             shortId: this.props.shortInfos.id,
@@ -72,7 +72,7 @@ class SideBar extends React.Component {
     // Get dislikes count
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/get-dislikes",
+        "http://localhost:5000/api/short/get-short-dislikes",
         {
           params: {
             shortId: this.props.shortInfos.id,
@@ -89,25 +89,25 @@ class SideBar extends React.Component {
     return (
       <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
         <LikeButton
+          id={this.props.shortInfos.id}
           isDisliked={this.state.isDisliked}
           dislikes={this.state.dislikes}
           isLiked={this.state.isLiked}
           likes={this.state.likes}
           setState={(p) => this.setState(p)}
-          shortInfos={this.props.shortInfos}
         />
         <DislikeButton
+          id={this.props.shortInfos.id}
           isLiked={this.state.isLiked}
           likes={this.state.likes}
           isDisliked={this.state.isDisliked}
           dislikes={this.state.dislikes}
           setState={(p) => this.setState(p)}
-          shortInfos={this.props.shortInfos}
         />
         <CommentsButton
           setState={this.props.setState}
           shortInfos={this.props.shortInfos}
-          commentsCount={this.props.commentsCount}
+          commentCount={this.props.commentCount}
         />
         <ShareButton />
         <OptionsButton />

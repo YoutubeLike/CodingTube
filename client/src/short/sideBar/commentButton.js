@@ -22,7 +22,7 @@ class CommentsButton extends React.Component {
           <img src="comment.png" className="scale-50" />
         </button>
         {/* Comments count */}
-        <p className="text-[1.5vh]">{this.props.commentsCount}</p>
+        <p className="text-[1.5vh]">{this.props.commentCount}</p>
       </div>
     );
   }
