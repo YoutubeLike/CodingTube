@@ -68,30 +68,28 @@ const addShortCommentLike = async (req, res) => {
 
     if (checkExistance[0] == null) {
       mariadb.pool
-        .query("INSERT INTO like_short_comment (id_user, id_comment) VALUES (?, ?);", [
-          req.query.id,
-          req.query.commentId,
-        ])
+        .query(
+          "INSERT INTO like_short_comment (id_user, id_comment) VALUES (?, ?);",
+          [req.query.id, req.query.commentId]
+        )
         .catch((error) => {
           console.error("Error inserting like:", error);
           res.status(500).send("Error inserting like");
         });
-    }
-    else {
+    } else {
       res.send("User already disliked");
     }
-  }
-  else {
+  } else {
     res.send("User already liked");
   }
 };
 
 const removeShortCommentLike = (req, res) => {
   mariadb.pool
-    .query("DELETE FROM like_short_comment WHERE id_user = ? AND id_comment = ?;", [
-      req.query.id,
-      req.query.commentId,
-    ])
+    .query(
+      "DELETE FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
+      [req.query.id, req.query.commentId]
+    )
     .then((value) => {
       res.send(value);
     })
@@ -112,6 +110,51 @@ const checkShortCommentDislike = (req, res) => {
     });
 };
 
+const addShortCommentDislike = async (req, res) => {
+  let checkExistance = await mariadb.pool.query(
+    "SELECT * FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
+    [req.query.id, req.query.commentId]
+  );
+
+  if (checkExistance[0] == null) {
+    let checkExistance = await mariadb.pool.query(
+      "SELECT * FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
+      [req.query.id, req.query.commentId]
+    );
+
+    if (checkExistance[0] == null) {
+      mariadb.pool
+        .query(
+          "INSERT INTO dislike_short_comment (id_user, id_comment) VALUES (?, ?);",
+          [req.query.id, req.query.commentId]
+        )
+        .catch((error) => {
+          console.error("Error inserting dislike:", error);
+          res.status(500).send("Error inserting dislike");
+        });
+    } else {
+      res.send("User already disliked");
+    }
+  } else {
+    res.send("User already liked");
+  }
+};
+
+const removeShortCommentDislike = (req, res) => {
+  mariadb.pool
+    .query(
+      "DELETE FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
+      [req.query.id, req.query.commentId]
+    )
+    .then((value) => {
+      res.send(value);
+    })
+    .catch((error) => {
+      console.error("Error removing dislike:", error);
+      res.status(500).send("Error removing dislike");
+    });
+};
+
 module.exports = {
   addCommentAndGetId,
   getCommentInfos,
@@ -120,4 +163,6 @@ module.exports = {
   addShortCommentLike,
   removeShortCommentLike,
   checkShortCommentDislike,
+  addShortCommentDislike,
+  removeShortCommentDislike,
 };

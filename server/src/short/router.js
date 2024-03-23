@@ -26,6 +26,8 @@ const {
   addShortCommentLike,
   removeShortCommentLike,
   checkShortCommentDislike,
+  addShortCommentDislike,
+  removeShortCommentDislike,
 } = require("./commentsManager.js");
 
 router.get("/get-ten-next-shorts", getTenNextShorts);
@@ -48,4 +50,6 @@ router.get("/check-short-comment-like", checkShortCommentLike);
 router.get("/add-short-comment-like", addShortCommentLike);
 router.get("/remove-short-comment-like", removeShortCommentLike);
 router.get("/check-short-comment-dislike", checkShortCommentDislike);
+router.get("/add-short-comment-dislike", addShortCommentDislike);
+router.get("/remove-short-comment-dislike", removeShortCommentDislike);
 module.exports = router;

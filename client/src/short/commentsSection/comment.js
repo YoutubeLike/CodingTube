@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import CommentLikeButton from "./commentLikeButton"
+import CommentLikeButton from "./commentLikeButton";
+import CommentDislikeButton from "./commentDislikeButton";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -40,38 +41,38 @@ class Comment extends React.Component {
 
     // Set isLiked and isDisliked states with database datas
     try {
-        const response = await axios.get(
-          "http://localhost:5000/api/short/check-short-comment-like",
-          {
-            params: {
-              id: 1,
-              commentId: this.props.id,
-            },
-          }
-        );
-        if (response.data.length == 1) {
-          this.setState({ isLiked: true });
-        } else {
-          try {
-            const response = await axios.get(
-              "http://localhost:5000/api/short/check-short-comment-dislike",
-              {
-                params: {
-                  id: 1,
-                  commentId: this.props.id,
-                },
-              }
-            );
-            if (response.data.length == 1) {
-              this.setState({ isDisliked: true });
-            }
-          } catch (error) {
-            console.error("Error fetching videos:", error);
-          }
+      const response = await axios.get(
+        "http://localhost:5000/api/short/check-short-comment-like",
+        {
+          params: {
+            id: 1,
+            commentId: this.props.id,
+          },
         }
-      } catch (error) {
-        console.error("Error fetching videos:", error);
+      );
+      if (response.data.length == 1) {
+        this.setState({ isLiked: true });
+      } else {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/short/check-short-comment-dislike",
+            {
+              params: {
+                id: 1,
+                commentId: this.props.id,
+              },
+            }
+          );
+          if (response.data.length == 1) {
+            this.setState({ isDisliked: true });
+          }
+        } catch (error) {
+          console.error("Error fetching videos:", error);
+        }
       }
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
 
     // Get comment's like count
     try {
@@ -118,9 +119,14 @@ class Comment extends React.Component {
                 isDisliked={this.state.isDisliked}
                 setState={(p) => this.setState(p)}
               />
-              <button className="h-[5vh] w-[5vh] flex items-center justify-center">
-                <img src="commentDislikeButton.png" className="scale-[55%]" />
-              </button>
+              <CommentDislikeButton
+                id={this.props.id}
+                likes={this.state.likes}
+                isLiked={this.state.isLiked}
+                dislikes={this.state.dislikes}
+                isDisliked={this.state.isDisliked}
+                setState={(p) => this.setState(p)}
+              />
             </div>
 
             <button className="ml-[3px] hover:bg-[#e5e5e5] rounded-[30px] px-[12px] py-[9px]">
