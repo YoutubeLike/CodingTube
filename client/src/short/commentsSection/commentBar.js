@@ -98,17 +98,15 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="text-[2vh] px-[2vh] overflow-y-auto break-words">
-          {/* Single comment renderer*/}
-          <div className=" flex flex-col-reverse">
-            {this.state.commentsIds.map((id) => (
-              <Comment
-                key={id}
-                id={id}
-                uploader={this.props.shortInfos.uploader_id}
-              />
-            ))}
-          </div>
+        <div className="flex flex-col-reverse text-[2vh] px-[2vh] overflow-y-auto break-words">
+          {/* Single comment renderer */}
+          {this.state.commentsIds.map((id) => (
+            <Comment
+              key={id}
+              id={id}
+              uploader={this.props.shortInfos.uploader_id}
+            />
+          ))}
         </div>
 
         {/* Comment insert section */}

@@ -90,11 +90,11 @@ class Video extends React.Component {
                 }
               >
                 <SideBar
+                  id={this.state.shortInfos.id}
+                  commentCount={this.state.commentCount}
                   setState={(p) => {
                     this.setState(p);
                   }}
-                  shortInfos={this.state.shortInfos}
-                  commentCount={this.state.commentCount}
                 />
               </div>
             </div>
