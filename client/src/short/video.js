@@ -98,7 +98,7 @@ class Video extends React.Component {
         </div>
 
         {/* COMMENTS NOT TOGGLED: Right bar */}
-        {!this.state.commentsShown && (
+        {!this.state.commentsShown ? (
           <SideBar
             id={this.state.shortInfos.id}
             commentCount={this.state.commentCount}
@@ -106,9 +106,7 @@ class Video extends React.Component {
               this.setState(p);
             }}
           />
-        )}
-
-        {this.state.commentsShown && (
+        ) : (
           <CommentBar
             setState={(p) => this.setState(p)}
             shortInfos={this.state.shortInfos}
