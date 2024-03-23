@@ -82,27 +82,23 @@ class Video extends React.Component {
               <VideoInfos shortInfos={this.state.shortInfos} />
 
               {/* COMMENTS TOGGLED: Right bar */}
-              <div
-                className={
-                  this.state.commentsShown
-                    ? "absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl"
-                    : "hidden"
-                }
-              >
-                <SideBar
-                  id={this.state.shortInfos.id}
-                  commentCount={this.state.commentCount}
-                  setState={(p) => {
-                    this.setState(p);
-                  }}
-                />
-              </div>
+              {this.state.commentsShown && (
+                <div className="absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl">
+                  <SideBar
+                    id={this.state.shortInfos.id}
+                    commentCount={this.state.commentCount}
+                    setState={(p) => {
+                      this.setState(p);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         {/* COMMENTS NOT TOGGLED: Right bar */}
-        <div className={this.state.commentsShown ? "hidden" : ""}>
+        {!this.state.commentsShown && (
           <SideBar
             id={this.state.shortInfos.id}
             commentCount={this.state.commentCount}
@@ -110,7 +106,7 @@ class Video extends React.Component {
               this.setState(p);
             }}
           />
-        </div>
+        )}
 
         {this.state.commentsShown && (
           <CommentBar
