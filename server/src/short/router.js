@@ -22,6 +22,7 @@ const {
   addCommentAndGetId,
   getCommentInfos,
   getCommentLikes,
+  getCommentDislikes,
   checkShortCommentLike,
   addShortCommentLike,
   removeShortCommentLike,
@@ -46,6 +47,7 @@ router.get("/remove-short-dislike", removeShortDislike);
 router.get("/add-short-comment", addCommentAndGetId);
 router.get("/get-short-comment-infos", getCommentInfos);
 router.get("/get-short-comment-likes", getCommentLikes);
+router.get("/get-short-comment-dislikes", getCommentDislikes);
 router.get("/check-short-comment-like", checkShortCommentLike);
 router.get("/add-short-comment-like", addShortCommentLike);
 router.get("/remove-short-comment-like", removeShortCommentLike);

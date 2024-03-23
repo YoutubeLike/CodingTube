@@ -90,27 +90,48 @@ class Comment extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    // Get comment's like count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-short-comment-dislikes",
+        {
+          params: {
+            commentId: this.props.id,
+          },
+        }
+      );
+      this.setState({
+        dislikes: response.data.length,
+      });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
   }
 
   render() {
-    // const now = new Date().toUTCString()
-    // console.log(now)
+    const now = new Date().toUTCString()
+    console.log(now)
     return (
-      <div className="flex flex-row my-2">
+      <div className="my-[1vh] flex">
         <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start">
           {/* <img src={this.state.senderPP} /> */}
         </div>
 
-        <div className="px-[1.9vh] max-w-[88%]">
-          <div className="text-sm mb-[3px]">
-            <strong> @{this.state.senderUsername} </strong>
-            <span className="text-[#525252] text-xs">{this.state.date}</span>
+        <div className="px-[2vh] w-[35vh]">
+          <div className="mb-[0.3vh]">
+            <strong className="text-[2vh]">
+              @{this.state.senderUsername}
+            </strong>
+            <span className="text-[#525252] text-[1.6vh]">
+              {this.state.date}
+            </span>
           </div>
 
-          <div className="text-ellipsis overflow-hidden">{this.state.text}</div>
+          <p>{this.state.text}</p>
 
-          <div className="flex flex-row items-center text-xs">
-            <div className="flex flex-row items-center">
+          <div className="w-[15vh] flex items-center">
+            <div className="flex items-center justify-between space-x-[1vh]">
               <CommentLikeButton
                 id={this.props.id}
                 likes={this.state.likes}
@@ -129,8 +150,8 @@ class Comment extends React.Component {
               />
             </div>
 
-            <button className="ml-[3px] hover:bg-[#e5e5e5] rounded-[30px] px-[12px] py-[9px]">
-              <strong> Reply </strong>
+            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]">
+              <strong className="text-[1.75vh]"> Reply </strong>
             </button>
           </div>
         </div>

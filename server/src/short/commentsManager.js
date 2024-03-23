@@ -43,6 +43,16 @@ const getCommentLikes = (req, res) => {
     });
 };
 
+const getCommentDislikes = (req, res) => {
+  mariadb.pool
+    .query("SELECT * FROM dislike_short_comment WHERE id_comment = ?;", [
+      req.query.commentId,
+    ])
+    .then((value) => {
+      res.send(value);
+    });
+};
+
 const checkShortCommentLike = (req, res) => {
   mariadb.pool
     .query(
@@ -159,6 +169,7 @@ module.exports = {
   addCommentAndGetId,
   getCommentInfos,
   getCommentLikes,
+  getCommentDislikes,
   checkShortCommentLike,
   addShortCommentLike,
   removeShortCommentLike,

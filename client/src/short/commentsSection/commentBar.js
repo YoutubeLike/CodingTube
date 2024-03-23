@@ -73,23 +73,21 @@ class CommentBar extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col shadow-2xl translate-y-px h-[80vh] w-[45vh] break-words rounded-[0.7vh] rounded-r-lg overflow-y-auto">
+      <div className="flex flex-col justify-between shadow-2xl translate-y-px h-[80vh] w-[45vh] rounded-[0.7vh] rounded-r-lg">
         {/* Upper title section */}
-        <div className="flex justify-between items-center sticky top-0 bg-white py-[5px] z-10">
-          <div className="flex flex-row text-lg px-3 space-x-2">
-            <h1>
-              <strong>Comments</strong>
-            </h1>
-            <h1 className="text-[#525252]">{this.state.commentsIds.length}</h1>
+        <div className="my-[0.5vh] flex justify-between items-center">
+          <div className=" ml-[2vh] flex justify-between w-1/3 text-[2.5vh]">
+            <strong>Comments</strong>
             {/* Comments count */}
+            <p className="text-[#525252]">{this.state.commentsIds.length}</p>
           </div>
 
-          <div className="flex flex-row text-lg px-3 space-x-2">
-            <button className="h-[5vh] w-[5vh] flex items-center justify-center">
+          <div className="flex flex-row space-x-[2vh]">
+            <button className="h-[5vh] w-[5vh]">
               <img src="commentsFilter.png" className="scale-75" />
             </button>
 
-            <button className="h-[5vh] w-[5vh] flex items-center justify-center hover:bg-[#e5e5e5] hover:ease-in-out hover:rounded-full hover:animate-pulse duration-300">
+            <button className="h-[5vh] w-[5vh] hover:bg-[#e5e5e5] hover:ease-in-out hover:rounded-full hover:animate-pulse duration-300">
               <img
                 src="commentsArrow.png"
                 className="scale-75"
@@ -100,77 +98,34 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="text-[0.9rem] px-[2vh]">
+        <div className="text-[2vh] px-[2vh] overflow-y-auto break-words">
           {/* Single comment renderer*/}
-          <div id="comment" className=" flex flex-col-reverse">
+          <div className=" flex flex-col-reverse">
             {this.state.commentsIds.map((id) => (
-              <Comment
-                key={id}
-                id={id}
-              />
-              // <div className="flex flex-row my-2">
-              //   <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start"></div>
-
-              //   <div className="px-[1.9vh] max-w-[88%]">
-              //     <div className="text-sm mb-[3px]">
-              //       <strong> @Name </strong>
-              //       <span className="text-[#525252] text-xs"> 1 year ago </span>
-              //     </div>
-
-              //     <div className="text-ellipsis overflow-hidden">
-              //       {comment.text}
-              //     </div>
-
-              //     <div className="flex flex-row items-center text-xs">
-              //       <div className="flex flex-row items-center">
-              //         <div className="flex flex-row items-center">
-              //           <button className="h-[3vh] w-[3vh] flex items-center justify-center">
-              //             <img
-              //               src="commentLikeButton.png"
-              //               className="scale-[90%]"
-              //             />
-              //           </button>
-              //           <span className="text-[#525252] ml-[3px]"> 3.5K </span>
-              //         </div>
-              //         <button className="h-[5vh] w-[5vh] flex items-center justify-center">
-              //           <img
-              //             src="commentDislikeButton.png"
-              //             className="scale-[55%]"
-              //           />
-              //         </button>
-              //       </div>
-
-              //       <button className="ml-[3px] hover:bg-[#e5e5e5] rounded-[30px] px-[12px] py-[9px]">
-              //         <strong> Reply </strong>
-              //       </button>
-              //     </div>
-              //   </div>
-              // </div>
+              <Comment key={id} id={id} />
             ))}
           </div>
         </div>
 
         {/* Comment insert section */}
-        <div className="flex-end sticky bottom-0 bg-white min-width-[100%] border-t-[1px]">
-          <div className="flex flex-row no-wrap p-[1.8vh] items-center">
-            <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5] content-start"></div>
+        <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
+          <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
 
-            <input
-              id="commentsInputField"
-              className="outline-0 text-sm px-[2vh]"
-              maxLength="1024"
-              placeholder="Add a comment..."
-              type="text"
-              onChange={this.handleChange}
-            />
+          <input
+            id="commentsInputField"
+            className="mx-[2vh] text-[2vh]"
+            maxLength="1024"
+            placeholder="Add a comment..."
+            type="text"
+            onChange={this.handleChange}
+          />
 
-            <button
-              onClick={this.postComment}
-              className=" flex-end m-2 rounded-full border-[1px] text-sm px-[15px] py-[7px] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
-            >
-              <strong>Post</strong>
-            </button>
-          </div>
+          <button
+            onClick={this.postComment}
+            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
+          >
+            <strong>Post</strong>
+          </button>
         </div>
       </div>
     );

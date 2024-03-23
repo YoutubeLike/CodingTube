@@ -12,12 +12,15 @@ class CommentLikeButton extends React.Component {
 
   async addLike() {
     try {
-      await axios.get("http://localhost:5000/api/short/add-short-comment-like", {
-        params: {
-          id: 1,
-          commentId: this.props.id,
-        },
-      });
+      await axios.get(
+        "http://localhost:5000/api/short/add-short-comment-like",
+        {
+          params: {
+            id: 1,
+            commentId: this.props.id,
+          },
+        }
+      );
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -25,12 +28,15 @@ class CommentLikeButton extends React.Component {
 
   async removeLike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-short-comment-like", {
-        params: {
-          id: 1,
-          commentId: this.props.id,
-        },
-      });
+      await axios.get(
+        "http://localhost:5000/api/short/remove-short-comment-like",
+        {
+          params: {
+            id: 1,
+            commentId: this.props.id,
+          },
+        }
+      );
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -38,12 +44,15 @@ class CommentLikeButton extends React.Component {
 
   async removeDislike() {
     try {
-      await axios.get("http://localhost:5000/api/short/remove-short-comment-dislike", {
-        params: {
-          id: 1,
-          commentId: this.props.id,
-        },
-      });
+      await axios.get(
+        "http://localhost:5000/api/short/remove-short-comment-dislike",
+        {
+          params: {
+            id: 1,
+            commentId: this.props.id,
+          },
+        }
+      );
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -75,11 +84,19 @@ class CommentLikeButton extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-row items-center">
-        <button className="h-[3vh] w-[3vh] flex items-center justify-center" onClick={this.like}>
-          <img src={this.props.isLiked ? "like.png" : "commentLikeButton.png"} className="scale-[90%]" />
+      <div className="flex items-center">
+        <button
+          className="h-[3vh] w-[3vh] flex items-center"
+          onClick={this.like}
+        >
+          <img
+            src={this.props.isLiked ? "like.png" : "commentLikeButton.png"}
+            className="scale-[90%]"
+          />
         </button>
-        <span className="text-[#525252] ml-[3px]">{this.props.likes}</span>
+        <p className="ml-[0.5vh] text-[1.75vh] text-[#525252]">
+          {this.props.likes}
+        </p>
       </div>
     );
   }

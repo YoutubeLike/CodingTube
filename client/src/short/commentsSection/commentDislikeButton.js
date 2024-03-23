@@ -84,9 +84,9 @@ class CommentDislikeButton extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-row items-center">
+      <div className="flex items-center">
         <button
-          className="h-[3vh] w-[3vh] flex items-center justify-center"
+          className="h-[3vh] w-[3vh] flex items-center"
           onClick={this.dislike}
         >
           <img
@@ -96,7 +96,9 @@ class CommentDislikeButton extends React.Component {
             className="scale-[90%]"
           />
         </button>
-        <span className="text-[#525252] ml-[3px]">{this.props.dislikes}</span>
+        <p className="ml-[0.5vh] text-[1.75vh] text-[#525252]">
+          {this.props.dislikes}
+        </p>
       </div>
     );
   }
