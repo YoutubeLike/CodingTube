@@ -11,6 +11,12 @@ class CommentsButton extends React.Component {
   }
 
   render() {
+    const commentCount =
+      this.props.commentCount < 1000
+        ? this.props.commentCount
+        : this.props.likcommentCountes < 1000000
+        ? Math.floor(this.props.commentCount / 1000) + "K"
+        : Math.floor(this.props.commentCount / 1000000) + "M";
     return (
       <div className="flex flex-col items-center">
         {/* Comment button */}
@@ -21,7 +27,7 @@ class CommentsButton extends React.Component {
           <img src="comment.png" className="scale-50" />
         </button>
         {/* Comments count */}
-        <p className="text-[1.5vh]">{this.props.commentCount}</p>
+        <p className="text-[1.5vh]">{commentCount}</p>
       </div>
     );
   }
