@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 
 export default function Live()
 {
-    console.log(document)
     axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
         console.log(response.data)
     })

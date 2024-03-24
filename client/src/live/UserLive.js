@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player'
 import { io } from "socket.io-client";
 import Chat from "./chat.js"
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 
 export async function loader({ params })
@@ -15,8 +16,6 @@ export async function loader({ params })
 export default function LiveFromUser()
 {
     const {user} = useLoaderData()
-    console.log(user)
-
     return (
         <>
             <p> {user} </p>

@@ -1,4 +1,13 @@
 const NodeMediaServer = require('node-media-server');
+var MySql = require('sync-mysql');
+
+var connection = new MySql({
+  host: 'bdd',
+  user: 'admin',
+  password: 'admin',
+  database: 'coditube'
+});
+
 
 const config = {
   rtmp: {
@@ -27,3 +36,13 @@ const config = {
 
 var nms = new NodeMediaServer(config)
 nms.run();
+
+nms.on('prePublish', (id, streamPath, args) => {
+  const session = nms.getSession(id);
+
+  const result = connection.query("SELECT username FROM user WHERE username = '" + streamPath.replace('/live/', "") + "'");
+  if(result.length < 1)
+  {
+    session.reject();
+  }
+});
