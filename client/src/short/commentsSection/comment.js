@@ -152,8 +152,8 @@ class Comment extends React.Component {
 
     return (
       <div className="my-[1vh] flex">
-        <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]">
-          {/* <img src={this.state.senderPP} /> */}
+        <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+          <img src={this.state.senderPP} />
         </div>
 
         <div className="px-[2vh] w-[35vh]">
