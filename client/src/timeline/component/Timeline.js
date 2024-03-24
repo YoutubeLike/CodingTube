@@ -7,7 +7,6 @@ import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
 
 export default function TimeLine() {
-
   // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {

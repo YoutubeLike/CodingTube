@@ -21,17 +21,17 @@ export default function Watch() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const videoId = searchParams.get("video_id");
-
   // Execute the SQL Request whitch adds one to the video's count
   const [error, setError] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (videoId) {
+        if (videoId && userId) {
           const response = await axios.get(
             `http://localhost:5000/api/timeline/addView-request`,{
               params: {
                 videoIdParam: videoId,
+                userIdParam: userId,
               },
             }
           );
