@@ -74,6 +74,12 @@ class DislikeButton extends React.Component {
   }
 
   render() {
+    const dislikeCount =
+      this.props.likes < 1000
+        ? this.props.dislikes
+        : this.props.dislikes < 1000000
+        ? Math.floor(this.props.dislikes / 1000) + "K"
+        : Math.floor(this.props.dislikes / 1000000) + "M";
     return (
       <div className="flex flex-col items-center">
         {/* Dislike button */}
@@ -95,7 +101,7 @@ class DislikeButton extends React.Component {
         </button>
 
         {/* Dislikes count */}
-        <p className="text-[1.5vh]">{this.props.dislikes}</p>
+        <p className="text-[1.5vh]">{dislikeCount}</p>
       </div>
     );
   }

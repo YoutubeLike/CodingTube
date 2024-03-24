@@ -74,6 +74,12 @@ class LikeButton extends React.Component {
   }
 
   render() {
+    const likeCount =
+      this.props.likes < 1000
+        ? this.props.likes
+        : this.props.likes < 1000000
+        ? Math.floor(this.props.likes / 1000) + "K"
+        : Math.floor(this.props.likes / 1000000) + "M";
     return (
       <div className="flex flex-col items-center">
         {/* Like button */}
@@ -94,7 +100,7 @@ class LikeButton extends React.Component {
           />
         </button>
         {/* Likes count */}
-        <p className="text-[1.5vh]">{this.props.likes}</p>
+        <p className="text-[1.5vh]">{likeCount}</p>
       </div>
     );
   }
