@@ -40,20 +40,23 @@ class Video extends React.Component {
   }
 
   componentDidUpdate() {
-    const shortPlayer = document.getElementById(
-      "shortPlayer" + this.state.shortInfos.id
-    );
-    if (this.props.isPlaying) {
-      shortPlayer.play();
-      shortPlayer.muted = this.props.isMuted;
-    } else {
-      shortPlayer.pause();
-      shortPlayer.currentTime = 0;
+    if (this.state.shortInfos.id) {
+      const shortPlayer = document.getElementById(
+        "shortPlayer" + this.state.shortInfos.id
+      );
+
+      if (this.props.isPlaying) {
+        shortPlayer.play();
+        shortPlayer.muted = this.props.isMuted;
+      } else {
+        shortPlayer.pause();
+        shortPlayer.currentTime = 0;
+      }
     }
   }
 
   render() {
-    return this.state.shortInfos.id != null ? (
+    return this.state.shortInfos.id ? (
       <div
         id={"short" + this.state.shortInfos.id}
         className="mb-[1vh] flex justify-center"

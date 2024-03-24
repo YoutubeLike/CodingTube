@@ -108,7 +108,7 @@ class SideBar extends React.Component {
           setState={this.props.setState}
           commentCount={this.props.commentCount}
         />
-        <ShareButton />
+        <ShareButton id={this.props.id}/>
         <OptionsButton />
         <SoundButton />
       </div>

@@ -14,24 +14,45 @@ class Short extends React.Component {
   }
 
   async componentDidMount() {
-    // get first 10 shorts IDs
+    // Look for id given in link
+    const searchedId = new URLSearchParams(window.location.search).get("id");
+    if (searchedId) {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/short/get-short-infos",
+          { params: { shortId: searchedId } }
+        );
+        if (response.data) {
+          this.setState({
+            searchedId: searchedId,
+            loadedVideos: [parseInt(searchedId)],
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+    }
+
+    // Get first 10 shorts IDs
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-ten-next-shorts",
         { params: { currentId: 0 } }
       );
-      const videos = [];
-      for (let i = 0; i < 3; i++) {
-        try {
-          videos.push(response.data[this.state.currentIndex + i].id);
-        } catch (error) {
-          console.log(error);
-        }
-      }
+      this.setState((state) => ({
+        loadedVideos: state.loadedVideos.concat(
+          response.data
+            .filter((element) => element.id != state.searchedId)
+            .map((element) => element.id)
+        ),
+      }));
 
-      this.setState({
-        loadedVideos: response.data.map((element) => element.id),
-      });
+      // Change URL
+      window.history.replaceState(
+        null,
+        "",
+        "http://localhost:3000/short?id=" + this.state.loadedVideos[0]
+      );
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -45,10 +66,25 @@ class Short extends React.Component {
           )
           .getBoundingClientRect();
         if (position.top > window.innerHeight / 2) {
+          // Change URL
+          window.history.replaceState(
+            null,
+            "",
+            "http://localhost:3000/short?id=" +
+              this.state.loadedVideos[this.state.currentIndex - 1]
+          );
           this.setState((state) => ({ currentIndex: state.currentIndex - 1 }));
         } else if (position.top < 0) {
+          // Change URL
+          window.history.replaceState(
+            null,
+            "",
+            "http://localhost:3000/short?id=" +
+              this.state.loadedVideos[this.state.currentIndex + 1]
+          );
           this.setState((state) => ({ currentIndex: state.currentIndex + 1 }));
         }
+
         this.loadShorts();
       });
   }
@@ -67,7 +103,9 @@ class Short extends React.Component {
         );
         this.setState((state) => ({
           loadedVideos: state.loadedVideos.concat(
-            response.data.map((element) => element.id)
+            response.data
+              .filter((element) => element.id != state.searchedId)
+              .map((element) => element.id)
           ),
         }));
       } catch (error) {
@@ -92,6 +130,7 @@ class Short extends React.Component {
           this.state.loadedVideos[this.state.currentIndex + 1]
         );
     }
+
     return (
       <div
         id="shortsSection"
