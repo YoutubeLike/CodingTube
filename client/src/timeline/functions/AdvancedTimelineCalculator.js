@@ -34,8 +34,6 @@ function GetMostViewedCategories() {
     fetch();
   }, []);
 
-  console.log("cat",viewedCategoriesInfos);
-
   // Count all the categories viewed
   var counter = {};
   for (var i = 0; i < viewedCategoriesInfos.length; i++) {
@@ -73,6 +71,8 @@ export function SetScores(videosInfos) {
     fetch();
   }, []);
 
+
+
   // Put all the channels_id subscribed in a list
   var subscribeList = [];
   for (var i = 0; i < subscribeListInfos.length; i++) {
@@ -80,8 +80,9 @@ export function SetScores(videosInfos) {
   }
 
   var mostViewedCategories = GetMostViewedCategories();
-  console.log(mostViewedCategories);
 
+  console.log("id",subscribeListInfos[0]);
+  
   for (var i = 0; i < videosInfos.length; i++) {
     videosInfos[i]["score"] = 0;
 
@@ -102,7 +103,7 @@ export function SetScores(videosInfos) {
     }
 
     // If you're not loged-in
-    if (connected == true) {
+    if (connected === true) {
 
       if (mostViewedCategories.length >= 1) {
         // If the video is on the 1st most viewed category
@@ -123,9 +124,12 @@ export function SetScores(videosInfos) {
         }
       }
   
-      // If the video is yours (1 == userid but I didn't get the userID)
-      if (videosInfos[i]["channel_id"] == 1) {
-        videosInfos[i]["score"] -= 100;
+      // If the video is yours
+      if (subscribeListInfos[i] != undefined) {
+        if (videosInfos[i]["channel_id"] === subscribeListInfos[i]["userId"]) {
+          videosInfos[i]["score"] -= 100;
+          console.log("-100 pour ",videosInfos[i]["title"])
+        }
       }
 
     }
