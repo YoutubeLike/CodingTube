@@ -174,7 +174,7 @@ const [confirmPassword, setConfirmPassword] = useState("");
 
           <div className=" ml-10 border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]  w-52 h-52 rounded-full ">
             <img
-              src="https://ih1.redbubble.net/image.519366270.8886/raf,360x360,075,t,fafafa:ca443f4786.jpg"
+              src="https://t4.ftcdn.net/jpg/01/17/00/39/360_F_117003938_TrPAYiOgFFLnIwKsjUjtqoe4W2RDzytI.jpg"
               class=" h-48 w-52 rounded-full"
               alt="..."
             />
