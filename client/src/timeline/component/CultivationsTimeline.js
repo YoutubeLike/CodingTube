@@ -38,6 +38,19 @@ export default function CultivationsTimeLine() {
   }
 
   var indents = [];
+
+  // If in BDD there is no cultivation video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No cultivation video in BDD... Publish a cultivation video to become the first!
+        </p>
+      </div>
+    );
+  }
+
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])

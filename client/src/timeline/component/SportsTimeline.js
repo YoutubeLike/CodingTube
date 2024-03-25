@@ -38,6 +38,19 @@ export default function SportsTimeLine() {
   }
 
   var indents = [];
+
+  // If in BDD there is no sport video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No sport video in BDD... Publish a sport video to become the first!
+        </p>
+      </div>
+    );
+  }
+
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])

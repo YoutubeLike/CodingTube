@@ -39,7 +39,7 @@ export default function GridSubscriptionTimeLine() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-2">
+      <div key={i} className="max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
           <div className="relative">
             <img

@@ -26,6 +26,19 @@ export default function TimelineHistory() {
     }, []);
   
     var indents = [];
+
+    // If you're not logges-in or no video are watched
+    if (videosInfos.length === 0) {
+      indents.push(
+        <div>
+          <p className="p-5 bg-red-700 text-white rounded-lg">
+            No video, watch at least one video OR login, to show your history
+          </p>
+        </div>
+      );
+    }
+
+    
     for (var i = 0; i < videosInfos.length; i++) {
       var date = videosInfos[i]["upload_date_time"];
       var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])

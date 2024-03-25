@@ -23,6 +23,7 @@ export default function TimelineRightSide() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
