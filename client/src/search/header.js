@@ -135,10 +135,17 @@ export default function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             submit(searchValue);
-            navigate({
-              pathname: '/search',
-              search: '?videoName=' + searchValue,
-            });
+            if (inputRef.current != "") {
+              navigate({
+                pathname: '/search',
+                search: '?videoName=' + searchValue,
+              });
+            }
+            else {
+              navigate({
+                pathname: '/',
+              });
+            }
           }}
         >
           <div
@@ -153,18 +160,18 @@ export default function Header() {
               value={inputRef.current}
               onChange={(e) => {
                 handleInputChange(e);
-                history_onChange();
-                mostResearch_onChange();
+                // history_onChange();
+                // mostResearch_onChange();
               }}
               onClick={(e) => {
                 setMenuOpen(true);
-                if (e.target.value === "") {
-                  mostResearch(e);
-                  history(e);
-                } else {
-                  history_onChange();
-                  mostResearch_onChange();
-                }
+                // if (e.target.value === "") {
+                //   mostResearch(e);
+                //   history(e);
+                // } else {
+                //   history_onChange();
+                //   mostResearch_onChange();
+                // }
               }}
             />
             {menuOpen && (
