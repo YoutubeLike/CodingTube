@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import img from '../../assets/logo.jpg'
-import dislike from '../../assets/dislike.png'
-import like from '../../assets/like.png'
-import share from '../../assets/share.png'
+import img from "../../assets/logo.jpg";
+import LikeDislike from "./LikeDislikeButton"
+import { useActionData } from "react-router-dom";
 
 export default function Video() {
 
   const [pseudo, setPseudo] = useState('') // Pseudo
-  const [follower, setFollower] = useState(0) // Subscriber number
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [number_view, setNumber_view] = useState(0)
-  const [nb_like, setNb_like] = useState(0)
+  const [follower, setFollower] = useState(0);
+  const [buttonSubscribe, setbuttonSubscribe] = useState("");
 
 
   useEffect(() => {
@@ -21,14 +20,15 @@ export default function Video() {
         // Requête vers les infos de la chaîne
         const response = await axios.get('http://localhost:5000/api/channel/infos');
         const responseVideo = await axios.get('http://localhost:5000/api/channel/video');
+        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
         // Attribution des informations
+        setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         setPseudo(response.data.pseudo);
-        setFollower(response.data.nb_follower);
+        setFollower(responseNbFollowers.data.length);
         setTitle(responseVideo.data.title);
         setDescription(responseVideo.data.description);
         setNumber_view(responseVideo.data.number_view);
-        setNb_like(responseVideo.data.nb_like);
-
       } catch (error) {
         console.error('Erreur :', error);
       }
@@ -37,13 +37,25 @@ export default function Video() {
     fetchTest();
   }, [])
 
+  async function handleSubscribe() {
+    try {
+      await axios.get('http://localhost:5000/api/channel/follow', { params: { channelId: 1, userId: 1 } });
+      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+      setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné");
+      //call a function which will get the number of followers
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+
   return (
     <>
       <div className="pl-10 mt-8 w-3/4">
         <iframe rounded-md
           width="100%"
           height="680"
-          
+
           src="https://www.youtube.com/embed/Oflbho9ZG2U?start=103"
         />
 
@@ -56,14 +68,10 @@ export default function Video() {
               <p className="text-sm font-bold">{pseudo}</p>
               <p className="text-sm text-gray-500">{follower} abonnés</p>
             </div>
-            {/*Button qui permet de s'abonner, liker, et partager*/}
-            <button className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full">S'abonner</button>
+
+            <button onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full">{buttonSubscribe}</button>
           </div>
-          <div>
-            <button className="bg-gray-100 px-8 ml-10 rounded-l-full">{nb_like}<img className="w-6 py-2" src={like}/></button>
-            <button className="bg-gray-100 px-8 rounded-r-full"><img className="w-6 py-2" src={dislike} /></button>
-            <button className="bg-gray-100 px-8 ml-10 rounded-full"><img className="w-6 py-2" src={share} /></button>
-          </div>
+          <LikeDislike />
         </div>
 
 
@@ -81,3 +89,4 @@ export default function Video() {
     </>
   );
 }
+
