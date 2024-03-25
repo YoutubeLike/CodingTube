@@ -17,7 +17,7 @@ export default function MusicsTimeLine() {
         const response = await axios.get(
           `http://localhost:5000/api/timeline/category-request`,{
             params: {
-              categoryStrParam: "Music",
+              categoryStrParam: "Musics",
             },
           }
         );
