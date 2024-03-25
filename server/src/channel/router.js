@@ -1,5 +1,5 @@
 // Import de express
-const express = require('express');
+const express = require("express");
 
 // Utilisation du router de Express
 const router = express.Router();
@@ -16,9 +16,7 @@ const { getVideoLikes,
     removeVideoDislike, } = require("./likeManager.js");
 
 // Configuration de la route
-router.get('/test', test)
 router.get('/infos', selectChannel)
-router.get('/request/:submit', submit)
 router.get('/video', selectVideo)
 router.get('/get-nb-followers', getNbFollowers)
 router.get('/get-follow', getFollow)
