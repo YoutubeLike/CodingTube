@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 class LikeButton extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isHovered: false
+    };
     this.like = this.like.bind(this);
+    this.handleHover = this.handleHover.bind(this);
     this.addLike = this.addLike.bind(this);
     this.removeLike = this.removeLike.bind(this);
     this.removeDislike = this.removeDislike.bind(this);
@@ -73,6 +77,12 @@ class LikeButton extends React.Component {
     }
   }
 
+  handleHover() {
+    this.setState((prevState) => ({
+      isHovered: !prevState.isHovered
+    }));
+  }
+
   render() {
     const likeCount =
       this.props.likes < 1000
@@ -86,13 +96,20 @@ class LikeButton extends React.Component {
         <button
           id={"like" + this.props.id}
           className={
-            "h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
+            "relative h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
             (this.props.isLiked
               ? " bg-[#171717]"
-              : " bg-[#f5f5f5] hover:bg-[#e5e5e5]")
+              : (this.state.isHovered ? " bg-[#e5e5e5]" : " bg-[#f5f5f5]"))
           }
           onClick={this.like}
+          onMouseEnter={this.handleHover}
+          onMouseLeave={this.handleHover}
         >
+          {this.state.isHovered && (
+            <span className="right-[6vh] px-[1vh] text-[1.5vh] rounded-[0.5vh] bg-slate-300/75 absolute">
+              Like
+            </span>
+          )}
           <img
             src="like.png"
             id={"likeImg" + this.props.id}

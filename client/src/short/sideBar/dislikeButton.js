@@ -4,7 +4,11 @@ import axios from "axios";
 class DislikeButton extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isHovered: false
+    };
     this.dislike = this.dislike.bind(this);
+    this.handleHover = this.handleHover.bind(this);
     this.addDislike = this.addDislike.bind(this);
     this.removeDislike = this.removeDislike.bind(this);
     this.removeLike = this.removeLike.bind(this);
@@ -55,7 +59,7 @@ class DislikeButton extends React.Component {
         this.props.setState((state) => ({
           likes: state.likes - 1,
           isLiked: false,
-        })); // LIKE button already pressed
+        }));
         this.removeLike();
       }
 
@@ -63,14 +67,20 @@ class DislikeButton extends React.Component {
         dislikes: state.dislikes + 1,
         isDisliked: true,
       }));
-      this.addDislike(1);
+      this.addDislike();
     } else {
       this.props.setState((state) => ({
         dislikes: state.dislikes - 1,
         isDisliked: false,
-      })); // DISLIKE button unpressed
+      }));
       this.removeDislike();
     }
+  }
+
+  handleHover() {
+    this.setState((prevState) => ({
+      isHovered: !prevState.isHovered
+    }));
   }
 
   render() {
@@ -86,13 +96,20 @@ class DislikeButton extends React.Component {
         <button
           id={"dislike" + this.props.id}
           className={
-            "h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
+            "relative h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
             (this.props.isDisliked
               ? " bg-[#171717]"
-              : " bg-[#f5f5f5] hover:bg-[#e5e5e5]")
+              : (this.state.isHovered ? " bg-[#e5e5e5]" : " bg-[#f5f5f5]"))
           }
           onClick={this.dislike}
+          onMouseEnter={this.handleHover}
+          onMouseLeave={this.handleHover}
         >
+          {this.state.isHovered && (
+            <span className="right-[6vh] px-[1vh] text-[1.5vh] rounded-[0.5vh] bg-slate-300/75 absolute">
+              Dislike
+            </span>
+          )}
           <img
             src="dislike.png"
             id={"dislikeImg" + this.props.id}
