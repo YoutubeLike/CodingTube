@@ -9,7 +9,7 @@ export default function Video() {
 	useEffect(() => {
 		const fetchVideos = async () => {
 			try {
-				// Requête pour récupérer les informations de la chaîne
+				// Query to retrieve string information
 				const urlParams = new URLSearchParams(window.location.search);
 				const response = await axios.get(
 					"http://localhost:5000/api/channel/infosId",
@@ -42,8 +42,6 @@ export default function Video() {
 	}, []);
 
 	const sendVideo = () => {};
-
-	// video && console.log(video);
 
 	return (
 		<div className="flex justify-center">
