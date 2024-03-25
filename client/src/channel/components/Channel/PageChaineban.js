@@ -9,11 +9,12 @@ import Playlists from "./Playlists";
 import CheckSession from "../../../session";
 
 const App = () => {
+	const [idChannel, setIdChannel] = useState(); // Id Channel
 	const [pseudo, setPseudo] = useState(""); // Pseudo
 	const [follower, setFollower] = useState(0); // Subscriber number
 	const [bio, setBio] = useState(""); // Bio
 	const [identifier, setIdentifier] = useState(""); // Identifier
-	const [numberVideo, setNumberVideo] = useState(0); // video number
+	const [numberVideo, setNumberVideo] = useState(); // video number
 	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 	const [isOpen, setIsOpen] = useState(false);
@@ -25,14 +26,32 @@ const App = () => {
 				const urlParams = new URLSearchParams(window.location.search);
 				setIdentifier(urlParams.get("identifier"));
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/infosId", {params: {identifier: urlParams.get("identifier")}}
+					"http://localhost:5000/api/channel/infosId",
+					{ params: { identifier: urlParams.get("identifier") } }
 				);
 
 				// Attribution of information
+				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
+
+				try {
+					// Requête pour récupérer le nombre de vidéos de la chaîne
+					const nbVideos = await axios.get(
+						"http://localhost:5000/api/channel/nombreVideo",
+						{ params: { numberVideo: response.data.id } }
+					);
+
+					// Attribution du nombre de vidéos
+					setNumberVideo(nbVideos.data.length);
+				} catch (error) {
+					console.error(
+						"Erreur lors de la récupération du nombre de vidéos de la chaîne :",
+						error
+					);
+				}
 			} catch (error) {
 				console.error(
 					"Erreur lors de la récupération des informations de la chaîne :",
@@ -41,25 +60,7 @@ const App = () => {
 			}
 		};
 
-		const fetchVideoCount = async () => {
-			try {
-				// Requête pour récupérer le nombre de vidéos de la chaîne
-				const response = await axios.get(
-					"http://localhost:5000/api/channel/nombreVideo"
-				);
-
-				// Attribution du nombre de vidéos
-				setNumberVideo(Number(response.data)); // Convertir en nombre entier
-			} catch (error) {
-				console.error(
-					"Erreur lors de la récupération du nombre de vidéos de la chaîne :",
-					error
-				);
-			}
-		};
-
 		fetchChannelInfo();
-		fetchVideoCount();
 	}, []);
 
 	//Met à jour l'onglet actif
@@ -69,13 +70,12 @@ const App = () => {
 
 	//Met à jour l'onglet actif en utilisant la fonction setActiveTab
 	const handleTabClick = (tabName) => {
-		setActiveTab(tabName); 
+		setActiveTab(tabName);
 	};
 
 	//Retourne la bon onglet actif
 	const renderContent = () => {
 		switch (activeTab) {
-			
 			case "Accueil":
 				return <Accueil />;
 			case "Vidéos":

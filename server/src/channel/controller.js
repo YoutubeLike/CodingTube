@@ -38,20 +38,21 @@ const UserChannel = async (_, res) => {
 
 // Récupérer des infos sur la chaîne
 const selectChannel = (req, res) => {
-    const id = req.query.idChannel;
-    mariadb.pool
-        .query("SELECT * FROM channel WHERE id = ?", [id])
-        .then((value) => {
-            res.send(value[0]);
-        });
+	const id = req.query.idChannel;
+	mariadb.pool
+		.query("SELECT * FROM channel WHERE id = ?", [id])
+		.then((value) => {
+			res.send(value[0]);
+		});
 };
 
 // Récupérer des infos sur la chaîne à partir d'un identifiant @
-const selectChannelIdentifier= (req, res) => {
+const selectChannelIdentifier = (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool
 		.query(
-			"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE identifier_channel = ?", [identifier]
+			"SELECT id, pseudo, nb_follower, bio, banner FROM channel WHERE identifier_channel = ?",
+			[identifier]
 		)
 		.then((value) => {
 			res.send(value[0]);
@@ -61,10 +62,9 @@ const selectChannelIdentifier= (req, res) => {
 // Récupérer l'id à partir de l'identifier
 const selectId = (req, res) => {
 	const identifier = req.query.identifier;
-	mariadb.pool
-		.query(
-			"SELECT id FROM channel WHERE identifier_channel = ?", [identifier]
-		)
+	mariadb.pool.query("SELECT id FROM channel WHERE identifier_channel = ?", [
+		identifier,
+	]);
 	const id = req.query.idChannel;
 	mariadb.pool
 		.query("SELECT * FROM channel WHERE id = ?", [id])
@@ -83,13 +83,12 @@ const selectVideo = (req, res) => {
 
 const submitChannel = async (req, res) => {
 	const { name, identifier, bio, banner, profile_picture } = req.body;
-	const isIdentifierAvailable = await mariadb.pool
-		.query(
-			"SELECT identifier_channel FROM channel WHERE identifier_channel = ?",
-			[identifier]
-		)
+	const isIdentifierAvailable = await mariadb.pool.query(
+		"SELECT identifier_channel FROM channel WHERE identifier_channel = ?",
+		[identifier]
+	);
 
-	if (isIdentifierAvailable[0] == null){
+	if (isIdentifierAvailable[0] == null) {
 		mariadb.pool
 			.query(
 				"INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio, banner, profile_picture) VALUES (1, ?, ?, 0, ?, ?, ?)",
@@ -101,35 +100,33 @@ const submitChannel = async (req, res) => {
 			.catch((error) => {
 				console.error(error);
 			});
-		} else {
-			res.status(200).send("Identifiant déjà utilisé");
-		}
+	} else {
+		res.status(200).send("Identifiant déjà utilisé");
+	}
 };
 
-//Récupère les vidéos postées
-const videoOnTab = (_, res) => {
+//Récupère les vidéos postées pour l'onglet vidéo de la chaîne
+const videoOnTab = (req, res) => {
+	const idVideoOnTab = req.query.idVideoOnTab;
 	mariadb.pool
-		.query(
-			"SELECT id, channel_id, upload_video_url, title, number_view, upload_date_time, thumbnail FROM video WHERE channel_id = 1"
-		)
+		.query("SELECT * FROM video WHERE channel_id = ?", [idVideoOnTab])
 		.then((value) => {
 			res.send(value);
+		})
+		.catch((error) => {
+			console.error("Error executing query", error);
+			res.status(500).send("An error occurred while fetching the data.");
 		});
 };
 
 //Récupère le nombre de vidéo mise en ligne
-const NumberVideo = (_, res) => {
+const NumberVideo = (req, res) => {
+	const numberVideo = req.query.numberVideo;
 	mariadb.pool
-		.query("SELECT COUNT (*) FROM video WHERE channel_id = 2")
+		.query("SELECT * FROM video WHERE channel_id = ?", [numberVideo])
 		.then((result) => {
-			// Récupérer la valeur du COUNT(*) depuis le résultat de la requête
-			const count = result[0]["COUNT (*)"];
-
-			// Convertir la valeur BigInt en nombre entier
-			const countInt = Number(count);
-
 			// Envoyer la réponse
-			res.json(countInt);
+			res.send(result);
 		})
 		.catch((error) => {
 			// Gérer les erreurs
