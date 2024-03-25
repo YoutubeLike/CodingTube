@@ -1,6 +1,7 @@
 const ffmpeg = require("fluent-ffmpeg")
 const fs = require ('fs')
 const mariadb = require('/app/back/src/src/database.js')
+const bcrypt = require('bcryptjs')
 
 const saveThumbnail = ((req, res) => 
 {
@@ -73,11 +74,23 @@ const test = ((req, res) => {
   res.send("" + req.session.userId)
 })
 
+const generateLiveKey = (async (req, res) => 
+{
+  if(req.session.userId != undefined)
+  {
+    mariadb.pool.query("UPDATE channel set stream_key = '" + await bcrypt.hash(Math.random().toString(36), 10) + "' WHERE user_id = '" + req.session.userId + "'")
+    res.send('Enregistré')
+  } else {
+    res.send("Vous n'êtes pas connecté")
+  }
+})
+
 module.exports = {
     saveThumbnail,
     sendThumbnail,
     GetProfilPicture,
     GetUsername,
     display,
-    test
+    test,
+    generateLiveKey
 }

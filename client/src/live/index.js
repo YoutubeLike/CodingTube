@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 
 export default function Live()
 {
+    axios.get("http://localhost:5000/api/live/LiveStreamKey", {withCredentials: true})
     axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
         console.log(response.data)
     })

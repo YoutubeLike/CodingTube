@@ -40,7 +40,7 @@ nms.run();
 nms.on('prePublish', (id, streamPath, args) => {
   const session = nms.getSession(id);
 
-  const result = connection.query("SELECT username FROM user WHERE username = '" + streamPath.replace('/live/', "") + "'");
+  const result = connection.query("SELECT stream_key FROM channel WHERE stream_key = '" + streamPath.replace('/live/', "") + "'");
   if(result.length < 1)
   {
     session.reject();
