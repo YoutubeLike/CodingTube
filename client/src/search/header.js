@@ -160,18 +160,18 @@ export default function Header() {
               value={inputRef.current}
               onChange={(e) => {
                 handleInputChange(e);
-                // history_onChange();
-                // mostResearch_onChange();
+                history_onChange();
+                mostResearch_onChange();
               }}
               onClick={(e) => {
                 setMenuOpen(true);
-                // if (e.target.value === "") {
-                //   mostResearch(e);
-                //   history(e);
-                // } else {
-                //   history_onChange();
-                //   mostResearch_onChange();
-                // }
+                if (e.target.value === "") {
+                  mostResearch(e);
+                  history(e);
+                } else {
+                  history_onChange();
+                  mostResearch_onChange();
+                }
               }}
             />
             {menuOpen && (
@@ -181,7 +181,7 @@ export default function Header() {
                     <div key={index} className="flex justify-between">
                       <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
                         <div
-                          onClick={() => {
+                          onMouseDown={() => {
                             handleClickSearch(result.name_search);
                           }}
                         >
@@ -216,7 +216,7 @@ export default function Header() {
                     <button
                       className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
                       key={index}
-                      onClick={() => {
+                      onMouseDown={() => {
                         handleClickSearch(result.name_search);
                       }}
                     >

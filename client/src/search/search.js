@@ -74,13 +74,11 @@ export default function Search() {
     const displaySearchPage = async () => {
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
-      console.log(video)
       try {
         const response = await axios.get(
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
-        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
