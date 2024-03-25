@@ -246,20 +246,6 @@ export default function Header() {
               ></path>
             </svg>
           </button>
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-            >
-              <path
-                className="ml-2 h-7 bg-gray-200 rounded-full z-20 relative"
-                fill="currentColor"
-                d="M8 24q-.425 0-.712-.288T7 23q0-.425.288-.712T8 22q.425 0 .713.288T9 23q0 .425-.288.713T8 24m4 0q-.425 0-.712-.288T11 23q0-.425.288-.712T12 22q.425 0 .713.288T13 23q0 .425-.288.713T12 24m4 0q-.425 0-.712-.288T15 23q0-.425.288-.712T16 22q.425 0 .713.288T17 23q0 .425-.288.713T16 24m-4-10q-1.25 0-2.125-.875T9 11V5q0-1.25.875-2.125T12 2q1.25 0 2.125.875T15 5v6q0 1.25-.875 2.125T12 14m-1 7v-3.1q-2.6-.35-4.3-2.312T5 11h2q0 2.075 1.463 3.538T12 16q2.075 0 3.538-1.463T17 11h2q0 2.625-1.7 4.588T13 17.9V21z"
-              ></path>
-            </svg>
-          </button>
         </form>
       </div>
       <div className="flex justify-end space-x-2 w-[33%]">

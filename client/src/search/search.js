@@ -74,6 +74,7 @@ export default function Search() {
     const displaySearchPage = async () => {
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
+      console.log(video)
       try {
         const response = await axios.get(
           "http://localhost:5000/api/search/displaySearchPage/" + video
@@ -86,7 +87,7 @@ export default function Search() {
     };
 
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
-  }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
+  }); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
   return (
       <div className="flex">
