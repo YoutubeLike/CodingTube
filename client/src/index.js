@@ -25,6 +25,7 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
+import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
 import Live from './live/index'
@@ -144,6 +145,10 @@ const router = createBrowserRouter([
       {
 				path: "/showPlaylist",
 				element: <ShowPlaylistPage />,
+			},
+      {
+				path: "*",
+				element: <Error />,
 			},
     ]
   },
