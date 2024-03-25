@@ -43,8 +43,8 @@ export default function UploadVideo() {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('category', category);
-        formData.append('thumbnail', thumbnailFile);
         formData.append('video', videoFile);
+		formData.append('thumbnail', thumbnailFile)
 
         axios.post('http://localhost:5000/api/channel/submitVideo', formData)
             .then(response => {
@@ -131,7 +131,7 @@ export default function UploadVideo() {
                     <button type="submit" className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors w-30 mt-10">
                         Valider
                     </button>
-                    <input type="file" accept="image/*" id="thumbnailInput" className="hidden" onChange={handleThumbnailChange} />
+                    <input type="file" accept="image/*" id="thumbnailInput" className="hidden" onChange={(e)=>{handleThumbnailChange(e)}}/>
                 </div>
             </form>
         </div>

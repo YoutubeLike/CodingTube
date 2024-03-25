@@ -1,21 +1,28 @@
 const mariadb = require("../src/database");
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 const multer = require('multer');
+
+const express = require('express');
+const app = express();
+app.use(cors);
+app.use(express.json);
+
+const source = path.join(__dirname, "../../../..", "upload")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if (file.fieldname === 'thumbnail') {
-            cb(null, path.join(__dirname, '..', '..', 'client', 'public', 'images'));
+            cb(null, path.join(source , "thumbnails"));
         } else if (file.fieldname === 'video') {
-            cb(null, path.join(__dirname, '..', '..', 'client', 'public', 'videos'));
+            cb(null, path.join(source, "videos"));
         }
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
     }
 });
-
 
 const upload = multer({ storage: storage });
 
@@ -60,7 +67,11 @@ const submit = (req, res) => {
 
 const submitVideo = (req, res) => {
     uploadVideo(req, res, (err) => {
-        if (err) {
+
+		console.log("Coucou")
+		console.log( path.join(__dirname, "../../../..") )
+
+        if (err) { 
             console.error("Error uploading files:", err);
             return res.status(500).send("Internal Server Error");
         }
@@ -75,7 +86,10 @@ const submitVideo = (req, res) => {
         }
 
         // Enregistrer la miniature
-        const thumbnailPath = path.join(__dirname, '..', '..', 'client', 'public', 'images', thumbnailFile.originalname);
+        const thumbnailPath = path.join(__dirname, "../../../..", "images" ,thumbnailFile.originalname);
+        const videoPath = path.join(__dirname, "../../../..", "videos" , videoFile.originalname);
+
+        // Déplacer les fichiers
         thumbnailFile.mv(thumbnailPath, (err) => {
             if (err) {
                 console.error("Error saving thumbnail:", err);
@@ -83,7 +97,6 @@ const submitVideo = (req, res) => {
             }
 
             // Enregistrer la vidéo
-            const videoPath = path.join(__dirname, '..', '..', 'client', 'public', 'videos', videoFile.originalname);
             videoFile.mv(videoPath, (err) => {
                 if (err) {
                     console.error("Error saving video:", err);
@@ -105,8 +118,6 @@ const submitVideo = (req, res) => {
         });
     });
 };
-
-
 
 const videoOnTab = (_, res) => {
     mariadb.pool
