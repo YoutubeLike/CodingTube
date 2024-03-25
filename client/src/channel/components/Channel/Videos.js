@@ -3,24 +3,38 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 export default function Video() {
-	const [channelId, setChannelId] = useState(0); // Channel id
-	const [uploadVideoUrl, setUploadVideoUrl] = useState([]); // Video number
-	const [title, setTitle] = useState([]); // Title
+	const [channelId, setChannelId] = useState(); // Channel id
 	const [video, setVideo] = useState(); // Video
 
 	useEffect(() => {
 		const fetchVideos = async () => {
 			try {
-				// Query for channel information
+				// Query to retrieve string information
+				const urlParams = new URLSearchParams(window.location.search);
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/videos"
+					"http://localhost:5000/api/channel/infosId",
+					{ params: { identifier: urlParams.get("identifier") } }
 				);
 
-				// Add query result into video variable
-				console.log(response.data);
-				setVideo(response.data);
+				// Attribution of information
+				setChannelId(response.data.id);
+				try {
+					// Query for channel information
+					const videos = await axios.get(
+						"http://localhost:5000/api/channel/videos",
+						{ params: { idVideoOnTab: response.data.id } }
+					);
+
+					// Add query result into video variable
+					setVideo(videos.data);
+				} catch (error) {
+					console.error("Erreur :", error);
+				}
 			} catch (error) {
-				console.error("Erreur :", error);
+				console.error(
+					"Erreur lors de la récupération des informations de la chaîne :",
+					error
+				);
 			}
 		};
 
@@ -28,8 +42,6 @@ export default function Video() {
 	}, []);
 
 	const sendVideo = () => {};
-
-	video && console.log(video);
 
 	return (
 		<div className="flex justify-center">
