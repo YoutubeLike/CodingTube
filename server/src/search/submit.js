@@ -1,6 +1,7 @@
 const mariadb = require('../src/database');
 
 const submit = async (req, res) => {
+    
     const submitValue = req.params.submit;
 
     try {
@@ -25,10 +26,24 @@ const submit = async (req, res) => {
             console.log("Élément mis à jour avec succès.");
             res.status(200).send("Élément mis à jour avec succès.");
         }
+        if (req.session.userId){
+            const userValue = req.session.userId;
+            const resultsHistory = await mariadb.pool.query("SELECT * FROM search_history JOIN search ON search.id=search_history.search_id WHERE user_id = ? AND name_search = UPPER(?)", [userValue, submitValue]);
+            const search_id = await mariadb.pool.query("SELECT id FROM search WHERE user_id = ? AND name_search = UPPER(?)", [userValue, submitValue]);
+            if (resultsHistory.length === 0){
+                await mariadb.pool.query("INSERT INTO search_history (search_id, user_id) VALUES (?, ?)", [userValue, search_id]);
+            }
+
+        }else{
+            console.log("vous n'etes pas connecté Cyka bliat for submit")
+        }
     } catch (error) {
         console.error("Une erreur est survenue :", error);
         res.status(500).send("Une erreur est survenue lors du traitement.");
     }
+
+
+
 };
 
 module.exports = { submit };

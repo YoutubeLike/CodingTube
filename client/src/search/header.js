@@ -4,6 +4,8 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const axiosSession = axios.create({ baseURL: "http://localhost:5000/", WithCredentials: true})
+
   const [searchValue, setSearchValue] = useState("");
   const [mostview, setMostView] = useState([]);
   const [userhistory, setUserHistory] = useState([]);
@@ -12,13 +14,19 @@ export default function Header() {
   const inputRef = useRef("");
   const navigate = useNavigate();
 
+ 
+
+
   const submit = async () => {
     if (inputRef.current != "") {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/search/request/" + inputRef.current
-        );
-      } catch (error) {
+        console.log(inputRef.current)
+          await fetch("http://localhost:5000/api/search/request/" + inputRef.current,{
+            method: "GET",
+            headers: {"content-type": "application/json"},
+            credentials: 'include'
+          })
+        }catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     }
@@ -41,10 +49,16 @@ export default function Header() {
 
   const history = async () => {
     try {
-      const resultHistory = await axios.get(
-        "http://localhost:5000/api/search/history/1"
-      );
-      setUserHistory(resultHistory.data);
+    await fetch("http://localhost:5000/api/search/history" , {
+        method: "GET",
+        headers: {"content-type": "application/json"},
+        credentials: 'include'
+      }).then(response =>{
+        return response.json()
+      })
+      .then(data => {
+        setUserHistory(data)
+      })
     } catch (error) {
       console.error(
         "An error occurred while searching research most view: ",
@@ -58,11 +72,16 @@ export default function Header() {
       history();
     } else {
       try {
-        const resultHistory_onChange = await axios.get(
-          "http://localhost:5000/api/search/history_onChange/1/" +
-            inputRef.current
-        );
-        setUserHistory(resultHistory_onChange.data);
+        await fetch("http://localhost:5000/api/search/history_onChange/" + inputRef.current, {
+          method: "GET",
+          headers: {"Content-Type": "application/json"},
+          credentials: 'include'
+        }).then(response =>{
+          return response.json()
+        })
+        .then(data => {
+          setUserHistory(data)
+        })
       } catch (error) {
         console.error("An error in history_onChange: ", error);
       }
