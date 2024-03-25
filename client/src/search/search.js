@@ -88,21 +88,111 @@ export default function Search() {
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
   }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
+
+    const handleClickFilters = async (e) => {
+        const buttonValue = e.target.value;
+        console.log(buttonValue)
+        try{
+          const applyFilters = await axios.get(
+            "http://localhost:5000/api/search/filters/" + buttonValue
+          );
+        } catch(error){
+          console.error("An error occurred while applying filter: ", error)
+        }
+    }
+  
+
   return (
       <div className="flex">
         <NonDisplayedBurgerMenu />
         <div className="flex ml-[3%] flex-wrap mt-[5%]">
         <div className="flex w-[100]">
           <div className="flex flex-row h-2">
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">Tous</button></div>
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">Shorts</button></div>
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">Vidéos</button></div>
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">Musiques</button></div>
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">Vidéos mises en ligne récemment</button></div>
-            <div><button type="submit" className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold">En direct</button></div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "all"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              All
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "videos"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              Videos
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "shorts"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              Shorts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "music"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              Music
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "recently-uploaded"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              Recently uploaded
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "live"
+                onClick={(e) => {
+                  handleClickFilters(e);
+                }}
+              >
+              Live
+              </button>
+            </div>
           </div>
           <div className="">
-            <div className=""><button type="submit" className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold">Filtres <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5zM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11zM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75m-3-2.75H8.5v1.5H2.75a.75.75 0 0 1 0-1.5M4 3H2.75a.75.75 0 0 0 0 1.5H4zm-1.25 8.5H4V13H2.75a.75.75 0 0 1 0-1.5"></path></svg></button></div>
+            <div className="">
+              <button 
+              type="submit" 
+              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold"
+              onClick={(e) => {
+
+              }}
+              >
+              Filters <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5zM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11zM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75m-3-2.75H8.5v1.5H2.75a.75.75 0 0 1 0-1.5M4 3H2.75a.75.75 0 0 0 0 1.5H4zm-1.25 8.5H4V13H2.75a.75.75 0 0 1 0-1.5"></path></svg>
+              </button>
+            </div>
           </div>
         </div>
           {videosInfos && videosInfos.map((result, index) => (
@@ -136,6 +226,14 @@ export default function Search() {
               </div>
           ))}
         </div>
+        {/* <div className="bg-green-800 opacity-100 z-80 flex flex-col">
+          <p className="text-lg">Filtres de recherche</p>
+          <div className="flex flex-row justify-between gap-4">
+            <p className="text-base">DATE D'AJOUT</p>
+            <p className="text-base">TYPE</p>
+            <p className="text-base">DURÉE</p>
+            <p className="text-base">TRIER PAR</p>
+          </div> */}         
     </div>
   );
 }
