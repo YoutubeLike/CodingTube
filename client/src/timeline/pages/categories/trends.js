@@ -1,12 +1,12 @@
 //  PAGE DISPLAYING THE TRENDINGS TIMELINE
 
-import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
-import TrendingsTimeLine from "../component/TrendingsTimeline";
-import TimelineRightSide from "../component/timelineRightSide";
-import "../styles/Timeline.css";
+import NonDisplayedBurgerMenu from "../../component/nonDisplayedBurgerMenu";
+import TrendingsTimeLine from "../../component/TrendingsTimeline";
+import TimelineRightSide from "../../component/timelineRightSide";
+import "../../styles/Timeline.css";
 import React, { useEffect, useState } from "react";
 
-export default function Mainpage() {
+export default function Trends() {
 
   /* Page title (displayed on tab) */
   useEffect(() => {

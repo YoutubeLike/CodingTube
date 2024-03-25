@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { timelineRequest } = require('./controllerTimelineRequest.js')
+const { categoryTimelineRequest } = require('./controllerCategoryTimelineRequest.js')
 const { addViewTimelineRequest } = require('./controllerAddViewVideoTimeline.js')
 const { subscriptionListMenu } = require('./controllerSubscriptionListMenu.js');
 const { subscriptionTimelineRequest } = require('./controllerSubscriptionTimelineRequest.js');
@@ -16,6 +17,9 @@ console.log("router timeline");
 
 // Get the videos infos to show timeline
 router.get('/timeline-request', timelineRequest)
+
+// Get the videos infos to show category's timeline
+router.get('/category-request', categoryTimelineRequest)
 
 // Get the videos infos to show timeline subscriptions
 router.get('/subscription-timeline-request', subscriptionTimelineRequest)
