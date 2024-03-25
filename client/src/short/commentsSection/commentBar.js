@@ -61,7 +61,6 @@ class CommentBar extends React.Component {
       this.props.setState((state) => ({
         commentCount: state.commentCount + 1,
       }));
-
       document.getElementById("commentsInputField").value = "";
       this.setState({ userInput: "" });
     }
@@ -105,6 +104,7 @@ class CommentBar extends React.Component {
               key={id}
               id={id}
               uploader={this.props.shortInfos.uploader_id}
+              shortInfos={this.props.shortInfos}
             />
           ))}
         </div>
