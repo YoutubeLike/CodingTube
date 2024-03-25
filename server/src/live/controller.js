@@ -78,7 +78,7 @@ const generateLiveKey = (async (req, res) =>
 {
   if(req.session.userId != undefined)
   {
-    mariadb.pool.query("UPDATE channel set stream_key = '" + await bcrypt.hash(Math.random().toString(36), 10) + "' WHERE user_id = '" + req.session.userId + "'")
+    mariadb.pool.query("UPDATE channel set stream_key = '" + (await bcrypt.hash(Math.random().toString(36), 10)).replace('/', "") + "' WHERE user_id = '" + req.session.userId + "'")
     res.send('Enregistré')
   } else {
     res.send("Vous n'êtes pas connecté")
