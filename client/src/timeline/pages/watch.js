@@ -28,10 +28,9 @@ export default function Watch() {
       try {
         if (videoId && userId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addView-request`,{
+            `http://localhost:5000/api/timeline/addView-request`, { WithCredentials: true},{
               params: {
                 videoIdParam: videoId,
-                userIdParam: userId,
               },
             }
           );

@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
+var connected = false;
 
 // Function that checks whether 'you have subscribed to a channel using its ID
 function isChannelSubscribed(id_channel, subscriptionList) {
@@ -26,13 +23,10 @@ function GetMostViewedCategories() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/timeline/viewed-categories-list-request`,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          `http://localhost:5000/api/timeline/viewed-categories-list-request`, { WithCredentials: true}
         );
         setViewedCategorieInfos(response.data);
+        connected = true;
       } catch (error) {
         console.error("Error fetching viewed categories list:", error);
       }
@@ -69,11 +63,7 @@ export function SetScores(videosInfos) {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscribe-list-request"
-          ,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          , { WithCredentials: true}
         );
         setSubscribeListInfos(response.data);
       } catch (error) {
@@ -112,7 +102,7 @@ export function SetScores(videosInfos) {
     }
 
     // If you're not loged-in
-    if (userId > 0) {
+    if (connected == true) {
 
       if (mostViewedCategories.length >= 1) {
         // If the video is on the 1st most viewed category
@@ -133,8 +123,8 @@ export function SetScores(videosInfos) {
         }
       }
   
-      // If the video is yours
-      if (videosInfos[i]["channel_id"] == userId) {
+      // If the video is yours (1 == userid but I didn't get the userID)
+      if (videosInfos[i]["channel_id"] == 1) {
         videosInfos[i]["score"] -= 100;
       }
 

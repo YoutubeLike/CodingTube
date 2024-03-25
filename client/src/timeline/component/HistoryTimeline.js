@@ -5,10 +5,6 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
 
 
 export default function TimelineHistory() {
@@ -19,11 +15,7 @@ export default function TimelineHistory() {
       const fetchVideos = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/history-request`,{
-              params: {
-                userIdParam: userId,
-              },
-            }
+            `http://localhost:5000/api/timeline/history-request`, { WithCredentials: true}
           );
           setVideosInfos(response.data);
         } catch (error) {

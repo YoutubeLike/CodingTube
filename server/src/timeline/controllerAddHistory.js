@@ -2,7 +2,7 @@ const mariadb = require("../src/database.js");
 
 const addHistoryRequest = (req, res) => {
   const videoId = req.query.videoIdParam;
-  const userId = req.query.userIdParam;
+  const userId = req.session.userId;
 
   mariadb.pool
     .query(
