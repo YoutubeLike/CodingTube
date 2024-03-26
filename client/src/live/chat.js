@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 
 const ENDPOINT = "http://127.0.0.1:5000";
-
+// les ban words
 const bannedWords = [
   "nigger",
   "nigga",
@@ -20,30 +20,30 @@ const bannedWords = [
 
 export default function Chat(props) {
   const [response, setResponse] = useState("");
-  const [inputMessage, setInputMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
-  const [isBanned, setIsBanned] = useState(false);
-  const banDuration = 60000; // 1 minute in milliseconds
+  const [inputMessage, setInputMessage] = useState(""); // Stock le message qu'à rentré l'utilisateur
+  const [messages, setMessages] = useState([]); // Stock tout les messages du chat
+  const [socket, setSocket] = useState(null); // Stock l'instance du socket
+  const [isBanned, setIsBanned] = useState(false); // Permet de voir si l'utilisateur est bannis
+  const banDuration = 60000; // 1 minute en milliseconds
   const chatContainerRef = useRef(null);
-  
+  // Le useEffect prock lorsque le composant s'initialise
   useEffect(() => {
-
-    console.log(isBanned);
-        const socketInstance = io(ENDPOINT);
-    setSocket(socketInstance);
-    
-    socketInstance.emit("connect-to-room", props.user)
-
+    const socketInstance = io(ENDPOINT); // Crée le chemin d'accès avec l'acces ENDPOINT
+    setSocket(socketInstance); // Stockage de l'instance pour pouvoir intéragir avec plus facilement
+    // Connexion à la room de chat du live
+    socketInstance.emit("connect-to-room", props.user);
+    // Permet de recevoir les messages
     socketInstance.on("chat-message", (data) => {
-      const messagesReceived = data.message;
-      const ppReceived = data.profilePicture;
+      const messagesReceived = data.message; // Permet de lire les informations du message
+      const ppReceived = data.profilePicture; // Permet d'avoir la pp de la personne qui écris
+      // Sert à stocker les valeurs du message dans un nouvel objet
       const ArrayMessage = {
         time: data.time,
         message: messagesReceived,
         sender: data.sender,
         profilePicture: ppReceived,
       };
+      // ajoute le message à la suite des autres les "..." sont un opérateur de spreadpour décomposer le tableau en élément individuel
       setMessages((prevMessages) => [...prevMessages, ArrayMessage]);
 
       const bannedWordFound = bannedWords.some((word) =>
@@ -55,10 +55,6 @@ export default function Chat(props) {
         setTimeout(() => setIsBanned(false), banDuration);
         socketInstance.emit("ban-message", { banned: true });
       } else {
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   { ...data.message, time: formattedTime },
-        // ]);
       }
     });
 
@@ -66,41 +62,48 @@ export default function Chat(props) {
       setIsBanned(data.banned);
     });
 
-    socketInstance.on("connect", () => {
-      console.log("Connected to server");
-    });
-
-    socketInstance.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
+    // déconnect le socket à la fin pour éviter tout problème
     return () => {
       socketInstance.disconnect();
     };
   }, []);
+
+  // Permet d'avoir la profile picture de l'utilisateur connecté
   const getUserProfilePicture = async (userId) => {
     try {
-      return axios.get("http://localhost:5000/api/live/profile-picture", {withCredentials: true}).then((response) => {
-      return response.data.profilePicture
-      })
+      return axios
+        .get("http://localhost:5000/api/live/profile-picture", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          return response.data.profilePicture;
+        });
     } catch (error) {
       console.error("Error fetching profile picture:", error);
       return null;
     }
   };
+
+  // permet de récupéré le pseudo de l'utilisateur connecté
   const getUserPseudo = async (userId) => {
     try {
-      return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
-        return response.data.pseudo
-      })
+      return axios
+        .get("http://localhost:5000/api/live/username", {
+          withCredentials: true,
+        })
+        .then((response) => {
+          return response.data.pseudo;
+        });
     } catch (error) {
       console.error("Error fetching pseudo:", error);
       return null;
     }
   };
+
+  // Fonction pour envoyer un message
   const send = async () => {
+    // Vérifie que le message n'est pas vide
     if (socket && inputMessage.trim() !== "") {
-      console.log(`C'est la pp: ${messages.profilePicture}`);
       const bannedWordFound = bannedWords.some((word) =>
         inputMessage.toLowerCase().includes(word)
       );
@@ -125,27 +128,24 @@ export default function Chat(props) {
           userId,
           profilePicture,
         };
-        console.log(
-          `Emitting chat-message event with message: ${inputMessage}`
-        );
-        console.log(newMessage);
-        console.log(`C'est la deuxième pp: ${newMessage.profilePicture}`);
+        // Emit le nouveau message
         socket.emit("chat-message", newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
+        // Réinitialise l'input du message
         setInputMessage("");
       }
     } else {
       alert("Please enter a non-empty message");
     }
   };
-
+  // Quand on envoie le message via la touche entré
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       send();
     }
   };
-
+  // Mise à jour du scroll lorsque de nouveaux messages sont ajoutés :
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -161,10 +161,8 @@ export default function Chat(props) {
         className="overflow-y-auto flex-grow flex flex-wrap"
       >
         <ul className="list-none p-0 m-0">
-          {console.log(messages)}
           {messages.map((message, index) => (
             <li key={index} className="bg-white p-4 rounded-lg flex">
-              {console.log(message.profilePicture)}
               <div className="relative mr-4">
                 {message.profilePicture && (
                   <img
@@ -220,4 +218,3 @@ export default function Chat(props) {
     </div>
   );
 }
-

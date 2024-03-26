@@ -1,13 +1,12 @@
-const NodeMediaServer = require('node-media-server');
-var MySql = require('sync-mysql');
+const NodeMediaServer = require("node-media-server");
+var MySql = require("sync-mysql");
 
 var connection = new MySql({
-  host: 'bdd',
-  user: 'admin',
-  password: 'admin',
-  database: 'coditube'
+  host: "bdd",
+  user: "admin",
+  password: "admin",
+  database: "coditube",
 });
-
 
 const config = {
   rtmp: {
@@ -15,35 +14,40 @@ const config = {
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
-    ping_timeout: 60
+    ping_timeout: 60,
   },
   http: {
     port: 8090,
-    mediaroot: './media',
-    allow_origin: '*'
+    mediaroot: "./media",
+    allow_origin: "*",
   },
   trans: {
-    ffmpeg: '/usr/bin/ffmpeg',
+    ffmpeg: "/usr/bin/ffmpeg",
     tasks: [
       {
-        app: 'live',
+        app: "live",
         mp4: true,
-        mp4Flags: '[movflags=frag_keyframe+empty_moov]',
-      }
-    ]
-  }
+        mp4Flags: "[movflags=frag_keyframe+empty_moov]",
+      },
+    ],
+  },
 };
 
-var nms = new NodeMediaServer(config)
+var nms = new NodeMediaServer(config);
 nms.run();
 
-nms.on('prePublish', (id, streamPath, args) => {
+nms.on("prePublish", (id, streamPath, args) => {
+  // Récupère l'utilisateur connecter
   const session = nms.getSession(id);
-
-  const result = connection.query("SELECT pseudo, stream_key FROM channel WHERE stream_key = '" + streamPath.replace('/live/', "") + "'");
-  session.publishStreamPath = "/live/" + result[0].pseudo
-  if(result.length < 1)
-  {
+  // Permet d'avoir la clef de stream depuis la base de donnée et le stat dans une variable qui permet donc un chemin de diffusion
+  const result = connection.query(
+    "SELECT pseudo, stream_key FROM channel WHERE stream_key = '" +
+      streamPath.replace("/live/", "") +
+      "'"
+  );
+  // Permet d'acceder au live au pseudo du user
+  session.publishStreamPath = "/live/" + result[0].pseudo;
+  if (result.length < 1) {
     session.reject();
   }
 });
