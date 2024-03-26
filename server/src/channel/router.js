@@ -16,17 +16,16 @@ const { selectChannel,
        	selectChannelIdentifier,
         videoOnTab, 
         NumberVideo, 
-        submit, 
-        submitVideo, 
+        submit,  
        	submitChannel,
-        selectVideo, 
        	submitVideo,
         getNbFollowers, 
         getFollow, 
         follow, 
        	selectId,
        	selectVideo,
-	      UserChannel,
+	    UserChannel,
+		getIdentifier,
 } = require("./controller");
 
 
@@ -37,7 +36,8 @@ const { getVideoLikes,
     removeVideoLike,
     checkVideoDislike,
     addVideoDislike,
-    removeVideoDislike, } = require("./likeManager.js");
+    removeVideoDislike, 
+} = require("./likeManager.js");
 
 const {
     getComments,
@@ -68,6 +68,7 @@ router.post("/submitChannel", submitChannel);
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
 router.get("/userChannel", UserChannel);
+router.get("/get-identifier", getIdentifier);
  
 router.get('/get-video-likes', getVideoLikes)
 router.get('/get-video-dislikes', getVideoDislikes)

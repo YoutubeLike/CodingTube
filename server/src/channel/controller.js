@@ -1,14 +1,24 @@
 const mariadb = require("../src/database");
 const fs = require('fs');
 const path = require('path');
-
-const cors = require('cors');
 const multer = require('multer');
 
 const express = require('express');
 const app = express();
-app.use(cors);
+
 app.use(express.json);
+
+const getIdentifier = ((req, res) => {
+	console.log("jure c ça ?")
+    console.log(req.session.userId);
+    mariadb.pool
+        .query("SELECT identifier_channel FROM channel WHERE id = ?", [
+            req.session.userId,
+        ])
+        .then((value) => {
+            res.send(value[0]);
+        });
+});
 
 const getNbFollowers = ((req, res) => {
 	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.query.channelId])
@@ -87,8 +97,7 @@ const submit = (req, res) => {
 
 const submitVideo = (req, res) => {
     uploadVideo(req, res, (err) => {
-
-        if (err) { 
+        if (err) {
             console.error("Error uploading files:", err);
             return res.status(500).send("Internal Server Error");
         }
@@ -97,23 +106,26 @@ const submitVideo = (req, res) => {
         const thumbnailFile = req.files['thumbnail'][0];
         const videoFile = req.files['video'][0];
 
-		// Sécurité si aucune vidéo, fichier
+        // Sécurité si aucune vidéo ou fichier n'a été sélectionné
         if (!thumbnailFile || !videoFile) {
             console.error("No thumbnail or video file selected");
             return res.status(400).send("No thumbnail or video file selected");
         }
 
-		const thumbnailURL = path.join(source , "thumbnails", thumbnailFile.originalname)
-		const videoURL = path.join(source, "/videos/" , videoFile.originalname) 
+        const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
+        const videoURL = path.join(source, "videos", videoFile.originalname);
 
-		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
-			.then(() => {
-				res.status(200).send("Data submitted successfully!");
-			})
-			.catch(error => {
-				console.error("Error submitting video:", error);
-				res.status(500).send("An error occurred while submitting video data.");
-			});
+        mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
+            .then(() => {
+                res.status(200).send("Data submitted successfully!");
+            })
+            .catch(error => {
+                console.error("Error submitting video:", error);
+                res.status(500).send("An error occurred while submitting video data.");
+            });
+    });
+};
+
 
 const UserChannel = async (_, res) => {
 	try {
@@ -230,10 +242,7 @@ const videoOnTab = (req, res) => {
 		.catch((error) => {
 			console.error("Error executing query", error);
 			res.status(500).send("An error occurred while fetching the data.");
-    
 		});
-
-
 };
 
 
@@ -253,30 +262,11 @@ const NumberVideo = (req, res) => {
 		});
 };
 
-const submitVideo = (req, res) => {
-	const { title, description, category } = req.body;
-	console.log("Données reçues :", title, description); // Ajoutez cette ligne pour vérifier les données reçues
-
-	mariadb.pool
-		.query(
-			"INSERT INTO video (title, description, category, thumbnail) VALUES (?, ?, ?)",
-			[title, description, category]
-		)
-		.then(() => {
-			res.status(200).send("Données soumises avec succès !");
-		})
-		.catch((error) => {
-			console.error("Erreur lors de la soumission des données :", error);
-			res
-				.status(500)
-				.send("Une erreur est survenue lors de la soumission des données.");
-		});
-};
 
 module.exports = {
 	selectChannel,
 	selectChannelIdentifier,
-  submit,
+  	submit,
 	selectId,
 	videoOnTab,
 	NumberVideo,
@@ -284,9 +274,10 @@ module.exports = {
 	submitVideo,
 	selectVideo,
 	UserChannel,
-  getNbFollowers,
+  	getNbFollowers,
 	getFollow,
 	follow,
+	getIdentifier,
 };
 
 

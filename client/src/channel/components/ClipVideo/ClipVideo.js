@@ -41,9 +41,6 @@ export default function Video() {
 		// Attribution des informations de Follopw
         setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         setFollower(responseNbFollowers.data.length);
-
-
-
         
         try {
           // Requête informations de la chaîne 

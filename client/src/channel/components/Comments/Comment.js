@@ -44,7 +44,8 @@ export default function Comment({ commentId }) {
                 <LikeDislike commentId={commentId}/>
 
             </div>
-        </div>)
+        </div>
+    )
 
 
 }
