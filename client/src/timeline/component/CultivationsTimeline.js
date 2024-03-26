@@ -55,12 +55,12 @@ export default function CultivationsTimeLine() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="mb-10 flex content-center">
+      <div key={i} className="sm:block mb-10 md:flex content-center">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div class="flex flex-row">
+          <div class="sm:block md:flex md:flex-row">
             <div class="relative">
-              <img
-                class="thumbnail-trendings-list"
+            <img
+                className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />

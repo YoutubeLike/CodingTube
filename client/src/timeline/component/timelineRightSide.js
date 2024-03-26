@@ -31,10 +31,10 @@ export default function TimelineRightSide() {
     indents.push(
       <div key={i} className="h-auto mb-2 ">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div class="flex flex-row">
+          <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
-                class="h-20 rounded-lg"
+                class="sm:max-w-auto sm:h-auto md:h-20 rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />
@@ -53,7 +53,6 @@ export default function TimelineRightSide() {
               <h4 className="text-gray text-[90%]">
                 {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
-              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
             </div>
           </div>
         </a>

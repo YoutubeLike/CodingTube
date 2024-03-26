@@ -7,11 +7,6 @@ import { useLocation } from "react-router-dom";
 import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
-
 export default function Watch() {
 
   /* Page title (displayed on tab) */
@@ -26,9 +21,9 @@ export default function Watch() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (videoId && userId) {
+        if (videoId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addView-request`, { WithCredentials: true},{
+            `http://localhost:5000/api/timeline/addView-request`, {
               params: {
                 videoIdParam: videoId,
               },
@@ -51,15 +46,16 @@ export default function Watch() {
     const fetchData = async () => {
       try {
         if (videoId) {
-
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addHistory-request`,{
-              params: {
-                videoIdParam: videoId,
-                userIdParam: userId,
-              },
+            `http://localhost:5000/api/timeline/addHistory-request`,
+            {
+                withCredentials: true,
+                params: {
+                    videoIdParam: videoId,
+                },
             }
-          );
+        );
+        
           console.log("History added successfully");
         }
       } catch (errorHistory) {
@@ -74,7 +70,7 @@ export default function Watch() {
       {/* PAGE CONTENT */}
       <div>
         <h1 className="text-3xl font-bold underline">Video page</h1>
-        <div class="flex inset-y-0 left-0 flex-col">
+        <div class="sm:block md:flex md:inset-y-0 md:left-0 md:flex-col">
           <TimelineRightSide /> {/* Showing Advanced Timeline Right-Side*/}
         </div>
       </div>

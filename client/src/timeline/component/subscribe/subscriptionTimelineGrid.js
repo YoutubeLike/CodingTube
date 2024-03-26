@@ -13,7 +13,7 @@ export default function GridSubscriptionTimeLine() {
 
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscription-timeline-request"
-          , { WithCredentials: true}
+          , { withCredentials: true}
         );
 
         setVideosInfos(response.data);

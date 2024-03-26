@@ -44,7 +44,7 @@ export default function TimeLine() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
+      <div key={i} className="md:max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
@@ -58,7 +58,7 @@ export default function TimeLine() {
 
 
 
-          <div className="flex flew-row mt-2.5">
+          <div className="sm:block md:flex md:flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">
               <h3 className="text-black font-bold text-[100%]">
