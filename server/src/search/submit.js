@@ -34,7 +34,6 @@ const submit = async (req, res) => {
                 console.log(search_id);
                 await mariadb.pool.query("INSERT INTO search_history (research_date,search_id, user_id) VALUES (NOW(), ?, ?);", [search_id[0].id,userValue]);
                 console.log("Élément utilisateur ajouté avec succès.");
-                res.status(200).send("Élément utilisateur ajouté avec succès.");
             }
             
         }else{
