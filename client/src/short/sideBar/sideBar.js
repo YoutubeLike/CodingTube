@@ -24,8 +24,8 @@ class SideBar extends React.Component {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-short-like",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             shortId: this.props.id,
           },
         }
@@ -37,8 +37,8 @@ class SideBar extends React.Component {
           const response = await axios.get(
             "http://localhost:5000/api/short/check-short-dislike",
             {
+              withCredentials: true,
               params: {
-                id: 1,
                 shortId: this.props.id,
               },
             }
@@ -108,7 +108,7 @@ class SideBar extends React.Component {
           setState={this.props.setState}
           commentCount={this.props.commentCount}
         />
-        <ShareButton id={this.props.id}/>
+        <ShareButton id={this.props.id} />
         <OptionsButton setState={this.props.setState} />
         <SoundButton />
       </div>

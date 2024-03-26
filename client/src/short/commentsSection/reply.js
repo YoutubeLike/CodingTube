@@ -52,8 +52,8 @@ class Reply extends React.Component {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-short-comment-like",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }
@@ -65,8 +65,8 @@ class Reply extends React.Component {
           const response = await axios.get(
             "http://localhost:5000/api/short/check-short-comment-dislike",
             {
+              withCredentials: true,
               params: {
-                id: 1,
                 commentId: this.props.id,
               },
             }
@@ -166,8 +166,8 @@ class Reply extends React.Component {
         const response = await axios.get(
           "http://localhost:5000/api/short/add-short-reply",
           {
+            withCredentials: true,
             params: {
-              id: 1,
               shortId: this.props.shortInfos.id,
               text: this.state.userInput,
               replyId: this.props.initialCommentId,
@@ -275,7 +275,9 @@ class Reply extends React.Component {
             (!this.state.isReplying && "hidden")
           }
         >
-          <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
+          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+            <img src={this.state.senderPP} />
+          </div>
 
           <input
             id={"commentsInputField" + this.props.id}

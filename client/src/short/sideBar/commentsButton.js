@@ -4,7 +4,7 @@ class CommentsButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHovered: false
+      isHovered: false,
     };
     this.toggleComments = this.toggleComments.bind(this);
     this.handleHover = this.handleHover.bind(this);
@@ -18,7 +18,7 @@ class CommentsButton extends React.Component {
   }
   handleHover() {
     this.setState((prevState) => ({
-      isHovered: !prevState.isHovered
+      isHovered: !prevState.isHovered,
     }));
   }
   render() {

@@ -26,30 +26,6 @@ class OptionsButton extends React.Component {
             <img src="3dots.png" alt="more" className="scale-50" />
           </button>
         </div>
-
-        {/*
-        <div id='more' className="flex content-center relative bg-white text-[1.5vh] h-[15vh] w-[22vh] rounded-md z-10 shadow-2xl py-[10px] flex-wrap overflow-hidden flex-column">
-          <button className="flex no-wrap items-center w-[100%] hover:bg-[#f5f5f5]">
-            <img src="commentsFilter.png" className="h-[4vh] w-[4vh] scale-75"/>
-            Description
-          </button>
-
-          <button className="flex no-wrap items-center w-[100%] hover:bg-[#f5f5f5]">
-            <img src="commentsFilter.png" className="h-[4vh] w-[4vh] scale-75"/>
-            Save to playlist
-          </button>
-
-          <button className="flex no-wrap items-center w-[100%] hover:bg-[#f5f5f5]">
-            <img src="commentsFilter.png" className="h-[4vh] w-[4vh] scale-75"/>
-            Captions
-          </button>
-
-          <button className="flex no-wrap items-center w-[100%] hover:bg-[#f5f5f5]">
-            <img src="commentsFilter.png" className="h-[4vh] w-[4vh] scale-75"/>
-            Report
-          </button>
-          
-        </div>*/}
       </div>
     );
   }

@@ -4,7 +4,7 @@ const addCommentAndGetId = (req, res) => {
   mariadb.pool
     .query(
       "INSERT INTO comment_short (user_id, short_id, text, comment_date) VALUES (?, ?, ?, CURRENT_TIMESTAMP);",
-      [req.query.id, req.query.shortId, req.query.text]
+      [req.session.userId, req.query.shortId, req.query.text]
     )
     .then(() => {
       mariadb.pool
@@ -26,7 +26,7 @@ const addReplyAndGetId = (req, res) => {
   mariadb.pool
     .query(
       "INSERT INTO comment_short (user_id, short_id, text, reply, comment_date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);",
-      [req.query.id, req.query.shortId, req.query.text, req.query.replyId]
+      [req.session.userId, req.query.shortId, req.query.text, req.query.replyId]
     )
     .then(() => {
       mariadb.pool
@@ -79,7 +79,18 @@ const checkShortCommentLike = (req, res) => {
   mariadb.pool
     .query(
       "SELECT * FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
+    )
+    .then((value) => {
+      res.send(value);
+    });
+};
+
+const checkShortCommentSuperlike = (req, res) => {
+  mariadb.pool
+    .query(
+      "SELECT * FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
+      [req.query.userId, req.query.commentId]
     )
     .then((value) => {
       res.send(value);
@@ -89,21 +100,24 @@ const checkShortCommentLike = (req, res) => {
 const addShortCommentLike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
-    [req.query.id, req.query.commentId]
+    [req.session.userId, req.query.commentId]
   );
 
   if (checkExistance[0] == null) {
     let checkExistance = await mariadb.pool.query(
       "SELECT * FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
     );
 
     if (checkExistance[0] == null) {
       mariadb.pool
         .query(
           "INSERT INTO like_short_comment (id_user, id_comment) VALUES (?, ?);",
-          [req.query.id, req.query.commentId]
+          [req.session.userId, req.query.commentId]
         )
+        .then(() => {
+          res.status(200).send("Data inserted sucessfully");
+        })
         .catch((error) => {
           console.error("Error inserting like:", error);
           res.status(500).send("Error inserting like");
@@ -120,10 +134,10 @@ const removeShortCommentLike = (req, res) => {
   mariadb.pool
     .query(
       "DELETE FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
     )
-    .then((value) => {
-      res.send(value);
+    .then(() => {
+      res.status(200).send("Data deleted sucessfully");
     })
     .catch((error) => {
       console.error("Error removing like:", error);
@@ -135,7 +149,7 @@ const checkShortCommentDislike = (req, res) => {
   mariadb.pool
     .query(
       "SELECT * FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
     )
     .then((value) => {
       res.send(value);
@@ -145,21 +159,24 @@ const checkShortCommentDislike = (req, res) => {
 const addShortCommentDislike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short_comment WHERE id_user = ? AND id_comment = ?;",
-    [req.query.id, req.query.commentId]
+    [req.session.userId, req.query.commentId]
   );
 
   if (checkExistance[0] == null) {
     let checkExistance = await mariadb.pool.query(
       "SELECT * FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
     );
 
     if (checkExistance[0] == null) {
       mariadb.pool
         .query(
           "INSERT INTO dislike_short_comment (id_user, id_comment) VALUES (?, ?);",
-          [req.query.id, req.query.commentId]
+          [req.session.userId, req.query.commentId]
         )
+        .then(() => {
+          res.status(200).send("Data inserted sucessfully");
+        })
         .catch((error) => {
           console.error("Error inserting dislike:", error);
           res.status(500).send("Error inserting dislike");
@@ -176,10 +193,10 @@ const removeShortCommentDislike = (req, res) => {
   mariadb.pool
     .query(
       "DELETE FROM dislike_short_comment WHERE id_user = ? AND id_comment = ?;",
-      [req.query.id, req.query.commentId]
+      [req.session.userId, req.query.commentId]
     )
-    .then((value) => {
-      res.send(value);
+    .then(() => {
+      res.status(200).send("Data deleted sucessfully");
     })
     .catch((error) => {
       console.error("Error removing dislike:", error);
@@ -194,6 +211,7 @@ module.exports = {
   getCommentLikes,
   getCommentDislikes,
   checkShortCommentLike,
+  checkShortCommentSuperlike,
   addShortCommentLike,
   removeShortCommentLike,
   checkShortCommentDislike,

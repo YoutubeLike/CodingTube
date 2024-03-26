@@ -54,8 +54,8 @@ class Comment extends React.Component {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-short-comment-like",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }
@@ -67,8 +67,8 @@ class Comment extends React.Component {
           const response = await axios.get(
             "http://localhost:5000/api/short/check-short-comment-dislike",
             {
+              withCredentials: true,
               params: {
-                id: 1,
                 commentId: this.props.id,
               },
             }
@@ -87,7 +87,7 @@ class Comment extends React.Component {
     // Set isSuperLiked state
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/check-short-comment-like",
+        "http://localhost:5000/api/short/check-short-comment-superlike",
         {
           params: {
             id: this.props.uploader,
@@ -182,15 +182,15 @@ class Comment extends React.Component {
         const response = await axios.get(
           "http://localhost:5000/api/short/add-short-reply",
           {
+            withCredentials: true,
             params: {
-              id: 1,
               shortId: this.props.shortInfos.id,
               text: this.state.userInput,
               replyId: this.props.id,
             },
           }
         );
-        this.setState((state) => ({
+        this.props.setState((state) => ({
           repliesIds: state.repliesIds.concat(response.data.id),
         }));
       } catch (error) {
@@ -289,7 +289,9 @@ class Comment extends React.Component {
             className="flex items-center p-[1.8vh] border-t-[1px]"
             ref={this.inputFieldRef}
           >
-            <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
+            <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+              <img src={this.state.senderPP} />
+            </div>
 
             <input
               id="commentsInputField"

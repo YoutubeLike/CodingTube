@@ -68,9 +68,7 @@ const addView = (req, res) => {
     })
     .catch((error) => {
       console.error("Error while updating datas :", error);
-      res
-        .status(500)
-        .send("Error while updating datas");
+      res.status(500).send("Error while updating datas");
     });
 };
 

@@ -15,7 +15,7 @@ class VideoInfos extends React.Component {
   async componentDidMount() {
     const response = await axios.get(
       "http://localhost:5000/api/short/get-follow",
-      { params: { channelId: this.props.shortInfos.id, userId: 1 } }
+      { withCredentials: true, params: { channelId: this.props.shortInfos.id } }
     );
     this.setState({
       isSubscribed: response.data.length == 0 ? false : true,
@@ -31,11 +31,17 @@ class VideoInfos extends React.Component {
   async handleSubscribe() {
     try {
       await axios.get("http://localhost:5000/api/short/follow", {
-        params: { channelId: this.props.shortInfos.id, userId: 1 },
+        withCredentials: true,
+        params: { channelId: this.props.shortInfos.id },
       });
       const response = await axios.get(
         "http://localhost:5000/api/short/get-follow",
-        { params: { channelId: this.props.shortInfos.id, userId: 1 } }
+        {
+          withCredentials: true,
+          params: {
+            channelId: this.props.shortInfos.id,
+          },
+        }
       );
       this.setState({
         isSubscribed: response.data.length == 0 ? false : true,

@@ -44,8 +44,8 @@ class CommentBar extends React.Component {
         const response = await axios.get(
           "http://localhost:5000/api/short/add-short-comment",
           {
+            withCredentials: true,
             params: {
-              id: 1,
               shortId: this.props.shortInfos.id,
               text: this.state.userInput,
             },
@@ -97,7 +97,7 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="flex flex-col-reverse text-[2vh] h-full px-[2vh] overflow-y-auto break-words">
+        <div className="flex flex-col-reverse text-[2vh] h-full px-[2vh] overflow-y-auto no-scrollbar break-words">
           {/* Single comment renderer */}
           {this.state.commentsIds.map((id) => (
             <Comment
@@ -112,7 +112,9 @@ class CommentBar extends React.Component {
 
         {/* Comment insert section */}
         <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
-          <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
+          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+            <img src={this.state.senderPP} />
+          </div>
 
           <input
             id="commentsInputField"
