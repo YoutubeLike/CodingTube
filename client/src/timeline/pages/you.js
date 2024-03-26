@@ -19,24 +19,26 @@ export default function You() {
       <div className="flex">
         <NonDisplayedBurgerMenu />
         <div>
-          <div className="channel-info relative left-[400px] relative top-[80px] flex flex-col items-start">
+          <div className="flex flex-row-reverse md:block">
+          <div className="md:relative left-[400px] md:relative top-[80px] flex flex-col items-start">
             <h1 className="text-start text-2xl font-bold mt-4">B R A S C O</h1>
             <a href="/PageChannel" className="text-start mt-4">
               @Itachi Budoke - View Channel
             </a>
-          </div>
+          </div> 
           <img
             src={img}
             alt="Channel Avatar"
-            className="rounded-full w-21 h-40 relative left-[230px]"
+            className="rounded-full w-21 h-40 md:relative left-[230px]"
           />
-          <div className="">
-            <a href="/history">
+          </div>
+          <div >
+            <a href="/history" className="flex flex-row md:block">
               <img
-                className="relative left-[220px] w-10 h-10"
+                className="md:relative left-[220px] w-10 h-10"
                 src="history.png"
               />
-              <button className="relative left-[265px] relative top-[-32px] font-black">
+              <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                 History
               </button>
             </a>
@@ -49,12 +51,12 @@ export default function You() {
             </div>
           </div>
           <div className="">
-            <div>
+            <div className="flex flex-row md:block">
               <img
-                className="relative left-[220px] w-10 h-10"
+                className="md:relative left-[220px] w-10 h-10"
                 src="likedvideo.png"
               />
-              <button className="relative left-[265px] relative top-[-32px] font-black">
+              <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                 Liked Videos
               </button>
             </div>
@@ -66,12 +68,12 @@ export default function You() {
               </div>
             </div>
             <div className="">
-              <a href="/playlist">
+              <a href="/playlist" className="flex flex-row md:block">
                 <img
-                  className="relative left-[220px] w-10 h-10"
+                  className="md:relative left-[220px] w-10 h-10"
                   src="history.png"
                 />
-                <button className="relative left-[265px] relative top-[-32px] font-black">
+                <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                   Playlist
                 </button>
               </a>
