@@ -71,7 +71,9 @@ export default function Playlist() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request');
+        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request',{
+          withCredentials: true,
+        });
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching playlist:', error);
