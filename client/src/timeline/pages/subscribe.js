@@ -1,10 +1,10 @@
 
-export default function History() {
+export default function Subscribe() {
   return (
     <>
       <div>
         <h1 className="text-3xl font-bold underline">
-          On teste des trucs rigolo pour l'historique
+          Here is the subscription page
         </h1>
       </div>
     </>
