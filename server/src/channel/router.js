@@ -4,6 +4,13 @@ const express = require("express");
 // Utilisation du router de Express
 const router = express.Router();
 
+const cors = require('cors');
+const multer = require('multer');
+
+const app = express();
+app.use(cors);
+app.use(express.json);
+
 // Import des fonctions
 const {
 	selectChannel,
@@ -28,6 +35,6 @@ router.get("/nombreVideo", NumberVideo);
 router.get("/userChannel", UserChannel);
 
 // Configuration de la route POST pour la soumission des données
-router.post("/submitVideo", submitVideo);
+router.post('/submitVideo', submitVideo); // Utilisation de submitVideo comme middleware pour gérer les fichiers envoyés
 
 module.exports = router;

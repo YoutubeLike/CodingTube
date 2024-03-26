@@ -1,5 +1,75 @@
-//Connexion à la Bdd
 const mariadb = require("../src/database");
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
+const multer = require('multer');
+
+const express = require('express');
+const app = express();
+app.use(cors);
+app.use(express.json);
+
+const source = path.join(__dirname, "../../../..", "uploads")
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        if (file.fieldname === 'thumbnail') {
+            cb(null, path.join(source , "thumbnails"));
+        } else if (file.fieldname === 'video') {
+            cb(null, path.join(source, "videos"));
+        }
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+const uploadVideo = upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'video', maxCount: 1 }]);
+
+const submit = (req, res) => {
+    const { name, identifier, bio } = req.body;
+    mariadb.pool.query("INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio) VALUES (1, ?, ?, 0, ?)", [name, identifier, bio])
+        .then(() => {
+            res.status(200).send('Chaîne créée');
+        })
+        .catch(error => {
+            console.error("Error submitting channel info:", error);
+            res.status(500).send("Internal Server Error");
+        });
+};
+
+
+const submitVideo = (req, res) => {
+    uploadVideo(req, res, (err) => {
+
+        if (err) { 
+            console.error("Error uploading files:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        const { title, description, category } = req.body;
+        const thumbnailFile = req.files['thumbnail'][0];
+        const videoFile = req.files['video'][0];
+
+		// Sécurité si aucune vidéo, fichier
+        if (!thumbnailFile || !videoFile) {
+            console.error("No thumbnail or video file selected");
+            return res.status(400).send("No thumbnail or video file selected");
+        }
+
+		const thumbnailURL = path.join(source , "thumbnails", thumbnailFile.originalname)
+		const videoURL = path.join(source, "/videos/" , videoFile.originalname) 
+
+		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
+			.then(() => {
+				res.status(200).send("Data submitted successfully!");
+			})
+			.catch(error => {
+				console.error("Error submitting video:", error);
+				res.status(500).send("An error occurred while submitting video data.");
+			});
 
 const UserChannel = async (_, res) => {
 	try {
@@ -116,8 +186,12 @@ const videoOnTab = (req, res) => {
 		.catch((error) => {
 			console.error("Error executing query", error);
 			res.status(500).send("An error occurred while fetching the data.");
+    
 		});
+
+
 };
+
 
 //Récupère le nombre de vidéo mise en ligne
 const NumberVideo = (req, res) => {
@@ -155,10 +229,10 @@ const submitVideo = (req, res) => {
 		});
 };
 
-//Permet d'exporter les fonctions
 module.exports = {
 	selectChannel,
 	selectChannelIdentifier,
+  submit,
 	selectId,
 	videoOnTab,
 	NumberVideo,
@@ -167,3 +241,5 @@ module.exports = {
 	selectVideo,
 	UserChannel,
 };
+
+
