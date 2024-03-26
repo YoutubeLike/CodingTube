@@ -23,7 +23,7 @@ export default function Sports() {
       {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
-        <div class="flex ml-[3%] flex-col content-center">
+        <div class="sm:block md:flex ml-[3%] md:flex-col content-center">
           <SportsTimeLine /> {/* Showing Sports Timeline */}
         </div>
       </div>

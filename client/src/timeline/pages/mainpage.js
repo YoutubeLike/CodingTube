@@ -17,7 +17,7 @@ export default function Mainpage() {
       {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
-        <div className="flex ml-[3%] flex-wrap content-center">
+        <div className="sm:block md:flex ml-[3%] mt-5 md:flex-wrap md:content-center">
           <TimeLine /> {/* Showing Advanced Timeline */}
         </div>
       </div>

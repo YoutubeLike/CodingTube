@@ -74,7 +74,7 @@ export default function Watch() {
       {/* PAGE CONTENT */}
       <div>
         <h1 className="text-3xl font-bold underline">Video page</h1>
-        <div class="flex inset-y-0 left-0 flex-col">
+        <div class="sm:block md:flex md:inset-y-0 md:left-0 md:flex-col">
           <TimelineRightSide /> {/* Showing Advanced Timeline Right-Side*/}
         </div>
       </div>
