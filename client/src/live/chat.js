@@ -112,27 +112,35 @@ export default function Chat(props) {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
-        const userId = 2;
-        const profilePicture = await getUserProfilePicture(userId);
-        const pseudo = await getUserPseudo(userId);
-        const newMessage = {
-          message: inputMessage,
-          sender: pseudo,
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          userId,
-          profilePicture,
-        };
-        console.log(
-          `Emitting chat-message event with message: ${inputMessage}`
-        );
-        console.log(newMessage);
-        console.log(`C'est la deuxième pp: ${newMessage.profilePicture}`);
-        socket.emit("chat-message", newMessage);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-        setInputMessage("");
+        axios.get("http://localhost:5000/api/live/testa", { withCredentials: true}).then(async (res) => {
+          if(res.data != "undefined")
+          {
+            const profilePicture = await getUserProfilePicture();
+
+            const pseudo = await getUserPseudo();
+                    const newMessage = {
+                      message: inputMessage,
+                      sender: pseudo,
+                      time: new Date().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                      profilePicture,
+                    };
+                    console.log(
+                      `Emitting chat-message event with message: ${inputMessage}`
+                    );
+                    console.log(newMessage);
+                    console.log(`C'est la deuxième pp: ${newMessage.profilePicture}`);
+                    socket.emit("chat-message", newMessage);
+                    setMessages((prevMessages) => [...prevMessages, newMessage]);
+                    setInputMessage("");
+          } else
+        {
+          alert("Vous n'êtes pas connecté")
+        }
+        })
+        
       }
     } else {
       alert("Please enter a non-empty message");
@@ -169,7 +177,7 @@ export default function Chat(props) {
                 {message.profilePicture && (
                   <img
                     src={message.profilePicture}
-                    alt={`tg`}
+                    alt={`pp`}
                     className="w-10 h-10 rounded-full"
                   />
                 )}

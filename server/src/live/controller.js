@@ -69,7 +69,7 @@ const display = ((req, res) => {
 
 })
 
-const test = ((req, res) => {
+const getUserId = ((req, res) => {
   console.log("Utilisateur " + req.session.userId)
   res.send("" + req.session.userId)
 })
@@ -91,6 +91,6 @@ module.exports = {
     GetProfilPicture,
     GetUsername,
     display,
-    test,
+    getUserId,
     generateLiveKey
 }
