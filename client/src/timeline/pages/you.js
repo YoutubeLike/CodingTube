@@ -1,4 +1,5 @@
 import TimeLine from "../component/Timeline";
+import { Link } from "react-router-dom";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import PageChannel from "../../channel/pages/Channel";
@@ -19,21 +20,20 @@ export default function You() {
       <div className="flex">
         <NonDisplayedBurgerMenu />
         <div>
-          <div className="flex flex-row-reverse md:block">
-          <div className="md:relative left-[400px] md:relative top-[80px] flex flex-col items-start">
-            <h1 className="text-start text-2xl font-bold mt-4">B R A S C O</h1>
-            <a href="/PageChannel" className="text-start mt-4">
-              @Itachi Budoke - View Channel
-            </a>
-          </div> 
-          <img
-            src={img}
-            alt="Channel Avatar"
-            className="rounded-full w-21 h-40 md:relative left-[230px]"
-          />
+          <div className="flex flex-row-reverse relative top-[15px] md:block">
+            <div className="relative md:left-[400px] md:top-[80px]  flex flex-col items-start">
+              <h1 className="text-start text-2xl font-bold mt-4 relative top-[10px]">B R A S C O</h1>
+              <Link to="/PageChannel" className="text-start mt-4">
+                @Itachi Budoke - View Channel
+              </Link>
+            </div> 
+            <div>
+              <img src={img} alt="Channel Avatar" 
+                className="rounded-full w-[8em] h-[8em] md:object-contain md:w-[10em] md:h-[10em] relative md:left-[230px] md:top-[-30px]"/>
+            </div>
           </div>
           <div >
-            <a href="/history" className="flex flex-row md:block">
+            <a href="/history" className="flex flex-row relative top-[15px] md:block">
               <img
                 className="md:relative left-[220px] w-10 h-10"
                 src="history.png"
@@ -51,7 +51,7 @@ export default function You() {
             </div>
           </div>
           <div className="">
-            <div className="flex flex-row md:block">
+            <div className="flex flex-row relative top-[15px] md:block">
               <img
                 className="md:relative left-[220px] w-10 h-10"
                 src="likedvideo.png"
@@ -68,7 +68,7 @@ export default function You() {
               </div>
             </div>
             <div className="">
-              <a href="/playlist" className="flex flex-row md:block">
+              <a href="/playlist" className="flex flex-row relative top-[15px] md:block">
                 <img
                   className="md:relative left-[220px] w-10 h-10"
                   src="history.png"
