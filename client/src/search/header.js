@@ -123,9 +123,11 @@ export default function Header() {
 				"http://localhost:5000/api/channel/get-identifier",
 				{ withCredentials: true }
 			);
-			const data = response.data;
+			const identifier = response.data.identifier_channel;
 			window.location.href =
-				"http://localhost:3000/channel?identifier=" + data.identifier_channel;
+				identifier != null
+					? "http://localhost:3000/channel?identifier=" + identifier
+					: "http://localhost:3000/new-channel";
 		} catch (error) {
 			console.error(
 				"An error occurred while searching research most view: ",
