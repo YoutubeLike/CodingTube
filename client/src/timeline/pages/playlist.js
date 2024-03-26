@@ -14,7 +14,6 @@ export default function PlaylistPage() {
       </div>
 
       <div className="flex">
-        <NonDisplayedBurgerMenu />
         <div class="flex ml-[3%] flex-wrap">
           <Playlist />
         </div>

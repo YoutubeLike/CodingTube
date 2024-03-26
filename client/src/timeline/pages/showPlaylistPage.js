@@ -12,7 +12,6 @@ export default function ShowPlaylistPage() {
   }, []);
   return (
     <>
-      <DisplayedBurgerMenu />
       <div>
         <h1 className="text-3xl font-bold underline">Playlist</h1>
         <div class="flex inset-y-0 left-0 flex-col">
