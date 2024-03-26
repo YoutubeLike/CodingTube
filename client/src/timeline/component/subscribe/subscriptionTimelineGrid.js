@@ -4,12 +4,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {GetTimeElapsed, TimeOfVideo} from "../../functions/VideoTiming";
 
-import CheckSession from "../../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
-
-
 export default function GridSubscriptionTimeLine() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
@@ -19,11 +13,7 @@ export default function GridSubscriptionTimeLine() {
 
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscription-timeline-request"
-          ,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          , { withCredentials: true}
         );
 
         setVideosInfos(response.data);

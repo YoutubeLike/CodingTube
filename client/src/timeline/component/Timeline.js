@@ -28,16 +28,28 @@ export default function TimeLine() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
+
+  // If in BDD there is no video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No video in BDD... Publish a video to become the first!
+        </p>
+      </div>
+    );
+  }
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0 inline-block">
+      <div key={i} className="md:max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
             <img
-                className="max-w-[90%] h-auto rounded-lg"
+                className="max-w-auto h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
             />
@@ -46,7 +58,7 @@ export default function TimeLine() {
 
 
 
-          <div className="flex flew-row mt-2.5">
+          <div className="sm:block md:flex md:flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">
               <h3 className="text-black font-bold text-[100%]">
@@ -59,7 +71,6 @@ export default function TimeLine() {
                 {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
                 
               </h4>
-              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
             </div>
           </div>
         </a>

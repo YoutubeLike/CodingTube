@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
+var connected = false;
 
 // Function that checks whether 'you have subscribed to a channel using its ID
 function isChannelSubscribed(id_channel, subscriptionList) {
@@ -26,21 +23,16 @@ function GetMostViewedCategories() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/timeline/viewed-categories-list-request`,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          `http://localhost:5000/api/timeline/viewed-categories-list-request`, { WithCredentials: true}
         );
         setViewedCategorieInfos(response.data);
+        connected = true;
       } catch (error) {
         console.error("Error fetching viewed categories list:", error);
       }
     };
     fetch();
   }, []);
-
-  console.log("cat",viewedCategoriesInfos);
 
   // Count all the categories viewed
   var counter = {};
@@ -69,11 +61,7 @@ export function SetScores(videosInfos) {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscribe-list-request"
-          ,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          , { withCredentials: true}
         );
         setSubscribeListInfos(response.data);
       } catch (error) {
@@ -83,6 +71,8 @@ export function SetScores(videosInfos) {
     fetch();
   }, []);
 
+
+
   // Put all the channels_id subscribed in a list
   var subscribeList = [];
   for (var i = 0; i < subscribeListInfos.length; i++) {
@@ -90,8 +80,9 @@ export function SetScores(videosInfos) {
   }
 
   var mostViewedCategories = GetMostViewedCategories();
-  console.log(mostViewedCategories);
 
+  console.log("id",subscribeListInfos[0]);
+  
   for (var i = 0; i < videosInfos.length; i++) {
     videosInfos[i]["score"] = 0;
 
@@ -112,7 +103,7 @@ export function SetScores(videosInfos) {
     }
 
     // If you're not loged-in
-    if (userId > 0) {
+    if (connected === true) {
 
       if (mostViewedCategories.length >= 1) {
         // If the video is on the 1st most viewed category
@@ -134,8 +125,11 @@ export function SetScores(videosInfos) {
       }
   
       // If the video is yours
-      if (videosInfos[i]["channel_id"] == userId) {
-        videosInfos[i]["score"] -= 100;
+      if (subscribeListInfos[i] != undefined) {
+        if (videosInfos[i]["channel_id"] === subscribeListInfos[i]["userId"]) {
+          videosInfos[i]["score"] -= 100;
+          console.log("-100 pour ",videosInfos[i]["title"])
+        }
       }
 
     }

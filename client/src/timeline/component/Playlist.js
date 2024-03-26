@@ -86,6 +86,19 @@ export default function Playlist() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
+
+  // If in BDD there is no music video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          You have no playlist or you're not logged-in
+        </p>
+      </div>
+    );
+  }
+
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
