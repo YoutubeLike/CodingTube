@@ -162,8 +162,19 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-module.exports = router; // Exporting the router
+router.post("/check-session", async (req, res) => {
+  try {
+    console.log(req.session.userId)
+    if (req.session.userId) {
+      return res.status(200).json({ loggedIn: true });
+    } else {
+      return res.status(200).json({ loggedIn: false });
+    }
+  } catch (error) {
+    console.error("Error checking session:", error);
+    return res.sendStatus(500);
+  }
+});
 
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
