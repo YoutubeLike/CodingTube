@@ -7,6 +7,7 @@ const {
   getShortLikes,
   getShortDislikes,
   getComments,
+  getReplies,
 } = require("./getShortInfos.js");
 
 const {
@@ -20,6 +21,7 @@ const {
 
 const {
   addCommentAndGetId,
+  addReplyAndGetId,
   getCommentInfos,
   getCommentLikes,
   getCommentDislikes,
@@ -36,6 +38,7 @@ router.get("/get-short-infos", getShortInfos);
 router.get("/get-short-likes", getShortLikes);
 router.get("/get-short-dislikes", getShortDislikes);
 router.get("/get-short-comments", getComments);
+router.get("/get-short-replies", getReplies);
 
 router.get("/check-short-like", checkShortLike);
 router.get("/add-short-like", addShortLike);
@@ -45,6 +48,7 @@ router.get("/add-short-dislike", addShortDislike);
 router.get("/remove-short-dislike", removeShortDislike);
 
 router.get("/add-short-comment", addCommentAndGetId);
+router.get("/add-short-reply", addReplyAndGetId);
 router.get("/get-short-comment-infos", getCommentInfos);
 router.get("/get-short-comment-likes", getCommentLikes);
 router.get("/get-short-comment-dislikes", getCommentDislikes);

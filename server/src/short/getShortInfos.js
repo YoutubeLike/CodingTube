@@ -40,8 +40,18 @@ const getShortDislikes = (req, res) => {
 
 const getComments = (req, res) => {
   mariadb.pool
-    .query("SELECT * FROM comment_short WHERE short_id = ?;", [
+    .query("SELECT * FROM comment_short WHERE short_id = ? AND reply IS NULL;", [
       req.query.shortId,
+    ])
+    .then((value) => {
+      res.send(value);
+    });
+};
+
+const getReplies = (req, res) => {
+  mariadb.pool
+    .query("SELECT * FROM comment_short WHERE reply = ?;", [
+      req.query.replyId,
     ])
     .then((value) => {
       res.send(value);
@@ -54,4 +64,5 @@ module.exports = {
   getShortLikes,
   getShortDislikes,
   getComments,
+  getReplies,
 };

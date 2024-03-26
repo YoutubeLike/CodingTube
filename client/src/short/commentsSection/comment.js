@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import CommentLikeButton from "./commentLikeButton";
 import CommentDislikeButton from "./commentDislikeButton";
+import Reply from "./reply";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -16,7 +17,62 @@ class Comment extends React.Component {
       dislikes: 0,
       isDisliked: false,
       isSuperLiked: false,
+      repliesIds: [],
+      userInput: "",
+      isReplying: false,
+      replyCount: "",
     };
+    this.openReply=this.openReply.bind(this);
+    this.closeReply=this.closeReply.bind(this);
+    this.postReply=this.postReply.bind(this);
+    this.handleChange=this.handleChange.bind(this);
+  }
+
+  async openReply(){
+    this.setState({isReplying: true});
+  }
+
+  async closeReply(){
+    this.setState({isReplying: false});
+  }
+  
+  handleChange(event) {
+    this.setState({ userInput: event.target.value });
+  }
+  
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+      this.setState({isReplying: false})
+    }
+  }
+
+
+  async postReply() {
+    if (this.state.userInput != "") {
+      // Insert comment into database
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/short/add-short-reply",
+          {
+            params: {
+              id: 1,
+              shortId: this.props.shortInfos.id,
+              text: this.state.userInput,
+              replyId: this.props.id,
+            },
+          }
+        );
+        this.setState((state) => ({
+          repliesIds: state.repliesIds.concat(response.data.id),
+        }));
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+
+      document.getElementById("commentsInputField").value = "";
+      this.setState({ userInput: "" });
+    }
   }
 
   async componentDidMount() {
@@ -124,6 +180,23 @@ class Comment extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-short-replies",
+        {
+          params: {
+            replyId: this.props.id,
+          },
+        }
+      );
+      this.setState({
+        repliesIds: response.data.map((element) => element.id),
+      });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
   }
 
   render() {
@@ -151,51 +224,83 @@ class Comment extends React.Component {
           (secondes < 63072000 ? " year ago" : " years ago");
 
     return (
-      <div className="my-[1vh] flex">
-        <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-          <img src={this.state.senderPP} />
-        </div>
-
-        <div className="px-[2vh] w-[35vh]">
-          <div className="mb-[0.3vh] space-x-[0.5vh]">
-            <strong className="text-[2vh]">@{this.state.senderUsername}</strong>
-            <span className="text-[#525252] text-[1.5vh]">{time}</span>
+      <div className="my-[1vh] flex flex-col">
+        <div className="flex">
+          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+            <img src={this.state.senderPP} />
           </div>
 
-          <p>{this.state.text}</p>
-
-          <div className="flex items-center">
-            <div className="flex items-center justify-between space-x-[1vh]">
-              <CommentLikeButton
-                id={this.props.id}
-                likes={this.state.likes}
-                isLiked={this.state.isLiked}
-                dislikes={this.state.dislikes}
-                isDisliked={this.state.isDisliked}
-                setState={(p) => this.setState(p)}
-              />
-              <CommentDislikeButton
-                id={this.props.id}
-                likes={this.state.likes}
-                isLiked={this.state.isLiked}
-                dislikes={this.state.dislikes}
-                isDisliked={this.state.isDisliked}
-                setState={(p) => this.setState(p)}
-              />
+          <div className="px-[2vh] w-[35vh]">
+            <div className="mb-[0.3vh] space-x-[0.5vh]">
+              <strong className="text-[2vh]">@{this.state.senderUsername}</strong>
+              <span className="text-[#525252] text-[1.5vh]">{time}</span>
             </div>
 
-            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]">
-              <strong className="text-[1.75vh]"> Reply </strong>
-            </button>
+            <p>{this.state.text}</p>
 
-            {this.state.isSuperLiked && (
+            <div className="flex items-center">
+              <div className="flex items-center justify-between space-x-[1vh]">
+                <CommentLikeButton
+                  id={this.props.id}
+                  likes={this.state.likes}
+                  isLiked={this.state.isLiked}
+                  dislikes={this.state.dislikes}
+                  isDisliked={this.state.isDisliked}
+                  setState={(p) => this.setState(p)}
+                />
+                <CommentDislikeButton
+                  id={this.props.id}
+                  likes={this.state.likes}
+                  isLiked={this.state.isLiked}
+                  dislikes={this.state.dislikes}
+                  isDisliked={this.state.isDisliked}
+                  setState={(p) => this.setState(p)}
+                />
+              </div>
+
+              <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.openReply}>
+                <strong className="text-[1.75vh]"> Reply </strong>
+              </button>
+
+              {this.state.isSuperLiked && (
               <div className="relative">
                 <img src={this.props.superlikePP} className="absolute ml-[1vh] h-[2.4vh] w-[2.4vh] rounded-full relative text-center" />
                 <span className="text-[1.5vh] absolute top-[0.7vh] left-[2.4vh] drop-shadow-xl shadow-white">❤️</span>
               </div>
             )}
+            </div>
           </div>
-        </div>
+        </div>  
+        {this.state.isReplying && <div id="replySection">
+          <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
+            <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
+
+            <input
+              id="commentsInputField"
+              className="mx-[2vh] text-[2vh]"
+              maxLength="1024"
+              placeholder="Add a comment..."
+              type="text"
+              onChange={this.handleChange}
+            />
+
+            <button
+              onClick={this.postReply}
+              className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
+            >
+              <strong>Post</strong>
+            </button>
+          </div>
+        </div>}
+            {this.state.repliesIds.length != 0 && <div className="ml-[5vh]">
+                  {
+                  this.state.repliesIds.map(id => <Reply 
+                  key={id}
+                  id={id}
+                  uploader={this.props.shortInfos.uploader_id}/>)
+                  }
+                  </div>
+                  }
       </div>
     );
   }
