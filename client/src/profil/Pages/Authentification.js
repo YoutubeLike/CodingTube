@@ -98,8 +98,8 @@ class Authentification extends React.Component {
         const response = await axios.post(
           "http://localhost:5000/api/profil/register",
           formData
-        )
-      
+        );
+
         // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodRegister: response.data.message,
@@ -131,7 +131,7 @@ class Authentification extends React.Component {
           {
             withCredentials: true,
           }
-        )
+        );
         // const { Cookies } = require('react-cookie')
         // new Cookies().set("SuperCookie", response.data)
         //window.location.href = response.data.redirectTo;
@@ -260,7 +260,12 @@ class Authentification extends React.Component {
               >
                 Sign in
               </h2>
-
+              <a
+                href="https://discord.com/oauth2/authorize?client_id=1222106872736383056&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2FloginDiscord&scope=identify+email"
+                class="inline-block px-4 py-2 mt-5 text-lg rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700"
+              >
+                Login with Discord
+              </a>
               <form className="w-full md:w-3/4 overflow-auto">
                 <FormLogin
                   LoginData={this.state.LoginData}

@@ -8,6 +8,7 @@ const server = createServer(app)
 const socketio = require('socket.io');
 const session = require('express-session');
 const routes = require("./router");
+const axios=require('axios');
 
 app.use(cors({
   // better way (browsers are now happy)
@@ -114,3 +115,45 @@ io.on("connection", (socket) => {
 server.listen(5000, () => {
   console.log("server listening on port 5000");
 });
+
+app.get('/loginDiscord',async(req,res)=>{
+  const code=req.query.code;
+  const params = new URLSearchParams();
+  let user;
+  params.append('client_id', "1222106872736383056");
+  params.append('client_secret', "bkyWreCY214vBAi8SPwGSgvwa5pvndA6");
+  params.append('grant_type', 'authorization_code');
+  params.append('code', code);
+  params.append('redirect_uri', "http://localhost:5000/loginDiscord");
+  try{
+      const response=await axios.post('https://discord.com/api/oauth2/token',params)
+      const { access_token,token_type}=response.data;
+      const userDataResponse=await axios.get('https://discord.com/api/users/@me',{
+          headers:{
+              authorization: `${token_type} ${access_token}`
+          }
+      })
+      console.log('Data: ',userDataResponse.data)
+      user={
+          username:userDataResponse.data.username,
+          email:userDataResponse.data.email,
+      }
+      return res.send(`
+          <div style="margin: 300px auto;
+          max-width: 400px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          font-family: sans-serif;"
+          >
+              <h3>Welcome ${user.username}</h3>
+              <span>Email: ${user.email}</span>
+              <a href="http://localhost:3000/">Click here to go back to the homepage</a>
+          </div>
+      `)
+      
+  }catch(error){
+      console.log('Error',error)
+      return res.send('Some error occurred! ')
+  } 
+})

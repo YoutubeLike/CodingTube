@@ -88,10 +88,10 @@ router.post("/register", async (req, res) => {
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
           const userId = await GetUserId(registerData.mail);
-            req.session.userId = userId;
-            req.session.save();
-            console.log(req.session.userId + " logged in");
-            return res.json({message: 'registered !'});
+          req.session.userId = userId ;
+          req.session.save()
+          res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
+          return res.json(req.session);
         } else {
           return res.status(400).json({ error: "Passwords do not match" });
         }
@@ -136,10 +136,7 @@ router.post("/login", async (req, res) => {
             // res.setHeader('Set-Cookie: ')
 
             req.session.userId = userId ;
-            await req.session.save()
-            console.log(req.sessionID)
-            console.log(req.session.userId + " logged in");
-            console.log(req.session)
+            req.session.save()
             res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
             return res.json(req.session);
 
@@ -165,19 +162,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/check-session", async (req, res) => {
-  try {
-    if (req.session.userId) {
-      return res.status(200).json({ loggedIn: true, userId: userId });
-    } else {
-      return res.status(200).json({ loggedIn: false });
-    }
-  } catch (error) {
-    console.error("Error checking session:", error);
-
-    return res.sendStatus(500);
-  }
-});
 
 module.exports = router; // Exporting the router
 
