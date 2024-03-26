@@ -49,7 +49,7 @@ const userUpdate = (req, res) => {
         formattedBirthdate,
         updatedUserData.country,
         updatedUserData.gender,
-        1, // Assuming user ID is 1 for now
+        userId, // Assuming user ID is 1 for now
       ]
     )
     .then((result) => {

@@ -45,16 +45,15 @@ const ProfilePage = () => {
       console.log(response.data);
 
       //this.setState({
-        //goodUpdate: response.data.message,
-        //errorUpdate: null,
+      //goodUpdate: response.data.message,
+      //errorUpdate: null,
 
       //});
-
     } catch (error) {
       console.error("Error updating user:", error);
       //this.setState({
-        //goodUpdate: null,
-        //errorUpdate: error.response.data.error,
+      //goodUpdate: null,
+      //errorUpdate: error.response.data.error,
       //});
     }
   };
@@ -81,7 +80,8 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/profil/userData/1`
+          `http://localhost:5000/api/profil/userData/`,
+          { withCredentials: true }
         );
         setProfileData(response.data);
       } catch (error) {
