@@ -1,6 +1,7 @@
 import TimeLine from "../component/Timeline";
 import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
+import TimelineHistory from "../component/HistoryTimeline";
 import PageChannel from "../../channel/pages/Channel"
 import Playlist from "../component/Playlist";
 import TimelineHistoryYou from "../component/HistoryTimelineYou";
@@ -11,6 +12,8 @@ import PlaylistYou from "../component/PlaylistYou";
 
 
 export default function You() {
+
+  /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "You - CodingTube";
   }, []);
@@ -64,9 +67,9 @@ export default function You() {
               <PlaylistYou />
               </div>
             </div>
-          </div>
-      </div>
-      </div>
-      </div>
+        </div>
+        </div>
+        </div>
+      </>
     );
 }
