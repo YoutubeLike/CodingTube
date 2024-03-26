@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App" 
-import Short from "./short/index"
+import App from "./App";
+import Short from "./short/short";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import GridSubscribe from "./timeline/pages/subscribe/subscribeGrid";
@@ -29,7 +29,7 @@ import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Authentification />
+    element: <Authentification />,
   },
   {
     path: "/live/widget",
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Mainpage />
+        element: <Mainpage />,
       },
       {
         path: "live",
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
         element: <History />,
       },
       {
-        path: "/shorts",
+        path: "/short",
         element: <Short />,
       },
       {
@@ -82,7 +82,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/watch",
-        element: <Watch />
+        element: <Watch />,
       },
       {
 				path: "new-channel",
