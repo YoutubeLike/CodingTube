@@ -36,15 +36,15 @@ const UserChannel = async (_, res) => {
 	}
 };
 
-// Récupérer des infos sur la chaîne
+// 
 const getIdentifier = (req, res) => {
+	console.log(req.session.userId);
 	mariadb.pool
 		.query("SELECT identifier_channel FROM channel WHERE id = ?", [
 			req.session.userId,
 		])
 		.then((value) => {
-			console.log(value)
-			res.json(value[0]);
+			res.send(value[0]);
 		});
 };
 

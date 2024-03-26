@@ -119,15 +119,11 @@ export default function Header() {
 
 	async function GoToChannel() {
 		try {
-			const response = await fetch(
+			const response = await axios.get(
 				"http://localhost:5000/api/channel/get-identifier",
-				{
-					method: "GET",
-					headers: { "content-type": "application/json" },
-					credentials: "include",
-				}
+				{ withCredentials: true }
 			);
-			const data = await response.json();
+			const data = response.data;
 			window.location.href =
 				"http://localhost:3000/channel?identifier=" + data.identifier_channel;
 		} catch (error) {
