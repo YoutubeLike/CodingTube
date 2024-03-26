@@ -9,7 +9,7 @@ const app = express();
 app.use(cors);
 app.use(express.json);
 
-const source = path.join(__dirname, "../../../..", "upload")
+const source = path.join(__dirname, "../../../..", "uploads")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -68,9 +68,6 @@ const submit = (req, res) => {
 const submitVideo = (req, res) => {
     uploadVideo(req, res, (err) => {
 
-		console.log("Coucou")
-		console.log( path.join(__dirname, "../../../..") )
-
         if (err) { 
             console.error("Error uploading files:", err);
             return res.status(500).send("Internal Server Error");
@@ -80,43 +77,26 @@ const submitVideo = (req, res) => {
         const thumbnailFile = req.files['thumbnail'][0];
         const videoFile = req.files['video'][0];
 
+		// Sécurité si aucune vidéo, fichier
         if (!thumbnailFile || !videoFile) {
             console.error("No thumbnail or video file selected");
             return res.status(400).send("No thumbnail or video file selected");
         }
 
-        // Enregistrer la miniature
-        const thumbnailPath = path.join(__dirname, "../../../..", "images" ,thumbnailFile.originalname);
-        const videoPath = path.join(__dirname, "../../../..", "videos" , videoFile.originalname);
+		const thumbnailURL = path.join(source , "thumbnails", thumbnailFile.originalname)
+		const videoURL = path.join(source, "/videos/" , videoFile.originalname) 
 
-        // Déplacer les fichiers
-        thumbnailFile.mv(thumbnailPath, (err) => {
-            if (err) {
-                console.error("Error saving thumbnail:", err);
-                return res.status(500).send("Internal Server Error");
-            }
+		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
+			.then(() => {
+				res.status(200).send("Data submitted successfully!");
+			})
+			.catch(error => {
+				console.error("Error submitting video:", error);
+				res.status(500).send("An error occurred while submitting video data.");
+			});
+		});
 
-            // Enregistrer la vidéo
-            videoFile.mv(videoPath, (err) => {
-                if (err) {
-                    console.error("Error saving video:", err);
-                    return res.status(500).send("Internal Server Error");
-                }
 
-                const thumbnailURL = '/images/' + thumbnailFile.originalname;
-                const videoURL = '/videos/' + videoFile.originalname;
-
-                mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
-                    .then(() => {
-                        res.status(200).send("Data submitted successfully!");
-                    })
-                    .catch(error => {
-                        console.error("Error submitting video:", error);
-                        res.status(500).send("An error occurred while submitting video data.");
-                    });
-            });
-        });
-    });
 };
 
 const videoOnTab = (_, res) => {
