@@ -65,9 +65,7 @@ var divContent3 = [];
       try {
         const response = await axios.get(
           `http://localhost:5000/api/timeline/subscribe-list-request-menu`,{
-            params: {
-              userIdParam: userId,
-            },
+            withCredentials: true,
           }
         );
         setSubscribeListInfos(response.data);
