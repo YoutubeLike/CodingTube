@@ -37,22 +37,23 @@ export default function GridSubscriptionTimeLine() {
 
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
+      <div key={i} className="md:max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div className="relative">
-            <img
-              className="max-w-[90%] h-auto rounded-lg"
-              src={videosInfos[i]["thumbnail"]}
-              alt="Thumbnail"
-            />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
-              {videoLenght}
-            </p>
-          </div>
 
-          <div className="flex flew-row mt-2.5">
+        <div className="relative">
+            <img
+                className="max-w-auto h-auto rounded-lg"
+                src={videosInfos[i]["thumbnail"]}
+                alt="Thumbnail"
+            />
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
+        </div>
+
+
+
+          <div className="sm:block md:flex md:flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">
               <h3 className="text-black font-bold text-[100%]">
@@ -62,8 +63,8 @@ export default function GridSubscriptionTimeLine() {
                 {videosInfos[i]["pseudo"]}
               </h4>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views -{" "}
-                {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                
               </h4>
             </div>
           </div>
