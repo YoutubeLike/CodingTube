@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
-import { useLocation } from "react-router-dom";
-
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -66,35 +64,25 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
-export default function ShowPlaylist() {
+export default function LikePageYou() {
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const playlistId = searchParams.get("playlist_id");
-
+  // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchVideos = async () => {
       try {
-        if (playlistId) {
-          const response = await axios.get(
-            `http://localhost:5000/api/timeline/showPlaylist-request`, {
-                params: {
-                    playlistIdParam: playlistId,
-                },
-            }
-          );
-          setVideosInfos(response.data);
-          console.log("Playlist load successfully");
-        }
+        const response = await axios.get('http://localhost:5000/api/timeline/likePageYou-request');
+        setVideosInfos(response.data);
       } catch (error) {
-        setVideosInfos(videosInfos);
+        console.error('Error fetching liked videos:', error);
       }
     };
+    fetchVideos();
+  }, []);
 
-    fetchData();
-  }, [playlistId]);
-  console.log(videosInfos);
+  if (videosInfos.length > 8) {
+    videosInfos = videosInfos.slice(0, 8);
+  }
   var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
@@ -102,6 +90,7 @@ export default function ShowPlaylist() {
     indents.push(
       <div key={i} className="max-w-[25%] h-auto mb-0">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+
         <div className="relative">
             <img
                 className="max-w-[90%] h-auto rounded-lg"
@@ -110,7 +99,7 @@ export default function ShowPlaylist() {
             />
             <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
         </div>
-        <div className="flex flew-row mt-2.5">
+          <div className="flex flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">
               <h3 className="text-black font-bold text-[100%]">
@@ -129,5 +118,6 @@ export default function ShowPlaylist() {
       </div>
     );
   }
+
   return indents;
 }
