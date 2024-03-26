@@ -64,10 +64,10 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
-export default function TimelineHistory() {
+export default function TimelineHistoryYou() {
 
     // Get the informations of the SQL Request by the URL
-    const [videosInfos, setVideosInfos] = useState([]);
+    var [videosInfos, setVideosInfos] = useState([]);
     useEffect(() => {
       const fetchVideos = async () => {
         try {
@@ -80,6 +80,9 @@ export default function TimelineHistory() {
       fetchVideos();
     }, []);
   
+    if (videosInfos.length > 8) {
+        videosInfos = videosInfos.slice(0, 8);
+      }
     var indents = [];
     for (var i = 0; i < videosInfos.length; i++) {
       var date = videosInfos[i]["upload_date_time"];

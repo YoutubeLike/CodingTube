@@ -3,7 +3,11 @@ import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import PageChannel from "../../channel/pages/Channel"
 import Playlist from "../component/Playlist";
+import TimelineHistoryYou from "../component/HistoryTimelineYou";
+import TimelineHistory from "../component/HistoryTimeline";
 import { useState,useEffect } from "react";
+import LikePageYou from "../component/LikePageYou";
+import PlaylistYou from "../component/PlaylistYou";
 
 
 export default function You() {
@@ -32,19 +36,19 @@ export default function You() {
           <div className="flex">
             <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
               <div className="flex flex-wrap">
+              <TimelineHistoryYou />
               </div>
             </div>
           </div>
           <div className="">
           <div>
-            <a href="/likedvideo">
               <img className="relative left-[220px] w-10 h-10" src="likedvideo.png" />
               <button className="relative left-[265px] relative top-[-32px] font-black">Liked Videos</button>
-            </a>
           </div>
           <div className="flex">
             <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
               <div className="flex flex-wrap">
+                <LikePageYou />
               </div>
             </div>
           </div>
@@ -57,7 +61,7 @@ export default function You() {
           <div className="flex">
             <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
               <div className="flex flex-wrap">
-              <Playlist />
+              <PlaylistYou />
               </div>
             </div>
           </div>

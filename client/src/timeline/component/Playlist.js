@@ -101,9 +101,6 @@ export default function Playlist() {
             />
             <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">Playlist</p>
         </div>
-
-
-
           <div className="flex flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">
