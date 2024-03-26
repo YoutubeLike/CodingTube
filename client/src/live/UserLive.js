@@ -31,5 +31,4 @@ export default function LiveFromUser()
 export async function SendWidget()
 {
     io("http://localhost:5000").emit("send")
-    // axios.get('http://localhost:5000/api/live/test')
 }
