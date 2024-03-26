@@ -183,7 +183,7 @@ export default function Header() {
       console.error("An error occurred while deleting: ", error);
     }
   }
- 
+
 
   return (
     // Header component containing search bar and buttons
@@ -368,4 +368,3 @@ export default function Header() {
     </div>
   );
 }
-
