@@ -166,8 +166,8 @@ class Authentification extends React.Component {
           darkMode ? "bg-gray-900" : "bg-white"
         } ${
           this.state.heightBiggerThanWidth
-            ? `min-h-[1120px] min-w-[200px]`
-            : `min-h-[800px] min-w-[768px]`
+            ? `min-h-[1130px] min-w-[200px]`
+            : `min-h-[820px] min-w-[768px]`
         }`}
       >
         {" "}
