@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { timelineRequest } = require('./controllerTimelineRequest.js')
-const { addViewTimelineRequest } = require('./controllerAddViewVideoTimeline.js')
 const { subscriptionListMenu } = require('./controllerSubscriptionListMenu.js');
-const { timelineRequest } = require('./controllerTimelineRequest.js');
 const { subscriptionTimelineRequest } = require('./controllerSubscriptionTimelineRequest.js');
 const { addViewTimelineRequest } = require('./controllerAddViewVideoTimeline.js');
 const { addHistoryRequest } = require('./controllerAddHistory.js');

@@ -4,12 +4,11 @@ const mariadb = require("./src/database");
 const routes = require("./router");
 bodyParser = require("body-parser");
 const { createServer } = require('http')
-const server = createServer(app)
 const socketio = require('socket.io');
 const session = require('express-session');
-const routes = require("./router");
-
 const app = express();
+
+const server = createServer(app)
 
 app.use(cors({
   // better way (browsers are now happy)
@@ -109,7 +108,7 @@ io.on("connection", (socket) => {
   })
 });
 
-app.use("/api", urlencodedParser, routes);
+app.use("/api", routes);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");
