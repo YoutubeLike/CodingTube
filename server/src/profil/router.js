@@ -53,11 +53,6 @@ router.post("/register", async (req, res) => {
       registerData.username != "" &&
       registerData.mail != ""
     ) {
-<<<<<<< HEAD
-      // Validation du mot de passe avec une expression régulière
-=======
-      // Validating password using regular expression
->>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
       const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
       if (
         registerData.password != "" &&
@@ -70,36 +65,12 @@ router.post("/register", async (req, res) => {
             error:
               "Password must contain at least 8 characters, 1 uppercase, 1 special character; 1 digit",
           });
-<<<<<<< HEAD
-
-        }
-
-        // Check if password is equal to confirm password 
-        if (registerData.password == registerData.confirmPassword) {
-          await InsertUser(registerData);
-          const userId = await GetUserId(registerData.mail);
-            req.session.userId = userId;
-            req.session.save();
-            console.log(req.session.userId + " logged in");
-            return res.json({message: 'registered !'});
-        } else {
-          return res.status(400).json({ error: "Passwords do not match" });
-        }
-      } 
-    } else {
-        return res.status(400).json({ error: "Fields can't be empty" });
-
-=======
->>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
       }
       if (registerData.password == registerData.confirmPassword) {
         await InsertUser(registerData);
         console.log("User inserted successfully");
-<<<<<<< HEAD
         return res.status(400).json({ error: "User registered successfully" });
-=======
-        return res.status(200).json({ message: "User registered successfully" });
->>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
+
       } else {
         return res.status(400).json({ error: "Passwords do not match" });
       }
