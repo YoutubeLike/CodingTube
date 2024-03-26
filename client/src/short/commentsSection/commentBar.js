@@ -86,7 +86,7 @@ class CommentBar extends React.Component {
               <img src="commentsFilter.png" className="scale-75" />
             </button>
 
-            <button className="h-[5vh] w-[5vh] hover:bg-[#e5e5e5] hover:ease-in-out hover:rounded-full hover:animate-pulse duration-300">
+            <button className="h-[5vh] w-[5vh] rounded-full transition ease-in-out hover:bg-[#e5e5e5] hover:animate-pulse">
               <img
                 src="commentsArrow.png"
                 className="scale-75"
@@ -125,7 +125,7 @@ class CommentBar extends React.Component {
 
           <button
             onClick={this.postComment}
-            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out"
+            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
           >
             <strong>Post</strong>
           </button>

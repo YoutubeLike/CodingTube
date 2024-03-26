@@ -87,6 +87,7 @@ class Video extends React.Component {
             <VideoButtons
               id={this.state.shortInfos.id}
               isMuted={this.props.isMuted}
+              isPlaying={this.props.isPlaying}
               setState={this.props.setState}
             />
 

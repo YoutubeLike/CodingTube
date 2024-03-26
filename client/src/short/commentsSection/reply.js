@@ -17,6 +17,9 @@ class Reply extends React.Component {
       isDisliked: false,
       isSuperLiked: false,
     };
+    this.reply = this.reply.bind(this)
+    this.postReply = this.postReply.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
@@ -126,6 +129,47 @@ class Reply extends React.Component {
     }
   }
 
+  reply() {
+
+  }
+
+  handleChange(event) {
+    this.setState({ userInput: event.target.value });
+  }
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+      this.setState({ isReplying: false });
+    }
+  }
+
+  async postReply() {
+    if (this.state.userInput != "") {
+      // Insert comment into database
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/short/add-short-reply",
+          {
+            params: {
+              id: 1,
+              shortId: this.props.shortInfos.id,
+              text: this.state.userInput,
+              replyId: this.props.id,
+            },
+          }
+        );
+        this.setState((state) => ({
+          repliesIds: state.repliesIds.concat(response.data.id),
+        }));
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+
+      document.getElementById("commentsInputField").value = "";
+      this.setState({ userInput: "" });
+    }
+  }
+
   render() {
     const secondes =
       (Date.parse(new Date()) - Date.parse(new Date(this.state.date))) / 1000;
@@ -184,12 +228,23 @@ class Reply extends React.Component {
               />
             </div>
 
-            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.reply}>
-              <strong className="text-[1.75vh]"> Reply </strong>
+            <button
+              className="ml-[1vh] rounded-full px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
+              onClick={this.reply}
+            >
+              <strong className="text-[1.75vh]">Reply</strong>
             </button>
 
             {this.state.isSuperLiked && (
-              <p className="ml-[1vh] text-[2vh]">❤️superliked</p>
+              <div className="relative">
+                <img
+                  src={this.props.superlikePP}
+                  className="absolute ml-[1vh] h-[2.4vh] w-[2.4vh] rounded-full relative text-center"
+                />
+                <span className="text-[1.5vh] absolute top-[0.7vh] left-[2.4vh] drop-shadow-xl shadow-white">
+                  ❤️
+                </span>
+              </div>
             )}
           </div>
         </div>
