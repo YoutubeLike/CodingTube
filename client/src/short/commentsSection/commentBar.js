@@ -125,7 +125,7 @@ class CommentBar extends React.Component {
 
           <button
             onClick={this.postComment}
-            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
+            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out"
           >
             <strong>Post</strong>
           </button>

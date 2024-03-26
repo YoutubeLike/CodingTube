@@ -204,7 +204,7 @@ class Comment extends React.Component {
       (Date.parse(new Date()) - Date.parse(new Date(this.state.date))) / 1000;
     const time =
       secondes < 60
-        ? secondes + (secondes < 2 ? " seconde ago" : " seconds ago")
+        ? secondes + (secondes == 1 ? " second ago" : " seconds ago")
         : secondes < 3600
         ? Math.floor(secondes / 60) +
           (secondes < 120 ? " minute ago" : " minutes ago")
