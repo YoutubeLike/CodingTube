@@ -8,22 +8,32 @@ const {
   GetPasswordFromUsernameOrEmail,
 } = require("./authentication");
 
+router.post("/updatePswrd", updatePassword);
+
+// Endpoint to get user data based on user ID
+router.get("/userData/:info_user", userData);
+
+// Endpoint to update user data
+router.post("/userUpdate", userUpdate);
+
+// Endpoint to register a new user
 router.post("/register", async (req, res) => {
   const registerData = req.body.registerData;
   try {
-    // Vérification si le nom d'utilisateur contient un arobase
+    // Checking if username contains '@'
     if (registerData.username.includes("@")) {
-        console.log("Username cannot contain '@'");
-        return res.status(400).json({ error: "Username cannot contain '@'" });
-    }
+      console.log("Username cannot contain '@'");
+      return res.status(400).json({ error: "Username cannot contain '@'" });
+    } 
 
-    // Vérification si l'adresse e-mail est valide
+    // Checking if email address is valid using regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(registerData.mail)) {
-        console.log("Invalid email address");
-        return res.status(400).json({ error: "Invalid email address" });
+      console.log("Invalid email address");
+      return res.status(400).json({ error: "Invalid email address" });
     }
 
+    // Checking if username and email are already taken
     const usernameExist = await CheckIfUsernameExist(registerData.username);
     const mailExist = await CheckIfMailExist(registerData.mail);
     const passwordMatch = await CheckIfPasswordMatch(
@@ -43,7 +53,11 @@ router.post("/register", async (req, res) => {
       registerData.username != "" &&
       registerData.mail != ""
     ) {
+<<<<<<< HEAD
       // Validation du mot de passe avec une expression régulière
+=======
+      // Validating password using regular expression
+>>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
       const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
       if (
         registerData.password != "" &&
@@ -56,6 +70,7 @@ router.post("/register", async (req, res) => {
             error:
               "Password must contain at least 8 characters, 1 uppercase, 1 special character; 1 digit",
           });
+<<<<<<< HEAD
 
         }
 
@@ -74,11 +89,17 @@ router.post("/register", async (req, res) => {
     } else {
         return res.status(400).json({ error: "Fields can't be empty" });
 
+=======
+>>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
       }
       if (registerData.password == registerData.confirmPassword) {
         await InsertUser(registerData);
         console.log("User inserted successfully");
+<<<<<<< HEAD
         return res.status(400).json({ error: "User registered successfully" });
+=======
+        return res.status(200).json({ message: "User registered successfully" });
+>>>>>>> parent of a530ad9 (Merge branch 'main-dev' into Profile-AccountPage)
       } else {
         return res.status(400).json({ error: "Passwords do not match" });
       }
@@ -91,9 +112,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
+// Endpoint for user login
 router.post("/login", async (req, res) => {
   const loginData = req.body.loginData;
-  console.log(loginData)
   try {
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
@@ -104,29 +126,21 @@ router.post("/login", async (req, res) => {
     console.log(passwordFromDb);
     
 
-    console.log(isPasswordMatch);
 
-
-    console.log(usernameExist, mailExist);
-    if(loginData.usernameOrMail != ""  && loginData.password != "") {
-
-        if (usernameExist || mailExist) {
-
-            if (isPasswordMatch) {
-                console.log("User signed in successfully");
-                return res.status(400).json({ error: "User signed in successfully" });
-            }else{
-                return res.status(400).json({ error: "Incorrect password" });
-            }
-        }else{
-            return res.status(400).json({ error: "Account not found" });
+      if (usernameExist || mailExist) {
+        if (isPasswordMatch) {
+          console.log("User signed in successfully");
+          return res.status(200).json({ message: "User signed in successfully" });
+        } else {
+          return res.status(400).json({ error: "Incorrect password" });
         }
     }else{
         return res.status(400).json({ error: "Fields can't be empty" })
     }
-}catch (error) {
-    console.error("Error during user registration:", error);
+  } catch (error) {
+    console.error("Error during user login:", error);
     return res.sendStatus(500);
   }
 });
-module.exports = router;
+
+module.exports = router; // Exporting the router
