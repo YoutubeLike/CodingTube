@@ -56,6 +56,24 @@ router.post("/register", async (req, res) => {
             error:
               "Password must contain at least 8 characters, 1 uppercase, 1 special character; 1 digit",
           });
+
+        }
+
+        // Check if password is equal to confirm password 
+        if (registerData.password == registerData.confirmPassword) {
+          await InsertUser(registerData);
+          const userId = await GetUserId(registerData.mail);
+            req.session.userId = userId;
+            req.session.save();
+            console.log(req.session.userId + " logged in");
+            return res.json({message: 'registered !'});
+        } else {
+          return res.status(400).json({ error: "Passwords do not match" });
+        }
+      } 
+    } else {
+        return res.status(400).json({ error: "Fields can't be empty" });
+
       }
       if (registerData.password == registerData.confirmPassword) {
         await InsertUser(registerData);
