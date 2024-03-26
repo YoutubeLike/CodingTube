@@ -4,6 +4,7 @@ import SideBar from "./sideBar/sideBar.js";
 import CommentBar from "./commentsSection/commentBar.js";
 import VideoButtons from "./videoButtons.js";
 import VideoInfos from "./videoInfos.js";
+import Description from "./description/description.js";
 
 class Video extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class Video extends React.Component {
       shortInfos: {},
       commentCount: 0,
       commentsShown: false,
+      descriptionShown: false,
     };
   }
 
@@ -66,10 +68,17 @@ class Video extends React.Component {
           <video
             src="1.mp4"
             id={"shortPlayer" + this.state.shortInfos.id}
-            className="h-full w-full object-cover absolute behind"
+            className={
+              "h-full w-full object-cover absolute behind filter " +
+              this.state.shortInfos.filters
+            }
             muted
             loop
           />
+
+          <strong className="px-[4vh] pt-[2.5vh] absolute text-center text-white text-[4vh] textStroke break-words behind">
+            {this.state.shortInfos.text}
+          </strong>
 
           {/* Contains video's informations */}
           <div className="flex flex-col justify-between h-full w-full group">
@@ -85,7 +94,7 @@ class Video extends React.Component {
               <VideoInfos shortInfos={this.state.shortInfos} />
 
               {/* COMMENTS TOGGLED: Right bar */}
-              {this.state.commentsShown && (
+              {(this.state.commentsShown || this.state.descriptionShown) && (
                 <div className="absolute bottom-[2.5vh] right-[2vh] text-white shadow-3xl">
                   <SideBar
                     id={this.state.shortInfos.id}
@@ -101,7 +110,7 @@ class Video extends React.Component {
         </div>
 
         {/* COMMENTS NOT TOGGLED: Right bar */}
-        {!this.state.commentsShown ? (
+        {!(this.state.commentsShown || this.state.descriptionShown) ? (
           <SideBar
             id={this.state.shortInfos.id}
             commentCount={this.state.commentCount}
@@ -109,11 +118,17 @@ class Video extends React.Component {
               this.setState(p);
             }}
           />
-        ) : (
+        ) : this.state.commentsShown ? (
           <CommentBar
             setState={(p) => this.setState(p)}
             shortInfos={this.state.shortInfos}
             commentCount={this.state.commentCount}
+            PP={this.state.shortInfos.PP}
+          />
+        ) : (
+          <Description
+            setState={(p) => this.setState(p)}
+            shortInfos={this.state.shortInfos}
           />
         )}
       </div>

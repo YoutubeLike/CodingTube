@@ -23,4 +23,8 @@
   .behind {
     z-index: -1;
   }
+
+  .textStroke {
+    -webkit-text-stroke: 0.2vh black;
+  }
 }

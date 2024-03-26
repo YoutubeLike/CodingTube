@@ -97,7 +97,7 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="flex flex-col-reverse text-[2vh] px-[2vh] overflow-y-auto break-words">
+        <div className="flex flex-col-reverse text-[2vh] h-full px-[2vh] overflow-y-auto break-words">
           {/* Single comment renderer */}
           {this.state.commentsIds.map((id) => (
             <Comment
@@ -105,6 +105,7 @@ class CommentBar extends React.Component {
               id={id}
               uploader={this.props.shortInfos.uploader_id}
               shortInfos={this.props.shortInfos}
+              superlikePP={this.props.PP}
             />
           ))}
         </div>

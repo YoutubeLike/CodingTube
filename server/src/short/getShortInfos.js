@@ -12,7 +12,7 @@ const getTenNextShorts = (req, res) => {
 const getShortInfos = (req, res) => {
   mariadb.pool
     .query(
-      "SELECT short.id AS id, channel.id AS uploader_id, title, pseudo, description, PP FROM short JOIN channel ON channel_id = channel.id JOIN user ON channel.user_id = user.id WHERE short.id = ?;",
+      "SELECT short.id AS id, channel.id AS uploader_id, title, upload_date_time AS date, filters, nb_like, text, description, number_view, pseudo, identifier_channel, PP FROM short JOIN channel ON channel_id = channel.id JOIN user ON channel.user_id = user.id WHERE short.id = ?;",
       [req.query.shortId]
     )
     .then((value) => {
