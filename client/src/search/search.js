@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import Header from "./header";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
@@ -69,6 +69,7 @@ function timeOfVideo(totalSeconds) {
 export default function Search() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
+  const inputRef = useRef("");
 
   useEffect(() => {
     const displaySearchPage = async () => {
@@ -91,11 +92,15 @@ export default function Search() {
 
     const handleClickFilters = async (e) => {
         const buttonValue = e.target.value;
-        console.log('Le filtre ' + buttonValue + ' est appliqué')
+        const queryParameters = new URLSearchParams(window.location.search);
+        const video_search = queryParameters.get("videoName")
+
         try{
+          console.log(video_search)
           const applyFilters = await axios.get(
-            "http://localhost:5000/api/search/filters/" + buttonValue );
+            "http://localhost:5000/api/search/filters/" + buttonValue + '/' + video_search );
             setVideosInfos(applyFilters.data)
+            console.log('Le filtre ' + buttonValue + ' est appliqué')
         } catch(error){
           console.error("An error occurred while applying filter: ", error)
         }
@@ -112,8 +117,9 @@ export default function Search() {
               <button 
                 type="submit" 
                 className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "all"
+                value= "All"
                 onClick={(e) => {
+                
                   handleClickFilters(e);
                 }}
               >
@@ -124,8 +130,9 @@ export default function Search() {
               <button 
                 type="submit" 
                 className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "videos"
+                value= "Videos"
                 onClick={(e) => {
+                 
                   handleClickFilters(e);
                 }}
               >
@@ -136,8 +143,9 @@ export default function Search() {
               <button 
                 type="submit" 
                 className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "shorts"
+                value= "Shorts"
                 onClick={(e) => {
+                  
                   handleClickFilters(e);
                 }}
               >
@@ -148,20 +156,9 @@ export default function Search() {
               <button 
                 type="submit" 
                 className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "music"
+                value= "Recently-uploaded"
                 onClick={(e) => {
-                  handleClickFilters(e);
-                }}
-              >
-              Music
-              </button>
-            </div>
-            <div>
-              <button 
-                type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "recently-uploaded"
-                onClick={(e) => {
+                  
                   handleClickFilters(e);
                 }}
               >
@@ -172,8 +169,9 @@ export default function Search() {
               <button 
                 type="submit" 
                 className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
-                value= "live"
+                value= "Live"
                 onClick={(e) => {
+                  
                   handleClickFilters(e);
                 }}
               >
@@ -181,6 +179,71 @@ export default function Search() {
               </button>
             </div>
           </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Music"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Music
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Gaming"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Gaming
+              </button>
+            </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Cultivations"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Cultivations
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Podcasts"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Podcasts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Sports"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Sports
+              </button>
+            </div>
           <div className="">
             <div className="">
               <button 
