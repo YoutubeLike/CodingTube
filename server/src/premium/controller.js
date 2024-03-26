@@ -29,9 +29,6 @@ const premium = async (req, res) => {
     ],
   ]);
   try {
-    const account = await stripe.accounts.create({
-      type: "express",
-    });
     const session = await stripe.checkout.sessions.create({
       // type de payments subscription ou payments
       mode: "subscription",
