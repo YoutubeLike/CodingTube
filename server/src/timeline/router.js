@@ -4,13 +4,15 @@ const router = express.Router();
 const { timelineRequest } = require('./controllerTimelineRequest.js')
 const { addViewTimelineRequest } = require('./controllerAddViewVideoTimeline.js')
 const { subscriptionListMenu } = require('./controllerSubscriptionListMenu.js');
-const { timelineRequest } = require('./controllerTimelineRequest.js');
 const { subscriptionTimelineRequest } = require('./controllerSubscriptionTimelineRequest.js');
-const { addViewTimelineRequest } = require('./controllerAddViewVideoTimeline.js');
 const { addHistoryRequest } = require('./controllerAddHistory.js');
 const { historyRequest } = require('./controllerHistory.js');
 const { subscriptionList } = require('./controllerSubscriptionList.js');
 const { viewedCategoriesList } = require('./controllerViewedCategoriesList.js');
+const { playlistRequest } = require('./controllerPlaylist.js');
+const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
+console.log("router timeline");
+
 
 // Get the videos infos to show timeline
 router.get('/timeline-request', timelineRequest)
@@ -25,13 +27,17 @@ router.get('/subscribe-list-request', subscriptionList)
 router.get('/viewed-categories-list-request', viewedCategoriesList)
 
 // Add view to video with video_id
-router.get('/addView-request/:videoId', addViewTimelineRequest)
+router.get('/addView-request', addViewTimelineRequest)
 
 // Get the list of subscriptions
 router.get('/subscribe-list-request-menu', subscriptionListMenu)
 
-router.get('/addHistory-request/:videoId', addHistoryRequest)
+router.get('/addHistory-request', addHistoryRequest)
 
 router.get('/history-request', historyRequest)
+
+router.get('/playlist-request', playlistRequest)
+
+router.get('/showPlaylist-request', showPlaylistRequest)
 
 module.exports = router

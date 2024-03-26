@@ -1,15 +1,13 @@
 const express = require("express");
 const cors = require("cors");
 const mariadb = require("./src/database");
-const routes = require("./router");
 bodyParser = require("body-parser");
 const { createServer } = require('http')
+const app = express();
 const server = createServer(app)
 const socketio = require('socket.io');
 const session = require('express-session');
 const routes = require("./router");
-
-const app = express();
 
 app.use(cors({
   // better way (browsers are now happy)
@@ -22,11 +20,9 @@ app.use(cors({
 app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
 }));
 
-
-app.use(express.json({ type: "application/*+json" }));
 
 
 /* Handle all POST requests with different kind of bodies */
@@ -35,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.raw({ type: "application/vnd.custom-type" }));
 app.use(express.text({ type: "text/html" }));
 
+
 /* Register all /api routes of differents teams */
 app.use("/api", routes);
 
@@ -42,6 +39,11 @@ const io = new socketio.Server(server, {
   cors: {
     origin: "*",
   },
+})
+
+app.get("/", (req,res) => {
+  console.log(req.session);
+  console.log(req.sessionID)
 })
 
 const bannedWords = ["nigger"];
@@ -108,8 +110,6 @@ io.on("connection", (socket) => {
     socket.join(arg)
   })
 });
-
-app.use("/api", urlencodedParser, routes);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");

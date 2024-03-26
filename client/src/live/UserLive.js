@@ -20,6 +20,7 @@ export default function LiveFromUser()
     return (
         <>
             <p> {user} </p>
+
             <ReactPlayer url={"http://localhost:8090/live/" + user + ".flv"} controls={false} playing={false} pip={false}/>
             <Chat user={user} />
             <button onClick={SendWidget}> Appuye moi </button>
@@ -34,5 +35,4 @@ export async function ConnectToRoom()
 export async function SendWidget()
 {
     io("http://localhost:5000").emit("send")
-    // axios.get('http://localhost:5000/api/live/test')
 }
