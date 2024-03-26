@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 const ENDPOINT = "http://127.0.0.1:5000";
 
@@ -22,18 +22,19 @@ export default function Chat(props) {
   const [response, setResponse] = useState("");
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [isBanned, setIsBanned] = useState(false);
   const banDuration = 60000; // 1 minute in milliseconds
   const chatContainerRef = useRef(null);
+  const socketInstance = props.socket
+  const [socket, setSocket] = useState(socketInstance);
+
+  console.log(props.socket)
   
   useEffect(() => {
+    setSocket(socketInstance);
+    socket.emit("connect-to-room", props.user)
 
     console.log(isBanned);
-        const socketInstance = io(ENDPOINT);
-    setSocket(socketInstance);
-    
-    socketInstance.emit("connect-to-room", props.user)
 
     socketInstance.on("chat-message", (data) => {
       const messagesReceived = data.message;
@@ -90,9 +91,11 @@ export default function Chat(props) {
   };
   const getUserPseudo = async (userId) => {
     try {
-      return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
-        return response.data.pseudo
-      })
+      const response = await axios.get("http://localhost:5000/api/live/username", { withCredentials: true});
+      return response.data.pseudo
+      // return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
+      //   return response.data.pseudo
+      // })
     } catch (error) {
       console.error("Error fetching pseudo:", error);
       return null;

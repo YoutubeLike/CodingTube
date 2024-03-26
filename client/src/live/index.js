@@ -2,17 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Live() {
-    const [userInLive, setUserInLive] = useState([]);
-    const [isExpanded, setIsExpanded] = useState(false);
 
 
 export default function Live()
 {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [userInLive, setUserInLive] = useState([])
     axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
         console.log(response.data)
     })
-    const [UserInLive, setUserInLive] = useState([])
     useEffect(() => {
         axios.get("http://localhost:8090/api/streams")
             .then((response) => {
@@ -46,6 +44,7 @@ export default function Live()
     );
 }
 
+
 export function UserLink({ userList, isExpanded, handleExpand }) {
     const [usersInLive, setUsersInLive] = useState([]);
 
@@ -62,7 +61,9 @@ export function UserLink({ userList, isExpanded, handleExpand }) {
                 setUsersInLive(["Live indisponible"]);
             });
     }, []);
-
+    userList.map((CUser) => {
+        axios.post("http://localhost:5000/api/live/save", { user : CUser})
+    })
     return (
         <>
             {usersInLive.length === 0 && (
@@ -73,8 +74,7 @@ export function UserLink({ userList, isExpanded, handleExpand }) {
                     {userList.map((element) => (
                         <div key={element} className="bg-white rounded-md overflow-hidden">
                             <div className="video-container">
-                                <Link to={"/live/" + element}>
-                                    <div className="video">
+                                <Link to={"/live/" + element}>                                    <div className="video">
                                         <img width="600px" src={"http://localhost:5000/api/live/thumbnail?user=" + element} alt="" />
                                     </div>
                                 </Link>

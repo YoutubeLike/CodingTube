@@ -38,6 +38,7 @@ app.use("/api", routes);
 const io = new socketio.Server(server, {
   cors: {
     origin: "*",
+    methods: ["GET", "POST"]
   },
 })
 
@@ -87,7 +88,11 @@ io.on("connection", (socket) => {
     } else {
       const room = socket.rooms.values()
       room.next();
-      socket.broadcast.to(room.next().value).emit("chat-message", {
+      const currentRoom = room.next()
+      // socket.in(currentRoom.value).sock
+      console.log(io.sockets.adapter.rooms.get(currentRoom.value).size)
+      
+      socket.broadcast.to(currentRoom.value).emit("chat-message", {
         sender: msg.sender,
         time: msg.time,
         message: msg.message,
@@ -99,16 +104,31 @@ io.on("connection", (socket) => {
   });
 
   // Handle disconnections
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
-  });
-
+    // console.log(socket.rooms)
+    })
+  
   console.log(io.engine.clientsCount)
   console.log(socket.rooms)
-
+  
   socket.on("connect-to-room", (arg) => {
     socket.join(arg)
+
+    console.log('connect user to room ' + arg)
   })
+
+  socket.on('AskUserCount', (arg) => {
+    console.log(arg.user)
+    if(io.sockets.adapter.rooms.get(arg.user))
+    {
+      console.log('bonjour')
+      io.sockets.to(arg.user).emit("user-count", { size: io.sockets.adapter.rooms.get(arg.user).size})
+    }
+  })
+
+
 });
 
 server.listen(5000, () => {

@@ -61,7 +61,7 @@ export default function Header() {
         const resultHistory_onChange = await axios.get(
           "http://localhost:5000/api/search/history_onChange/1/" +
             inputRef.current
-        );
+        , { withCredentials: true});
         setUserHistory(resultHistory_onChange.data);
       } catch (error) {
         console.error("An error in history_onChange: ", error);
