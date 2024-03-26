@@ -12,6 +12,16 @@ class VideoInfos extends React.Component {
     this.handleSubscribe = this.handleSubscribe.bind(this);
   }
 
+  async componentDidMount() {
+    const response = await axios.get(
+      "http://localhost:5000/api/short/get-follow",
+      { params: { channelId: this.props.shortInfos.id, userId: 1 } }
+    );
+    this.setState({
+      isSubscribed: response.data.length == 0 ? false : true,
+    });
+  }
+
   handleHover() {
     this.setState((prevState) => ({
       isHovered: !prevState.isHovered,
@@ -21,11 +31,11 @@ class VideoInfos extends React.Component {
   async handleSubscribe() {
     try {
       await axios.get("http://localhost:5000/api/short/follow", {
-        params: { channelId: 1, userId: 1 },
+        params: { channelId: this.props.shortInfos.id, userId: 1 },
       });
       const response = await axios.get(
         "http://localhost:5000/api/short/get-follow",
-        { params: { channelId: 1, userId: 1 } }
+        { params: { channelId: this.props.shortInfos.id, userId: 1 } }
       );
       this.setState({
         isSubscribed: response.data.length == 0 ? false : true,
@@ -75,7 +85,10 @@ class VideoInfos extends React.Component {
           </a>
 
           {/* Subscribe button */}
-          <button onClick={this.handleSubscribe} className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]">
+          <button
+            onClick={this.handleSubscribe}
+            className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]"
+          >
             {this.state.isSubscribed ? "Subscribed" : "Subscribe"}
           </button>
         </div>
