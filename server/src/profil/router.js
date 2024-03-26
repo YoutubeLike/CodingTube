@@ -90,18 +90,34 @@ router.post("/login", async (req, res) => {
   try {
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
-    const passwordFromDb = await GetPasswordFromUsernameOrEmail(loginData.usernameOrMail);
-    const isPasswordMatch = await CheckIfPasswordMatch(loginData.password, passwordFromDb)
+    // Get password associated with username or email from the database
+    const passwordFromDb = await GetPasswordFromUsernameOrEmail(
+      loginData.usernameOrMail
+    );
 
-    console.log(loginData.password);
-    console.log(passwordFromDb);
-    
-
-
+    // Check if password matches with the one in the database
+    const isPasswordMatch = await CheckIfPasswordMatch(
+      loginData.password,
+      passwordFromDb
+    );
+    if (loginData.usernameOrMail != "" || loginData.password != "") {
       if (usernameExist || mailExist) {
         if (isPasswordMatch) {
-          console.log("User signed in successfully");
-          return res.status(200).json({ message: "User signed in successfully" });
+            // Create a session and save the id of the user to it
+            const userId = await GetUserId(loginData.usernameOrMail);
+            res.setHeader('Content-Type', 'text/html')
+            // res.setHeader('Set-Cookie: ')
+
+            req.session.userId = userId ;
+            await req.session.save()
+            console.log(req.sessionID)
+            console.log(req.session.userId + " logged in");
+            console.log(req.session)
+            res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
+            return res.json(req.session);
+
+            //return res.status(400).json({ error: "User logged In Successfully!" });
+            //return res.status(200).json({ redirectTo: '/' });
         } else {
           return res.status(400).json({ error: "Incorrect password" });
         }
