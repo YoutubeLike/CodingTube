@@ -2,143 +2,159 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const ProfilePage = () => {
-// State for managing edit mode for each field in profile
-const [isEditing, setIsEditing] = useState({
-  name: false,
-  mail: false,
-  birthdate: false,
-  country: false,
-  gender: false,
-  password: false,
-});
+  // State for managing edit mode for each field in profile
+  const [isEditing, setIsEditing] = useState({
+    username: false,
+    name: false,
+    mail: false,
+    birthdate: false,
+    country: false,
+    gender: false,
+    password: false,
+    errorUpdate: null,
+    goodUpdate: null,
+  });
 
-// State for storing profile data
-const [profileData, setProfileData] = useState({
-  first_name: "",
-  last_name: "",
-  mail: "",
-  birthdate: "",
-  country: "",
-  gender: "",
-  password: "",
-});
+  // State for storing profile data
+  const [profileData, setProfileData] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    mail: "",
+    birthdate: "",
+    country: "",
+    gender: "",
+    password: "",
+  });
 
-// Function to update user data
-const updateUser = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/profil/userUpdate",
-      {
-        first_name: profileData.first_name,
-        last_name: profileData.last_name,
-        mail: profileData.mail,
-        birthdate: profileData.birthdate,
-        country: profileData.country,
-        gender: profileData.gender,
-      }
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error updating user:", error);
-    console.log("Error connecting to the backend");
-  }
-};
-
-// Function to update password
-const updatePassword = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/profil/updatePswrd",
-      {
-        id: profileData.id,
-        password: newPassword,
-      }
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error updating password:", error);
-    console.log("Couldn't connect to the backend");
-  }
-};
-
-// Fetch user data on component mount
-useEffect(() => {
-  const fetchUserData = async () => {
+  // Function to update user data
+  const updateUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/userUpdate",
+        {
+          username: profileData.username,
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          mail: profileData.mail,
+          birthdate: profileData.birthdate,
+          country: profileData.country,
+          gender: profileData.gender,
+        }
       );
-      setProfileData(response.data);
+      console.log(response.data);
+
+      //this.setState({
+        //goodUpdate: response.data.message,
+        //errorUpdate: null,
+
+      //});
+
     } catch (error) {
-      console.error("Data retrieval error", error);
+      console.error("Error updating user:", error);
+      //this.setState({
+        //goodUpdate: null,
+        //errorUpdate: error.response.data.error,
+      //});
     }
   };
 
-  fetchUserData();
-}, []);
-
-// Toggle edit mode for a field
-const handleEditToggle = (field) => {
-  setIsEditing((prevState) => ({
-    ...prevState,
-    [field]: !prevState[field],
-  }));
-};
-
-// Handle input change for profile fields
-const handleInputChange = (e, field) => {
-  setProfileData((prevState) => ({
-    ...prevState,
-    [field]: e.target.value,
-  }));
-};
-
-// Format date for display
-const formatDateForDisplay = (dateString) => {
-  const date = new Date(dateString);
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-};
-
-// State for managing active tab
-const [toggleState, setToggleState] = useState(1);
-
-// Toggle between tabs
-const toggleTab = (index) => {
-  setToggleState(index);
-};
-
-// Handle password change
-const handlePasswordChange = async (e) => {
-  e.preventDefault();
-  handleEditToggle("password");
-
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
-    );
-    const userData = response.data;
-    const fetchedPassword = userData["password"];
-    
-    if (currentPassword === fetchedPassword) {
-      if (newPassword === confirmPassword) {
-        updatePassword();
-        console.log("Password updated successfully!");
-      } else {
-        console.log("New password and confirmation password do not match!");
-      }
-    } else {
-      console.log("Current password is incorrect!");
+  // Function to update password
+  const updatePassword = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/updatePswrd",
+        {
+          id: profileData.id,
+          password: newPassword,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating password:", error);
+      console.log("Couldn't connect to the backend");
     }
-  } catch (error) {
-    console.error("Error fetching data", error);
-  }
-};
+  };
 
-// State and functions for managing password fields
-const [showPassword, setShowPassword] = useState(false);
-const [currentPassword, setCurrentPassword] = useState("");
-const [newPassword, setNewPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/profil/userData/1`
+        );
+        setProfileData(response.data);
+      } catch (error) {
+        console.error("Data retrieval error", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Toggle edit mode for a field
+  const handleEditToggle = (field) => {
+    setIsEditing((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
+  // Handle input change for profile fields
+  const handleInputChange = (e, field) => {
+    setProfileData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
+
+  // Format date for display
+  const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
+  // State for managing active tab
+  const [toggleState, setToggleState] = useState(1);
+
+  // Toggle between tabs
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+
+  // Handle password change
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    handleEditToggle("password");
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/profil/userData/`,
+        { WithCredentials: true }
+      );
+      const userData = response.data;
+      const fetchedPassword = userData["password"];
+
+      if (currentPassword === fetchedPassword) {
+        if (newPassword === confirmPassword) {
+          updatePassword();
+          console.log("Password updated successfully!");
+        } else {
+          console.log("New password and confirmation password do not match!");
+        }
+      } else {
+        console.log("Current password is incorrect!");
+      }
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  // State and functions for managing password fields
+  const [showPassword, setShowPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <div>
@@ -255,6 +271,76 @@ const [confirmPassword, setConfirmPassword] = useState("");
             </div>
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
+            {/*username*/}
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleEditToggle("username");
+                updateUser();
+              }}
+            >
+              <p className="text-xl font-semibold ml-5">Username</p>
+
+              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                <button
+                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                  type="submit"
+                >
+                  {isEditing.username ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  )}
+                  {/* icon */}
+                </button>
+              </div>
+
+              <div className=" mx-5 flex items-center">
+                <label>
+                  <span className="text-sm text-gray-500">Username</span>:
+                  {isEditing.username ? (
+                    <input
+                      type="text"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.username}
+                      onChange={(e) => {
+                        handleInputChange(e, "username");
+                      }}
+                    />
+                  ) : (
+                    <b className=" ml-2 mr-5">{profileData.username} </b>
+                  )}
+                </label>
+              </div>
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
             {/* name */}
 
             <form

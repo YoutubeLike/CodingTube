@@ -7,13 +7,13 @@ import ChannelHeader from "./channel/components/Header/Header";
 import DisplayedBurgerMenu from "./timeline/component/displayedBurgerMenu";
 import PageChaineban from "./channel/components/Channel/PageChaineban";
 import Upload from "./channel/pages/Upload";
-
+import Authentification from "./profil/Pages/MyAccount"
 function App() {
 	return (
 		<>
 			<div>
 				<Header/>
-				<Outlet />
+				<Authentification/>
 				{/* <Upload /> */}
 			</div>
 		</>

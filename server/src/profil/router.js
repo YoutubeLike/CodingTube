@@ -11,9 +11,11 @@ const {
   GetPasswordFromUsernameOrEmail,
   GetUserId,
 } = require("./authentication");
+
 const { userData } = require("./userData.js"); // Importing userData function
 const { userUpdate } = require("./userUpdate.js"); // Importing userUpdate function
 const { updatePassword } = require("./updatePswrd.js"); // Importing updatePassword function
+
 
 router.post("/updatePswrd", updatePassword);
 

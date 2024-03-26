@@ -1,6 +1,9 @@
 // Importing the mariadb module
 const mariadb = require("../src/database");
 
+// Importing functions from authentication module
+const { CheckIfMailExist, CheckIfUsernameExist } = require("./authentication");
+
 // Logging the start of the processing
 console.error("Début du traitement... (Processing started...)");
 
@@ -22,18 +25,31 @@ const userUpdate = (req, res) => {
   // Formatting birthdate to match the database format
   const formattedBirthdate = formatDateForBackend(updatedUserData.birthdate);
 
+  // Check if username or email exists in the database
+  const usernameExist = CheckIfUsernameExist(updatedUserData.username);
+  const mailExist = CheckIfMailExist(updatedUserData.mail);
+
+  if (usernameExist) {
+    console.log("Username is already taken");
+    //return res.status(400).json({ error: "Username is already taken" });
+  } else if (mailExist) {
+    console.log("Mail is already taken");
+    //return res.status(400).json({ error: "Mail is already taken" });
+  }
+
   // Performing the SQL update query
   mariadb.pool
     .query(
-      "UPDATE user SET first_name = ?, last_name = ?, mail = ?, birthdate = ?, country = ?, gender = ? WHERE id = ?",
+      "UPDATE user SET username = ?, first_name = ?, last_name = ?, mail = ?, birthdate = ?, country = ?, gender = ? WHERE id = ?",
       [
+        updatedUserData.username,
         updatedUserData.first_name,
         updatedUserData.last_name,
         updatedUserData.mail,
         formattedBirthdate,
         updatedUserData.country,
         updatedUserData.gender,
-        userId, // Assuming user ID is 1 for now
+        1, // Assuming user ID is 1 for now
       ]
     )
     .then((result) => {
