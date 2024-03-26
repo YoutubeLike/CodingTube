@@ -85,6 +85,8 @@ router.post("/register", async (req, res) => {
           });
 
         }
+
+        // Check if password is equal to confirm password 
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
           const userId = await GetUserId(registerData.mail);
