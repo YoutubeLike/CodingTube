@@ -172,6 +172,7 @@ export default function Header() {
             ref={menuRef}
           >
             <input
+            maxLength={255}
               autocomplete="off"
               className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
@@ -194,7 +195,7 @@ export default function Header() {
               }}
             />
             {menuOpen && (
-              <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
+              <div className="overflow-hidden w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
                   {userhistory.map((result, index) => (
                     <div key={index} className="flex justify-between">
@@ -251,7 +252,7 @@ export default function Header() {
                           d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5q0-2.725 1.888-4.612T9.5 3q2.725 0 4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5q0-1.875-1.312-3.187T9.5 5Q7.625 5 6.313 6.313T5 9.5q0 1.875 1.313 3.188T9.5 14"
                         ></path>
                       </svg>
-                      <span>{result.name_search}</span>
+                      <span className="w-[100%]">{result.name_search}</span>
                     </button>
                   ))}
                 </ul>
