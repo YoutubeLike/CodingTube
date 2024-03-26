@@ -58,7 +58,7 @@ export default function UploadVideo() {
                 setImagePreview(null);
             })
             .catch(error => {
-                console.error('Error submitting form:', error);
+                console.error('Error submitting form:', error.message);
             });
     }
 

@@ -4,13 +4,6 @@ const express = require("express");
 // Utilisation du router de Express
 const router = express.Router();
 
-const cors = require('cors');
-const multer = require('multer');
-
-const app = express();
-app.use(cors);
-app.use(express.json);
-
 // Import des fonctions
 const { selectChannel, videoOnTab, NumberVideo, submit, submitVideo, selectVideo } = require("./controller");
 

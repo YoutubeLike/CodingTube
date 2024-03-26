@@ -28,12 +28,15 @@ export default function Video() {
 		fetchVideos();
 	}, []);
 
+<<<<<<< Updated upstream
 	const sendVideo = () => {
 
 	}
 
 	video && console.log(video);
 
+=======
+>>>>>>> Stashed changes
 	return (
 		<div className="flex justify-center">
 			<div className="flex flex-wrap w-auto">
