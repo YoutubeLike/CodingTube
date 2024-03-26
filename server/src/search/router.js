@@ -18,6 +18,9 @@ router.get('/deleteHistory/:deleteHistory', deleteHistory)
 router.get('/mostResearch_onChange/:researchInput', mostResearch_onChange)  
 router.get('/history_onChange/:userId/:researchInput', history_onChange)
 router.get('/displaySearchPage/:researchInput', displaySearchPage)  
+<<<<<<< HEAD
 router.get('/request/:submit', submit)
+=======
+>>>>>>> parent of 3a52263 (DIsplay videos with filters and the search)
 
 module.exports = router
