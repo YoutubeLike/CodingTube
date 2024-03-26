@@ -91,11 +91,11 @@ export default function Search() {
 
     const handleClickFilters = async (e) => {
         const buttonValue = e.target.value;
-        console.log('Le filtre ' + buttonValue + ' est appliqué')
+        console.log(buttonValue)
         try{
           const applyFilters = await axios.get(
-            "http://localhost:5000/api/search/filters/" + buttonValue );
-            setVideosInfos(applyFilters.data)
+            "http://localhost:5000/api/search/filters/" + buttonValue
+          );
         } catch(error){
           console.error("An error occurred while applying filter: ", error)
         }
