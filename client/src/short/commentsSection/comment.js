@@ -20,11 +20,11 @@ class Comment extends React.Component {
       repliesIds: [],
       userInput: "",
       isReplying: false,
-      replyCount: "",
     };
+    this.inputFieldRef = React.createRef();
     this.openReply = this.openReply.bind(this);
     this.postReply = this.postReply.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -151,26 +151,29 @@ class Comment extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
-    document.addEventListener("mousedown", this.handleClickOutside)
+    document.addEventListener("mousedown", this.handleClickOutside);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside)
+    document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
   openReply() {
     this.setState({ isReplying: true });
   }
 
+  handleClickOutside(event) {
+    if (
+      this.inputFieldRef.current &&
+      !this.inputFieldRef.current.contains(event.target)
+    ) {
+      this.setState({ isReplying: false });
+    }
+  }
+
   handleChange(event) {
     this.setState({ userInput: event.target.value });
   }
-
-  handleClickOutside(event) {
-    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
-      this.setState({ isReplying: false });
-    }
-  } 
 
   async postReply() {
     if (this.state.userInput != "") {
@@ -195,7 +198,7 @@ class Comment extends React.Component {
       }
 
       document.getElementById("commentsInputField").value = "";
-      this.setState({ userInput: "" });
+      this.setState({ userInput: "", isReplying: false });
     }
   }
 
@@ -282,10 +285,13 @@ class Comment extends React.Component {
           </div>
         </div>
         {this.state.isReplying && (
-          <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
+          <div
+            className="flex items-center p-[1.8vh] border-t-[1px]"
+            ref={this.inputFieldRef}
+          >
             <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
 
-            <input  
+            <input
               id="commentsInputField"
               className="mx-[2vh] text-[2vh]"
               maxLength="1024"
@@ -302,18 +308,18 @@ class Comment extends React.Component {
             </button>
           </div>
         )}
-        {this.state.repliesIds.length != 0 && (
-          <div className="ml-[5vh]">
-            {this.state.repliesIds.map((id) => (
-              <Reply
-                key={id}
-                id={id}
-                uploader={this.props.shortInfos.uploader_id}
-                superlikePP={this.props.superlikePP}
-              />
-            ))}
-          </div>
-        )}
+        <div className="ml-[5vh]">
+          {this.state.repliesIds.map((id) => (
+            <Reply
+              key={id}
+              id={id}
+              initialCommentId={this.props.id}
+              shortInfos={this.props.shortInfos}
+              superlikePP={this.props.superlikePP}
+              setState={(p) => this.setState(p)}
+            />
+          ))}
+        </div>
       </div>
     );
   }
