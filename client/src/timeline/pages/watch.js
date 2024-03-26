@@ -7,11 +7,6 @@ import { useLocation } from "react-router-dom";
 import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
-
 export default function Watch() {
 
   /* Page title (displayed on tab) */
@@ -26,9 +21,9 @@ export default function Watch() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (videoId && userId) {
+        if (videoId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addView-request`, { WithCredentials: true},{
+            `http://localhost:5000/api/timeline/addView-request`, { withCredentials: true},{
               params: {
                 videoIdParam: videoId,
               },
@@ -51,12 +46,10 @@ export default function Watch() {
     const fetchData = async () => {
       try {
         if (videoId) {
-
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addHistory-request`,{
+            `http://localhost:5000/api/timeline/addHistory-request`, { withCredentials: true},{
               params: {
                 videoIdParam: videoId,
-                userIdParam: userId,
               },
             }
           );

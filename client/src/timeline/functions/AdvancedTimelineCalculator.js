@@ -61,7 +61,7 @@ export function SetScores(videosInfos) {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscribe-list-request"
-          , { WithCredentials: true}
+          , { withCredentials: true}
         );
         setSubscribeListInfos(response.data);
       } catch (error) {

@@ -12,7 +12,7 @@ export default function ListSubscriptionTimeLine() {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscription-timeline-request"
-          , { WithCredentials: true}
+          , { withCredentials: true}
         );
         setVideosInfos(response.data);
       } catch (error) {

@@ -15,7 +15,7 @@ export default function TimelineHistory() {
       const fetchVideos = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/history-request`, { WithCredentials: true}
+            `http://localhost:5000/api/timeline/history-request`, { withCredentials: true}
           );
           setVideosInfos(response.data);
         } catch (error) {
