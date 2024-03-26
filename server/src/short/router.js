@@ -33,6 +33,8 @@ const {
   removeShortCommentDislike,
 } = require("./commentsManager.js");
 
+const { getFollow, follow } = require("./subsciptionManager.js");
+
 router.get("/get-ten-next-shorts", getTenNextShorts);
 router.get("/get-short-infos", getShortInfos);
 router.get("/get-short-likes", getShortLikes);
@@ -58,4 +60,8 @@ router.get("/remove-short-comment-like", removeShortCommentLike);
 router.get("/check-short-comment-dislike", checkShortCommentDislike);
 router.get("/add-short-comment-dislike", addShortCommentDislike);
 router.get("/remove-short-comment-dislike", removeShortCommentDislike);
+
+router.get("/get-follow", getFollow)
+router.get("/follow", follow)
+
 module.exports = router;

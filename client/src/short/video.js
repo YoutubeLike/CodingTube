@@ -39,6 +39,10 @@ class Video extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+
+    document.getElementById(
+      "shortPlayer" + this.state.shortInfos.id
+    ).style.filter = this.state.shortInfos.filters;
   }
 
   componentDidUpdate() {
@@ -68,10 +72,7 @@ class Video extends React.Component {
           <video
             src="1.mp4"
             id={"shortPlayer" + this.state.shortInfos.id}
-            className={
-              "h-full w-full object-cover absolute behind filter " +
-              this.state.shortInfos.filters
-            }
+            className={"h-full w-full object-cover absolute behind"}
             muted
             loop
           />

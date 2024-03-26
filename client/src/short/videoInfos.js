@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
+import axios from "axios";
 
 class VideoInfos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHovered: false
+      isSubscribed: false,
+      isHovered: false,
     };
     this.handleHover = this.handleHover.bind(this);
+    this.handleSubscribe = this.handleSubscribe.bind(this);
   }
+
   handleHover() {
     this.setState((prevState) => ({
-      isHovered: !prevState.isHovered
+      isHovered: !prevState.isHovered,
     }));
   }
+
+  async handleSubscribe() {
+    try {
+      await axios.get("http://localhost:5000/api/short/follow", {
+        params: { channelId: 1, userId: 1 },
+      });
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-follow",
+        { params: { channelId: 1, userId: 1 } }
+      );
+      this.setState({
+        isSubscribed: response.data.length == 0 ? false : true,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   render() {
     return (
       <div className="mb-[2vh] p-[1vh] mb-[1vh] ml-[2vh] text-white">
@@ -35,7 +57,6 @@ class VideoInfos extends React.Component {
 
           {/* Uploader's channel */}
 
-
           <a
             href={
               "http://localhost:3000/channel?identifier=" +
@@ -46,18 +67,16 @@ class VideoInfos extends React.Component {
             onMouseLeave={this.handleHover}
           >
             @{this.props.shortInfos.pseudo}
-        
-          {this.state.isHovered && (
-            <span className="left-[18%] bottom-[8%] mb-[5vh] px-[1vh] text-[1.5vh] rounded-[0.5vh] bg-slate-300/75 absolute">
-              @{this.props.shortInfos.pseudo}
-            </span>
-          )}
+            {this.state.isHovered && (
+              <span className="left-[18%] bottom-[8%] mb-[5vh] px-[1vh] text-[1.5vh] rounded-[0.5vh] bg-slate-300/75 absolute">
+                @{this.props.shortInfos.pseudo}
+              </span>
+            )}
           </a>
 
-
           {/* Subscribe button */}
-          <button className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]">
-            Subscribe
+          <button onClick={this.handleSubscribe} className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]">
+            {this.state.isSubscribed ? "Subscribed" : "Subscribe"}
           </button>
         </div>
 

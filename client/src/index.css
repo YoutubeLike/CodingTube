@@ -27,4 +27,8 @@
   .textStroke {
     -webkit-text-stroke: 0.2vh black;
   }
+
+  .grayscale-filter {
+    filter: grayscale(1);
+  }
 }
