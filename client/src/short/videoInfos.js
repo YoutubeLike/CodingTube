@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
 class VideoInfos extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isHovered: false
+    };
+    this.handleHover = this.handleHover.bind(this);
   }
-
+  handleHover() {
+    this.setState((prevState) => ({
+      isHovered: !prevState.isHovered
+    }));
+  }
   render() {
     return (
       <div className="mb-[2vh] p-[1vh] mb-[1vh] ml-[2vh] text-white">
@@ -26,15 +34,26 @@ class VideoInfos extends React.Component {
           </a>
 
           {/* Uploader's channel */}
+
+
           <a
             href={
               "http://localhost:3000/channel?identifier=" +
               this.props.shortInfos.identifier_channel
             }
             className="ml-[0.95vh] font-semibold text-[2vh]"
+            onMouseEnter={this.handleHover}
+            onMouseLeave={this.handleHover}
           >
             @{this.props.shortInfos.pseudo}
+        
+          {this.state.isHovered && (
+            <span className="left-[18%] bottom-[8%] mb-[5vh] px-[1vh] text-[1.5vh] rounded-[0.5vh] bg-slate-300/75 absolute">
+              @{this.props.shortInfos.pseudo}
+            </span>
+          )}
           </a>
+
 
           {/* Subscribe button */}
           <button className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]">
