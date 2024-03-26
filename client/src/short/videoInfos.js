@@ -35,8 +35,13 @@ class VideoInfos extends React.Component {
 
           {/* Uploader's channel */}
 
-          <button className="ml-[0.95vh] font-semibold text-[2vh]"
-            
+
+          <a
+            href={
+              "http://localhost:3000/channel?identifier=" +
+              this.props.shortInfos.identifier_channel
+            }
+            className="ml-[0.95vh] font-semibold text-[2vh]"
             onMouseEnter={this.handleHover}
             onMouseLeave={this.handleHover}
           >
@@ -47,17 +52,6 @@ class VideoInfos extends React.Component {
               @{this.props.shortInfos.pseudo}
             </span>
           )}
-
-          </button>
-
-          <a
-            href={
-              "http://localhost:3000/channel?identifier=" +
-              this.props.shortInfos.identifier_channel
-            }
-            className="ml-[0.95vh] font-semibold text-[2vh]"
-          >
-            @{this.props.shortInfos.pseudo}
           </a>
 
 
