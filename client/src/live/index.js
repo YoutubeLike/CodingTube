@@ -6,6 +6,14 @@ export default function Live() {
     const [userInLive, setUserInLive] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
 
+
+export default function Live()
+{
+    console.log(document)
+    axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
+        console.log(response.data)
+    })
+    const [UserInLive, setUserInLive] = useState([])
     useEffect(() => {
         axios.get("http://localhost:8090/api/streams")
             .then((response) => {

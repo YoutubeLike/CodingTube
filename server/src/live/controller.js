@@ -1,5 +1,8 @@
 const ffmpeg = require("fluent-ffmpeg")
 const fs = require ('fs')
+const socketio = require('socket.io')
+const express = require('express')
+const router = express.Router();
 
 const saveThumbnail = ((req, res) => 
 {
@@ -23,7 +26,60 @@ const sendThumbnail = ((req, res) => {
     }
 })
 
+const GetProfilPicture = async (req, res) => {
+        const userId = req.query.userId;
+        try {
+          const connection = await mariadb.pool.getConnection();
+          const result = await connection.query("SELECT pp FROM user WHERE id = ?", [
+            userId,
+          ]);
+          connection.release();
+          if (result.length > 0) {
+            res.json({ profilePicture: result[0].pp });
+          } else {
+            res.json({ profilePicture: null });
+          }
+        } catch (err) {
+          console.error(err);
+          res.json({ profilePicture: null });
+        }
+}
+
+const GetUsername = async (req, res) => {
+    const userId = req.query.userId;
+    try {
+      const connection = await mariadb.pool.getConnection();
+      const result = await connection.query(
+        "SELECT username FROM user WHERE id = ?",
+        [userId]
+      );
+      connection.release();
+      if (result.length > 0) {
+        res.json({ pseudo: result[0].username });
+      } else {
+        res.json({ pseudo: null });
+      }
+    } catch (err) {
+      console.error(err);
+      res.json({ pseudo: null });
+    }
+} 
+
+const display = ((req, res) => {
+    res.sendFile("/app/back/src/public/follow.jpg")
+
+})
+
+const test = ((req, res) => {
+  console.log("Utilisateur" + req.session.userId)
+  res.send("" + req.session.userId)
+})
+
 module.exports = {
     saveThumbnail,
-    sendThumbnail
+    sendThumbnail,
+    GetProfilPicture,
+    GetUsername,
+    display,
+    test
 }
