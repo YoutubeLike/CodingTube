@@ -153,9 +153,9 @@ export default function Chat(props) {
         chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
+  // w-1/3 h-5/6
   return (
-    <div className="fixed top-1/2 right-0 w-1/3 h-5/6 rounded-t-lg bg-slate-100 flex flex-col justify-between p-4 box-border transform -translate-y-1/2 divide-y divide-slate-600">
+    <div className="w-full h-3/6 md:w-1/3 md:h-5/6 rounded-t-lg bg-slate-100 flex flex-col justify-between p-4 box-border divide-y divide-slate-600">
       <h1 className="mt-0 ">Top Chat</h1>
 
       <div
@@ -187,7 +187,7 @@ export default function Chat(props) {
               <span className="font-bold w-16 text-black">
                 {message.sender}:
               </span>
-              <span className="flex ml-4  text-black align-middle	">
+              <span className="flex ml-4 w-55 text-black align-middle	">
                 {message.message &&
                   message.message
                     .split("")

@@ -17,9 +17,9 @@ export default function LiveFromUser() {
   return (
     <>
       <p> {user} </p>
-      <div className="section-live-chat">
+      <div className="section-live-chat flex flex-col items-start md:flex-row w-full h-screen">
         <ReactPlayer
-          className="live_container absolute left-0 right-1/3"
+          className="live_container "
           url={"http://localhost:8090/live/" + user + ".flv"}
           controls={false}
           playing={false}
