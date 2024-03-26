@@ -114,18 +114,6 @@ router.post("/login", async (req, res) => {
     // Check if username or email exists in the database
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
-
-    const passwordFromDb = await GetPasswordFromUsernameOrEmail(loginData.usernameOrMail);
-    const isPasswordMatch = await CheckIfPasswordMatch(loginData.password, passwordFromDb)
-
-    if (loginData.usernameOrMail != "" && loginData.password != "") {
-
-      if (usernameExist || mailExist) {
-        if (isPasswordMatch) {
-          console.log("User signed in successfully");
-          return res.status(200).json({ message: "User signed in successfully" });
-
-
     // Get password associated with username or email from the database
     const passwordFromDb = await GetPasswordFromUsernameOrEmail(
       loginData.usernameOrMail
