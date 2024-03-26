@@ -48,6 +48,17 @@ class Short extends React.Component {
         ),
       }));
 
+      // Add a view in database
+      try {
+        await axios.get("http://localhost:5000/api/short/add-view", {
+          params: {
+            shortId: this.state.loadedVideos[0],
+          },
+        });
+      } catch (error) {
+        console.error("Error updating datas:", error);
+      }
+
       // Change URL
       window.history.replaceState(
         null,
@@ -69,13 +80,24 @@ class Short extends React.Component {
       .removeEventListener("scrollend", this.handleScroll);
   }
 
-  handleScroll() {
+  async handleScroll() {
     const position = document
       .getElementById(
         "short" + this.state.loadedVideos[this.state.currentIndex]
       )
       .getBoundingClientRect();
     if (position.top > window.innerHeight / 2) {
+      // Add a view in database
+      try {
+        await axios.get("http://localhost:5000/api/short/add-view", {
+          params: {
+            shortId: this.state.loadedVideos[this.state.currentIndex - 1],
+          },
+        });
+      } catch (error) {
+        console.error("Error updating datas:", error);
+      }
+
       // Change URL
       window.history.replaceState(
         null,
@@ -85,6 +107,17 @@ class Short extends React.Component {
       );
       this.setState((state) => ({ currentIndex: state.currentIndex - 1 }));
     } else if (position.top < 0) {
+      // Add a view in database
+      try {
+        await axios.get("http://localhost:5000/api/short/add-view", {
+          params: {
+            shortId: this.state.loadedVideos[this.state.currentIndex + 1],
+          },
+        });
+      } catch (error) {
+        console.error("Error updating datas:", error);
+      }
+
       // Change URL
       window.history.replaceState(
         null,
@@ -92,6 +125,7 @@ class Short extends React.Component {
         "http://localhost:3000/short?id=" +
           this.state.loadedVideos[this.state.currentIndex + 1]
       );
+
       this.setState((state) => ({ currentIndex: state.currentIndex + 1 }));
     }
 

@@ -8,6 +8,7 @@ const {
   getShortDislikes,
   getComments,
   getReplies,
+  addView,
 } = require("./getShortInfos.js");
 
 const {
@@ -41,6 +42,7 @@ router.get("/get-short-likes", getShortLikes);
 router.get("/get-short-dislikes", getShortDislikes);
 router.get("/get-short-comments", getComments);
 router.get("/get-short-replies", getReplies);
+router.get("/add-view", addView);
 
 router.get("/check-short-like", checkShortLike);
 router.get("/add-short-like", addShortLike);
