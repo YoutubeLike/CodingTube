@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Import des fonctions
 const {
+	getIdentifier,
 	selectChannel,
 	selectChannelIdentifier,
 	selectId,
@@ -18,6 +19,7 @@ const {
 } = require("./controller");
 
 // Configuration de la route
+router.get("/get-identifier", getIdentifier);
 router.get("/infos", selectChannel);
 router.get("/infosId", selectChannelIdentifier);
 router.get("/id", selectId);
