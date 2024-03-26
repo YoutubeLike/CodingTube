@@ -1,8 +1,7 @@
 const ffmpeg = require("fluent-ffmpeg")
 const fs = require ('fs')
-const socketio = require('socket.io')
-const express = require('express')
-const router = express.Router();
+const mariadb = require('/app/back/src/src/database.js')
+const bcrypt = require('bcryptjs')
 
 const saveThumbnail = ((req, res) => 
 {
@@ -27,7 +26,7 @@ const sendThumbnail = ((req, res) => {
 })
 
 const GetProfilPicture = async (req, res) => {
-        const userId = req.query.userId;
+        const userId = req.session.userId;
         try {
           const connection = await mariadb.pool.getConnection();
           const result = await connection.query("SELECT pp FROM user WHERE id = ?", [
@@ -46,7 +45,7 @@ const GetProfilPicture = async (req, res) => {
 }
 
 const GetUsername = async (req, res) => {
-    const userId = req.query.userId;
+    const userId = req.session.userId;
     try {
       const connection = await mariadb.pool.getConnection();
       const result = await connection.query(
@@ -70,9 +69,20 @@ const display = ((req, res) => {
 
 })
 
-const test = ((req, res) => {
-  console.log("Utilisateur" + req.session.userId)
+const getUserId = ((req, res) => {
+  console.log("Utilisateur " + req.session.userId)
   res.send("" + req.session.userId)
+})
+
+const generateLiveKey = (async (req, res) => 
+{
+  if(req.session.userId != undefined)
+  {
+    mariadb.pool.query("UPDATE channel set stream_key = '" + (await bcrypt.hash(Math.random().toString(36), 10)).replace('/', "") + "' WHERE user_id = '" + req.session.userId + "'")
+    res.send('Enregistré')
+  } else {
+    res.send("Vous n'êtes pas connecté")
+  }
 })
 
 module.exports = {
@@ -81,5 +91,6 @@ module.exports = {
     GetProfilPicture,
     GetUsername,
     display,
-    test
+    getUserId,
+    generateLiveKey
 }
