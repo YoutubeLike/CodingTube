@@ -1,42 +1,8 @@
 //Connexion à la Bdd
 const mariadb = require("../src/database");
 
-const UserChannel = async (_, res) => {
-	try {
-		const userData = "tokenId"; // Remplacez "NomUtilisateur" par la valeur appropriée
 
-		// Obtenez l'ID de l'utilisateur en utilisant GetUserId avec les données fournies
-		const isLoggedIn = await GetUserId(userData);
-
-		// Si l'ID de l'utilisateur est trouvé avec succès
-		if (isLoggedIn) {
-			// Exécutez la requête SQL pour récupérer les informations du canal associé à cet utilisateur
-			const result = await mariadb.pool.query(
-				"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = ?",
-				[isLoggedIn]
-			);
-
-			// Envoyez les informations du canal en réponse
-			res.send(result[0]);
-		} else {
-			// Si aucun ID d'utilisateur n'a été trouvé, renvoyez une réponse appropriée
-			res.send("Aucun utilisateur trouvé avec les informations fournies.");
-		}
-	} catch (error) {
-		// Si une erreur se produit à n'importe quelle étape, capturez-la et envoyez une réponse d'erreur appropriée
-		console.log(
-			"Erreur lors de la récupération des informations du canal:",
-			error
-		);
-		res
-			.status(500)
-			.send(
-				"Une erreur s'est produite lors de la récupération des informations du canal."
-			);
-	}
-};
-
-// 
+//
 const getIdentifier = (req, res) => {
 	console.log(req.session.userId);
 	mariadb.pool
@@ -178,5 +144,4 @@ module.exports = {
 	submitChannel,
 	submitVideo,
 	selectVideo,
-	UserChannel,
 };
