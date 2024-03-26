@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import dislikeImg from "../../assets/dislike.png";
-import likeImg from "../../assets/like.png";
-import shareImg from "../../assets/share.png";
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import dislikeImg from '../../assets/dislike.png'
+import likeImg from '../../assets/like.png'
 
-export default function LikeDislike() {
-
-    const [video_id, setVideo_id] = useState(1)
-    const [isLiked, setIsLiked] = useState(false)
-    const [isDisliked, setIsDisliked] = useState(false)
+export default function LikeDislike({ commentId }) {
     const [nb_like, setNb_like] = useState(0)
     const [nb_dislike, setNb_dislike] = useState(0)
+    const [isLiked, setIsLiked] = useState(false)
+    const [isDisliked, setIsDisliked] = useState(false)
+    const [isSuperLiked, setIsSuperLiked] = useState(false)
 
     useEffect(() => {
         const setInitialValues = async () => {
             // Set isLiked and isDisliked states with database datas
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/api/channel/check-video-like",
+                    "http://localhost:5000/api/channel/check-video-comment-like",
                     {
                         params: {
                             id: 1,
-                            videoId: video_id,
+                            commentId: commentId,
                         },
                     }
                 );
@@ -30,16 +28,16 @@ export default function LikeDislike() {
                 } else {
                     try {
                         const response = await axios.get(
-                            "http://localhost:5000/api/channel/check-video-dislike",
+                            "http://localhost:5000/api/channel/check-video-comment-dislike",
                             {
                                 params: {
                                     id: 1,
-                                    videoId: video_id,
+                                    commentId: commentId,
                                 },
                             }
                         );
                         if (response.data.length == 1) {
-                            setIsDisliked(true);
+                            setIsDisliked(response.data.length == 1);
                         }
                     } catch (error) {
                         console.error("Error fetching videos:", error);
@@ -49,32 +47,48 @@ export default function LikeDislike() {
                 console.error("Error fetching videos:", error);
             }
 
-            // Get likes count
+            // Set isSuperLiked state
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/api/channel/get-video-likes",
+                    "http://localhost:5000/api/channel/check-video-comment-like",
                     {
                         params: {
-                            videoId: video_id,
+                            id: 1,
+                            commentId: commentId,
                         },
                     }
                 );
-                setNb_like(response.data.length);
+                setIsSuperLiked(response.data.length == 1);
             } catch (error) {
                 console.error("Error fetching videos:", error);
             }
 
-            // Get dislikes count
+            // Get comment's like count
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/api/channel/get-video-dislikes",
+                    "http://localhost:5000/api/channel/get-video-comment-likes",
                     {
                         params: {
-                            videoId: video_id,
+                            commentId: commentId,
                         },
                     }
                 );
-                setNb_dislike(response.data.length);
+                setNb_like(response.data.length)
+            } catch (error) {
+                console.error("Error fetching videos:", error);
+            }
+
+            // Get comment's like count
+            try {
+                const response = await axios.get(
+                    "http://localhost:5000/api/channel/get-video-comment-dislikes",
+                    {
+                        params: {
+                            commentId: commentId,
+                        },
+                    }
+                );
+                setNb_dislike(response.data.length)
             } catch (error) {
                 console.error("Error fetching videos:", error);
             }
@@ -85,12 +99,15 @@ export default function LikeDislike() {
 
     async function addLike() {
         try {
-            await axios.get("http://localhost:5000/api/channel/add-video-like", {
-                params: {
-                    id: 1,
-                    videoId: video_id,
-                },
-            });
+            await axios.get(
+                "http://localhost:5000/api/channel/add-video-comment-like",
+                {
+                    params: {
+                        id: 1,
+                        commentId: commentId,
+                    },
+                }
+            );
         } catch (error) {
             console.error("Error fetching videos:", error);
         }
@@ -98,12 +115,15 @@ export default function LikeDislike() {
 
     async function addDislike() {
         try {
-            await axios.get("http://localhost:5000/api/channel/add-video-dislike", {
-                params: {
-                    id: 1,
-                    videoId: video_id,
-                },
-            });
+            await axios.get(
+                "http://localhost:5000/api/channel/add-video-comment-dislike",
+                {
+                    params: {
+                        id: 1,
+                        commentId: commentId,
+                    },
+                }
+            );
         } catch (error) {
             console.error("Error fetching videos:", error);
         }
@@ -111,12 +131,15 @@ export default function LikeDislike() {
 
     async function removeLike() {
         try {
-            await axios.get("http://localhost:5000/api/channel/remove-video-like", {
-                params: {
-                    id: 1,
-                    videoId: video_id,
-                },
-            });
+            await axios.get(
+                "http://localhost:5000/api/channel/remove-video-comment-like",
+                {
+                    params: {
+                        id: 1,
+                        commentId: commentId,
+                    },
+                }
+            );
         } catch (error) {
             console.error("Error fetching videos:", error);
         }
@@ -124,12 +147,15 @@ export default function LikeDislike() {
 
     async function removeDislike() {
         try {
-            await axios.get("http://localhost:5000/api/channel/remove-video-dislike", {
-                params: {
-                    id: 1,
-                    videoId: video_id,
-                },
-            });
+            await axios.get(
+                "http://localhost:5000/api/channel/remove-video-comment-dislike",
+                {
+                    params: {
+                        id: 1,
+                        commentId: commentId,
+                    },
+                }
+            );
         } catch (error) {
             console.error("Error fetching videos:", error);
         }
@@ -174,20 +200,18 @@ export default function LikeDislike() {
             removeDislike();
         }
     }
-
     return (
-
-
-        <div className="flex justify-normal ">
-            <button onClick={like} className="bg-gray-100 px-8 ml-10 rounded-l-full flex items-center">
-                <img className="w-6 py-2 mr-2" src={likeImg} />
-                {nb_like}
-            </button>
-            <button onClick={dislike} className="bg-gray-100 px-8 rounded-r-full flex items-center">
-                <img className="w-6 py-2 mr-2" src={dislikeImg} />
-                {nb_dislike}
-            </button>
-            <button className="bg-gray-100 px-8 ml-10 rounded-full"><img className="w-6 py-2" src={shareImg} /></button>
+        <div className="flex">
+          <button className='flex items-center' onClick={like}>
+            <img src={likeImg} className='w-6 h-6 mr-2 mt-1' /> {/* Reduced mr-14 to mr-2 */}
+            {nb_like}
+          </button>
+          <button className='flex items-center pl-2' onClick={dislike}>
+            <img src={dislikeImg} className='w-6 h-6 mr-2 mt-1' /> {/* No change to margin */}
+            {nb_dislike}
+          </button>
+          <p className='mt-2 ml-10'>Répondre</p>
         </div>
-    )
+      );
+      
 }

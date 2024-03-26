@@ -59,24 +59,23 @@ export default function Video() {
           src="https://www.youtube.com/embed/Oflbho9ZG2U?start=103"
         />
 
-        <h1 className="font-bold mt-30 text-xl mb-2">{title}</h1>
+        <h1 className="font-bold mt-30 text-base mb-1 mt-4">{title}</h1>
 
         <div className="flex justify-between">
-          <div className="flex">
-            <img src={img} className="w-4 mr-2" />
-            <div className="flex flex-col">
+          <div className='flex items-center '>
+            <img src={img} className="w-12 mr-4" />
+            <div className="flex flex-col pr-4">
               <p className="text-sm font-bold">{pseudo}</p>
               <p className="text-sm text-gray-500">{follower} abonnés</p>
             </div>
 
-            <button onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full">{buttonSubscribe}</button>
+            <button onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full pt-2 pb-2">{buttonSubscribe}</button>
           </div>
           <LikeDislike />
         </div>
 
 
-
-        <div className="p-4 bg-gray-100 rounded-xl mt-4" >
+        <div className="p-4 bg-gray-100 rounded-xl mt-4 " >
           <p className="font-bold">{number_view} vues  1 sept. 2023 <span className="text-blue-600">#sifu #nodamage</span></p>
           <p className="text-justify">
             {description}
