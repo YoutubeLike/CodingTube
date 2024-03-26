@@ -131,7 +131,7 @@ class Comment extends React.Component {
       (Date.parse(new Date()) - Date.parse(new Date(this.state.date))) / 1000;
     const time =
       secondes < 60
-        ? secondes + (secondes < 2 ? " seconde ago" : " secondes ago")
+        ? secondes + (secondes < 2 ? " seconde ago" : " seconds ago")
         : secondes < 3600
         ? Math.floor(secondes / 60) +
           (secondes < 120 ? " minute ago" : " minutes ago")
@@ -189,7 +189,10 @@ class Comment extends React.Component {
             </button>
 
             {this.state.isSuperLiked && (
-              <p className="ml-[1vh] text-[2vh]">❤️superliked</p>
+              <div className="relative">
+                <img src={this.props.superlikePP} className="absolute ml-[1vh] h-[2.4vh] w-[2.4vh] rounded-full relative text-center" />
+                <span className="text-[1.5vh] absolute top-[0.7vh] left-[2.4vh] drop-shadow-xl shadow-white">❤️</span>
+              </div>
             )}
           </div>
         </div>

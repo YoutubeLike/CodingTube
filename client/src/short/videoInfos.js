@@ -11,18 +11,30 @@ class VideoInfos extends React.Component {
         {/* Contains uploader's informations */}
         <div className="mb-[1vh] flex items-center">
           {/* Profile picture */}
-          <button className="h-[4.5vh] w-[4.5vh] rounded-full overflow-hidden">
+          <a
+            href={
+              "http://localhost:3000/channel?identifier=" +
+              this.props.shortInfos.identifier_channel
+            }
+            className="h-[4.5vh] w-[4.5vh] rounded-full overflow-hidden"
+          >
             <img
               src={this.props.shortInfos.PP}
               alt="photo"
               className="h-[4.5vh] w-[4.5vh]"
             />
-          </button>
+          </a>
 
           {/* Uploader's channel */}
-          <button className="ml-[0.95vh] font-semibold text-[2vh]">
+          <a
+            href={
+              "http://localhost:3000/channel?identifier=" +
+              this.props.shortInfos.identifier_channel
+            }
+            className="ml-[0.95vh] font-semibold text-[2vh]"
+          >
             @{this.props.shortInfos.pseudo}
-          </button>
+          </a>
 
           {/* Subscribe button */}
           <button className="ml-[0.95vh] px-[1.5vh] py-[0.95vh] bg-white text-black rounded-full text-[1.5vh]">

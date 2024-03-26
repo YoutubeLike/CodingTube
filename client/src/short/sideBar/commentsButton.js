@@ -7,7 +7,10 @@ class CommentsButton extends React.Component {
   }
 
   toggleComments() {
-    this.props.setState((state) => ({ commentsShown: !state.commentsShown }));
+    this.props.setState((state) => ({
+      commentsShown: !state.commentsShown,
+      descriptionShown: false,
+    }));
   }
 
   render() {
