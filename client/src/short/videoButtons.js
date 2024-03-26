@@ -4,6 +4,7 @@ class VideoButtons extends React.Component {
   constructor(props) {
     super(props);
     this.handlePauseButton = this.handlePauseButton.bind(this);
+    this.preventSpaceBarDefault = this.preventSpaceBarDefault.bind(this);
     this.handleSpaceBar = this.handleSpaceBar.bind(this);
     this.handleMute = this.handleMute.bind(this);
   }
@@ -13,6 +14,7 @@ class VideoButtons extends React.Component {
       .getElementById("soundButton" + this.props.id)
       .addEventListener("click", this.handleMute);
 
+    document.addEventListener("keydown", this.preventSpaceBarDefault);
     document.addEventListener("keyup", this.handleSpaceBar);
 
     document
@@ -25,6 +27,7 @@ class VideoButtons extends React.Component {
       .getElementById("soundButton" + this.props.id)
       .removeEventListener("click", this.handleMute);
 
+      document.removeEventListener("keydown", this.preventSpaceBarDefault);
     document.removeEventListener("keyup", this.handleSpaceBar);
 
     document
@@ -36,6 +39,12 @@ class VideoButtons extends React.Component {
     const video = document.getElementById("shortPlayer" + this.props.id);
     video.muted = !this.props.isMuted;
     this.props.setState((state) => ({ isMuted: !state.isMuted }));
+  }
+
+  preventSpaceBarDefault(event) {
+    if (event.code === "Space") {
+      event.preventDefault()
+    }
   }
 
   handleSpaceBar(event) {
