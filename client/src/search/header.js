@@ -6,17 +6,32 @@ import { useNavigate } from "react-router-dom";
 export default function Header() {
   const axiosSession = axios.create({ baseURL: "http://localhost:5000/", WithCredentials: true})
 
+  //State for the search input field
   const [searchValue, setSearchValue] = useState("");
+
+  //State to store most viewed search results
   const [mostview, setMostView] = useState([]);
+
+  //State to store user's search history
   const [userhistory, setUserHistory] = useState([]);
+
+  //State to indicate wether the menu is open or closed
   const [menuOpen, setMenuOpen] = useState(false);
+
+  //Ref to the menu element
   const menuRef = useRef(null);
+
+  //Ref to the input element
   const inputRef = useRef("");
+
+  //Hook for navigation
   const navigate = useNavigate();
 
- 
 
-
+  /**
+   * Function to submit a search request
+   * @async
+   */
   const submit = async () => {
     if (inputRef.current != "") {
       try {
@@ -32,6 +47,9 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to display the most popular search
+   */
   const mostResearch = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     try {
@@ -47,6 +65,9 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to display the user history
+   */
   const history = async () => {
     try {
     await fetch("http://localhost:5000/api/search/history" , {
@@ -67,6 +88,9 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to diplay the user history based on the user input
+   */
   const history_onChange = async () => {
     if (inputRef.current === "") {
       history();
@@ -88,6 +112,9 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to diplay the most popular search based on the user input
+   */
   const mostResearch_onChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     if (inputRef.current === "") {
@@ -105,21 +132,37 @@ export default function Header() {
     }
   };
 
+  /**
+   * Handles change in the input
+   * @param {object} e - change event
+   */
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
     inputRef.current = e.target.value;
   };
 
+  /**
+   * Handles search by clicking on the research or history div
+   * @param {string} search - selected search term
+   */
   const handleClickSearch = (search) => {
     setSearchValue(search);
     inputRef.current = search;
   };
+
+  /**
+   * Handles click outside the menu
+   * @param {Object} e - Click event.
+   */
   const handleClickOutsideMenu = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
       setMenuOpen(false);
     }
   };
 
+  /**
+   * Effect that listen to click in the menu
+   */
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutsideMenu);
     return () => {
@@ -127,6 +170,11 @@ export default function Header() {
     };
   }, []);
 
+  /**
+   * Function to delete the user history
+   * @param {string} id - id of the search to delete 
+   * @param {object} e - click event 
+   */
   async function deleteHistory(id, e) {
     e.preventDefault();
     try {
