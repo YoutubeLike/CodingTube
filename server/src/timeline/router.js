@@ -13,6 +13,7 @@ const { viewedCategoriesList } = require('./controllerViewedCategoriesList.js');
 const { playlistRequest } = require('./controllerPlaylist.js');
 const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
 const { likePageYouRequest } = require('./controllerLikePageYou.js');
+const { userInfo } = require('./controllerYouPage.js');
 
 // Get the videos infos to show timeline
 router.get('/timeline-request', timelineRequest)
@@ -44,5 +45,7 @@ router.get('/playlist-request', playlistRequest)
 router.get('/showPlaylist-request', showPlaylistRequest)
 
 router.get('/likePageYou-request', likePageYouRequest)
+
+router.get('/userInfo', userInfo)
 
 module.exports = router

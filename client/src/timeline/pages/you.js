@@ -1,20 +1,33 @@
-import TimeLine from "../component/Timeline";
 import { Link } from "react-router-dom";
-import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
-import PageChannel from "../../channel/pages/Channel";
-import Playlist from "../component/Playlist";
 import TimelineHistoryYou from "../component/HistoryTimelineYou";
-import TimelineHistory from "../component/HistoryTimeline";
 import { useState, useEffect } from "react";
 import LikePageYou from "../component/LikePageYou";
 import PlaylistYou from "../component/PlaylistYou";
+import axios from 'axios';
 
 export default function You() {
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "You - CodingTube";
   }, []);
+
+  var [userInfo, setUserInfo] = useState([]);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/timeline/userInfo`,{
+            withCredentials: true,
+        });
+        setUserInfo(response.data);
+      } catch (error) {
+        console.error('Error fetching user infos:', error);
+      }
+    };
+    fetchUserInfo();
+  }, []);
+  const userPP = userInfo[0]["PP"];
   return (
     <>
       <div className="flex">
@@ -28,7 +41,7 @@ export default function You() {
               </Link>
             </div> 
             <div>
-              <img src={img} alt="Channel Avatar" 
+              <img src={userPP} alt="Channel Avatar" 
                 className="rounded-full w-[8em] h-[8em] md:object-contain md:w-[10em] md:h-[10em] relative md:left-[230px] md:top-[-30px]"/>
             </div>
           </div>
