@@ -28,12 +28,15 @@ const submit = async (req, res) => {
         }
         if (req.session.userId){
             const userValue = req.session.userId;
-            const resultsHistory = await mariadb.pool.query("SELECT * FROM search_history JOIN search ON search.id=search_history.search_id WHERE user_id = ? AND name_search = UPPER(?)", [userValue, submitValue]);
-            const search_id = await mariadb.pool.query("SELECT id FROM search WHERE user_id = ? AND name_search = UPPER(?)", [userValue, submitValue]);
+            const resultsHistory = await mariadb.pool.query("SELECT search_history.* FROM search_history JOIN search ON search.id=search_history.search_id WHERE search_history.user_id = ? AND search.name_search = UPPER(?);", [userValue, submitValue]);
+            const search_id = await mariadb.pool.query("SELECT id FROM search WHERE name_search = UPPER(?);", [submitValue]);
             if (resultsHistory.length === 0){
-                await mariadb.pool.query("INSERT INTO search_history (search_id, user_id) VALUES (?, ?)", [userValue, search_id]);
+                console.log(search_id);
+                await mariadb.pool.query("INSERT INTO search_history (research_date,search_id, user_id) VALUES (NOW(), ?, ?);", [search_id[0].id,userValue]);
+                console.log("Élément utilisateur ajouté avec succès.");
+                res.status(200).send("Élément utilisateur ajouté avec succès.");
             }
-
+            
         }else{
             console.log("vous n'etes pas connecté Cyka bliat for submit")
         }
