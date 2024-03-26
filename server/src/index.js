@@ -1,33 +1,33 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const mariadb = require("./src/database");
 const routes = require("./router");
 bodyParser = require("body-parser");
-const { createServer } = require('http')
-const server = createServer(app)
-const socketio = require('socket.io');
-const session = require('express-session');
-const routes = require("./router");
+const { createServer } = require("http");
+const socketio = require("socket.io");
+const session = require("express-session");
+const server = createServer(app);
 
-const app = express();
+app.use(
+  cors({
+    // better way (browsers are now happy)
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true, // authorize cookie
+  })
+);
 
-app.use(cors({
-  // better way (browsers are now happy)
-  origin: (origin, callback) => {
-    callback(null, true)
-  },
-  credentials: true, // authorize cookie
-}));
-
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false,
-}));
-
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(express.json({ type: "application/*+json" }));
-
 
 /* Handle all POST requests with different kind of bodies */
 app.use(express.json());
@@ -42,7 +42,7 @@ const io = new socketio.Server(server, {
   cors: {
     origin: "*",
   },
-})
+});
 
 const bannedWords = ["nigger"];
 const bannedWordCounts = {};
@@ -52,12 +52,12 @@ io.on("connection", (socket) => {
   console.log("Listening for chat-message event"); // Add this line
 
   //WIDGET
-  
-  socket.on('send', () => {
-     io.emit("widget-message")
-  })
-  
-  //WIDGET 
+
+  socket.on("send", () => {
+    io.emit("widget-message");
+  });
+
+  //WIDGET
   // Handle chat messages
   socket.on("chat-message", async (msg) => {
     console.log(
@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
         );
       }
     } else {
-      const room = socket.rooms.values()
+      const room = socket.rooms.values();
       room.next();
       socket.broadcast.to(room.next().value).emit("chat-message", {
         sender: msg.sender,
@@ -101,12 +101,12 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 
-  console.log(io.engine.clientsCount)
-  console.log(socket.rooms)
+  console.log(io.engine.clientsCount);
+  console.log(socket.rooms);
 
   socket.on("connect-to-room", (arg) => {
-    socket.join(arg)
-  })
+    socket.join(arg);
+  });
 });
 
 app.use("/api", urlencodedParser, routes);

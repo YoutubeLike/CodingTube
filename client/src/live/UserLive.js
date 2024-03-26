@@ -17,13 +17,17 @@ export default function LiveFromUser() {
   return (
     <>
       <p> {user} </p>
-      <ReactPlayer
-        url={"http://localhost:8090/live/" + user + ".flv"}
-        controls={false}
-        playing={false}
-        pip={false}
-      />
-      <Chat user={user} />
+      <div className="section-live-chat">
+        <ReactPlayer
+          className="live_container absolute left-0 right-1/3"
+          url={"http://localhost:8090/live/" + user + ".flv"}
+          controls={false}
+          playing={false}
+          pip={false}
+        />
+        <Chat user={user} />
+      </div>
+
       <button onClick={SendWidget}> Appuye moi </button>
     </>
   );

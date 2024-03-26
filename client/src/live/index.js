@@ -52,9 +52,8 @@ export function UserLink() {
       <div className="video-container">
         {Test.map((element) => (
           <Link key={element} to={"/live/" + element}>
-            <div className="video w-full h-full">
+            <div className="video">
               <img
-                width="600px"
                 src={"http://localhost:5000/api/live/thumbnail?user=" + element}
               />{" "}
               <span>{element}</span>

@@ -187,7 +187,7 @@ export default function Chat(props) {
               <span className="font-bold w-16 text-black">
                 {message.sender}:
               </span>
-              <span className="flex ml-4 w-55 text-black align-middle	">
+              <span className="flex ml-4  text-black align-middle	">
                 {message.message &&
                   message.message
                     .split("")

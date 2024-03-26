@@ -20,6 +20,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .live_container{
+    width: auto !important;
+    height: auto !important;
+  }
 }
 
 .video-container 
