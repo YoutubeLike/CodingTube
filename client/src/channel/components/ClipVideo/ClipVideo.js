@@ -1,37 +1,67 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import img from "../../assets/logo.jpg";
 import LikeDislike from "./LikeDislikeButton"
 import { useActionData } from "react-router-dom";
 
 export default function Video() {
-
-  const [pseudo, setPseudo] = useState('') // Pseudo
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [number_view, setNumber_view] = useState(0)
-  const [follower, setFollower] = useState(0);
-  const [buttonSubscribe, setbuttonSubscribe] = useState("");
+	const [uploadVideoUrl, setUploadVideo] = useState(); //
+	const [channel_id, setChannelId] = useState(0);
+	const [date, setDate] = useState("");
+	const [nb_like, setNb_like] = useState(0);
+	const [profilePicture, setProfilePicture] = useState("");
+	const [pseudo, setPseudo] = useState('') // Pseudo
+	const [title, setTitle] = useState('')
+	const [description, setDescription] = useState('')
+	const [number_view, setNumber_view] = useState(0)
+	const [follower, setFollower] = useState(0);
+	const [buttonSubscribe, setbuttonSubscribe] = useState("");
 
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
     const fetchTest = async () => {
       try {
         // Requête vers les infos de la chaîne
-        const response = await axios.get('http://localhost:5000/api/channel/infos');
-        const responseVideo = await axios.get('http://localhost:5000/api/channel/video');
+        const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
         const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
         const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
-        // Attribution des informations
-        setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
-        setPseudo(response.data.pseudo);
-        setFollower(responseNbFollowers.data.length);
-        setTitle(responseVideo.data.title);
-        setDescription(responseVideo.data.description);
+        
+        // Attribution des informations de la vidéo
+		setTitle(responseVideo.data.title);
+		setDescription(responseVideo.data.description);
         setNumber_view(responseVideo.data.number_view);
+		setChannelId(responseVideo.data.channel_id);
+		setNb_like(responseVideo.data.nb_like);
+		setUploadVideo(responseVideo.data.upload_video_url);
+		setDate(responseVideo.data.upload_date_time);
+
+		// Attribution des informations de Follopw
+        setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
+        setFollower(responseNbFollowers.data.length);
+
+
+
+        
+        try {
+          // Requête informations de la chaîne 
+          const responseChannel = await axios.get('http://localhost:5000/api/channel/infos',{ params: { idChannel: responseVideo.data.channel_id } });
+          
+          // Attribution des informations
+          setPseudo(responseChannel.data.pseudo);
+          setFollower(responseChannel.data.nb_follower);
+          setProfilePicture(responseChannel.data.profilePicture);
+        
+        } catch (error) {
+          console.error("Erreur :", error);
+        }
+        
       } catch (error) {
         console.error('Erreur :', error);
       }
+      
     };
 
     fetchTest();
@@ -76,7 +106,7 @@ export default function Video() {
 
 
         <div className="p-4 bg-gray-100 rounded-xl mt-4 " >
-          <p className="font-bold">{number_view} vues  1 sept. 2023 <span className="text-blue-600">#sifu #nodamage</span></p>
+          <p className="font-bold">{number_view} vues  {date} <span className="text-blue-600">#sifu #nodamage</span></p>
           <p className="text-justify">
             {description}
           </p>
@@ -88,4 +118,3 @@ export default function Video() {
     </>
   );
 }
-

@@ -21,10 +21,12 @@ services:
         source: ./server/src
         target: /app/back/src
       - ./server/env:/app/back/.env
+      - ./upload:/uploads  # Ajout du volume pour les uploads
     networks:
       - bdd-back
     ports:
       - "5000:5000"
+    
   bdd:
     image: mariadb
     networks:
