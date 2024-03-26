@@ -23,7 +23,7 @@ export default function Watch() {
       try {
         if (videoId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addView-request`, { withCredentials: true},{
+            `http://localhost:5000/api/timeline/addView-request`, {
               params: {
                 videoIdParam: videoId,
               },
@@ -47,12 +47,15 @@ export default function Watch() {
       try {
         if (videoId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addHistory-request`, { withCredentials: true},{
-              params: {
-                videoIdParam: videoId,
-              },
+            `http://localhost:5000/api/timeline/addHistory-request`,
+            {
+                withCredentials: true,
+                params: {
+                    videoIdParam: videoId,
+                },
             }
-          );
+        );
+        
           console.log("History added successfully");
         }
       } catch (errorHistory) {
