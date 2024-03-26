@@ -32,6 +32,21 @@ async function InsertUser(registerData) {
     }
 }
 
+async function InsertDiscordUser(username, email) {
+    try {
+        // Establishing a database connection
+        const conn = await mariadb.pool.getConnection();
+        // Executing the SQL query to insert user data into the database
+        await conn.query("INSERT INTO User (username, mail, discordAccount) VALUES (?, ?, true)", [username, email]);
+        // Releasing the database connection
+        conn.release();
+        console.log("User inserted successfully");
+    } catch (err) {
+        // Handling errors if any occur during the insertion process
+        console.log("Error inserting user:", err);
+    }
+}
+
 /**
  * Checks if a username already exists in the database.
  * @param {string} data - Username to be checked.
@@ -127,11 +142,37 @@ async function GetUserId(data) {
         const result = await conn.query("SELECT id FROM user WHERE mail = ? OR username = ?", [data, data]);
         // Releasing the database connection
         conn.release();
-        // Returning true if the count is greater than 0, indicating the email address exists
-        return result[0].id;
+        return result[0];
     } catch (error) {
         // Handling errors if any occur during the password comparison
-        console.error("Error comparing passwords:", error);
+        console.error("Error retrieving userId:", error);
+    }
+}
+
+async function CheckIfDiscordAccount(data){
+    try{
+        const conn = await mariadb.pool.getConnection();
+        const result = await conn.query("SELECT discordAccount FROM user WHERE mail = ?", data);
+        conn.release();
+        if (result[0] == null){
+            return false
+        } else{
+            return true
+        }
+    }catch (error) {
+        // Handling errors
+        console.error("Error checking discordAccount:", error);
+    }
+}
+
+async function ModifyDiscordStatus(data){
+    try{
+        const conn = await mariadb.pool.getConnection();
+        await conn.query("UPDATE user SET discordAccount = 1 WHERE mail = ?", data);
+        conn.release();
+    }catch (error) {
+        // Handling errors
+        console.error("Error modifying discord status: ", error);
     }
 }
 
@@ -141,4 +182,4 @@ async function GetUserId(data) {
 
 
 // Exporting all functions for use in other modules
-module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, GetUserId};
+module.exports = {InsertUser, CheckIfMailExist, CheckIfUsernameExist, CheckIfPasswordMatch, GetPasswordFromUsernameOrEmail, GetUserId, CheckIfDiscordAccount, ModifyDiscordStatus, InsertDiscordUser};
