@@ -71,15 +71,7 @@ class Authentification extends React.Component {
 
   render() {
     return (
-      <div
-        className={`flex justify-center items-center h-screen min-h-screen min-w-screen ${
-          darkMode ? "bg-gray-900" : "bg-white"
-        } ${
-          this.state.heightBiggerThanWidth
-            ? `min-h-[1200px] min-w-[200px]`
-            : `min-h-[800px] min-w-[768px]`
-        }`}
-      >
+      <div className="flex justify-center items-center h-screen min-h-screen min-w-screen min-h-[770px] min-w-[700px]">
         {" "}
         {/* Div qui englobe tout */}
         <div className="relative w-3/4 h-3/4 shadow-2xl rounded-2xl flex">
