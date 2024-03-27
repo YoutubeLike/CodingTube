@@ -110,13 +110,13 @@ export default function Search() {
   return (
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div className="flex ml-[3%] flex-wrap mt-[5%]">
-        <div className="flex w-[100]">
+        <div className="flex ml-[3%] flex-wrap mt-[5%] overflow-hidden">
+        <div className="flex w-[100] overflow-x-scroll no-scrollbar">
           <div className="flex flex-row h-2">
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "All"
                 onClick={(e) => {
                 
@@ -129,7 +129,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Videos"
                 onClick={(e) => {
                  
@@ -142,7 +142,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Shorts"
                 onClick={(e) => {
                   
@@ -155,7 +155,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Recently-uploaded"
                 onClick={(e) => {
                   
@@ -168,7 +168,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Live"
                 onClick={(e) => {
                   
@@ -182,7 +182,7 @@ export default function Search() {
           <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Music"
                 onClick={(e) => {
                   
@@ -195,7 +195,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Gaming"
                 onClick={(e) => {
                   
@@ -208,7 +208,7 @@ export default function Search() {
           <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Cultivations"
                 onClick={(e) => {
                   
@@ -221,7 +221,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Podcasts"
                 onClick={(e) => {
                   
@@ -234,7 +234,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
                 value= "Sports"
                 onClick={(e) => {
                   
@@ -248,7 +248,7 @@ export default function Search() {
             <div className="">
               <button 
               type="submit" 
-              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold"
+              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
               onClick={(e) => {
 
               }}
