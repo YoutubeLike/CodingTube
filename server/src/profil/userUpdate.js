@@ -25,8 +25,7 @@ const userUpdate = async (req, res) => {
     // Get the current user data from the database
     const currentUserData = await mariadb.pool.query(
       "SELECT username, mail FROM user WHERE id = ?",
-      [1]
-      //[userId]
+      [6]
     );
 
     const currentUsername = currentUserData[0].username;
@@ -66,7 +65,7 @@ const userUpdate = async (req, res) => {
         formattedBirthdate,
         updatedUserData.country,
         updatedUserData.gender,
-        //userId,
+        6,
       ]
     );
 

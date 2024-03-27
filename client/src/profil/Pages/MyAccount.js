@@ -38,39 +38,50 @@ const ProfilePage = () => {
     e.preventDefault();
     handleEditToggle(formKey);
 
-    setErrorMessage("");
-    setGoodMessage("");
-
     try {
-      // Vérifiez si le formulaire correspondant à la clé formKey a été cliqué une fois
+      // Check if the form corresponding to formKey has been clicked once
       if (formClickedMap[formKey]) {
-        // Si oui, appelez la fonction de mise à jour de l'utilisateur
+        // If yes, call the user update function
         await updateUser(formKey);
       } else {
-        // Si non, mettez à jour l'état pour indiquer que le formulaire a été cliqué une fois
+        // If no, update the state to indicate that the form has been clicked once
         setFormClickedMap((prevState) => ({
           ...prevState,
           [formKey]: true,
         }));
       }
 
-      // Réinitialisez l'état après une soumission réussie
+      // Reset state after successful submission
       if (formClickedMap[formKey]) {
         setFormClickedMap((prevState) => ({
           ...prevState,
           [formKey]: false,
         }));
-        setGoodMessage("Information updated");
       }
     } catch (error) {
       console.error("Error updating user:", error);
-      // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
+      // Handle error and display appropriate error message to the user
       setErrorMessage(error.response.data.error);
     }
   };
 
   // Function to update user data
   const updateUser = async () => {
+    setGoodMessage("");
+    setErrorMessage("");
+
+    if (!profileData.username.trim()) {
+      setErrorMessage(
+        "Please enter at least one character for the new username."
+      );
+      return; // Stop function execution if field is empty
+    }
+
+    if (!profileData.mail.trim()) {
+      setErrorMessage("Please enter at least on character for the new mail");
+      return; // Stop program
+    }
+
     const response = await axios.post(
       "http://localhost:5000/api/profil/userUpdate",
       {
@@ -83,25 +94,8 @@ const ProfilePage = () => {
         gender: profileData.gender,
       }
     );
+    setGoodMessage("Information updated");
     console.log(response.data);
-  };
-
-  // Function to update password
-  const updatePassword = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/profil/updatePswrd",
-        {
-          password: profileData.currentPassword,
-          newPassword: profileData.newPassword,
-          newConfirmPassword: profileData.newConfirmPassword,
-        }, {withCredentials: true}
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating password:", error);
-      console.log("Couldn't connect to the backend");
-    }
   };
 
   // Fetch user data on component mount
@@ -109,8 +103,7 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/profil/userData/1`,
-          //{ withCredentials: true }
+          `http://localhost:5000/api/profil/userData/6`
         );
         setProfileData(response.data);
       } catch (error) {
@@ -154,24 +147,41 @@ const ProfilePage = () => {
   // Handle password change
   const handlePasswordChange = async (e) => {
     e.preventDefault();
-    handleEditToggle("password");
+
+    setErrorMessage("");
+    setGoodMessage("");
+
+    // Check if password field is empty
+    if (!newPassword.trim()) {
+      setErrorMessage(
+        "Please enter at least one character for the new password."
+      );
+      return; // Stop function execution if field is empty
+    }
 
     try {
-        updatePassword(e)
-      const response = await axios.get(
-        `http://localhost:5000/api/profil/userData/1`
-        //{ withCredentials: true }
-
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/updatePswrd",
+        {
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        }
       );
-      const userData = response.data;
-      const fetchedPassword = userData["password"];
 
+      console.log(response.data); // Handle response as necessary
 
+      // If request is successful, display success message
+      setGoodMessage("Password updated successfully");
     } catch (error) {
-      setErrorMessage("Current password is incorrect!");
+      // If an error occurs, display appropriate error message
+      setErrorMessage(error.response.data.error);
 
-      console.error("Error fetching data", error);
+      console.error("Error updating password:", error);
     }
+
+    // After handling the request, you can close the password editor
+    handleEditToggle("password");
   };
 
   // State and functions for managing password fields
@@ -196,30 +206,6 @@ const ProfilePage = () => {
       {/* banner */}
 
       <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
-        <div className="py-10 flex flex-col md:flex-row  md: items-center">
-          {/* the button that alow us to change the banner and the */}
-
-          <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-            <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md  flex justify-center items-center">
-              {" "}
-              {/* icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-9 h-9"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
         <div className=" py-10 flex space-x-10">
           {/* profile picture */}
 
@@ -257,8 +243,7 @@ const ProfilePage = () => {
           <div className="w-60 rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]">
             <p className=" text-center text-2xl font-bold">CodingTube</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
-              @{profileData.first_name}
-              {profileData.last_name} ·0·
+              @{profileData.username} ·0·
             </p>
             <div class=" mt-10 relative inline-flex  group">
               <div class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
@@ -687,7 +672,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => handleFormSubmit(e, "username")}
+              onSubmit={(e) => handleFormSubmit(e, "gender")}
             >
               <div className="flex items-center">
                 <p className="text-xl font-semibold ml-5">Gender</p>
