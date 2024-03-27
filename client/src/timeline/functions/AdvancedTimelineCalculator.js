@@ -40,8 +40,6 @@ function GetMostViewedCategories() {
     fetch();
   }, []);
 
-  console.log("cat",viewedCategoriesInfos);
-
   // Count all the categories viewed
   var counter = {};
   for (var i = 0; i < viewedCategoriesInfos.length; i++) {
@@ -90,7 +88,6 @@ export function SetScores(videosInfos) {
   }
 
   var mostViewedCategories = GetMostViewedCategories();
-  console.log(mostViewedCategories);
 
   for (var i = 0; i < videosInfos.length; i++) {
     videosInfos[i]["score"] = 0;

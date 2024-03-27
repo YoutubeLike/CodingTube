@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import Header from "./header";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
@@ -69,6 +69,7 @@ function timeOfVideo(totalSeconds) {
 export default function Search() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
+  const inputRef = useRef("");
 
   useEffect(() => {
     const displaySearchPage = async () => {
@@ -79,7 +80,6 @@ export default function Search() {
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
-        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
@@ -88,10 +88,173 @@ export default function Search() {
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
   }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
+
+    const handleClickFilters = async (e) => {
+        const buttonValue = e.target.value;
+        const queryParameters = new URLSearchParams(window.location.search);
+        const video_search = queryParameters.get("videoName")
+
+        try{
+          const applyFilters = await axios.get(
+            "http://localhost:5000/api/search/filters/" + buttonValue + '/' + video_search );
+            setVideosInfos(applyFilters.data)
+        } catch(error){
+          console.error("An error occurred while applying filter: ", error)
+        }
+    }
+  
+
   return (
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div className="flex ml-[3%] flex-wrap mt-[5%]">
+        <div className="flex ml-[3%] flex-wrap mt-[5%] overflow-hidden">
+        <div className="flex w-[100] overflow-x-scroll no-scrollbar">
+          <div className="flex flex-row h-2">
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "All"
+                onClick={(e) => {
+                
+                  handleClickFilters(e);
+                }}
+              >
+              All
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Videos"
+                onClick={(e) => {
+                 
+                  handleClickFilters(e);
+                }}
+              >
+              Videos
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Shorts"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Shorts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Recently-uploaded"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Recently uploaded
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Live"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Live
+              </button>
+            </div>
+          </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Music"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Music
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Gaming"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Gaming
+              </button>
+            </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Cultivations"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Cultivations
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Podcasts"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Podcasts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                value= "Sports"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Sports
+              </button>
+            </div>
+          {/* <div className="">
+            <div className="">
+              <button 
+              type="submit" 
+              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+              onClick={(e) => {
+
+              }}
+              >
+              Filters <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5zM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11zM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75m-3-2.75H8.5v1.5H2.75a.75.75 0 0 1 0-1.5M4 3H2.75a.75.75 0 0 0 0 1.5H4zm-1.25 8.5H4V13H2.75a.75.75 0 0 1 0-1.5"></path></svg>
+              </button>
+            </div>
+          </div> */}
+        </div>
           {videosInfos && videosInfos.map((result, index) => (
               <div key={index}>
                 <a href={`/watch?video_id=${result.id}`}>
@@ -123,6 +286,14 @@ export default function Search() {
               </div>
           ))}
         </div>
+        {/* <div className="bg-green-800 opacity-100 z-80 flex flex-col">
+          <p className="text-lg">Filtres de recherche</p>
+          <div className="flex flex-row justify-between gap-4">
+            <p className="text-base">DATE D'AJOUT</p>
+            <p className="text-base">TYPE</p>
+            <p className="text-base">DURÉE</p>
+            <p className="text-base">TRIER PAR</p>
+          </div> */}         
     </div>
   );
 }
