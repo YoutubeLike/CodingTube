@@ -10,6 +10,7 @@ const { subscriptionList } = require('./controllerSubscriptionList.js');
 const { viewedCategoriesList } = require('./controllerViewedCategoriesList.js');
 const { playlistRequest } = require('./controllerPlaylist.js');
 const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
+const { addViewTimelineRequest } = require ('./controllerAddViewVideoTimeline.js')
 console.log("router timeline");
 
 

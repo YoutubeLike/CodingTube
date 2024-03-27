@@ -111,10 +111,7 @@ const router = createBrowserRouter([
         path: "changeTitle",
         element: <ChangeTitle />,
       },
-      // {
-			// 	path: "/PageChannel",
-			// 	element: <PageChannel />,
-			// },
+      {
 				path: "/playlist",
 				element: <PlaylistPage />,
 			},

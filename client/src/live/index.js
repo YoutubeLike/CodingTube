@@ -21,10 +21,6 @@ export default function Live() {
             .catch(error => console.log('Server unreachable'));
     }, []);
 
-
-    const handleExpand = () => {
-        setIsExpanded(!isExpanded);
-    };
     return (
         <div className="flex flex-col">
             <div className="flex flex-nowrap pl-6 pt-6">
