@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json);
 
+// Get the number of users subscribed to a channel
 const getNbFollowers = ((req, res) => {
 	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.query.channelId])
 		.then((result) => {
@@ -53,8 +54,10 @@ const follow = ((req, res) => {
 }
 );
 
-
+// PAth to docker source
 const source = path.join(__dirname, "../../../..", "uploads")
+
+const date = Date.now();
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -65,7 +68,7 @@ const storage = multer.diskStorage({
 		}
 	},
 	filename: function (req, file, cb) {
-		cb(null, file.originalname);
+		cb(null, `${date}_${file.originalname}`);
 	}
 });
 
@@ -102,11 +105,14 @@ const submitVideo = (req, res) => {
 			return res.status(400).send("No thumbnail or video file selected");
 		}
 
-		const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
-		const videoURL = path.join(source, "videos", videoFile.originalname);
+		console.log("BOOLEAN")
+		console.log(isShort)
 
-		if (isShort) {
-			mariadb.pool.query('INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, filters) VALUES (?, ?, ?, ?, ?, 1, ?)', [title, description, category, thumbnailURL, videoURL, filters])
+		const thumbnailURL = path.join(source, "thumbnails", `${date}_${thumbnailFile.originalname}`);
+		const videoURL = path.join(source, "videos", `${date}_${videoFile.originalname}`);
+
+		if (isShort == 'true') {
+			mariadb.pool.query('INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, filters, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)', [title, description, category, thumbnailURL, videoURL, filters])
 				.then(() => {
 					res.status(200).send("Data submitted successfully!");
 				})
@@ -115,7 +121,7 @@ const submitVideo = (req, res) => {
 					res.status(500).send("An error occurred while submitting video data.");
 				});
 		} else {
-			mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
+			mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, CURRENT_TIMESTAMP)', [title, description, category, thumbnailURL, videoURL])
 				.then(() => {
 					res.status(200).send("Data submitted successfully!");
 				})
