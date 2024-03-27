@@ -25,7 +25,10 @@ export default function Chat(props) {
   const [socket, setSocket] = useState(null); // Stock l'instance du socket
   const [isBanned, setIsBanned] = useState(false); // Permet de voir si l'utilisateur est bannis
   const banDuration = 60000; // 1 minute en milliseconds
+  const [isAdmin, setIsAdmin] = useState(false); // Variable qui me sert à être modérateur si je suis l'hote du stream
   const chatContainerRef = useRef(null);
+  const [isStreamer, setIsStreamer] = useState("");
+
   // Le useEffect prock lorsque le composant s'initialise
   useEffect(() => {
     const socketInstance = io(ENDPOINT); // Crée le chemin d'accès avec l'acces ENDPOINT
@@ -42,6 +45,7 @@ export default function Chat(props) {
         message: messagesReceived,
         sender: data.sender,
         profilePicture: ppReceived,
+        userId: data.userId,
       };
       // ajoute le message à la suite des autres les "..." sont un opérateur de spreadpour décomposer le tableau en élément individuel
       setMessages((prevMessages) => [...prevMessages, ArrayMessage]);
@@ -57,6 +61,22 @@ export default function Chat(props) {
       } else {
       }
     });
+    const pseudo = props.user;
+
+    const fetchAdminStatus = async (userId, pseudo) => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/live/admind?streamer=" + pseudo,
+          { withCredentials: true }
+        );
+        setIsAdmin(response.data.isAdmin);
+        console.log(response.data.isAdmin);
+      } catch (error) {
+        console.error("Error fetching admin status:", error);
+      }
+    };
+
+    fetchAdminStatus(null, pseudo);
 
     socketInstance.on("ban-message", (data) => {
       setIsBanned(data.banned);
@@ -145,6 +165,12 @@ export default function Chat(props) {
       send();
     }
   };
+
+  const banUser = (userId) => {
+    console.log("j'ai cliquer sur ban là gros");
+    // Envoyer une demande au serveur pour bannir l'utilisateur
+    socket.emit("ban-user", { userId });
+  };
   // Mise à jour du scroll lorsque de nouveaux messages sont ajoutés :
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -194,6 +220,15 @@ export default function Chat(props) {
                   {message.time}
                 </span>
               </span>
+              {/* Bouton d'administration, par exemple "Ban" */}
+              {isAdmin && (
+                <button
+                  onClick={() => banUser(message.userId)}
+                  className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
+                >
+                  Ban
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -214,6 +249,9 @@ export default function Chat(props) {
         >
           Send
         </button>
+        <div>
+          <h1>Streamer: {isStreamer}</h1>
+        </div>
       </div>
     </div>
   );

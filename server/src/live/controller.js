@@ -3,6 +3,8 @@ const fs = require("fs");
 const mariadb = require("/app/back/src/src/database.js");
 const bcrypt = require("bcryptjs");
 
+// Fonction pour vérifier si l'utilisateur est le streamer
+
 // Permet de récupérer une image d'étiquette pour le stream
 const saveThumbnail = (req, res) => {
   let user = req.body.user;
@@ -22,6 +24,7 @@ const sendThumbnail = (req, res) => {
     res.sendFile("/app/back/src/public/default.png");
   }
 };
+
 // Requète pour la pp de la personne
 const GetProfilPicture = async (req, res) => {
   const userId = req.session.userId;
@@ -42,6 +45,15 @@ const GetProfilPicture = async (req, res) => {
   }
 };
 // Requète pour l'username de l'utilisateur
+
+const display = (req, res) => {
+  res.sendFile("/app/back/src/public/follow.jpg");
+};
+
+const test = (req, res) => {
+  console.log("Utilisateur " + req.session.userId);
+  res.send("" + req.session.userId);
+};
 const GetUsername = async (req, res) => {
   const userId = req.session.userId;
   try {
@@ -53,6 +65,7 @@ const GetUsername = async (req, res) => {
     connection.release();
     if (result.length > 0) {
       res.json({ pseudo: result[0].username });
+      return { pseudo: result[0].username };
     } else {
       res.json({ pseudo: null });
     }
@@ -61,19 +74,55 @@ const GetUsername = async (req, res) => {
     res.json({ pseudo: null });
   }
 };
-
-const display = (req, res) => {
-  res.sendFile("/app/back/src/public/follow.jpg");
+const GetUsernameAdmin = async (userId) => {
+  try {
+    const connection = await mariadb.pool.getConnection();
+    const result = await connection.query(
+      "SELECT username FROM user WHERE id = ?",
+      [userId]
+    );
+    connection.release();
+    if (result.length > 0) {
+      return { pseudo: result[0].username }; // Retourner le pseudo trouvé
+    } else {
+      return { pseudo: null }; // Retourner null si aucun pseudo trouvé
+    }
+  } catch (err) {
+    console.error(err);
+    return { pseudo: null }; // Retourner null en cas d'erreur
+  }
 };
+const adminDuLive = async (req, res) => {
+  try {
+    // Récupérer le pseudo de l'URL
+    const streamer = req.query.streamer;
+    console.log("Streamer from URL: " + streamer);
 
-const test = (req, res) => {
-  console.log("Utilisateur " + req.session.userId);
-  res.send("" + req.session.userId);
+    // Récupérer le pseudo de l'utilisateur connecté
+    const { pseudo } = await GetUsernameAdmin(req.session.userId);
+    console.log("Connected User: " + pseudo);
+
+    // Vérifier si les pseudos correspondent
+    if (pseudo === streamer) {
+      // Si le streamer est celui qui est connecté
+      res.json({ isAdmin: true }); // Envoyer une réponse indiquant que c'est un admin
+      console.log("The user is an admin.");
+    } else {
+      // Si ce n'est pas le streamer qui est connecté
+      res.json({ isAdmin: false }); // Envoyer une réponse indiquant que ce n'est pas un admin
+      console.log("The user is not an admin.");
+    }
+  } catch (error) {
+    console.error("Error fetching admin status:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 // Génère une clef de stream pour chaque utilisateur à la quel il peut stream dessus
 const generateLiveKey = async (req, res) => {
   if (req.session.userId != undefined) {
+    // vérifie que la session n'est pas vide
+    // Permet de crée une clef de stream a l'id connecter
     mariadb.pool.query(
       "UPDATE channel set stream_key = '" +
         (await bcrypt.hash(Math.random().toString(36), 10)).replace("/", "") +
@@ -95,4 +144,5 @@ module.exports = {
   display,
   test,
   generateLiveKey,
+  adminDuLive,
 };

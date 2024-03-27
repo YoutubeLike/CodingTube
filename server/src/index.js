@@ -2,35 +2,36 @@ const express = require("express");
 const cors = require("cors");
 const mariadb = require("./src/database");
 bodyParser = require("body-parser");
-const { createServer } = require('http')
+const { createServer } = require("http");
 const app = express();
-const server = createServer(app)
-const socketio = require('socket.io');
-const session = require('express-session');
+const server = createServer(app);
+const socketio = require("socket.io");
+const session = require("express-session");
 const routes = require("./router");
 
-app.use(cors({
-  // better way (browsers are now happy)
-  origin: (origin, callback) => {
-    callback(null, true)
-  },
-  credentials: true, // authorize cookie
-}));
+app.use(
+  cors({
+    // better way (browsers are now happy)
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true, // authorize cookie
+  })
+);
 
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false,
-}));
-
-
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 /* Handle all POST requests with different kind of bodies */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.raw({ type: "application/vnd.custom-type" }));
 app.use(express.text({ type: "text/html" }));
-
 
 /* Register all /api routes of differents teams */
 app.use("/api", routes);
@@ -39,12 +40,12 @@ const io = new socketio.Server(server, {
   cors: {
     origin: "*",
   },
-})
+});
 
-app.get("/", (req,res) => {
+app.get("/", (req, res) => {
   console.log(req.session);
-  console.log(req.sessionID)
-})
+  console.log(req.sessionID);
+});
 
 const bannedWords = ["nigger"];
 const bannedWordCounts = {};
@@ -54,17 +55,15 @@ io.on("connection", (socket) => {
   console.log("Listening for chat-message event"); // Add this line
 
   //WIDGET
-  
-  socket.on('send', () => {
-     io.emit("widget-message")
-  })
-  
-  //WIDGET 
+
+  socket.on("send", () => {
+    io.emit("widget-message");
+  });
+
+  //WIDGET
   // Handle chat messages
   socket.on("chat-message", async (msg) => {
-    console.log(
-      `Received message from ${socket.handshake.query.userId}: ${msg.message}`
-    );
+    console.log(`Received message from ${msg.sender}: ${msg.message}`);
     const bannedWordFound = bannedWords.some((word) =>
       msg.message.toLowerCase().includes(word)
     );
@@ -85,7 +84,7 @@ io.on("connection", (socket) => {
         );
       }
     } else {
-      const room = socket.rooms.values()
+      const room = socket.rooms.values();
       room.next();
       socket.broadcast.to(room.next().value).emit("chat-message", {
         sender: msg.sender,
@@ -103,12 +102,12 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
   });
 
-  console.log(io.engine.clientsCount)
-  console.log(socket.rooms)
+  console.log(io.engine.clientsCount);
+  console.log(socket.rooms);
 
   socket.on("connect-to-room", (arg) => {
-    socket.join(arg)
-  })
+    socket.join(arg);
+  });
 });
 
 server.listen(5000, () => {
