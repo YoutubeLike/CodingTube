@@ -64,7 +64,7 @@ class Video extends React.Component {
         {/* Contains video and its informations */}
         <div className="h-[80vh] w-[45vh] flex flex-col justify-between relative snap-center rounded-[0.7vh] overflow-hidden">
           <video
-            src="1.mp4"
+            src={this.state.shortInfos.url}
             id={"shortPlayer" + this.state.shortInfos.id}
             className="h-full w-full object-cover absolute behind"
             muted
