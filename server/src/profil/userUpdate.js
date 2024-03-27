@@ -48,9 +48,11 @@ const userUpdate = async (req, res) => {
 
     // If username or mail already exists, send an error response
     if (usernameExist) {
-      return res.status(400).json({ errorMessage: "Username is already taken" });
+      console.log("username already taken")
+      return res.status(400).json({ error: "Username is already taken" });
     } else if (mailExist) {
-      return res.status(400).json({ errorMessage: "Mail is already taken" });
+      console.log("mail already taken ")
+      return res.status(400).json({ error: "Mail is already taken" });
     }
 
     // Perform the SQL update query
@@ -69,13 +71,13 @@ const userUpdate = async (req, res) => {
     );
 
     if (result.affectedRows > 0) {
-      res.send({ success: true, errorMessage: "User updated successfully" });
+      res.send({ success: true, message: "User updated successfully" });
     } else {
-      res.status(404).send({ success: false, errorMessage: "User not found" });
+      res.status(404).send({ success: false, message: "User not found" });
     }
   } catch (error) {
     console.error("Error updating user:", error);
-    res.status(500).send({ success: false, errorMessage: "Internal server error" });
+    res.status(500).send({ success: false, message: "Internal server error" });
   }
 };
 

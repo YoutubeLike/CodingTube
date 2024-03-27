@@ -29,10 +29,14 @@ const ProfilePage = () => {
 
   const [formClickedMap, setFormClickedMap] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const [goodMessage, setGoodMessage] = useState("");
 
   const handleFormSubmit = async (e, formKey) => {
     e.preventDefault();
     handleEditToggle(formKey);
+
+    setErrorMessage("");
+    setGoodMessage("");
 
     try {
       // Vérifiez si le formulaire correspondant à la clé formKey a été cliqué une fois
@@ -53,54 +57,30 @@ const ProfilePage = () => {
           ...prevState,
           [formKey]: false,
         }));
+        setGoodMessage("Information updated");
       }
     } catch (error) {
       console.error("Error updating user:", error);
       // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.errorMessage
-      ) {
-        // Si le message d'erreur est disponible dans la réponse du serveur
-        setErrorMessage(error.response.data.errorMessage);
-      } else {
-        // Sinon, affichez un message d'erreur générique
-        setErrorMessage("An error occurred while updating user");
-      }
+      setErrorMessage(error.response.data.error);
     }
   };
 
   // Function to update user data
   const updateUser = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/profil/userUpdate",
-        {
-          username: profileData.username,
-          first_name: profileData.first_name,
-          last_name: profileData.last_name,
-          mail: profileData.mail,
-          birthdate: profileData.birthdate,
-          country: profileData.country,
-          gender: profileData.gender,
-        }
-      );
-      console.log(response.data.message);
-
-      this.setState({
-        goodUpdate: response.data.message,
-        errorUpdate: null,
-      });
-    } catch (error) {
-      console.log(error.response.data.error);
-
-      console.error("Error updating user:", error);
-      this.setState({
-        goodUpdate: null,
-        errorUpdate: error.response.data.error,
-      });
-    }
+    const response = await axios.post(
+      "http://localhost:5000/api/profil/userUpdate",
+      {
+        username: profileData.username,
+        first_name: profileData.first_name,
+        last_name: profileData.last_name,
+        mail: profileData.mail,
+        birthdate: profileData.birthdate,
+        country: profileData.country,
+        gender: profileData.gender,
+      }
+    );
+    console.log(response.data);
   };
 
   // Function to update password
@@ -173,6 +153,8 @@ const ProfilePage = () => {
     handleEditToggle("password");
 
     try {
+      console.log("ici")
+      console.log(e)
       const response = await axios.get(
         `http://localhost:5000/api/profil/userData/1`
         //{ withCredentials: true }
@@ -181,17 +163,10 @@ const ProfilePage = () => {
       const userData = response.data;
       const fetchedPassword = userData["password"];
 
-      if (currentPassword === fetchedPassword) {
-        if (newPassword === confirmPassword) {
-          updatePassword();
-          console.log("Password updated successfully!");
-        } else {
-          console.log("New password and confirmation password do not match!");
-        }
-      } else {
-        console.log("Current password is incorrect!");
-      }
+
     } catch (error) {
+      setErrorMessage("Current password is incorrect!");
+
       console.error("Error fetching data", error);
     }
   };
@@ -207,9 +182,7 @@ const ProfilePage = () => {
       const response = await axios.get(
         "http://localhost:5000/api/profil/logout"
       );
-      if (response.data.message === "logout") {
-        window.location.href = "/login"; // Redirect to the login page
-      }
+      window.location.href = "/login"; // Redirect to the login page
     } catch (error) {
       console.error("Error logging out:", error);
     }
@@ -339,7 +312,8 @@ const ProfilePage = () => {
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
             {/*username*/}
-            {errorMessage && <p>{errorMessage}</p>}
+            <p className="text-green-600 ml-5">{goodMessage}</p>
+            <p className="text-red-600 ml-5">{errorMessage}</p>
             <form
               className=" mt-5 flex items-center"
               onSubmit={(e) => handleFormSubmit(e, "username")}
@@ -406,6 +380,7 @@ const ProfilePage = () => {
                   )}
                 </label>
               </div>
+
               <hr className="mt-4 mb-8 mx-5" />
             </form>
             {/* name */}
@@ -783,6 +758,8 @@ const ProfilePage = () => {
                 <button
                   className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-8 rounded-md  flex justify-center items-center"
                   onClick={(e) => {
+                    setGoodMessage("");
+                    setErrorMessage("");
                     e.preventDefault();
                     handleEditToggle("password");
                   }}
@@ -822,7 +799,8 @@ const ProfilePage = () => {
                 </button>
               </div>
             </div>
-
+            <p className="text-red-600 ml-5">{errorMessage}</p>
+            <p className="text-green-600 ml-5">{goodMessage}</p>
             <form
               className="mt-5 flex flex-col"
               onSubmit={(e) => {
