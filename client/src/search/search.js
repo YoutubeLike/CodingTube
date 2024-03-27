@@ -4,11 +4,7 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
 import NonDisplayedBurgerMenu from "../timeline/component/nonDisplayedBurgerMenu";
 
-/**
- * Function to calculate the time elapsed since the upload date
- * @param {string} uploadDateTime - upload date and time in string format
- * @returns {string} elapsed time in a human-readable format
- */
+// Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
   const currentDate = new Date();
@@ -30,11 +26,6 @@ function getTimeElapsed(uploadDateTime) {
   }
 }
 
-/**
- * Function to calculate the duration of a video 
- * @param {int} totalSeconds - total of second to convert 
- * @returns {string} Time formatted as Hours : Minutes : Seconds
- */
 function timeOfVideo(totalSeconds) {
   var hours;
   var minutes;
@@ -75,34 +66,28 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
-/**
- * Component for displaying search results.
- * @returns {JSX.Element} Search results component.
- */
 export default function Search() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
   const inputRef = useRef("");
 
   useEffect(() => {
-    // Function to fetch search results based on the query parameter
     const displaySearchPage = async () => {
-      // Extracting the video name from the URL query parameters
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
       try {
-        // Fetching search results from the server
         const response = await axios.get(
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
+        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     };
 
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
-  }); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
+  }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
 
     const handleClickFilters = async (e) => {
