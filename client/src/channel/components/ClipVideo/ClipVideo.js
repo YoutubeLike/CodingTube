@@ -17,11 +17,13 @@ export default function Video() {
 	const [number_view, setNumber_view] = useState(0)
 	const [follower, setFollower] = useState(0);
 	const [buttonSubscribe, setbuttonSubscribe] = useState("");
+  const [idVideo, setIdVideo] = useState()
 
   console.log(uploadVideo)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
+    setIdVideo(urlParams.get("id"))
     
     const fetchTest = async () => {
       try {
@@ -92,8 +94,7 @@ export default function Video() {
           <video rounded-md
             width="100%"
             height="680"
-            // src={uploadVideo}
-            src={"http://localhost:5000/api/channel/videoPath?idVideo=6"}
+            src={'http://localhost:5000/api/channel/videoPath?idVideo=' + idVideo}
             type="video/mp4"
             controls
             autoPlay
