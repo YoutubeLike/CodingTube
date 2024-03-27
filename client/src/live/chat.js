@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
 const ENDPOINT = "http://127.0.0.1:5000";
 
@@ -18,20 +19,17 @@ const bannedWords = [
 ];
 
 export default function Chat(props) {
-  const [response, setResponse] = useState("");
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [isBanned, setIsBanned] = useState(false);
   const banDuration = 60000; // 1 minute in milliseconds
   const chatContainerRef = useRef(null);
-
+  const socketInstance = props.socket
+  const [socket, setSocket] = useState(socketInstance);
+  
   useEffect(() => {
-
-        const socketInstance = io(ENDPOINT);
     setSocket(socketInstance);
-    
-    socketInstance.emit("connect-to-room", props.user)
+    socket.emit("connect-to-room", props.user)
 
     socketInstance.on("chat-message", (data) => {
       const messagesReceived = data.message;
@@ -52,11 +50,6 @@ export default function Chat(props) {
         setIsBanned(true);
         setTimeout(() => setIsBanned(false), banDuration);
         socketInstance.emit("ban-message", { banned: true });
-      } else {
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   { ...data.message, time: formattedTime },
-        // ]);
       }
     });
 
@@ -64,37 +57,25 @@ export default function Chat(props) {
       setIsBanned(data.banned);
     });
 
-    socketInstance.on("connect", () => {
-      console.log("Connected to server");
-    });
-
-    socketInstance.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
     return () => {
       socketInstance.disconnect();
     };
   }, []);
-  const getUserProfilePicture = async (userId) => {
+  const getUserProfilePicture = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/profile-picture?userId=${userId}`
-      );
-      const data = await response.json();
-      return data.profilePicture;
+      return axios.get("http://localhost:5000/api/live/profile-picture", {withCredentials: true}).then((response) => {
+        return response.data.profilePicture
+      })
     } catch (error) {
       console.error("Error fetching profile picture:", error);
       return null;
     }
   };
-  const getUserPseudo = async (userId) => {
+  const getUserPseudo = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/username?userId=${userId}`
-      );
-      const data = await response.json();
-      return data.pseudo;
+      return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
+        return response.data.pseudo
+      })
     } catch (error) {
       console.error("Error fetching pseudo:", error);
       return null;
@@ -102,7 +83,6 @@ export default function Chat(props) {
   };
   const send = async () => {
     if (socket && inputMessage.trim() !== "") {
-      console.log(`C'est la pp: ${messages.profilePicture}`);
       const bannedWordFound = bannedWords.some((word) =>
         inputMessage.toLowerCase().includes(word)
       );
@@ -114,27 +94,30 @@ export default function Chat(props) {
           `You are banned from chatting for 1 minute due to using a banned word.`
         );
       } else {
-        const userId = 2;
-        const profilePicture = await getUserProfilePicture(userId);
-        const pseudo = await getUserPseudo(userId);
-        const newMessage = {
-          message: inputMessage,
-          sender: pseudo,
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          userId,
-          profilePicture,
-        };
-        console.log(
-          `Emitting chat-message event with message: ${inputMessage}`
-        );
-        console.log(newMessage);
-        console.log(`C'est la deuxième pp: ${newMessage.profilePicture}`);
-        socket.emit("chat-message", newMessage);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-        setInputMessage("");
+        axios.get("http://localhost:5000/api/live/testa", { withCredentials: true}).then(async (res) => {
+          if(res.data != "undefined")
+          {
+            const profilePicture = await getUserProfilePicture();
+
+            const pseudo = await getUserPseudo();
+                    const newMessage = {
+                      message: inputMessage,
+                      sender: pseudo,
+                      time: new Date().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                      profilePicture,
+                    };
+                    socket.emit("chat-message", newMessage);
+                    setMessages((prevMessages) => [...prevMessages, newMessage]);
+                    setInputMessage("");
+          } else
+        {
+          alert("Vous n'êtes pas connecté")
+        }
+        })
+        
       }
     } else {
       alert("Please enter a non-empty message");
@@ -171,7 +154,7 @@ export default function Chat(props) {
                 {message.profilePicture && (
                   <img
                     src={message.profilePicture}
-                    alt={`tg`}
+                    alt={`pp`}
                     className="w-10 h-10 rounded-full"
                   />
                 )}

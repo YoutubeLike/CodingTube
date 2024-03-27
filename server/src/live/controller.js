@@ -69,8 +69,7 @@ const display = ((req, res) => {
 
 })
 
-const test = ((req, res) => {
-  console.log("Utilisateur " + req.session.userId)
+const getUserId = ((req, res) => {
   res.send("" + req.session.userId)
 })
 
@@ -116,14 +115,16 @@ const GetTitle = async (req, res) => {
     res.json({ title: null });
   }
 };
+
 module.exports = {
     saveThumbnail,
     sendThumbnail,
     GetProfilPicture,
     GetUsername,
     display,
-    test,
     generateLiveKey,
     updateTitle,
     GetTitle,
+    getUserId,
+    generateLiveKey
 }

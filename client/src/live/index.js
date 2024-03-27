@@ -21,6 +21,10 @@ export default function Live() {
             .catch(error => console.log('Server unreachable'));
     }, []);
 
+
+    const handleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
     return (
         <div className="flex flex-col">
             <div className="flex flex-nowrap pl-6 pt-6">
@@ -32,6 +36,7 @@ export default function Live() {
                 <>
                     <p className="pl-6">Il y a actuellement {userInLive.length} live en cours</p>
                     <UserLink userList={userInLive} title={title} />
+
                 </>
             ) : (
                 <p className="pl-6">Personne n'est en direct pour le moment</p>
@@ -48,6 +53,7 @@ export function UserLink({ userList, title }) {
             .then(response => {
                 if (response.status === 200 && Object.keys(response.data).length > 0) {
                     const liveUsers = Object.keys(response.data.live);
+
                     setUsersInLive(liveUsers);
                 }
             })
@@ -57,6 +63,9 @@ export function UserLink({ userList, title }) {
             });
     }, []);
 
+    userList.map((CUser) => {
+        axios.post("http://localhost:5000/api/live/save", { user : CUser})
+    })
     return (
         <>
             {usersInLive.length === 0 && (
@@ -92,3 +101,4 @@ export function UserLink({ userList, title }) {
         </>
     );
 }
+

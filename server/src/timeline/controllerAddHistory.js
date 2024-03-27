@@ -5,8 +5,8 @@ const addHistoryRequest = ((req, res) =>
   const videoId = req.params.videoId;
   console.log(videoId);
   mariadb.pool
-    .query("INSERT INTO watched_video (video_id, user_id, watch_date) VALUES (?, 1, CURRENT_TIMESTAMP)", [
-      videoId,
+    .query("INSERT INTO watched_video (video_id, user_id, watch_date) SELECT ?,1,CURRENT_TIMESTAMP WHERE NOT EXISTS (SELECT 1 FROM watched_video WHERE user_id = 1 AND video_id = ?)", [
+      videoId, videoId
     ])
     .then((value) => {
       res.send(value);
