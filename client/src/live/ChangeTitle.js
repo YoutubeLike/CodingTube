@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 function LiveStreamingPage() {
   const [title, settitle] = useState('');
 
-  const handleChangeName = () => {
+  const handleChangeTitle = () => {
     if (title.trim() === '') {
       alert('Veuillez entrer un nom pour le live.');
       return;
@@ -37,7 +37,7 @@ function LiveStreamingPage() {
         </div>
         <button
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
-          onClick={handleChangeName}
+          onClick={handleChangeTitle}
         > 
           Changer le nom du live
         </button>
