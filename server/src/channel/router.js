@@ -65,7 +65,7 @@ router.get("/infos", selectChannel);
 router.get("/infosId", selectChannelIdentifier);
 router.get("/id", selectId);
 router.get("/video", selectVideo);
-router.post("/submitChannel", submitChannel);
+router.get("/submitChannel", submitChannel);
 
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
