@@ -16,30 +16,44 @@ const formatDateForBackend = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-// Function to handle user update
-const userUpdate = (req, res) => {
-  // Extracting updated user data from the request body
-  const updatedUserData = req.body;
-  const userId = req.session.userId;
+const userUpdate = async (req, res) => {
+  try {
+    const updatedUserData = req.body;
+    const userId = req.session.userId;
+    const formattedBirthdate = formatDateForBackend(updatedUserData.birthdate);
 
-  // Formatting birthdate to match the database format
-  const formattedBirthdate = formatDateForBackend(updatedUserData.birthdate);
+    // Get the current user data from the database
+    const currentUserData = await mariadb.pool.query(
+      "SELECT username, mail FROM user WHERE id = ?",
+      [1]
+    );
 
-  // Check if username or email exists in the database
-  const usernameExist = CheckIfUsernameExist(updatedUserData.username);
-  const mailExist = CheckIfMailExist(updatedUserData.mail);
+    const currentUsername = currentUserData[0].username;
+    const currentMail = currentUserData[0].mail;
 
-  if (usernameExist) {
-    console.log("Username is already taken");
-    //return res.status(400).json({ error: "Username is already taken" });
-  } else if (mailExist) {
-    console.log("Mail is already taken");
-    //return res.status(400).json({ error: "Mail is already taken" });
-  }
+    // Check if the updated username already exists in the database
+    let usernameExist = false;
+    if (updatedUserData.username !== currentUsername) {
+      usernameExist = await CheckIfUsernameExist(
+        updatedUserData.username
+      );
+    }
 
-  // Performing the SQL update query
-  mariadb.pool
-    .query(
+    // Check if the updated mail already exists in the database
+    let mailExist = false;
+    if (updatedUserData.mail !== currentMail) {
+      mailExist = await CheckIfMailExist(updatedUserData.mail);
+    }
+
+    // If username or mail already exists, send an error response
+    if (usernameExist) {
+      return res.status(400).json({ errorMessage: "Username is already taken" });
+    } else if (mailExist) {
+      return res.status(400).json({ errorMessage: "Mail is already taken" });
+    }
+
+    // Perform the SQL update query
+    const result = await mariadb.pool.query(
       "UPDATE user SET username = ?, first_name = ?, last_name = ?, mail = ?, birthdate = ?, country = ?, gender = ? WHERE id = ?",
       [
         updatedUserData.username,
@@ -49,25 +63,19 @@ const userUpdate = (req, res) => {
         formattedBirthdate,
         updatedUserData.country,
         updatedUserData.gender,
-        userId, // Assuming user ID is 1 for now
+        1,
       ]
-    )
-    .then((result) => {
-      if (result.affectedRows > 0) {
-        // If at least one userinfo is updated, return a success message
-        res.send({ success: true, message: "User updated successfully" });
-      } else {
-        // If there is no change on userdata, return a message indicating user not found
-        res.status(404).send({ success: false, message: "User not found" });
-      }
-    })
-    .catch((error) => {
-      // If there is an error while executing the SQL request
-      console.error("Error updating user:", error);
-      res
-        .status(500)
-        .send({ success: false, message: "Internal server error" }); // Sending an internal server error response
-    });
+    );
+
+    if (result.affectedRows > 0) {
+      res.send({ success: true, errorMessage: "User updated successfully" });
+    } else {
+      res.status(404).send({ success: false, errorMessage: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send({ success: false, errorMessage: "Internal server error" });
+  }
 };
 
 // Exporting the userUpdate function

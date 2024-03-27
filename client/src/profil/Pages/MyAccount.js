@@ -27,6 +27,56 @@ const ProfilePage = () => {
     password: "",
   });
 
+
+
+  const [formClickedMap, setFormClickedMap] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+
+
+  const handleFormSubmit = async (e, formKey) => {
+    e.preventDefault();
+    handleEditToggle(formKey);
+  
+    try {
+      // Vérifiez si le formulaire correspondant à la clé formKey a été cliqué une fois
+      if (formClickedMap[formKey]) {
+        // Si oui, appelez la fonction de mise à jour de l'utilisateur
+        await updateUser(formKey);
+      } else {
+        // Si non, mettez à jour l'état pour indiquer que le formulaire a été cliqué une fois
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: true,
+        }));
+      }
+  
+      // Réinitialisez l'état après une soumission réussie
+      if (formClickedMap[formKey]) {
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: false,
+        }));
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
+      if (error.response && error.response.data && error.response.data.errorMessage) {
+        // Si le message d'erreur est disponible dans la réponse du serveur
+        setErrorMessage(error.response.data.errorMessage);
+      } else {
+        // Sinon, affichez un message d'erreur générique
+        setErrorMessage("An error occurred while updating user");
+      }
+    }
+  };
+
+
+
+
+
+
   // Function to update user data
   const updateUser = async () => {
     try {
@@ -80,8 +130,7 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/profil/userData/`,
-          { withCredentials: true }
+          `http://localhost:5000/api/profil/userData/1`
         );
         setProfileData(response.data);
       } catch (error) {
@@ -129,8 +178,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/profil/userData/`,
-        { WithCredentials: true }
+        `http://localhost:5000/api/profil/userData/1`
       );
       const userData = response.data;
       const fetchedPassword = userData["password"];
@@ -174,7 +222,7 @@ const ProfilePage = () => {
       {/* banner */}
 
       <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
-      <div className="py-10 flex flex-col md:flex-row  md: items-center">
+        <div className="py-10 flex flex-col md:flex-row  md: items-center">
           {/* the button that alow us to change the banner and the */}
 
           <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
@@ -285,13 +333,10 @@ const ProfilePage = () => {
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
             {/*username*/}
+            {errorMessage && <p>{errorMessage}</p>}
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("username");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "username")}
             >
               <div className="flex items-center">
                 <p className="text-xl text-center font-semibold ml-5 text-nowrap">
@@ -361,11 +406,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("fullName");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "fullName")}
             >
               <div className="flex items-center">
                 <p className="text-xl text-center font-semibold ml-5 text-nowrap">
@@ -455,11 +496,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex flex-col md:flex-row justify-start"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("mail");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "mail")}
             >
               <div className="flex items-center">
                 <p className="text-xl font-semibold ml-5">Mail Address</p>
@@ -530,11 +567,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex flex-col md:flex-row justify-start"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("birthdate");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "birthdate")}
             >
               <div className="flex items-center">
                 <p className="text-xl font-semibold ml-5">Birthdate</p>
@@ -602,11 +635,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex flex-col md:flex-row justify-start"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("country");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "country")}
             >
               <div className="flex items-center">
                 <p className="text-xl font-semibold ml-5">Country</p>
@@ -674,11 +703,7 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("gender");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "username")}
             >
               <div className="flex items-center">
                 <p className="text-xl font-semibold ml-5">Gender</p>

@@ -4,7 +4,7 @@ console.error("Début du traitement...");
 
 const userData = (req, res) => {
   // Extract the user ID from the request parameters
-  const userId = req.session.userId;
+  const userId = req.params.info_user;
 
   // Execute a SQL query to fetch user data based on the provided ID
   mariadb.pool
