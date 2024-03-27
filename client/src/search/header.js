@@ -203,10 +203,7 @@ export default function Header() {
             e.preventDefault();
             submit(searchValue);
             if (inputRef.current != "") {
-              navigate({
-                pathname: '/search',
-                search: '?videoName=' + searchValue,
-              });
+              window.location.href = "http://localhost:3000/search?videoName=" + searchValue
             }
             else {
               navigate({
