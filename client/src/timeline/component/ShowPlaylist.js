@@ -95,7 +95,7 @@ export default function ShowPlaylist() {
 
     fetchData();
   }, [playlistId]);
-  console.log(videosInfos);
+
   var indents = [];
   
   for (var i = 0; i < videosInfos.length; i++) {
@@ -107,7 +107,7 @@ export default function ShowPlaylist() {
         <div className="min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
           <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">{i+1}</h1>
         </div>
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+        <a href={`/watch?video_id=${videosInfos[i]["id_video"]}`}>
           <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img

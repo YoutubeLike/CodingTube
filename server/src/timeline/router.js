@@ -11,6 +11,7 @@ const { historyRequest } = require('./controllerHistory.js');
 const { subscriptionList } = require('./controllerSubscriptionList.js');
 const { viewedCategoriesList } = require('./controllerViewedCategoriesList.js');
 const { playlistRequest } = require('./controllerPlaylist.js');
+const { playlistInfosRequest } = require('./controllerPlaylistInfos.js');
 const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
 const { likePageYouRequest } = require('./controllerLikePageYou.js');
 const { rightSideTimelineRequest } = require('./controllerRightSideTimeline.js')
@@ -41,6 +42,8 @@ router.get('/addHistory-request', addHistoryRequest)
 router.get('/history-request', historyRequest)
 
 router.get('/playlist-request', playlistRequest)
+
+router.get('/playlistInfos-request', playlistInfosRequest)
 
 router.get('/showPlaylist-request', showPlaylistRequest)
 
