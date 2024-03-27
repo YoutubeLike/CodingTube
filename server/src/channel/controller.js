@@ -9,7 +9,6 @@ const app = express();
 app.use(express.json);
 
 const getIdentifier = ((req, res) => {
-	console.log("jure c ça ?")
     console.log(req.session.userId);
     mariadb.pool
         .query("SELECT identifier_channel FROM channel WHERE id = ?", [
@@ -262,6 +261,31 @@ const NumberVideo = (req, res) => {
 		});
 };
 
+const getVideo = (req, res) => {
+    const videoId = req.query.idVideo;
+	console.log(videoId)
+
+    mariadb.pool
+        .query('SELECT upload_video_url FROM video WHERE id = ?', [videoId])
+        .then((result) => {
+            if (result.length > 0) {
+                const videoPath = result[0].upload_video_url;
+				console.log(videoPath)
+                // Lire la vidéo depuis le chemin du fichier ou l'URL
+                const videoStream = fs.createReadStream(path.join(__dirname, '../../../..', videoPath));
+                // Définir les en-têtes appropriés pour la réponse
+                res.setHeader('Content-Type', 'video/mp4'); // Définir le type de contenu de la vidéo
+                videoStream.pipe(res); // Envoyer la vidéo en tant que flux dans le corps de la réponse HTTP
+			} else {
+                res.status(404).json({ message: "Vidéo non trouvée" });
+            }
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la récupération de la vidéo :", error);
+            res.status(500).json({ message: "Erreur lors de la récupération de la vidéo" });
+        });
+};
+
 
 module.exports = {
 	selectChannel,
@@ -278,6 +302,7 @@ module.exports = {
 	getFollow,
 	follow,
 	getIdentifier,
+	getVideo,
 };
 
 
