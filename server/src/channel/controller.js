@@ -10,17 +10,6 @@ const app = express();
 
 app.use(express.json);
 
-const getIdentifier = ((req, res) => {
-    console.log(req.session.userId);
-    mariadb.pool
-        .query("SELECT identifier_channel FROM channel WHERE id = ?", [
-            req.session.userId,
-        ])
-        .then((value) => {
-            res.send(value[0]);
-        });
-});
-
 const getNbFollowers = ((req, res) => {
 	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.query.channelId])
 		.then((result) => {
@@ -116,7 +105,7 @@ const submitVideo = (req, res) => {
         const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
         const videoURL = path.join(source, "videos", videoFile.originalname);
 
-        mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url) VALUES (?, ?, ?, ?, ?)', [title, description, category, thumbnailURL, videoURL])
+        mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
             .then(() => {
                 res.status(200).send("Data submitted successfully!");
             })
@@ -129,16 +118,16 @@ const submitVideo = (req, res) => {
 
 
 // Permet de s'identifier vers la chaîne
-const getIdentifier = (req, res) => {
-	console.log(req.session.userId);
-	mariadb.pool
-		.query("SELECT identifier_channel FROM channel WHERE id = ?", [
-			req.session.userId,
-		])
-		.then((value) => {
-			res.send(value[0]);
-		});
-};
+const getIdentifier = ((req, res) => {
+    console.log(req.session.userId);
+    mariadb.pool
+        .query("SELECT identifier_channel FROM channel WHERE id = ?", [
+            req.session.userId,
+        ])
+        .then((value) => {
+            res.send(value[0]);
+        });
+});
 
 // Retrieve channel information
 const selectChannel = (req, res) => {
@@ -191,12 +180,14 @@ const submitChannel = async (req, res) => {
 		"SELECT identifier_channel FROM channel WHERE identifier_channel = ?",
 		[identifier]
 	);
+	
+const userId = req.session.userId
 
 	if (isIdentifierAvailable[0] == null) {
 		mariadb.pool
 			.query(
-				"INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio, banner, profile_picture) VALUES (1, ?, ?, 0, ?, ?, ?)",
-				[name, identifier, bio, banner, profile_picture]
+				"INSERT INTO channel (user_id, pseudo, identifier_channel, nb_follower, bio, banner, profile_picture) VALUES (?, ?, ?, 0, ?, ?, ?)",
+				[userId, name, identifier, bio, banner, profile_picture]
 			)
 			.then(() => {
 				res.status(200).send("Channel created");
@@ -270,15 +261,14 @@ module.exports = {
 	getIdentifier,
 	selectChannel,
 	selectChannelIdentifier,
-  submit,
+  	submit,
 	selectId,
 	videoOnTab,
 	NumberVideo,
 	submitChannel,
 	submitVideo,
 	selectVideo,
-  UserChannel,
-  getNbFollowers,
+  	getNbFollowers,
 	getFollow,
 	follow,
 	getVideo,

@@ -72,22 +72,6 @@ const App = () => {
 		setActiveTab(tabName);
 	};
 
-	//Returns the correct active tab
-	const renderContent = () => {
-		switch (activeTab) {
-			case "Accueil":
-				return <Accueil />;
-			case "Vidéos":
-				return <Video />;
-			case "Shorts":
-				return <Shorts />;
-			case "Playlists":
-				return <Playlists />;
-			default:
-				return null;
-		}
-	};
-
 	//Enable/disable the pop-up
 	function Popup() {
 		const [isOpen, setIsOpen] = useState(false);

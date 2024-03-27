@@ -70,7 +70,6 @@ router.post("/submitChannel", submitChannel);
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
 
-router.get("/userChannel", UserChannel);
 router.get("/get-identifier", getIdentifier);
 router.get("/videoPath", getVideo);
  

@@ -17,7 +17,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "fs": "^0.0.1-security",
     "mariadb": "^3.2.3",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
