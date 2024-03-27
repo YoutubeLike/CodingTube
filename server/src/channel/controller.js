@@ -92,7 +92,7 @@ const submitVideo = (req, res) => {
 			return res.status(500).send("Internal Server Error");
 		}
 
-		const { title, description, category } = req.body;
+		const { title, description, category, isShort, filters } = req.body;
 		const thumbnailFile = req.files['thumbnail'][0];
 		const videoFile = req.files['video'][0];
 
@@ -105,14 +105,25 @@ const submitVideo = (req, res) => {
 		const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
 		const videoURL = path.join(source, "videos", videoFile.originalname);
 
-		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
-			.then(() => {
-				res.status(200).send("Data submitted successfully!");
-			})
-			.catch(error => {
-				console.error("Error submitting video:", error);
-				res.status(500).send("An error occurred while submitting video data.");
-			});
+		if (isShort) {
+			mariadb.pool.query('INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, filters) VALUES (?, ?, ?, ?, ?, 1, ?)', [title, description, category, thumbnailURL, videoURL, filters])
+				.then(() => {
+					res.status(200).send("Data submitted successfully!");
+				})
+				.catch(error => {
+					console.error("Error submitting video:", error);
+					res.status(500).send("An error occurred while submitting video data.");
+				});
+		} else {
+			mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
+				.then(() => {
+					res.status(200).send("Data submitted successfully!");
+				})
+				.catch(error => {
+					console.error("Error submitting video:", error);
+					res.status(500).send("An error occurred while submitting video data.");
+				});
+		}
 	});
 };
 
