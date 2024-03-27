@@ -1,6 +1,4 @@
-
 import React from "react";
-import { redirect } from "react-router-dom";
 import FormLogin from "../Forms/FormLogin";
 import FormSignup from "../Forms/FormSignup";
 import TransitionToLogin from "../Transitions/TransitionToLogin";
@@ -42,55 +40,32 @@ class Authentification extends React.Component {
     this.setState({ heightBiggerThanWidth });
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     // Ajoute un écouteur d'événement pour détecter les changements de taille de la fenêtre
     window.addEventListener("resize", this.checkHeightWidthRatio);
     // Vérifie initialement la taille de la fenêtre
     this.checkHeightWidthRatio();
+  
     try {
-      console.log("fghdjksl")
-      const response = axios.post(
-        "http://localhost:5000/api/profil/check-session",
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("pipalapoupou")
-      if (response.data.loggedIn) {
-        console.log("le boug est login je crois")
-        this.setState({ isLoggedIn: true });
+      const response = await axios.get("http://localhost:5000/api/profil/check-session", {
+        withCredentials: true,
+      });
+  
+      // Extraction des données pertinentes de l'objet Response
+      const loggedIn  = response.data.loggedIn;
+  
+      // Mise à jour de l'état du composant avec les données extraites
+      this.setState({ isLoggedIn: loggedIn });
+  
+      console.log(loggedIn)
+      if (loggedIn){
+        window.location.href = "/"
       }
-    } catch (error) {
-      console.error(
-        "Erreur lors de la vérification de l'authentification :",
-        error
-      );
+    } catch(error) {
+      console.log("Erreur lors de la vérification du login:", error);
     }
   }
-
-  componentWillUnmount() {
-    // Supprime l'écouteur d'événement lors du démontage du composant pour éviter les fuites de mémoire
-    window.removeEventListener("resize", this.checkHeightWidthRatio);
-    try {
-      console.log("fghdjksl")
-      const response = axios.post(
-        "http://localhost:5000/api/profil/check-session",
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("pipalapoupou")
-      if (response.data.loggedIn) {
-        console.log("le boug est login je crois")
-        this.setState({ isLoggedIn: true });
-      }
-    } catch (error) {
-      console.error(
-        "Erreur lors de la vérification de l'authentification :",
-        error
-      );
-    }
-  }
+  
 
   // Méthode pour basculer entre le formulaire de connexion et d'inscription
   toggleForm = () => {
@@ -200,15 +175,29 @@ class Authentification extends React.Component {
         });
       }
     }
+    try {
+      const response = await axios.get("http://localhost:5000/api/profil/check-session", {
+        withCredentials: true,
+      });
+  
+      // Extraction des données pertinentes de l'objet Response
+      const loggedIn  = response.data.loggedIn;
+  
+      // Mise à jour de l'état du composant avec les données extraites
+      this.setState({ isLoggedIn: loggedIn });
+  
+      console.log(loggedIn)
+      if (loggedIn){
+        window.location.href = "/"
+      }
+    } catch(error) {
+      console.log("Erreur lors de la vérification du login:", error);
+    }
   };
 
   render() {
-    if (this.state.isLoggedIn) {
-      return redirect("localhost:3000/");
-    }
     const { darkMode } = this.state; // Récupération de l'état du mode sombre
     return (
-
       <div
         className={`flex justify-center items-center h-screen min-h-screen min-w-screen ${
           darkMode ? "bg-gray-900" : "bg-white"

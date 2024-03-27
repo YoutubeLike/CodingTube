@@ -2,143 +2,159 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const ProfilePage = () => {
-// State for managing edit mode for each field in profile
-const [isEditing, setIsEditing] = useState({
-  name: false,
-  mail: false,
-  birthdate: false,
-  country: false,
-  gender: false,
-  password: false,
-});
+  // State for managing edit mode for each field in profile
+  const [isEditing, setIsEditing] = useState({
+    name: false,
+    mail: false,
+    birthdate: false,
+    country: false,
+    gender: false,
+    password: false,
+  });
 
-// State for storing profile data
-const [profileData, setProfileData] = useState({
-  first_name: "",
-  last_name: "",
-  mail: "",
-  birthdate: "",
-  country: "",
-  gender: "",
-  password: "",
-});
+  // State for storing profile data
+  const [profileData, setProfileData] = useState({
+    first_name: "",
+    last_name: "",
+    mail: "",
+    birthdate: "",
+    country: "",
+    gender: "",
+    password: "",
+    isLoggedIn: false, // Added isLoggedIn state
+  });
 
-// Function to update user data
-const updateUser = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/profil/userUpdate",
-      {
-        first_name: profileData.first_name,
-        last_name: profileData.last_name,
-        mail: profileData.mail,
-        birthdate: profileData.birthdate,
-        country: profileData.country,
-        gender: profileData.gender,
-      }
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error updating user:", error);
-    console.log("Error connecting to the backend");
-  }
-};
-
-// Function to update password
-const updatePassword = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/profil/updatePswrd",
-      {
-        id: profileData.id,
-        password: newPassword,
-      }
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error updating password:", error);
-    console.log("Couldn't connect to the backend");
-  }
-};
-
-// Fetch user data on component mount
-useEffect(() => {
-  const fetchUserData = async () => {
+  // Function to update user data
+  const updateUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/userUpdate",
+        {
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          mail: profileData.mail,
+          birthdate: profileData.birthdate,
+          country: profileData.country,
+          gender: profileData.gender,
+        }
       );
-      setProfileData(response.data);
+      console.log(response.data);
     } catch (error) {
-      console.error("Data retrieval error", error);
+      console.error("Error updating user:", error);
+      console.log("Error connecting to the backend");
     }
   };
 
-  fetchUserData();
-}, []);
-
-// Toggle edit mode for a field
-const handleEditToggle = (field) => {
-  setIsEditing((prevState) => ({
-    ...prevState,
-    [field]: !prevState[field],
-  }));
-};
-
-// Handle input change for profile fields
-const handleInputChange = (e, field) => {
-  setProfileData((prevState) => ({
-    ...prevState,
-    [field]: e.target.value,
-  }));
-};
-
-// Format date for display
-const formatDateForDisplay = (dateString) => {
-  const date = new Date(dateString);
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-};
-
-// State for managing active tab
-const [toggleState, setToggleState] = useState(1);
-
-// Toggle between tabs
-const toggleTab = (index) => {
-  setToggleState(index);
-};
-
-// Handle password change
-const handlePasswordChange = async (e) => {
-  e.preventDefault();
-  handleEditToggle("password");
-
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
-    );
-    const userData = response.data;
-    const fetchedPassword = userData["password"];
-    
-    if (currentPassword === fetchedPassword) {
-      if (newPassword === confirmPassword) {
-        updatePassword();
-        console.log("Password updated successfully!");
-      } else {
-        console.log("New password and confirmation password do not match!");
-      }
-    } else {
-      console.log("Current password is incorrect!");
+  // Function to update password
+  const updatePassword = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/updatePswrd",
+        {
+          id: profileData.id,
+          password: newPassword,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error updating password:", error);
+      console.log("Couldn't connect to the backend");
     }
-  } catch (error) {
-    console.error("Error fetching data", error);
-  }
-};
+  };
 
-// State and functions for managing password fields
-const [showPassword, setShowPassword] = useState(false);
-const [currentPassword, setCurrentPassword] = useState("");
-const [newPassword, setNewPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/profil/check-session",
+          {
+            withCredentials: true,
+          }
+        );
+
+        const loggedIn = response.data.loggedIn;
+
+        // Update the profileData state with isLoggedIn
+        setProfileData((prevProfileData) => ({
+          ...prevProfileData,
+          isLoggedIn: loggedIn,
+        }));
+
+        if (!loggedIn) {
+          window.location.href = "/login";
+        }
+      } catch (error) {
+        console.log("Erreur lors de la vérification du login:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
+  // Toggle edit mode for a field
+  const handleEditToggle = (field) => {
+    setIsEditing((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
+  // Handle input change for profile fields
+  const handleInputChange = (e, field) => {
+    setProfileData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
+
+  // Format date for display
+  const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
+  // State for managing active tab
+  const [toggleState, setToggleState] = useState(1);
+
+  // Toggle between tabs
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+
+  // Handle password change
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    handleEditToggle("password");
+
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/profil/userData/",
+        { withCredentials: true }
+      );
+      const userData = response.data;
+      const fetchedPassword = userData["password"];
+
+      if (currentPassword === fetchedPassword) {
+        if (newPassword === confirmPassword) {
+          updatePassword();
+          console.log("Password updated successfully!");
+        } else {
+          console.log("New password and confirmation password do not match!");
+        }
+      } else {
+        console.log("Current password is incorrect!");
+      }
+    } catch (error) {
+      console.error("Error fetching data", error);
+    }
+  };
+
+  // State and functions for managing password fields
+  const [showPassword, setShowPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <div>

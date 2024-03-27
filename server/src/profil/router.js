@@ -87,6 +87,7 @@ router.post("/register", async (req, res) => {
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
+          console.log(await GetUserId(registerData.mail))
           const userId = await GetUserId(registerData.mail);
           req.session.userId = userId ;
           req.session.save()
@@ -162,9 +163,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/check-session", async (req, res) => {
+router.get("/check-session", async (req, res) => {
   try {
+    console.log('session :')
+    console.log(req.sessionID)
     console.log(req.session.userId)
+    console.log("")
     if (req.session.userId) {
       return res.status(200).json({ loggedIn: true });
     } else {
@@ -177,14 +181,11 @@ router.post("/check-session", async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(req.session.userId + " logged in");
-      return res.json({ message: 'logout' });
-    }
-  });
+  if(req.session.userId){
+    req.session.destroy();
+  } else{
+    console.log("t'es pas connecté")
+  }
 });
 
 

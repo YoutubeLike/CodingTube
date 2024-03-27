@@ -142,7 +142,7 @@ async function GetUserId(data) {
         const result = await conn.query("SELECT id FROM user WHERE mail = ? OR username = ?", [data, data]);
         // Releasing the database connection
         conn.release();
-        return result[0];
+        return result[0].id;
     } catch (error) {
         // Handling errors if any occur during the password comparison
         console.error("Error retrieving userId:", error);
