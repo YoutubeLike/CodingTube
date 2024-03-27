@@ -1,8 +1,7 @@
-//Connexion à la Bdd
+//Connection to the database
 const mariadb = require("../src/database");
 
-
-//
+// Permet de s'identifier vers la chaîne
 const getIdentifier = (req, res) => {
 	console.log(req.session.userId);
 	mariadb.pool
@@ -14,7 +13,7 @@ const getIdentifier = (req, res) => {
 		});
 };
 
-// Récupérer des infos sur la chaîne
+// Retrieve channel information
 const selectChannel = (req, res) => {
 	const id = req.query.idChannel;
 	mariadb.pool
@@ -24,7 +23,7 @@ const selectChannel = (req, res) => {
 		});
 };
 
-// Récupérer des infos sur la chaîne à partir d'un identifiant @
+// Retrieve channel info from an @ ID
 const selectChannelIdentifier = (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool
@@ -37,7 +36,7 @@ const selectChannelIdentifier = (req, res) => {
 		});
 };
 
-// Récupérer l'id à partir de l'identifier
+// Get id from identifier
 const selectId = (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool.query("SELECT id FROM channel WHERE identifier_channel = ?", [
@@ -51,7 +50,7 @@ const selectId = (req, res) => {
 		});
 };
 
-// Récupérer des informations sur la vidéo
+// Retrieve video information
 const selectVideo = (req, res) => {
 	const id = req.query.idVideo;
 	mariadb.pool.query("SELECT * FROM video WHERE id = ?", [id]).then((value) => {
@@ -83,7 +82,7 @@ const submitChannel = async (req, res) => {
 	}
 };
 
-//Récupère les vidéos postées pour l'onglet vidéo de la chaîne
+//Retrieves posted videos for the channel's video tab
 const videoOnTab = (req, res) => {
 	const idVideoOnTab = req.query.idVideoOnTab;
 	mariadb.pool
@@ -97,7 +96,7 @@ const videoOnTab = (req, res) => {
 		});
 };
 
-//Récupère le nombre de vidéo mise en ligne
+//Retrieves the number of videos uploaded
 const NumberVideo = (req, res) => {
 	const numberVideo = req.query.numberVideo;
 	mariadb.pool
@@ -133,7 +132,7 @@ const submitVideo = (req, res) => {
 		});
 };
 
-//Permet d'exporter les fonctions
+//export functions
 module.exports = {
 	getIdentifier,
 	selectChannel,
