@@ -4,13 +4,23 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
+import { useLocation } from "react-router-dom";
 
 export default function TimelineRightSide() {
   var [videosInfos, setVideosInfos] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const videoId = searchParams.get("video_id");
+
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/timeline-request');
+        const response = await axios.get('http://localhost:5000/api/timeline/rightSide-timeline',{
+        params: {
+          videoIdParam: videoId,
+        }
+      });
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching videos:', error);
