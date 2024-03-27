@@ -4,7 +4,11 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
 import NonDisplayedBurgerMenu from "../timeline/component/nonDisplayedBurgerMenu";
 
-// Fonction pour calculer le temps écoulé depuis la date d'upload
+/**
+ * Function to calculate the time elapsed since the upload date
+ * @param {string} uploadDateTime - upload date and time in string format
+ * @returns {string} elapsed time in a human-readable format
+ */
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
   const currentDate = new Date();
@@ -26,6 +30,11 @@ function getTimeElapsed(uploadDateTime) {
   }
 }
 
+/**
+ * Function to calculate the duration of a video 
+ * @param {int} totalSeconds - total of second to convert 
+ * @returns {string} Time formatted as Hours : Minutes : Seconds
+ */
 function timeOfVideo(totalSeconds) {
   var hours;
   var minutes;
@@ -66,16 +75,23 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
+/**
+ * Component for displaying search results.
+ * @returns {JSX.Element} Search results component.
+ */
 export default function Search() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
   const inputRef = useRef("");
 
   useEffect(() => {
+    // Function to fetch search results based on the query parameter
     const displaySearchPage = async () => {
+      // Extracting the video name from the URL query parameters
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
       try {
+        // Fetching search results from the server
         const response = await axios.get(
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
@@ -86,7 +102,7 @@ export default function Search() {
     };
 
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
-  }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
+  },[]); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
 
 
     const handleClickFilters = async (e) => {
@@ -95,25 +111,26 @@ export default function Search() {
         const video_search = queryParameters.get("videoName")
 
         try{
+          console.log(video_search)
           const applyFilters = await axios.get(
             "http://localhost:5000/api/search/filters/" + buttonValue + '/' + video_search );
             setVideosInfos(applyFilters.data)
+            console.log('Le filtre ' + buttonValue + ' est appliqué')
         } catch(error){
           console.error("An error occurred while applying filter: ", error)
         }
     }
-  
 
   return (
       <div className="flex">
         <NonDisplayedBurgerMenu />
-        <div className="flex ml-[3%] flex-wrap mt-[5%] overflow-hidden">
-        <div className="flex w-[100] overflow-x-scroll no-scrollbar">
+        <div className="flex ml-[3%] flex-wrap mt-[5%]">
+        <div className="flex w-[100]">
           <div className="flex flex-row h-2">
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "All"
                 onClick={(e) => {
                 
@@ -126,7 +143,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Videos"
                 onClick={(e) => {
                  
@@ -139,7 +156,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Shorts"
                 onClick={(e) => {
                   
@@ -152,7 +169,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Recently-uploaded"
                 onClick={(e) => {
                   
@@ -165,7 +182,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Live"
                 onClick={(e) => {
                   
@@ -179,7 +196,7 @@ export default function Search() {
           <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Music"
                 onClick={(e) => {
                   
@@ -192,7 +209,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Gaming"
                 onClick={(e) => {
                   
@@ -205,7 +222,7 @@ export default function Search() {
           <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Cultivations"
                 onClick={(e) => {
                   
@@ -218,7 +235,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Podcasts"
                 onClick={(e) => {
                   
@@ -231,7 +248,7 @@ export default function Search() {
             <div>
               <button 
                 type="submit" 
-                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
                 value= "Sports"
                 onClick={(e) => {
                   
@@ -245,7 +262,7 @@ export default function Search() {
             <div className="">
               <button 
               type="submit" 
-              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold hover:bg-gray-300 active:bg-gray-400 focus:outline-none"
+              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold"
               onClick={(e) => {
 
               }}
