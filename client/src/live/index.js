@@ -3,16 +3,18 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Live() {
-    const [userInLive, setUserInLive] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [userInLive, setUserInLive] = useState([])
 
-
-export default function Live()
-{
-    axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
-        console.log(response.data)
+    window.addEventListener("unload", () => {
+        axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
+            console.log(response.data)
+        }) 
     })
-    const [UserInLive, setUserInLive] = useState([])
+
+    // axios.get("http://localhost:5000/api/live/testa", {withCredentials: true}).then((response) => {
+    //     console.log(response.data)
+    // })
     useEffect(() => {
         axios.get("http://localhost:8090/api/streams")
             .then((response) => {
