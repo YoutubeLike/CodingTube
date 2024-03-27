@@ -12,21 +12,19 @@ app.use(cors);
 app.use(express.json);
 
 // Import des fonctions
-const { selectChannel, 
-       	selectChannelIdentifier,
-        videoOnTab, 
-        NumberVideo, 
-        submit, 
-        submitVideo, 
-       	submitChannel,
-        selectVideo, 
-       	submitVideo,
-        getNbFollowers, 
-        getFollow, 
-        follow, 
-       	selectId,
-       	selectVideo,
-	      UserChannel,
+const { selectChannel,
+    selectChannelIdentifier,
+    videoOnTab,
+    NumberVideo,
+    submit,
+    submitVideo,
+    submitChannel,
+    selectVideo,
+    getNbFollowers,
+    getFollow,
+    follow,
+    selectId,
+    UserChannel,
 } = require("./controller");
 
 
@@ -68,7 +66,7 @@ router.post("/submitChannel", submitChannel);
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);
 router.get("/userChannel", UserChannel);
- 
+
 router.get('/get-video-likes', getVideoLikes)
 router.get('/get-video-dislikes', getVideoDislikes)
 router.get('/check-video-like', checkVideoLike)
@@ -77,7 +75,7 @@ router.get('/remove-video-like', removeVideoLike)
 router.get('/check-video-dislike', checkVideoDislike)
 router.get('/add-video-dislike', addVideoDislike)
 router.get("/remove-video-dislike", removeVideoDislike);
- 
+
 router.get("/get-video-comments", getComments);
 router.get("/add-video-comment", addCommentAndGetId);
 router.get("/get-video-comment-infos", getCommentInfos);
