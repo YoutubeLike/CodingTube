@@ -1,3 +1,5 @@
+
+//Connection to the database
 const mariadb = require("../src/database");
 const fs = require('fs');
 const path = require('path');
@@ -126,42 +128,19 @@ const submitVideo = (req, res) => {
 };
 
 
-const UserChannel = async (_, res) => {
-	try {
-		const userData = "tokenId"; // Remplacez "NomUtilisateur" par la valeur appropriée
-
-		// Obtenez l'ID de l'utilisateur en utilisant GetUserId avec les données fournies
-		const isLoggedIn = await GetUserId(userData);
-
-		// Si l'ID de l'utilisateur est trouvé avec succès
-		if (isLoggedIn) {
-			// Exécutez la requête SQL pour récupérer les informations du canal associé à cet utilisateur
-			const result = await mariadb.pool.query(
-				"SELECT pseudo, nb_follower, bio, banner FROM channel WHERE user_id = ?",
-				[isLoggedIn]
-			);
-
-			// Envoyez les informations du canal en réponse
-			res.send(result[0]);
-		} else {
-			// Si aucun ID d'utilisateur n'a été trouvé, renvoyez une réponse appropriée
-			res.send("Aucun utilisateur trouvé avec les informations fournies.");
-		}
-	} catch (error) {
-		// Si une erreur se produit à n'importe quelle étape, capturez-la et envoyez une réponse d'erreur appropriée
-		console.log(
-			"Erreur lors de la récupération des informations du canal:",
-			error
-		);
-		res
-			.status(500)
-			.send(
-				"Une erreur s'est produite lors de la récupération des informations du canal."
-			);
-	}
+// Permet de s'identifier vers la chaîne
+const getIdentifier = (req, res) => {
+	console.log(req.session.userId);
+	mariadb.pool
+		.query("SELECT identifier_channel FROM channel WHERE id = ?", [
+			req.session.userId,
+		])
+		.then((value) => {
+			res.send(value[0]);
+		});
 };
 
-// Récupérer des infos sur la chaîne
+// Retrieve channel information
 const selectChannel = (req, res) => {
 	const id = req.query.idChannel;
 	mariadb.pool
@@ -171,7 +150,7 @@ const selectChannel = (req, res) => {
 		});
 };
 
-// Récupérer des infos sur la chaîne à partir d'un identifiant @
+// Retrieve channel info from an @ ID
 const selectChannelIdentifier = (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool
@@ -184,7 +163,7 @@ const selectChannelIdentifier = (req, res) => {
 		});
 };
 
-// Récupérer l'id à partir de l'identifier
+// Get id from identifier
 const selectId = (req, res) => {
 	const identifier = req.query.identifier;
 	mariadb.pool.query("SELECT id FROM channel WHERE identifier_channel = ?", [
@@ -198,7 +177,7 @@ const selectId = (req, res) => {
 		});
 };
 
-// Récupérer des informations sur la vidéo
+// Retrieve video information
 const selectVideo = (req, res) => {
 	const id = req.query.idVideo;
 	mariadb.pool.query("SELECT * FROM video WHERE id = ?", [id]).then((value) => {
@@ -230,7 +209,7 @@ const submitChannel = async (req, res) => {
 	}
 };
 
-//Récupère les vidéos postées pour l'onglet vidéo de la chaîne
+//Retrieves posted videos for the channel's video tab
 const videoOnTab = (req, res) => {
 	const idVideoOnTab = req.query.idVideoOnTab;
 	mariadb.pool
@@ -245,7 +224,7 @@ const videoOnTab = (req, res) => {
 };
 
 
-//Récupère le nombre de vidéo mise en ligne
+//Retrieves the number of videos uploaded
 const NumberVideo = (req, res) => {
 	const numberVideo = req.query.numberVideo;
 	mariadb.pool
@@ -286,23 +265,24 @@ const getVideo = (req, res) => {
         });
 };
 
-
+//export functions
 module.exports = {
+	getIdentifier,
 	selectChannel,
 	selectChannelIdentifier,
-  	submit,
+  submit,
 	selectId,
 	videoOnTab,
 	NumberVideo,
 	submitChannel,
 	submitVideo,
 	selectVideo,
-	UserChannel,
-  	getNbFollowers,
+  UserChannel,
+  getNbFollowers,
 	getFollow,
 	follow,
-	getIdentifier,
 	getVideo,
+
 };
 
 
