@@ -190,9 +190,10 @@ export default function Header() {
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
-        <div className="flex w-[99%] h-6 ml-2 mt-0.5">
+        <div 
+         className="flex w-[99%] h-6 ml-2 mt-0.5">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
-          <p>CODITUBE</p>
+          <p className="hidden md:block">CODITUBE</p>
         </div>
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
@@ -216,7 +217,7 @@ export default function Header() {
           }}
         >
           <div
-            className="display-block w-[100%] h-7 z-20 relative"
+            className="w-[100%] display-block h-7 z-20 relative"
             ref={menuRef}
           >
             <input
