@@ -84,12 +84,47 @@ const generateLiveKey = (async (req, res) =>
   }
 })
 
+const updateTitle = ((req, res) => {
+  const { title } = req.body;
+  console.log('Données reçues :', title);  
+  console.log(req.session)
+  mariadb.pool.query('UPDATE live SET title = ? WHERE user_id = ?', [title, req.session.userId])
+      .then(() => {
+          res.status(200).send("Données mises à jour avec succès !");
+      })
+      .catch(error => {
+          console.error("Erreur lors de la mise à jour des données :", error);
+          res.status(500).send("Une erreur est survenue lors de la mise à jour des données.");
+      });
+});
+const GetTitle = async (req, res) => {
+  const userId = req.session.userId;
+  try {
+    const connection = await mariadb.pool.getConnection();
+    const result = await connection.query(
+      "SELECT title FROM live ",[userId]
+    );
+    connection.release();
+    if (result.length > 0) {
+      res.json({ title: result[0].title });
+    } else {
+      res.json({ title: null });
+    }
+  } catch (err) {
+    console.error(err);
+    res.json({ title: null });
+  }
+};
+
 module.exports = {
     saveThumbnail,
     sendThumbnail,
     GetProfilPicture,
     GetUsername,
     display,
+    generateLiveKey,
+    updateTitle,
+    GetTitle,
     getUserId,
     generateLiveKey
 }
