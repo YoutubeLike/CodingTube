@@ -105,7 +105,7 @@ const submitVideo = (req, res) => {
 		const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
 		const videoURL = path.join(source, "videos", videoFile.originalname);
 
-		if (isShort) {
+		if (isShort == true) {
 			mariadb.pool.query('INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, filters) VALUES (?, ?, ?, ?, ?, 1, ?)', [title, description, category, thumbnailURL, videoURL, filters])
 				.then(() => {
 					res.status(200).send("Data submitted successfully!");
