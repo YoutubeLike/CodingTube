@@ -27,18 +27,13 @@ const ProfilePage = () => {
     password: "",
   });
 
-
-
   const [formClickedMap, setFormClickedMap] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
-
-
-
 
   const handleFormSubmit = async (e, formKey) => {
     e.preventDefault();
     handleEditToggle(formKey);
-  
+
     try {
       // Vérifiez si le formulaire correspondant à la clé formKey a été cliqué une fois
       if (formClickedMap[formKey]) {
@@ -51,7 +46,7 @@ const ProfilePage = () => {
           [formKey]: true,
         }));
       }
-  
+
       // Réinitialisez l'état après une soumission réussie
       if (formClickedMap[formKey]) {
         setFormClickedMap((prevState) => ({
@@ -62,7 +57,11 @@ const ProfilePage = () => {
     } catch (error) {
       console.error("Error updating user:", error);
       // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
-      if (error.response && error.response.data && error.response.data.errorMessage) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.errorMessage
+      ) {
         // Si le message d'erreur est disponible dans la réponse du serveur
         setErrorMessage(error.response.data.errorMessage);
       } else {
@@ -71,11 +70,6 @@ const ProfilePage = () => {
       }
     }
   };
-
-
-
-
-
 
   // Function to update user data
   const updateUser = async () => {
@@ -92,19 +86,20 @@ const ProfilePage = () => {
           gender: profileData.gender,
         }
       );
-      console.log(response.data);
+      console.log(response.data.message);
 
-      //this.setState({
-      //goodUpdate: response.data.message,
-      //errorUpdate: null,
-
-      //});
+      this.setState({
+        goodUpdate: response.data.message,
+        errorUpdate: null,
+      });
     } catch (error) {
+      console.log(error.response.data.error);
+
       console.error("Error updating user:", error);
-      //this.setState({
-      //goodUpdate: null,
-      //errorUpdate: error.response.data.error,
-      //});
+      this.setState({
+        goodUpdate: null,
+        errorUpdate: error.response.data.error,
+      });
     }
   };
 
@@ -130,7 +125,8 @@ const ProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/profil/userData/1`
+          `http://localhost:5000/api/profil/userData/1`,
+          //{ withCredentials: true }
         );
         setProfileData(response.data);
       } catch (error) {
@@ -179,6 +175,8 @@ const ProfilePage = () => {
     try {
       const response = await axios.get(
         `http://localhost:5000/api/profil/userData/1`
+        //{ withCredentials: true }
+
       );
       const userData = response.data;
       const fetchedPassword = userData["password"];
@@ -330,6 +328,14 @@ const ProfilePage = () => {
                 Password
               </h1>
             </div>
+          </div>
+          <div className="align-content: center">
+            {isEditing.errorUpdate && (
+              <p className="!mt-2 text-red-600">{isEditing.errorUpdate}</p>
+            )}
+            {isEditing.goodUpdate && (
+              <p className="!mt-2 text-green-600">{isEditing.goodUpdate}</p>
+            )}
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
             {/*username*/}
