@@ -59,7 +59,6 @@ const ProfilePage = () => {
         }));
         setGoodMessage("Information updated");
       }
-      
     } catch (error) {
       console.error("Error updating user:", error);
       // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
@@ -153,28 +152,18 @@ const ProfilePage = () => {
     handleEditToggle("password");
 
     try {
+      console.log("ici")
+      console.log(e)
       const response = await axios.get(
         `http://localhost:5000/api/profil/userData/1`
       );
       const userData = response.data;
       const fetchedPassword = userData["password"];
 
-      if (currentPassword === fetchedPassword) {
-        if (newPassword === confirmPassword) {
-          updatePassword();
-          setGoodMessage("Password updated succesfully!");
-          console.log("Password updated successfully!");
-        } else {
-          setErrorMessage(
-            "New password and confirmation password do not match!"
-          );
-          console.log("New password and confirmation password do not match!");
-        }
-      } else {
-        setErrorMessage("Current password is incorrect!");
-        console.log("Current password is incorrect!");
-      }
+
     } catch (error) {
+      setErrorMessage("Current password is incorrect!");
+
       console.error("Error fetching data", error);
     }
   };
