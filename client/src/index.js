@@ -80,10 +80,6 @@ const router = createBrowserRouter([
 				path: "/you",
 				element: <You />,
 			},
-      // {
-			// 	path: "/PageChannel",
-			// 	element: <PageChannel />,
-			// },
     ]
   },
 ]);
