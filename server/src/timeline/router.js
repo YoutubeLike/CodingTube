@@ -15,6 +15,7 @@ const { playlistInfosRequest } = require('./controllerPlaylistInfos.js');
 const { showPlaylistRequest } = require('./controllerShowPlaylist.js');
 const { likePageYouRequest } = require('./controllerLikePageYou.js');
 const { userInfo } = require('./controllerYouPage.js');
+const { userName } = require('./controllerPseudoUser.js');
 const { rightSideTimelineRequest } = require('./controllerRightSideTimeline.js')
 
 // Get the videos infos to show timeline
@@ -51,6 +52,8 @@ router.get('/showPlaylist-request', showPlaylistRequest)
 router.get('/likePageYou-request', likePageYouRequest)
 
 router.get('/userInfo', userInfo)
+
+router.get('/userName', userName)
 
 router.get('/rightSide-timeline', rightSideTimelineRequest)
 

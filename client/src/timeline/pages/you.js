@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import img from "../../channel/assets/logo.jpg";
 import NonDisplayedBurgerMenu from "../component/nonDisplayedBurgerMenu";
 import TimelineHistoryYou from "../component/HistoryTimelineYou";
 import { useState, useEffect } from "react";
 import LikePageYou from "../component/LikePageYou";
 import PlaylistYou from "../component/PlaylistYou";
-import axios from 'axios';
+import axios from "axios";
+import GetUserPseudo from "../component/GetUserPseudo";
 
 export default function You() {
   /* Page title (displayed on tab) */
@@ -17,17 +19,29 @@ export default function You() {
     const fetchUserInfo = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/timeline/userInfo`,{
+          `http://localhost:5000/api/timeline/userInfo`,
+          {
             withCredentials: true,
-        });
+          }
+        );
         setUserInfo(response.data);
       } catch (error) {
-        console.error('Error fetching user infos:', error);
+        console.error("Error fetching user infos:", error);
       }
     };
     fetchUserInfo();
   }, []);
-  const userPP = userInfo[0]["PP"];
+
+  var userPP = "";
+  var pseudo = "";
+  if (userInfo[0] === undefined) {
+    userPP = img;
+    pseudo = GetUserPseudo;
+  } else {
+    userPP = userInfo[0]["PP"];
+    pseudo = userInfo[0]["username"];
+  }
+
   return (
     <>
       <div className="flex">
@@ -35,18 +49,26 @@ export default function You() {
         <div>
           <div className="flex flex-row-reverse relative top-[15px] md:block">
             <div className="relative md:left-[400px] md:top-[80px]  flex flex-col items-start">
-              <h1 className="text-start text-2xl font-bold mt-4 relative top-[10px]">B R A S C O</h1>
+              <h1 className="text-start text-2xl font-bold mt-4 relative top-[10px]">
+                {pseudo}
+              </h1>
               <Link to="/PageChannel" className="text-start mt-4">
                 @Itachi Budoke - View Channel
               </Link>
-            </div> 
+            </div>
             <div>
-              <img src={userPP} alt="Channel Avatar" 
-                className="rounded-full w-[8em] h-[8em] md:object-contain md:w-[10em] md:h-[10em] relative md:left-[230px] md:top-[-30px]"/>
+              <img
+                src={userPP}
+                alt="Channel Avatar"
+                className="rounded-full w-[8em] h-[8em] md:object-contain md:w-[10em] md:h-[10em] relative md:left-[230px] md:top-[-30px]"
+              />
             </div>
           </div>
-          <div >
-            <a href="/history" className="flex flex-row relative top-[15px] md:block">
+          <div>
+            <a
+              href="/history"
+              className="flex flex-row relative top-[15px] md:block"
+            >
               <img
                 className="md:relative left-[220px] w-10 h-10"
                 src="history.png"
@@ -86,7 +108,10 @@ export default function You() {
               </div>
             </div>
             <div className="">
-              <a href="/playlist" className="flex flex-row relative top-[15px] md:block">
+              <a
+                href="/playlist"
+                className="flex flex-row relative top-[15px] md:block"
+              >
                 <img
                   className="md:relative left-[220px] w-10 h-10"
                   src="history.png"
