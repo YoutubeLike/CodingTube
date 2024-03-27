@@ -1,4 +1,6 @@
 const mariadb = require("../src/database");
+const fs = require("fs");
+const path = require("path");
 
 const getTenNextShorts = (req, res) => {
   mariadb.pool
@@ -18,6 +20,31 @@ const getShortInfos = (req, res) => {
     )
     .then((value) => {
       res.send(value[0]);
+    });
+};
+
+const getShortVideo = (req, res) => {
+  mariadb.pool
+    .query("SELECT upload_video_url FROM short WHERE id = ?", [
+      req.query.shortId,
+    ])
+    .then((result) => {
+      if (result.length > 0) {
+        const videoPath = result[0].upload_video_url;
+        const videoStream = fs.createReadStream(
+          path.join(__dirname, "../../../..", videoPath)
+        );
+        res.setHeader("Content-Type", "video/mp4");
+        videoStream.pipe(res);
+      } else {
+        res.status(404).json({ message: "Vidéo non trouvée" });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération de la vidéo :", error);
+      res
+        .status(500)
+        .json({ message: "Erreur lors de la récupération de la vidéo" });
     });
 };
 
@@ -75,6 +102,7 @@ const addView = (req, res) => {
 module.exports = {
   getTenNextShorts,
   getShortInfos,
+  getShortVideo,
   getShortLikes,
   getShortDislikes,
   getComments,

@@ -11,6 +11,7 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
+      videoURL: "",
       commentCount: 0,
       commentsShown: false,
       descriptionShown: false,
@@ -63,6 +64,7 @@ class Video extends React.Component {
   }
 
   render() {
+    console.log(this.state.shortInfos.upload_video_url)
     return this.state.shortInfos.id ? (
       <div
         id={"short" + this.state.shortInfos.id}
@@ -71,7 +73,7 @@ class Video extends React.Component {
         {/* Contains video and its informations */}
         <div className="h-[80vh] w-[45vh] flex flex-col justify-between relative snap-center rounded-[0.7vh] overflow-hidden">
           <video
-            src="1.mp4"
+            src={"http://localhost:5000/api/short/get-short-video?shortId=" + this.props.id}
             id={"shortPlayer" + this.state.shortInfos.id}
             className={"h-full w-full object-cover absolute behind"}
             muted

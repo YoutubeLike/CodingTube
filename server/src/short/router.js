@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   getTenNextShorts,
   getShortInfos,
+  getShortVideo,
   getShortLikes,
   getShortDislikes,
   getComments,
@@ -38,6 +39,7 @@ const { getFollow, follow } = require("./subsciptionManager.js");
 
 router.get("/get-ten-next-shorts", getTenNextShorts);
 router.get("/get-short-infos", getShortInfos);
+router.get("/get-short-video", getShortVideo);
 router.get("/get-short-likes", getShortLikes);
 router.get("/get-short-dislikes", getShortDislikes);
 router.get("/get-short-comments", getComments);
