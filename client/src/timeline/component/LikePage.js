@@ -1,31 +1,24 @@
-// File containing all the HTML content to be displayed
-
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
 
-export default function TimeLine() {
-  // Get the informations of the SQL Request by the URL
-  var [videosInfos, setVideosInfos] = useState([]);
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/timeline/timeline-request`
-        );
-        setVideosInfos(response.data);
-      } catch (error) {
-        console.error('Error fetching videos:', error);
-      }
-    };
-    fetchVideos();
-  }, []);
-
-  
-  videosInfos = SetScores(videosInfos);
-  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
+export default function LikePage() {
+    var [videosInfos, setVideosInfos] = useState([]);
+    useEffect(() => {
+      const fetchVideos = async () => {
+        try {
+          const response = await axios.get('http://localhost:5000/api/timeline/likePageYou-request', {
+            withCredentials: true,
+          });
+          setVideosInfos(response.data);
+        } catch (error) {
+          console.error('Error fetching liked videos:', error);
+        }
+      };
+      fetchVideos();
+    }, []);
 
   var indents = [];
 
@@ -69,7 +62,6 @@ export default function TimeLine() {
               </h4>
               <h4 className="text-gray text-[90%]">
                 {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
-                
               </h4>
             </div>
           </div>

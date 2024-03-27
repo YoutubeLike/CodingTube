@@ -186,7 +186,7 @@ export default function Header() {
 
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white">
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 bg-white">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <div 

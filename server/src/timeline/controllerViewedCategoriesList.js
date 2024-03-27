@@ -2,7 +2,7 @@ const mariadb = require("../src/database.js");
 
 const viewedCategoriesList = ((req, res) =>  
 {
-  const userId = req.query.userIdParam;
+  const userId = req.session.userId;
   // SQL Request : get the video's informations and send it
     mariadb.pool
     .query(

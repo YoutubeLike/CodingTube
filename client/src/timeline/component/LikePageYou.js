@@ -64,49 +64,34 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
-export default function Playlist() {
+export default function LikePageYou() {
 
   // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request', {
+        const response = await axios.get('http://localhost:5000/api/timeline/likePageYou-request', {
           withCredentials: true,
         });
         setVideosInfos(response.data);
       } catch (error) {
-        console.error('Error fetching playlist:', error);
+        console.error('Error fetching liked videos:', error);
       }
     };
     fetchVideos();
   }, []);
 
-    console.log(videosInfos);
-  
-  videosInfos = SetScores(videosInfos);
-  videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
-
-  var indents = [];
-
-  // If in BDD there is no music video
-  if (videosInfos.length === 0) {
-    indents.push(
-      <div>
-        <p className="p-5 bg-red-700 text-white rounded-lg">
-          You have no playlist or you're not logged-in
-        </p>
-      </div>
-    );
+  if (videosInfos.length > 8) {
+    videosInfos = videosInfos.slice(0, 8);
   }
-
-
+  var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="md:max-w-[25%] h-auto mb-0">
-        <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
+      <div key={i} className="max-w-[25%] h-auto mb-0">
+        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
             <img
@@ -114,7 +99,7 @@ export default function Playlist() {
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
             />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">Playlist</p>
+            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
         </div>
           <div className="flex flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
@@ -122,8 +107,12 @@ export default function Playlist() {
               <h3 className="text-black font-bold text-[100%]">
                 {videosInfos[i]["title"]}
               </h3>
-              <h4 className="text-gray text-[120%]">
+              <h4 className="text-gray text-[90%]">
                 {videosInfos[i]["pseudo"]}
+              </h4>
+              <h4 className="text-gray text-[90%]">
+                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                
               </h4>
             </div>
           </div>

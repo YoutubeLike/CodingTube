@@ -64,7 +64,7 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
-export default function Playlist() {
+export default function PlaylistYou() {
 
   // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
@@ -87,25 +87,15 @@ export default function Playlist() {
   videosInfos = SetScores(videosInfos);
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
-  var indents = [];
-
-  // If in BDD there is no music video
-  if (videosInfos.length === 0) {
-    indents.push(
-      <div>
-        <p className="p-5 bg-red-700 text-white rounded-lg">
-          You have no playlist or you're not logged-in
-        </p>
-      </div>
-    );
+  if (videosInfos.length > 8) {
+    videosInfos = videosInfos.slice(0, 8);
   }
-
-
+  var indents = [];
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="md:max-w-[25%] h-auto mb-0">
+      <div key={i} className="max-w-[25%] h-auto mb-0">
         <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">

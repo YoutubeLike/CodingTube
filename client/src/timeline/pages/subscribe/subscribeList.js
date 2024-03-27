@@ -14,10 +14,10 @@ export default function ListSubscribe() {
   return (
     <>
       {/* TITLES */}
-      <div className="ml-24 mt-8 mb-8">
-        <h1 className="text-3xl font-bold">Your subscriptions</h1>
-        <div className="flex flex-row space-x-[75%]">
-          <h2 className="text-1xl font-bold">The most recent</h2>
+      <div className="flex flex-col mt-2 ml-4 md:ml-24 md:mt-8 md:mb-8 max-w-[100%]">
+        <h1 className="md:text-3xl font-bold">Your subscriptions</h1>
+        <div className="flex flex-col mb-1 md:mb-0 md:flex-row md:space-x-[75%]">
+          <h2 className="md:text-1xl font-bold">The most recent</h2>
           <div>
             <a href="#" className="text-base text-blue-700">
               Manage subscriptions
@@ -26,7 +26,7 @@ export default function ListSubscribe() {
         </div>
 
         {/* BUTTONS OF DISPLAYS */}
-        <div className="flex flex-row">
+        <div className="hidden md:flex md:flex-row mt-1">
           <form action="grid">
             <button
               type="submit"
