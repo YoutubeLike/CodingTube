@@ -36,30 +36,31 @@ const updatePassword = (req, res) => {
   const password = req.body; // Extracting id and password from request body
   console.log("fzghqdiefokpledk^pjfjdqvfbknbfd,gdgmf,zlkhfsvjbdfkjnl,mfqnkdl")
   console.log(password)
+  const userId = req.session.userId
 
   // Get password associated with username or email from the database
   const passwordFromDb = GetPasswordFromId(password.id);
 
   // Check if password matches with the one in the database
   const isPasswordMatch = CheckIfPasswordMatch(
-    password.password,
+    password.currentPassword,
     passwordFromDb
   );
 
   // Check if passwords match
   const passwordMatch = CheckIfPasswordMatch(
-    password.password,
-    password.confirmPassword
+    password.currentPassword,
+    password.newConfirmPassword
   );
 
   if (passwordMatch) {
     if (isPasswordMatch) {
       try {
-        const hashedPassword = bcrypt.hash(password.password, 10);
+        const hashedPassword = bcrypt.hash(password.currentPassword, 10);
         mariadb.pool
           .query("UPDATE user SET password = ? WHERE id = ?", [
             hashedPassword,
-            password.id,
+            userId,
           ]) // Updating user's password in the database
           .then((value) => {
             // Once the query is successful, send the first row of the result as the response

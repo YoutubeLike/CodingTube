@@ -17,7 +17,7 @@ const { userUpdate } = require("./userUpdate.js"); // Importing userUpdate funct
 const { updatePassword } = require("./updatePswrd.js"); // Importing updatePassword function
 
 
-router.post("/updatePswrd", updatePassword);
+router.get("/updatePswrd", updatePassword);
 
 // Endpoint to get user data based on user ID
 router.get("/userData/:info_user", userData);

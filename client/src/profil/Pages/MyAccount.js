@@ -24,7 +24,10 @@ const ProfilePage = () => {
     birthdate: "",
     country: "",
     gender: "",
-    password: "",
+    currentPassword: "",
+    newPassword:"",
+    newConfirmPassword:"",
+
   });
 
   const [formClickedMap, setFormClickedMap] = useState({});
@@ -86,12 +89,13 @@ const ProfilePage = () => {
   // Function to update password
   const updatePassword = async () => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         "http://localhost:5000/api/profil/updatePswrd",
         {
-          id: profileData.id,
-          password: newPassword,
-        }
+          password: profileData.currentPassword,
+          newPassword: profileData.newPassword,
+          newConfirmPassword: profileData.newConfirmPassword,
+        }, {withCredentials: true}
       );
       console.log(response.data);
     } catch (error) {
@@ -153,8 +157,7 @@ const ProfilePage = () => {
     handleEditToggle("password");
 
     try {
-      console.log("ici")
-      console.log(e)
+        updatePassword(e)
       const response = await axios.get(
         `http://localhost:5000/api/profil/userData/1`
         //{ withCredentials: true }
