@@ -46,7 +46,6 @@ const GetProfilPicture = async (req, res) => {
 
 const GetUsername = async (req, res) => {
     const userId = req.session.userId;
-    console.log(req.session)
     try {
       const connection = await mariadb.pool.getConnection();
       const result = await connection.query(
@@ -71,7 +70,6 @@ const display = ((req, res) => {
 })
 
 const getUserId = ((req, res) => {
-  console.log("Utilisateur " + req.session.userId)
   res.send("" + req.session.userId)
 })
 

@@ -89,8 +89,6 @@ io.on("connection", (socket) => {
       const room = socket.rooms.values()
       room.next();
       const currentRoom = room.next()
-      // socket.in(currentRoom.value).sock
-      console.log(io.sockets.adapter.rooms.get(currentRoom.value).size)
       
       socket.broadcast.to(currentRoom.value).emit("chat-message", {
         sender: msg.sender,
@@ -99,26 +97,34 @@ io.on("connection", (socket) => {
         profilePicture: msg.profilePicture,
       });
     }
-    console.log("Message received: " + msg.message);
-    console.log("PP of the message received: " + msg.profilePicture);
   });
 
   // Handle disconnections
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
-    // console.log(socket.rooms)
+
+    console.log(socket.adapter.rooms)
+
+    socket.adapter.rooms.forEach((value, key) => {
+      console.log(key)
+      if(io.sockets.adapter.rooms.get(key))
+      {
+        io.sockets.to(key).emit("user-count", { size: io.sockets.adapter.rooms.get(key).size })
+      }
     })
+    // io.adapter
+  })
   
-  console.log(io.engine.clientsCount)
-  console.log(socket.rooms)
-  
+
+  //Handle connection to room  
   socket.on("connect-to-room", (arg) => {
     socket.join(arg)
-
     console.log('connect user to room ' + arg)
   })
 
+
+  // Verify the number of person in current room 
   socket.on('AskUserCount', (arg) => {
     console.log(arg.user)
     if(io.sockets.adapter.rooms.get(arg.user))

@@ -19,7 +19,6 @@ const bannedWords = [
 ];
 
 export default function Chat(props) {
-  const [response, setResponse] = useState("");
   const [inputMessage, setInputMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isBanned, setIsBanned] = useState(false);
@@ -27,14 +26,10 @@ export default function Chat(props) {
   const chatContainerRef = useRef(null);
   const socketInstance = props.socket
   const [socket, setSocket] = useState(socketInstance);
-
-  console.log(props.socket)
   
   useEffect(() => {
     setSocket(socketInstance);
     socket.emit("connect-to-room", props.user)
-
-    console.log(isBanned);
 
     socketInstance.on("chat-message", (data) => {
       const messagesReceived = data.message;
@@ -55,11 +50,6 @@ export default function Chat(props) {
         setIsBanned(true);
         setTimeout(() => setIsBanned(false), banDuration);
         socketInstance.emit("ban-message", { banned: true });
-      } else {
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   { ...data.message, time: formattedTime },
-        // ]);
       }
     });
 
@@ -67,35 +57,25 @@ export default function Chat(props) {
       setIsBanned(data.banned);
     });
 
-    socketInstance.on("connect", () => {
-      console.log("Connected to server");
-    });
-
-    socketInstance.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
     return () => {
       socketInstance.disconnect();
     };
   }, []);
-  const getUserProfilePicture = async (userId) => {
+  const getUserProfilePicture = async () => {
     try {
       return axios.get("http://localhost:5000/api/live/profile-picture", {withCredentials: true}).then((response) => {
-      return response.data.profilePicture
+        return response.data.profilePicture
       })
     } catch (error) {
       console.error("Error fetching profile picture:", error);
       return null;
     }
   };
-  const getUserPseudo = async (userId) => {
+  const getUserPseudo = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/live/username", { withCredentials: true});
-      return response.data.pseudo
-      // return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
-      //   return response.data.pseudo
-      // })
+      return axios.get("http://localhost:5000/api/live/username", {withCredentials: true}).then((response) => {
+        return response.data.pseudo
+      })
     } catch (error) {
       console.error("Error fetching pseudo:", error);
       return null;
@@ -103,7 +83,6 @@ export default function Chat(props) {
   };
   const send = async () => {
     if (socket && inputMessage.trim() !== "") {
-      console.log(`C'est la pp: ${messages.profilePicture}`);
       const bannedWordFound = bannedWords.some((word) =>
         inputMessage.toLowerCase().includes(word)
       );
@@ -130,11 +109,6 @@ export default function Chat(props) {
                       }),
                       profilePicture,
                     };
-                    console.log(
-                      `Emitting chat-message event with message: ${inputMessage}`
-                    );
-                    console.log(newMessage);
-                    console.log(`C'est la deuxième pp: ${newMessage.profilePicture}`);
                     socket.emit("chat-message", newMessage);
                     setMessages((prevMessages) => [...prevMessages, newMessage]);
                     setInputMessage("");
