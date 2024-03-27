@@ -3,7 +3,6 @@ import axios from "axios";
 import CommentLikeButton from "./commentLikeButton";
 import CommentDislikeButton from "./commentDislikeButton";
 import Reply from "./reply";
-import ReplySection from "./replySection";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -23,12 +22,31 @@ class Comment extends React.Component {
       isReplying: false,
       replyCount: "",
     };
-    this.openReply = this.openReply.bind(this);
-    this.closeReply = this.closeReply.bind(this);
-    this.postReply = this.postReply.bind(this);
-    this.setValueToReplyName = this.setValueToReplyName.bind(this);
-    this.handleChange = this.handleChange.bind(this)
+    this.openReply=this.openReply.bind(this);
+    this.closeReply=this.closeReply.bind(this);
+    this.postReply=this.postReply.bind(this);
+    this.handleChange=this.handleChange.bind(this);
   }
+
+  async openReply(){
+    this.setState({isReplying: true});
+  }
+
+  async closeReply(){
+    this.setState({isReplying: false});
+  }
+  
+  handleChange(event) {
+    this.setState({ userInput: event.target.value });
+  }
+  
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+      this.setState({isReplying: false})
+    }
+  }
+
 
   async postReply() {
     if (this.state.userInput != "") {
@@ -54,28 +72,8 @@ class Comment extends React.Component {
 
       document.getElementById("commentsInputField").value = "";
       this.setState({ userInput: "" });
-      this.closeReply();
     }
   }
-
-  handleChange(event) {
-    this.setState({ userInput: event.target.value });
-  }
-
-
-  openReply() {
-    this.setState({ isReplying: true });
-  }
-
-  async closeReply() {
-    this.setState({ isReplying: false });
-  }
-
-  setValueToReplyName() {
-    this.openReply();
-    this.state.userInput = ("test")
-  }
-
 
   async componentDidMount() {
     // Get comment's metadatas
@@ -208,22 +206,22 @@ class Comment extends React.Component {
       secondes < 60
         ? secondes + (secondes < 2 ? " seconde ago" : " secondes ago")
         : secondes < 3600
-          ? Math.floor(secondes / 60) +
+        ? Math.floor(secondes / 60) +
           (secondes < 120 ? " minute ago" : " minutes ago")
-          : secondes < 86400
-            ? Math.floor(secondes / 3600) +
-            (secondes < 7200 ? " hour ago" : " hours ago")
-            : secondes < 604800
-              ? Math.floor(secondes / 86400) +
-              (secondes < 172800 ? " day ago" : " days ago")
-              : secondes < 2592000
-                ? Math.floor(secondes / 604800) +
-                (secondes < 1209600 ? " week ago" : " weeks ago")
-                : secondes < 31536000
-                  ? Math.floor(secondes / 2592000) +
-                  (secondes < 5184000 ? " month ago" : " months ago")
-                  : Math.floor(secondes / 31536000) +
-                  (secondes < 63072000 ? " year ago" : " years ago");
+        : secondes < 86400
+        ? Math.floor(secondes / 3600) +
+          (secondes < 7200 ? " hour ago" : " hours ago")
+        : secondes < 604800
+        ? Math.floor(secondes / 86400) +
+          (secondes < 172800 ? " day ago" : " days ago")
+        : secondes < 2592000
+        ? Math.floor(secondes / 604800) +
+          (secondes < 1209600 ? " week ago" : " weeks ago")
+        : secondes < 31536000
+        ? Math.floor(secondes / 2592000) +
+          (secondes < 5184000 ? " month ago" : " months ago")
+        : Math.floor(secondes / 31536000) +
+          (secondes < 63072000 ? " year ago" : " years ago");
 
     return (
       <div className="my-[1vh] flex flex-col">
@@ -269,22 +267,37 @@ class Comment extends React.Component {
               )}
             </div>
           </div>
-        </div>
-        {this.state.isReplying && <ReplySection
-          closeReply={this.closeReply}
-          handleChange={this.handleChange}
-          postReply={this.postReply}
-          shortInfos={this.props.shortInfos}
-          repliesIds={this.state.repliesIds}
-        />}
-        {this.state.repliesIds.length != 0 && <div className="ml-[5vh]">
-          {
-            this.state.repliesIds.map(id => <Reply
-              key={id}
-              id={id}
-              uploader={this.props.shortInfos.uploader_id}
-              childReply={this.setValueToReplyName}
-            />)}</div>}
+        </div>  
+        {this.state.isReplying && <div id="replySection">
+          <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
+            <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
+
+            <input
+              id="commentsInputField"
+              className="mx-[2vh] text-[2vh]"
+              maxLength="1024"
+              placeholder="Add a comment..."
+              type="text"
+              onChange={this.handleChange}
+            />
+
+            <button
+              onClick={this.postReply}
+              className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
+            >
+              <strong>Post</strong>
+            </button>
+          </div>
+        </div>}
+            {this.state.repliesIds.length != 0 && <div className="ml-[5vh]">
+                  {
+                  this.state.repliesIds.map(id => <Reply 
+                  key={id}
+                  id={id}
+                  uploader={this.props.shortInfos.uploader_id}/>)
+                  }
+                  </div>
+                  }
       </div>
     );
   }

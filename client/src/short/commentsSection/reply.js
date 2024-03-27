@@ -184,7 +184,7 @@ class Reply extends React.Component {
               />
             </div>
 
-            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.props.childReply}>
+            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.reply}>
               <strong className="text-[1.75vh]"> Reply </strong>
             </button>
 
