@@ -23,4 +23,28 @@
   .behind {
     z-index: -1;
   }
+
+  .textStroke {
+    -webkit-text-stroke: 0.2vh black;
+  }
+}
+
+.video-container 
+{
+  /* height: 60px; */
+  /* position: absolute; */
+  display: flex;
+  /* width: 500px; */
+  gap: 20px;
+}
+
+.video img
+{
+  transition: 0.2s;
+  border-radius: 20px;
+}
+
+.video:hover img
+{
+  border-radius: 0px;
 }

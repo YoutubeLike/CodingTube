@@ -19,19 +19,19 @@ class FormLogin extends React.Component {
       <>
         <div className="flex flex-col space-y-4 relative">
           <label>
-            <input
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
-              type="text"
-              name="usernameOrMail"
-              placeholder="Email or Username"
-              required
-              value={this.props.LoginData.usernameOrMail}
-              onChange={this.props.onLoginChange}
-            />
+          <input
+          className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}
+          type="text"
+          name="usernameOrMail"
+          placeholder="Email or Username"
+          required
+          value={this.props.LoginData.usernameOrMail}
+          onChange={this.props.onLoginChange}
+        />
           </label>
           <label className="relative">
             <input
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200 pr-12"
+                  className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}
               type={this.state.showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"

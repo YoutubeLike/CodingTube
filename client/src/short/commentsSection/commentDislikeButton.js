@@ -15,8 +15,8 @@ class CommentDislikeButton extends React.Component {
       await axios.get(
         "http://localhost:5000/api/short/add-short-comment-dislike",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }
@@ -31,8 +31,8 @@ class CommentDislikeButton extends React.Component {
       await axios.get(
         "http://localhost:5000/api/short/remove-short-comment-dislike",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }
@@ -47,8 +47,8 @@ class CommentDislikeButton extends React.Component {
       await axios.get(
         "http://localhost:5000/api/short/remove-short-comment-like",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }

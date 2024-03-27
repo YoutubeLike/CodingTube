@@ -4,18 +4,20 @@ class ShareButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHovered: false
+      isHovered: false,
     };
     this.copyLink = this.copyLink.bind(this);
     this.handleHover = this.handleHover.bind(this);
   }
 
   copyLink() {
-    navigator.clipboard.writeText("http://localhost:3000/short?id=" + this.props.id)
+    navigator.clipboard.writeText(
+      "http://localhost:3000/short?id=" + this.props.id
+    );
   }
   handleHover() {
     this.setState((prevState) => ({
-      isHovered: !prevState.isHovered
+      isHovered: !prevState.isHovered,
     }));
   }
 

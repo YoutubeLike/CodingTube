@@ -5,7 +5,7 @@ class DislikeButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHovered: false
+      isHovered: false,
     };
     this.dislike = this.dislike.bind(this);
     this.handleHover = this.handleHover.bind(this);
@@ -17,8 +17,8 @@ class DislikeButton extends React.Component {
   async addDislike() {
     try {
       await axios.get("http://localhost:5000/api/short/add-short-dislike", {
+        withCredentials: true,
         params: {
-          id: 1,
           shortId: this.props.id,
         },
       });
@@ -30,8 +30,8 @@ class DislikeButton extends React.Component {
   async removeDislike() {
     try {
       await axios.get("http://localhost:5000/api/short/remove-short-dislike", {
+        withCredentials: true,
         params: {
-          id: 1,
           shortId: this.props.id,
         },
       });
@@ -43,8 +43,8 @@ class DislikeButton extends React.Component {
   async removeLike() {
     try {
       await axios.get("http://localhost:5000/api/short/remove-short-like", {
+        withCredentials: true,
         params: {
-          id: 1,
           shortId: this.props.id,
         },
       });
@@ -79,7 +79,7 @@ class DislikeButton extends React.Component {
 
   handleHover() {
     this.setState((prevState) => ({
-      isHovered: !prevState.isHovered
+      isHovered: !prevState.isHovered,
     }));
   }
 
@@ -99,7 +99,9 @@ class DislikeButton extends React.Component {
             "relative h-[5vh] w-[5vh] flex items-center justify-center rounded-full" +
             (this.props.isDisliked
               ? " bg-[#171717]"
-              : (this.state.isHovered ? " bg-[#e5e5e5]" : " bg-[#f5f5f5]"))
+              : this.state.isHovered
+              ? " bg-[#e5e5e5]"
+              : " bg-[#f5f5f5]")
           }
           onClick={this.dislike}
           onMouseEnter={this.handleHover}

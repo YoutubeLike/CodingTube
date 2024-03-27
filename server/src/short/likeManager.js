@@ -3,7 +3,7 @@ const mariadb = require("../src/database");
 const checkShortLike = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;", [
-      req.query.id,
+      req.session.userId,
       req.query.shortId,
     ])
     .then((value) => {
@@ -14,31 +14,32 @@ const checkShortLike = (req, res) => {
 const addShortLike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;",
-    [req.query.id, req.query.shortId]
+    [req.session.userId, req.query.shortId]
   );
 
   if (checkExistance[0] == null) {
     let checkExistance = await mariadb.pool.query(
       "SELECT * FROM dislike_short WHERE id_user = ? AND id_short = ?;",
-      [req.query.id, req.query.shortId]
+      [req.session.userId, req.query.shortId]
     );
 
     if (checkExistance[0] == null) {
       mariadb.pool
         .query("INSERT INTO like_short (id_user, id_short) VALUES (?, ?);", [
-          req.query.id,
+          req.session.userId,
           req.query.shortId,
         ])
+        .then(() => {
+          res.status(200).send("Data inserted sucessfully");
+        })
         .catch((error) => {
           console.error("Error updating view count:", error);
           res.status(500).send("Error updating view count");
         });
-    }
-    else {
+    } else {
       res.send("User already disliked");
     }
-  }
-  else {
+  } else {
     res.send("User already liked");
   }
 };
@@ -46,11 +47,11 @@ const addShortLike = async (req, res) => {
 const removeShortLike = (req, res) => {
   mariadb.pool
     .query("DELETE FROM like_short WHERE id_user = ? AND id_short = ?;", [
-      req.query.id,
+      req.session.userId,
       req.query.shortId,
     ])
-    .then((value) => {
-      res.send(value);
+    .then(() => {
+      res.status(200).send("Data deleted sucessfully");
     })
     .catch((error) => {
       console.error("Error updating view count:", error);
@@ -61,7 +62,7 @@ const removeShortLike = (req, res) => {
 const checkShortDislike = (req, res) => {
   mariadb.pool
     .query("SELECT * FROM dislike_short WHERE id_user = ? AND id_short = ?;", [
-      req.query.id,
+      req.session.userId,
       req.query.shortId,
     ])
     .then((value) => {
@@ -72,31 +73,32 @@ const checkShortDislike = (req, res) => {
 const addShortDislike = async (req, res) => {
   let checkExistance = await mariadb.pool.query(
     "SELECT * FROM like_short WHERE id_user = ? AND id_short = ?;",
-    [req.query.id, req.query.shortId]
+    [req.session.userId, req.query.shortId]
   );
 
   if (checkExistance[0] == null) {
     let checkExistance = await mariadb.pool.query(
       "SELECT * FROM dislike_short WHERE id_user = ? AND id_short = ?;",
-      [req.query.id, req.query.shortId]
+      [req.session.userId, req.query.shortId]
     );
 
     if (checkExistance[0] == null) {
       mariadb.pool
         .query("INSERT INTO dislike_short (id_user, id_short) VALUES (?, ?);", [
-          req.query.id,
+          req.session.userId,
           req.query.shortId,
         ])
+        .then(() => {
+          res.status(200).send("Data inserted sucessfully");
+        })
         .catch((error) => {
           console.error("Error updating view count:", error);
           res.status(500).send("Error updating view count");
         });
-    }
-    else {
+    } else {
       res.send("User already disliked");
     }
-  }
-  else {
+  } else {
     res.send("User already liked");
   }
 };
@@ -104,11 +106,11 @@ const addShortDislike = async (req, res) => {
 const removeShortDislike = (req, res) => {
   mariadb.pool
     .query("DELETE FROM dislike_short WHERE id_user = ? AND id_short = ?;", [
-      req.query.id,
+      req.session.userId,
       req.query.shortId,
     ])
-    .then((value) => {
-      res.send(value);
+    .then(() => {
+      res.status(200).send("Data deleted sucessfully");
     })
     .catch((error) => {
       console.error("Error updating view count:", error);

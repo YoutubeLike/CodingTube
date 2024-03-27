@@ -21,7 +21,6 @@ class Comment extends React.Component {
       repliesIds: [],
       userInput: "",
       isReplying: false,
-      replyCount: "",
     };
     this.openReply = this.openReply.bind(this);
     this.closeReply = this.closeReply.bind(this);
@@ -103,8 +102,8 @@ class Comment extends React.Component {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-short-comment-like",
         {
+          withCredentials: true,
           params: {
-            id: 1,
             commentId: this.props.id,
           },
         }
@@ -116,8 +115,8 @@ class Comment extends React.Component {
           const response = await axios.get(
             "http://localhost:5000/api/short/check-short-comment-dislike",
             {
+              withCredentials: true,
               params: {
-                id: 1,
                 commentId: this.props.id,
               },
             }
@@ -136,7 +135,7 @@ class Comment extends React.Component {
     // Set isSuperLiked state
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/short/check-short-comment-like",
+        "http://localhost:5000/api/short/check-short-comment-superlike",
         {
           params: {
             id: this.props.uploader,
@@ -183,6 +182,7 @@ class Comment extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
+    // Get short replies
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-short-replies",
@@ -199,6 +199,55 @@ class Comment extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClickOutside);
+  }
+
+  openReply() {
+    this.setState({ isReplying: true });
+  }
+
+  handleClickOutside(event) {
+    if (
+      this.inputFieldRef.current &&
+      !this.inputFieldRef.current.contains(event.target)
+    ) {
+      this.setState({ isReplying: false });
+    }
+  }
+
+  handleChange(event) {
+    this.setState({ userInput: event.target.value });
+  }
+
+  async postReply() {
+    if (this.state.userInput != "") {
+      // Insert comment into database
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/short/add-short-reply",
+          {
+            withCredentials: true,
+            params: {
+              shortId: this.props.shortInfos.id,
+              text: this.state.userInput,
+              replyId: this.props.id,
+            },
+          }
+        );
+        this.props.setState((state) => ({
+          repliesIds: state.repliesIds.concat(response.data.id),
+        }));
+      } catch (error) {
+        console.error("Error fetching videos:", error);
+      }
+
+      document.getElementById("commentsInputField").value = "";
+      this.setState({ userInput: "", isReplying: false });
+    }
   }
 
   render() {
@@ -206,7 +255,7 @@ class Comment extends React.Component {
       (Date.parse(new Date()) - Date.parse(new Date(this.state.date))) / 1000;
     const time =
       secondes < 60
-        ? secondes + (secondes < 2 ? " seconde ago" : " secondes ago")
+        ? secondes + (secondes == 1 ? " second ago" : " seconds ago")
         : secondes < 3600
           ? Math.floor(secondes / 60) +
           (secondes < 120 ? " minute ago" : " minutes ago")
@@ -234,7 +283,9 @@ class Comment extends React.Component {
 
           <div className="px-[2vh] w-[35vh]">
             <div className="mb-[0.3vh] space-x-[0.5vh]">
-              <strong className="text-[2vh]">@{this.state.senderUsername}</strong>
+              <strong className="text-[2vh]">
+                @{this.state.senderUsername}
+              </strong>
               <span className="text-[#525252] text-[1.5vh]">{time}</span>
             </div>
 
@@ -260,12 +311,23 @@ class Comment extends React.Component {
                 />
               </div>
 
-              <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.openReply}>
-                <strong className="text-[1.75vh]"> Reply </strong>
+              <button
+                className="ml-[1vh] rounded-full px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
+                onClick={this.openReply}
+              >
+                <strong className="text-[1.75vh]">Reply</strong>
               </button>
 
               {this.state.isSuperLiked && (
-                <p className="ml-[1vh] text-[2vh]">❤️superliked</p>
+                <div className="relative">
+                  <img
+                    src={this.props.superlikePP}
+                    className="absolute ml-[1vh] h-[2.4vh] w-[2.4vh] rounded-full relative text-center"
+                  />
+                  <span className="text-[1.5vh] absolute top-[0.7vh] left-[2.4vh] drop-shadow-xl shadow-white">
+                    ❤️
+                  </span>
+                </div>
               )}
             </div>
           </div>

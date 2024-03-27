@@ -26,8 +26,7 @@ class FormSignup extends React.Component {
       <div className="flex flex-col space-y-4 relative">
         <label>
           <input
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200"
-            type="text"
+          className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}            type="text"
             name="username"
             placeholder="Username"
             required
@@ -37,8 +36,7 @@ class FormSignup extends React.Component {
         </label>
         <label>
           <input
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200 pr-12"
-            type="email"
+          className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}            type="email"
             name="mail"
             placeholder="Mail"
             required
@@ -48,8 +46,7 @@ class FormSignup extends React.Component {
         </label>
         <label className="relative">
           <input
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200 pr-12"
-            type={this.state.showPassword ? "text" : "password"}
+          className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}            type={this.state.showPassword ? "text" : "password"}
             name="password"
             placeholder="Password"
             required
@@ -105,8 +102,7 @@ class FormSignup extends React.Component {
         </label>
         <label className="relative">
           <input
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-black w-full px-4 py-4 rounded-none bg-gray-200 pr-12"
-            type={this.state.showConfirmPassword ? "text" : "password"}
+          className={`block mb-2 text-sm font-medium ${this.props.darkMode ? 'text-white bg-gray-600' : 'text-gray-900 bg-gray-200'} w-full px-4 py-4 rounded-none border border-transparent`}            type={this.state.showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
             placeholder="Confirm Password"
             required
@@ -117,7 +113,7 @@ class FormSignup extends React.Component {
             className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
             onClick={this.toggleConfirmPasswordVisibility}
           >
-            {this.state.showPassword ? (
+            {this.state.showConfirmPassword ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="32"
