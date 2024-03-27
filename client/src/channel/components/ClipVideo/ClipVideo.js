@@ -2,133 +2,132 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import img from "../../assets/logo.jpg";
-import dislike from "../../assets/dislike.png";
-import like from "../../assets/like.png";
-import share from "../../assets/share.png";
+import LikeDislike from "./LikeDislikeButton"
+import { useActionData } from "react-router-dom";
 
 export default function Video() {
-	const [uploadVideoUrl, setUploadVideo] = useState(); //
+	const [uploadVideo, setUploadVideo] = useState(); //
 	const [channel_id, setChannelId] = useState(0);
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
 	const [date, setDate] = useState("");
-	const [number_view, setNumber_view] = useState(0);
-	const [pseudo, setPseudo] = useState(""); // Pseudo
-	const [follower, setFollower] = useState(0); // Subscriber number
 	const [nb_like, setNb_like] = useState(0);
 	const [profilePicture, setProfilePicture] = useState("");
+	const [pseudo, setPseudo] = useState('') // Pseudo
+	const [title, setTitle] = useState('')
+	const [description, setDescription] = useState('')
+	const [number_view, setNumber_view] = useState(0)
+	const [follower, setFollower] = useState(0);
+	const [buttonSubscribe, setbuttonSubscribe] = useState("");
 
-	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
+  console.log(uploadVideo)
 
-		const fetchVideo = async () => {
-			try {
-				// Requête vers les infos de la vidéo
-				const responseUrlVideo = await axios.get(
-					"http://localhost:5000/api/channel/video",
-					{ params: { idVideo: urlParams.get("id") } }
-				);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const fetchTest = async () => {
+      try {
+        // Requête vers les infos de la chaîne
+        const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
+        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
+        const responseVideoPath = await axios.get('http://localhost:5000/api/channel/videoPath?idVideo=' + urlParams.get("id"))
 
-				// Attribution des informations
-				setChannelId(responseUrlVideo.data.channel_id);
-				setTitle(responseUrlVideo.data.title);
-				setDescription(responseUrlVideo.data.description);
-				setNumber_view(responseUrlVideo.data.number_view);
-				setNb_like(responseUrlVideo.data.nb_like);
-				setUploadVideo(responseUrlVideo.data.upload_video_url);
-				setDate(responseUrlVideo.data.upload_date_time);
+        // Récupérer la vidéo
+        const videoUrl = responseVideoPath.data.upload_video_url;
+        setUploadVideo(videoUrl);
+        
+        // Attribution des informations de la vidéo
+        setTitle(responseVideo.data.title);
+        setDescription(responseVideo.data.description);
+        setNumber_view(responseVideo.data.number_view);
+        setChannelId(responseVideo.data.channel_id);
+        setNb_like(responseVideo.data.nb_like);
+        setDate(responseVideo.data.upload_date_time);
 
-				// Requête vers les infos de la chaîne
-				const responseChannel = await axios.get(
-					"http://localhost:5000/api/channel/infos",
-					{ params: { idChannel: responseUrlVideo.data.channel_id } }
-				);
+		// Attribution des informations de Follopw
+        setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
+        setFollower(responseNbFollowers.data.length);
+        
+        try {
+          // Requête informations de la chaîne 
+          const responseChannel = await axios.get('http://localhost:5000/api/channel/infos',{ params: { idChannel: responseVideo.data.channel_id } });
+          
+          // Attribution des informations
+          setPseudo(responseChannel.data.pseudo);
+          setFollower(responseChannel.data.nb_follower);
+          setProfilePicture(responseChannel.data.profilePicture);
+        
+        } catch (error) {
+          console.error("Erreur :", error);
+        }
+        
+      } catch (error) {
+        console.error('Erreur :', error);
+      }
+      
+    };
 
-				// Attribution des informations
-				setPseudo(responseChannel.data.pseudo);
-				setFollower(responseChannel.data.nb_follower);
-				setProfilePicture(responseChannel.data.profilePicture);
+    fetchTest();
 
-			} catch (error) {
-				console.error("Erreur :", error);
-			}
-		};
+    return () => {
+      URL.revokeObjectURL(uploadVideo);
+    }
+  }, [])
 
-		// const fetchChannel = async () => {
-		// 	try {
+  async function handleSubscribe() {
+    try {
+      await axios.get('http://localhost:5000/api/channel/follow', { params: { channelId: 1, userId: 1 } });
+      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+      setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné");
+      //call a function which will get the number of followers
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
-		// 		const responseUrlVideo = await axios.get(
-		// 			"http://localhost:5000/api/channel/video",
-		// 			{ params: { idVideo: urlParams.get("id") } }
-		// 		);
 
-		// 		// Requête vers les infos de la chaîne
-		// 		const responseChannel = await axios.get(
-		// 			"http://localhost:5000/api/channel/infos",
-		// 			{ params: { idChannel: responseUrlVideo.data.channel_id } }
-		// 		);
+  return (
+    <>
+      <div className="pl-10 mt-8 w-3/4  ">
+        {!uploadVideo ? (
+          <video rounded-md
+            width="100%"
+            height="680"
+            // src={uploadVideo}
+            src={"http://localhost:5000/api/channel/videoPath?idVideo=6"}
+            type="video/mp4"
+            controls
+            autoPlay
+          />
+        ) : (
+          <p>Chargement de la vidéo...</p>
+        )}
 
-		// 		// Attribution des informations
-		// 		setPseudo(responseChannel.data.pseudo);
-		// 		setFollower(responseChannel.data.nb_follower);
-		// 		setProfilePicture(responseChannel.data.profilePicture);
-		// 	} catch (error) {
-		// 		console.error("Erreur :", error);
-		// 	}
-		// };
+        <h1 className="font-bold mt-30 text-base mb-1 mt-4">{title}</h1>
 
-		fetchVideo();  
-		// fetchChannel();
-	}, []);
-	
+        <div className="flex justify-between">
+          <div className='flex items-center '>
+            <img src={img} className="w-12 mr-4" />
+            <div className="flex flex-col pr-4">
+              <p className="text-sm font-bold">{pseudo}</p>
+              <p className="text-sm text-gray-500">{follower} abonnés</p>
+            </div>
 
-	console.log(pseudo, follower);
-	return (
-		<>
-			<div className="pl-10 mt-8 w-3/4">
-				<iframe
-					rounded-md
-					width="100%"
-					height="680"
-					src="https://www.youtube.com/embed/Oflbho9ZG2U?start=103"
-				/>
+            <button onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full pt-2 pb-2">{buttonSubscribe}</button>
+          </div>
+          <LikeDislike />
+        </div>
 
-				<h1 className="font-bold mt-30 text-xl mb-2">{title}</h1>
 
-				<div className="flex justify-between">
-					<div className="flex">
-						<img src={profilePicture} className="w-4 mr-2" />
-						<div className="flex flex-col">
-							<p className="text-sm font-bold">{pseudo}</p>
-							<p className="text-sm text-gray-500">{follower} abonnés</p>
-						</div>
-						{/*Button qui permet de s'abonner, liker, et partager*/}
-						<button className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full">
-							S'abonner
-						</button>
-					</div>
-					<div>
-						<button className="bg-gray-100 px-8 ml-10 rounded-l-full">
-							{nb_like}
-							<img className="w-6 py-2" src={like} />
-						</button>
-						<button className="bg-gray-100 px-8 rounded-r-full">
-							<img className="w-6 py-2" src={dislike} />
-						</button>
-						<button className="bg-gray-100 px-8 ml-10 rounded-full">
-							<img className="w-6 py-2" src={share} />
-						</button>
-					</div>
-				</div>
+        <div className="p-4 bg-gray-100 rounded-xl mt-4 " >
+          <p className="font-bold">{number_view} vues  {date} <span className="text-blue-600">#sifu #nodamage</span></p>
+          <p className="text-justify">
+            {description}
+          </p>
 
-				<div className="p-4 bg-gray-100 rounded-xl mt-4">
-					<p className="font-bold">
-						{number_view} vues {date}
-						<span className="text-blue-600">#sifu #nodamage</span>
-					</p>
-					<p className="text-justify">{description}</p>
-				</div>
-			</div>
-		</>
-	);
+        </div>
+      </div>
+
+
+    </>
+  );
 }

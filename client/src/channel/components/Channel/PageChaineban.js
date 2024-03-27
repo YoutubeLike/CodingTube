@@ -105,7 +105,7 @@ const App = () => {
 				<img
 					src={banner}
 					alt="Banner"
-					className="w-full object-cover mt-4 rounded-xl"
+					className="h-48 w-full object-cover mt-4 rounded-xl"
 				/>
 			</div>
 
