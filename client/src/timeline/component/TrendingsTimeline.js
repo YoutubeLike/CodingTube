@@ -49,9 +49,10 @@ export default function TrendingsTimeLine() {
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
+    const color = ["bg-orange-500","bg-gray-500","bg-orange-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900"]
     indents.push(
       <div key={i} className="mb-10 sm:block md:flex content-center">
-        <div className="bg-orange-500 min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
+        <div className={`${color[i]} min-w-[6%] pt-2 pb-2 rounded-xl mr-2`}>
           <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">🔥 {i+1}</h1>
         </div>
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>

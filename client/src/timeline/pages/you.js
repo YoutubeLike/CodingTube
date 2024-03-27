@@ -94,6 +94,11 @@ export default function You() {
               <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                 Liked Videos
               </button>
+              <a href="/likedVideos">
+                <button className="relative left-[265px] relative top-[-32px] font-black">
+                  Liked Videos
+                </button>
+              </a>
             </div>
             <div className="flex">
               <div className="flex ml-[10%] flex-wrap relative top-[-20px]">

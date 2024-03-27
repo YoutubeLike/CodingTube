@@ -71,7 +71,9 @@ export default function Playlist() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request');
+        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request', {
+          withCredentials: true,
+        });
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching playlist:', error);
@@ -103,7 +105,7 @@ export default function Playlist() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0">
+      <div key={i} className="md:max-w-[25%] h-auto mb-0">
         <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
