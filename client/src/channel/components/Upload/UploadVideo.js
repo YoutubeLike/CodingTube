@@ -62,8 +62,32 @@ export default function UploadVideo() {
             });
     }
 
+    const [test, setTest] = useState();
+    console.log(test)
+
+    const fetchTest = async() => {
+        try {
+            const formData = new FormData();
+            formData.append('img', test);
+            formData.append('key', test);
+            await axios.post('http://localhost:5000/api/channel/test', formData)
+            .then(res => {
+                console.log("Réponse serveur :", res.data)
+            }) 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
     return (
         <div className="flex flex-col items-center w-full px-[15vw] bg-white p-8 rounded-lg shadow-xl hover:bg-white-300 transition-colors my-4">
+            <div className="">
+                <h1>Test</h1>
+                <input type="file" onChange={(e)=>{setTest(e.target.files[0])}}/>
+                <button onClick={fetchTest}>Submit</button>
+            </div>
             <form className="w-full" onSubmit={handleSubmit}>
                 <h2 className="font-bold text-2xl mb-4">Détails</h2>
                 <div className="flex">

@@ -6,7 +6,7 @@ import LikeDislike from "./LikeDislikeButton"
 import { useActionData } from "react-router-dom";
 
 export default function Video() {
-	const [uploadVideoUrl, setUploadVideo] = useState(); //
+	const [uploadVideo, setUploadVideo] = useState(); //
 	const [channel_id, setChannelId] = useState(0);
 	const [date, setDate] = useState("");
 	const [nb_like, setNb_like] = useState(0);
@@ -18,6 +18,7 @@ export default function Video() {
 	const [follower, setFollower] = useState(0);
 	const [buttonSubscribe, setbuttonSubscribe] = useState("");
 
+  console.log(uploadVideo)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,15 +29,19 @@ export default function Video() {
         const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
         const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
         const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
+        const responseVideoPath = await axios.get('http://localhost:5000/api/channel/videoPath?idVideo=' + urlParams.get("id"))
+
+        // Récupérer la vidéo
+        const videoUrl = responseVideoPath.data.upload_video_url;
+        setUploadVideo(videoUrl);
         
         // Attribution des informations de la vidéo
-		setTitle(responseVideo.data.title);
-		setDescription(responseVideo.data.description);
+        setTitle(responseVideo.data.title);
+        setDescription(responseVideo.data.description);
         setNumber_view(responseVideo.data.number_view);
-		setChannelId(responseVideo.data.channel_id);
-		setNb_like(responseVideo.data.nb_like);
-		setUploadVideo(responseVideo.data.upload_video_url);
-		setDate(responseVideo.data.upload_date_time);
+        setChannelId(responseVideo.data.channel_id);
+        setNb_like(responseVideo.data.nb_like);
+        setDate(responseVideo.data.upload_date_time);
 
 		// Attribution des informations de Follopw
         setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
@@ -62,6 +67,10 @@ export default function Video() {
     };
 
     fetchTest();
+
+    return () => {
+      URL.revokeObjectURL(uploadVideo);
+    }
   }, [])
 
   async function handleSubscribe() {
@@ -78,13 +87,20 @@ export default function Video() {
 
   return (
     <>
-      <div className="pl-10 mt-8 w-3/4">
-        <iframe rounded-md
-          width="100%"
-          height="680"
-
-          src="https://www.youtube.com/embed/Oflbho9ZG2U?start=103"
-        />
+      <div className="pl-10 mt-8 w-3/4  ">
+        {!uploadVideo ? (
+          <video rounded-md
+            width="100%"
+            height="680"
+            // src={uploadVideo}
+            src={"http://localhost:5000/api/channel/videoPath?idVideo=6"}
+            type="video/mp4"
+            controls
+            autoPlay
+          />
+        ) : (
+          <p>Chargement de la vidéo...</p>
+        )}
 
         <h1 className="font-bold mt-30 text-base mb-1 mt-4">{title}</h1>
 

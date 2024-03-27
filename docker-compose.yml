@@ -21,7 +21,8 @@ services:
         source: ./server/src
         target: /app/back/src
       - ./server/env:/app/back/.env
-      - ./upload:/uploads  # Ajout du volume pour les uploads
+      - ./server/uploads/thumbnails:/uploads/thumbnails # Ajout du volume pour les miniatures
+      - ./server/uploads/videos:/uploads/videos # Ajout du volume pour les vidéos
     networks:
       - bdd-back
     ports:
