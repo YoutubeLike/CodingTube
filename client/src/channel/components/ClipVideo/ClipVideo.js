@@ -20,7 +20,7 @@ export default function Video() {
         // Requête vers les infos de la chaîne
         const response = await axios.get('http://localhost:5000/api/channel/infos');
         const responseVideo = await axios.get('http://localhost:5000/api/channel/video');
-        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { withCredentials: true, params: { channelId: 1 } });
         const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
         // Attribution des informations
         setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
@@ -39,8 +39,8 @@ export default function Video() {
 
   async function handleSubscribe() {
     try {
-      await axios.get('http://localhost:5000/api/channel/follow', { params: { channelId: 1, userId: 1 } });
-      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
+      await axios.get('http://localhost:5000/api/channel/follow', { withCredentials: true, params: { channelId: 1 } });
+      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { withCredentials: true, params: { channelId: 1 } });
       setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné");
       //call a function which will get the number of followers
     } catch (err) {
