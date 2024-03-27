@@ -7,14 +7,15 @@ import ProfilePage from './profil/Pages/MyAccount';
 import DisplayedBurgerMenu from './timeline/component/displayedBurgerMenu';
 
 function App() {
-  return (
-    <>
-      <div>
-        <Header />
-        <Outlet />
-      </div>
-    </>
-  )
+	return (
+		<>
+			<div>
+				<Header />
+				<Outlet />
+				<channel />
+			</div>
+		</>
+	);
 }
 
 export default App;

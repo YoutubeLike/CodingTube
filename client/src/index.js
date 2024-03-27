@@ -69,6 +69,10 @@ const router = createBrowserRouter([
 				path: "upload",
 				element: <Upload />,
 			},
+      {
+				path: "/you",
+				element: <You />,
+			},
     ]
   },
 ]);
