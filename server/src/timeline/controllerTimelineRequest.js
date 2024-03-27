@@ -12,6 +12,8 @@ const timelineRequest = ((req, res) =>
     });
 })
 
+console.log("router controller");
+
 module.exports = {
     timelineRequest,
 }

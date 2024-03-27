@@ -44,8 +44,8 @@ class CommentBar extends React.Component {
         const response = await axios.get(
           "http://localhost:5000/api/short/add-short-comment",
           {
-            withCredentials: true,
             params: {
+              id: 1,
               shortId: this.props.shortInfos.id,
               text: this.state.userInput,
             },
@@ -86,7 +86,7 @@ class CommentBar extends React.Component {
               <img src="commentsFilter.png" className="scale-75" />
             </button>
 
-            <button className="h-[5vh] w-[5vh] rounded-full transition ease-in-out hover:bg-[#e5e5e5] hover:animate-pulse">
+            <button className="h-[5vh] w-[5vh] hover:bg-[#e5e5e5] hover:ease-in-out hover:rounded-full hover:animate-pulse duration-300">
               <img
                 src="commentsArrow.png"
                 className="scale-75"
@@ -97,7 +97,7 @@ class CommentBar extends React.Component {
         </div>
 
         {/* Displayed comments section */}
-        <div className="flex flex-col-reverse text-[2vh] h-full px-[2vh] overflow-y-auto no-scrollbar break-words">
+        <div className="flex flex-col-reverse text-[2vh] px-[2vh] overflow-y-auto break-words">
           {/* Single comment renderer */}
           {this.state.commentsIds.map((id) => (
             <Comment
@@ -105,16 +105,13 @@ class CommentBar extends React.Component {
               id={id}
               uploader={this.props.shortInfos.uploader_id}
               shortInfos={this.props.shortInfos}
-              superlikePP={this.props.PP}
             />
           ))}
         </div>
 
         {/* Comment insert section */}
         <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
-          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-            <img src={this.state.senderPP} />
-          </div>
+          <div className="rounded-full h-[4.5vh] w-[4.5vh] bg-[#e5e5e5]"></div>
 
           <input
             id="commentsInputField"
@@ -127,7 +124,7 @@ class CommentBar extends React.Component {
 
           <button
             onClick={this.postComment}
-            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
+            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] hover:bg-[#e5e5e5] hover:ease-in-out duration-300"
           >
             <strong>Post</strong>
           </button>

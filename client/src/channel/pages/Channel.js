@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import PageChaineban from "../components/Channel/PageChaineban";
-import axios from 'axios'
+import React from "react";
+import Create from "../components/Create_channel/Create";
 
-export default function PageChannel() {
-
+export default function Channel() {
 	return (
 		<div>
-			<PageChaineban />
+			<Create />
 		</div>
 	);
 }
