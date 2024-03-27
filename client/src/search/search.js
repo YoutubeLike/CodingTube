@@ -80,7 +80,6 @@ export default function Search() {
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
-        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
@@ -96,11 +95,9 @@ export default function Search() {
         const video_search = queryParameters.get("videoName")
 
         try{
-          console.log(video_search)
           const applyFilters = await axios.get(
             "http://localhost:5000/api/search/filters/" + buttonValue + '/' + video_search );
             setVideosInfos(applyFilters.data)
-            console.log('Le filtre ' + buttonValue + ' est appliqué')
         } catch(error){
           console.error("An error occurred while applying filter: ", error)
         }

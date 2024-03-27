@@ -35,7 +35,6 @@ export default function Header() {
   const submit = async () => {
     if (inputRef.current != "") {
       try {
-        console.log(inputRef.current)
           await fetch("http://localhost:5000/api/search/request/" + inputRef.current,{
             method: "GET",
             headers: {"content-type": "application/json"},

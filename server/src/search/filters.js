@@ -3,8 +3,6 @@ const mariadb = require('../src/database');
 const filters = async (req, res) => {
     const filterValue = req.params.buttonValue;
     const inputSearch = req.params.videoSearch;
-    console.log(filterValue)
-    console.log(inputSearch)
     try {
         if (filterValue === "All"){
             const results = await mariadb.pool.query("SELECT video.*, user.PP FROM video JOIN channel ON video.channel_id=channel.id JOIN user ON channel.user_id=user.id WHERE title LIKE UPPER(?);",["%"+ inputSearch +"%"]);

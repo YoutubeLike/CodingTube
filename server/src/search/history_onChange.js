@@ -1,7 +1,6 @@
 const mariadb = require('../src/database');
 
 const history_onChange = async (req, res) => {
-    console.log(req.session)
     if (req.session.userId){
 
     const userId = req.session.userId;
@@ -12,7 +11,6 @@ const history_onChange = async (req, res) => {
     } catch (error) {erreur
         res.status(500).send(error.message);
     }
-    console.log('Validé')
 }else {
     console.log("vous n'etes pas connecté Cyka bliat For HistoryChange")
 }
