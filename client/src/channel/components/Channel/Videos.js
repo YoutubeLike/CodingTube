@@ -54,8 +54,8 @@ export default function Video() {
 							className="flex flex-col mr-4 justify-between"
 						>
 							<img
-								src={data.thumbnail}
-								className="w-[270px] min-h-[155px] rounded-xl bg-black"
+								src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + data.id}
+								className="object-cover w-[270px] min-h-[155px] rounded-xl bg-black"
 							/>
 							<div className="h-full flex flex-col justify-between">
 								<p className="w-[270px] text-start font-bold">{data.title}</p>

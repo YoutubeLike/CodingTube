@@ -264,6 +264,41 @@ const getVideo = (req, res) => {
 		});
 };
 
+const getThumbnail = (req, res) => {
+    const thumbnailId = req.query.idThumbnail;
+
+    mariadb.pool
+        .query('SELECT thumbnail FROM video WHERE id = ?', [thumbnailId])
+        .then((result) => {
+            if (result.length > 0) {
+                const thumbnailPath = result[0].thumbnail;
+                const thumbnailStream = fs.createReadStream(path.join(__dirname, '../../../..', thumbnailPath));
+
+                const extension = path.extname(thumbnailPath).toLowerCase();
+                let contentType = 'image/jpeg'; // Par défaut à jpeg
+                if (extension === '.png') {
+                    contentType = 'image/png';
+                } else if (extension === '.gif') {
+                    contentType = 'image/gif';
+                } else if (extension === '.jpg'){
+                    contentType === 'image/jpg'
+                }
+
+                // Définir le type de contenu pour la réponse
+                res.setHeader('Content-Type', contentType);
+
+                // Envoyer l'image en tant que flux dans le corps de la réponse HTTP
+                thumbnailStream.pipe(res);
+            } else {
+                res.status(404).json({ message: "Thumbnail non trouvé" });
+            }
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la récupération du thumbnail :", error);
+            res.status(500).json({ message: "Erreur lors de la récupération du thumbnail" });
+        });
+};
+
 //export functions
 module.exports = {
 	selectChannel,
@@ -280,6 +315,7 @@ module.exports = {
 	follow,
 	getVideo,
 	getIdentifier,
+	getThumbnail,
 
 };
 

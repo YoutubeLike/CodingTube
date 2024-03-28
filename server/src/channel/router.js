@@ -27,6 +27,7 @@ const { selectChannel,
     UserChannel,
     getIdentifier,
     getVideo,
+    getThumbnail,
 } = require("./controller");
 
 
@@ -72,6 +73,7 @@ router.get("/nombreVideo", NumberVideo);
 
 router.get("/get-identifier", getIdentifier);
 router.get("/videoPath", getVideo);
+router.get("/thumbnail", getThumbnail);
  
 router.get('/get-video-likes', getVideoLikes)
 router.get('/get-video-dislikes', getVideoDislikes)
