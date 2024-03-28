@@ -2,6 +2,7 @@ const mariadb = require("../src/database");
 const fs = require("fs");
 const path = require("path");
 const { videoOnTab } = require("../channel/controller");
+const { Console } = require("console");
 
 const getTenNextShorts = (req, res) => {
   mariadb.pool
@@ -25,14 +26,17 @@ const getShortInfos = (req, res) => {
 };
 
 const getShortVideo = (req, res) => {
+  console.log(req.query.shortId);
   mariadb.pool
     .query("SELECT upload_video_url FROM short WHERE id = ?", [
       req.query.shortId,
     ])
     .then((result) => {
-      if (result.length > 0) {
+      if (result[0].upload_video_url != null && result[0].upload_video_url != "") {
         const videoPath = result[0].upload_video_url;
-        console.log(path.join(__dirname, "../../../..", videoPath));
+        console.log(
+          "CHEMIN   " + path.join(__dirname, "../../../..", videoPath)
+        );
         const videoStream = fs.createReadStream("../../../.." + videoPath);
         res.setHeader("Content-Type", "video/mp4");
         videoStream.pipe(res);

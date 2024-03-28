@@ -64,7 +64,6 @@ class Video extends React.Component {
   }
 
   render() {
-    console.log(this.state.shortInfos.upload_video_url);
     return this.state.shortInfos.id ? (
       <div
         id={"short" + this.state.shortInfos.id}
@@ -83,7 +82,7 @@ class Video extends React.Component {
             loop
           />
 
-          <strong className="px-[4vh] pt-[2.5vh] absolute text-center text-white text-[4vh] textStroke break-words behind">
+          <strong className="w-full px-[4vh] pt-[2.5vh] absolute text-center text-white text-[4vh] textStroke break-words behind">
             {this.state.shortInfos.text}
           </strong>
 
