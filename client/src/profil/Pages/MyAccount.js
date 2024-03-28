@@ -14,6 +14,18 @@ const ProfilePage = () => {
     errorUpdate: null,
     goodUpdate: null,
   });
+  // State for managing edit mode for each field in profile
+  const [isEditing, setIsEditing] = useState({
+    username: false,
+    name: false,
+    mail: false,
+    birthdate: false,
+    country: false,
+    gender: false,
+    password: false,
+    errorUpdate: null,
+    goodUpdate: null,
+  });
 
   // State for storing profile data
   const [profileData, setProfileData] = useState({
@@ -86,6 +98,7 @@ const ProfilePage = () => {
       "http://localhost:5000/api/profil/userUpdate",
       {
         username: profileData.username,
+        username: profileData.username,
         first_name: profileData.first_name,
         last_name: profileData.last_name,
         mail: profileData.mail,
@@ -147,7 +160,21 @@ const ProfilePage = () => {
       [field]: !prevState[field],
     }));
   };
+  // Toggle edit mode for a field
+  const handleEditToggle = (field) => {
+    setIsEditing((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
 
+  // Handle input change for profile fields
+  const handleInputChange = (e, field) => {
+    setProfileData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
   // Handle input change for profile fields
   const handleInputChange = (e, field) => {
     setProfileData((prevState) => ({
@@ -161,10 +188,21 @@ const ProfilePage = () => {
     const date = new Date(dateString);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
+  // Format date for display
+  const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
 
   // State for managing active tab
   const [toggleState, setToggleState] = useState(1);
+  // State for managing active tab
+  const [toggleState, setToggleState] = useState(1);
 
+  // Toggle between tabs
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
   // Toggle between tabs
   const toggleTab = (index) => {
     setToggleState(index);
@@ -217,12 +255,91 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/profil/logout"
+      );
+      window.location.href = "/login"; // Redirect to the login page
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [channelExists, setChannelExists] = useState(false);
+  const [identifier, setIdentifier] = useState(null); // State to hold identifier_channel
+  const [follower, setFollower] = useState(null);
+  const [pseudo, sePseudo] = useState(null);
+  // Assume isChannelAvailable is a state indicating whether the session has a channel
+  useEffect(() => {
+    const fetchChannelInfo = async () => {
+      try {
+        const userId = 1;
+        const response = await axios.get(
+          `http://localhost:5000/api/profil/getInfoChannel/${userId}`
+          //, {  withCredentials: true,}
+        );
+        const channelInfo = response.data;
+
+        console.log("Session ID:", response.headers["set-cookie"]);
+
+        // Check if identifier_channel is null
+        if (channelInfo && channelInfo.identifier_channel === null) {
+          setChannelExists(false); // No channel exists
+        } else {
+          setChannelExists(true); // Channel exists
+          setIdentifier(channelInfo.identifier_channel);
+          setFollower(channelInfo.nb_follower);
+          sePseudo(channelInfo.pseudo);
+        }
+      } catch (error) {
+        console.error("Error fetching channel info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChannelInfo();
+  }, []);
+
+  const handleClick = () => {
+    if (channelExists) {
+      window.location.href = "/channel?identifier=/${identifier}";
+    } else {
+      window.location.href = "/new-channel";
+    }
+  };
 
   return (
     <div className="pl-0">
       {/* banner */}
 
       <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
+        <div className="py-10 flex flex-col md:flex-row  md: items-center">
+          {/* the button that alow us to change the banner and the */}
+
+          <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+            <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md  flex justify-center items-center">
+              {" "}
+              {/* icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-9 h-9"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
         <div className=" py-10 flex space-x-10">
           {/* profile picture */}
 
@@ -258,20 +375,24 @@ const ProfilePage = () => {
           {/* pseudo and the buttons to create a channel  */}
 
           <div className="w-60 rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]">
-            <p className=" text-center text-2xl font-bold">CodingTube</p>
+            <p className=" text-center text-2xl font-bold">{pseudo}</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
-              @{profileData.username} ·0·
+              @{profileData.first_name}
+              {profileData.last_name} ·{follower} Followers·
             </p>
-            <div class=" mt-10 relative inline-flex  group">
-              <div class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <a
-                href="#"
-                title="Get channel now"
-                class="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
+
+            <div className="mt-10 relative inline-flex group">
+              <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+              <button
+                onClick={handleClick}
+                className="relative inline-flex items-center text-nowrap justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
-                Create a channel
-              </a>
+                {isLoading
+                  ? "Loading..."
+                  : channelExists
+                  ? "Go to Channel"
+                  : "Create a Channel"}
+              </button>
             </div>
           </div>
         </div>

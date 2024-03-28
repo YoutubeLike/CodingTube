@@ -71,7 +71,8 @@ const display = ((req, res) => {
 })
 
 const test = ((req, res) => {
-  console.log("Utilisateur" + req.session.userId)
+  console.log(req.session)
+  console.log(req.sessionID)
   res.send("" + req.session.userId)
 })
 

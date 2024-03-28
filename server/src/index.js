@@ -173,10 +173,8 @@ app.get("/loginDiscord", async (req, res) => {
         const randomNumber = Math.floor(1000 + Math.random() * 9000);
         
         InsertDiscordUser(user.username + "#" +randomNumber, user.email);
-        console.log('fghjkljhgfdfghjkjhgf')
       } else {
         InsertDiscordUser(user.username, user.email);
-        console.log('gfhdjksdjfh')
       }
       const userId = await GetUserId(user.email);
       req.session.userId = userId;

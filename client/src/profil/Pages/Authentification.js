@@ -28,6 +28,7 @@ class Authentification extends React.Component {
       goodRegister: null, // Message de succès pour l'inscription
       heightBiggerThanWidth: true, // Indique si la hauteur est plus grande que la largeur
       darkMode: false, // Indique si le mode sombre est activé ou non
+      isLoggedIn: false,
     };
   }
 
@@ -119,7 +120,10 @@ class Authentification extends React.Component {
         // Envoie les données d'inscription au serveur
         const response = await axios.post(
           "http://localhost:5000/api/profil/register",
-          formData
+          formData,
+          {
+            withCredentials: true,
+          }
         );
 
         // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
@@ -198,6 +202,24 @@ class Authentification extends React.Component {
       } catch (error) {
         console.log("Erreur lors de la vérification du login:", error);
       }
+    }
+    try {
+      const response = await axios.get("http://localhost:5000/api/profil/check-session", {
+        withCredentials: true,
+      });
+  
+      // Extraction des données pertinentes de l'objet Response
+      const loggedIn  = response.data.loggedIn;
+  
+      // Mise à jour de l'état du composant avec les données extraites
+      this.setState({ isLoggedIn: loggedIn });
+  
+      console.log(loggedIn)
+      if (loggedIn){
+        window.location.href = "/"
+      }
+    } catch(error) {
+      console.log("Erreur lors de la vérification du login:", error);
     }
   };
 
@@ -384,14 +406,6 @@ class Authentification extends React.Component {
                 </p>
               )}
               <div className="flex flex-col justify-center items-center space-y-4 w-full">
-                <p>
-                  <button
-                    className="text-sm text-slate-400"
-                    onClick={this.toggleForm}
-                  >
-                    I have a Account
-                  </button>
-                </p>
                 <button
                   className="w-full md:w-auto h-10 md:min-w-[130px] text-white px-2 py-1 cursor-pointer transition-all duration-300 relative inline-block outline-none rounded-full border-2 border-red-600 bg-red-600 hover:bg-white hover:text-red-600"
                   type="submit"
