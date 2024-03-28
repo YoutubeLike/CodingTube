@@ -42,7 +42,7 @@ export default function TimelineRightSide() {
 
     indents.push(
       <div key={i} className="h-auto mb-2 ">
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+        <a href={`/video?id=${videosInfos[i]["id"]}`}>
           <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
