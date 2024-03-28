@@ -13,20 +13,20 @@ app.use(express.json);
 
 // Import des fonctions
 const { selectChannel, 
-       	selectChannelIdentifier,
-        videoOnTab, 
-        NumberVideo, 
-        submit,  
-       	submitChannel,
-       	submitVideo,
-        getNbFollowers, 
-        getFollow, 
-        follow, 
-       	selectId,
-       	selectVideo,
-	      UserChannel,
-		    getIdentifier,
-        getVideo,
+    selectChannelIdentifier,
+    videoOnTab, 
+    NumberVideo, 
+    submit,  
+    submitChannel,
+    submitVideo,
+    getNbFollowers, 
+    getFollow, 
+    follow, 
+    selectId,
+    selectVideo,
+    UserChannel,
+    getIdentifier,
+    getVideo,
 } = require("./controller");
 
 
@@ -109,14 +109,11 @@ const BASE_URL = "https://imgs.digyx.co/i/";
 // const dataStore = require('./store');
 // const store = dataStore.store;
 
-router.get('/tout', (req,res) => {
-    res.send('coucou')
-})
 
 
 /* Server Routes */
 router.post('/test', upload.single('img'), async (req, res) => {
-   
+
     var access = null;
 
     // if (!req.body.key) {
@@ -159,7 +156,5 @@ router.post('/test', upload.single('img'), async (req, res) => {
         return res.status(200).json({ infos: { api_public: access.api_public, url } });
     })
 });
-
-
 
 module.exports = router;

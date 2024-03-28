@@ -256,7 +256,6 @@ const getVideo = (req, res) => {
 
 //export functions
 module.exports = {
-	getIdentifier,
 	selectChannel,
 	selectChannelIdentifier,
 	submit,
@@ -270,6 +269,7 @@ module.exports = {
 	getFollow,
 	follow,
 	getVideo,
+	getIdentifier,
 
 };
 
