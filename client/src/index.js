@@ -25,6 +25,7 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
+import MyAccount from './profil/Pages/MyAccount';
 import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Authentification />
+  },
+  {
+    path: "/profil",
+    element: <MyAccount />
   },
   {
     path: "/live/widget",

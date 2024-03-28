@@ -69,6 +69,7 @@ const display = ((req, res) => {
 
 })
 
+
 const getUserId = ((req, res) => {
   res.send("" + req.session.userId)
 })

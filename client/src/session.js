@@ -4,7 +4,6 @@ import axios from 'axios';
 export default function CheckSession() {
     // State for isLoggedIn and userId
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [tokenId, setUserToken] = useState(null);
   
     useEffect(() => {
       // Fetch session data from the server
@@ -12,9 +11,6 @@ export default function CheckSession() {
         try {
           const response = await axios.post('http://localhost:5000/api/profil/check-session');
           setIsLoggedIn(response.data.loggedIn);
-          if (response.data.loggedIn) {
-            setUserToken(response.data.TokenId);
-          }
         } catch (error) {
           console.log(error);
         }
@@ -23,5 +19,5 @@ export default function CheckSession() {
     }, []);
 
     // Retourne les informations de session
-    return { isLoggedIn, tokenId };
+    return { isLoggedIn};
 }
