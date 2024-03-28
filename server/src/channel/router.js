@@ -56,8 +56,8 @@ const {
 
 // Configuration de la route
 router.get('/get-nb-followers', getNbFollowers)
-router.get('/get-follow', getFollow)
-router.get('/follow', follow)
+router.get('/get-follow/:idChannel', getFollow)
+router.get('/follow/:idChannel', follow)
 
 // Configuration de la route
 router.get("/get-identifier", getIdentifier);

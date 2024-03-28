@@ -7,7 +7,7 @@ import { useActionData } from "react-router-dom";
 
 export default function Video() {
 	const [uploadVideo, setUploadVideo] = useState(); //
-	const [channel_id, setChannelId] = useState(0);
+	const [channelId, setChannelId] = useState(0);
 	const [date, setDate] = useState("");
 	const [nb_like, setNb_like] = useState(0);
 	const [profilePicture, setProfilePicture] = useState("");
@@ -29,8 +29,8 @@ export default function Video() {
       try {
         // Requête vers les infos de la chaîne
         const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
-        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
-        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
+        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {idChannel:1, withCredentials: true });
+        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers',{ idChannel: 1 });
 
         // Récupérer la vidéo
         // const videoUrl = responseVideoPath.data.upload_video_url;
@@ -76,9 +76,10 @@ export default function Video() {
 
   async function handleSubscribe() {
     try {
-      await axios.get('http://localhost:5000/api/channel/follow', { params: { channelId: 1, userId: 1 } });
-      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
-      setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné");
+     
+      await axios.get('http://localhost:5000/api/channel/follow/' + "1", { withCredentials: true});
+      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow/' + "1", {withCredentials: true } );
+      setbuttonSubscribe(responseSubscribe.data.length == 0 ? "Follow" : "Unfollow");
       //call a function which will get the number of followers
     } catch (err) {
       console.error(err)
@@ -108,17 +109,17 @@ export default function Video() {
             <img src={img} className="w-12 mr-4" />
             <div className="flex flex-col pr-4">
               <p className="text-sm font-bold">{pseudo}</p>
-              <p className="text-sm text-gray-500">{follower} abonnés</p>
+              <p className="text-sm text-gray-500">{follower} followers</p>
             </div>
 
-            <button onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full pt-2 pb-2">{buttonSubscribe}</button>
+            <button  onClick={handleSubscribe} className="font-bold bg-neutral-900 hover:bg-neutral-600 text-white px-6 ml-2 rounded-full pt-2 pb-2">{buttonSubscribe}</button>
           </div>
           <LikeDislike />
         </div>
 
 
         <div className="p-4 bg-gray-100 rounded-xl mt-4 " >
-          <p className="font-bold">{number_view} vues  {date} <span className="text-blue-600">#sifu #nodamage</span></p>
+          <p className="font-bold">{number_view} views  {date} <span className="text-blue-600">#sifu #nodamage</span></p>
           <p className="text-justify">
             {description}
           </p>
