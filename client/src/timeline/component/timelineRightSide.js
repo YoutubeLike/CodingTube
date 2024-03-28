@@ -10,7 +10,7 @@ export default function TimelineRightSide() {
   var [videosInfos, setVideosInfos] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const videoId = searchParams.get("video_id");
+  const videoId = searchParams.get("id");
 
   useEffect(() => {
     const fetchVideos = async () => {
