@@ -1,47 +1,56 @@
 const mariadb = require("../src/database");
 
 const addCommentAndGetId = (req, res) => {
-  mariadb.pool
-    .query(
-      "INSERT INTO comment_short (user_id, short_id, text, comment_date) VALUES (?, ?, ?, CURRENT_TIMESTAMP);",
-      [req.session.userId, req.query.shortId, req.query.text]
-    )
-    .then(() => {
-      mariadb.pool
-        .query(
-          "SELECT id FROM comment_short WHERE text = ? ORDER BY comment_date DESC;",
-          [req.query.text]
-        )
-        .then((value) => {
-          res.send(value[0]);
-        });
-    })
-    .catch((error) => {
-      console.error("Error inserting comment:", error);
-      res.status(500).send("Error inserting comment");
-    });
+  if (req.session.userId) {
+    mariadb.pool
+      .query(
+        "INSERT INTO comment_short (user_id, short_id, text, comment_date) VALUES (?, ?, ?, CURRENT_TIMESTAMP);",
+        [req.session.userId, req.query.shortId, req.query.text]
+      )
+      .then(() => {
+        mariadb.pool
+          .query(
+            "SELECT id FROM comment_short WHERE text = ? ORDER BY comment_date DESC;",
+            [req.query.text]
+          )
+          .then((value) => {
+            res.send(value[0]);
+          });
+      })
+      .catch((error) => {
+        console.error("Error inserting comment:", error);
+        res.status(500).send("Error inserting comment");
+      });
+  }
 };
 
 const addReplyAndGetId = (req, res) => {
-  mariadb.pool
-    .query(
-      "INSERT INTO comment_short (user_id, short_id, text, reply, comment_date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);",
-      [req.session.userId, req.query.shortId, req.query.text, req.query.replyId]
-    )
-    .then(() => {
-      mariadb.pool
-        .query(
-          "SELECT id FROM comment_short WHERE text = ? ORDER BY comment_date DESC;",
-          [req.query.text]
-        )
-        .then((value) => {
-          res.send(value[0]);
-        });
-    })
-    .catch((error) => {
-      console.error("Error inserting comment:", error);
-      res.status(500).send("Error inserting comment");
-    });
+  if (req.session.userId) {
+    mariadb.pool
+      .query(
+        "INSERT INTO comment_short (user_id, short_id, text, reply, comment_date) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP);",
+        [
+          req.session.userId,
+          req.query.shortId,
+          req.query.text,
+          req.query.replyId,
+        ]
+      )
+      .then(() => {
+        mariadb.pool
+          .query(
+            "SELECT id FROM comment_short WHERE text = ? ORDER BY comment_date DESC;",
+            [req.query.text]
+          )
+          .then((value) => {
+            res.send(value[0]);
+          });
+      })
+      .catch((error) => {
+        console.error("Error inserting comment:", error);
+        res.status(500).send("Error inserting comment");
+      });
+  }
 };
 
 const getCommentInfos = (req, res) => {
