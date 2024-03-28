@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
@@ -88,7 +87,7 @@ export default function TimelineHistoryYou() {
       var date = videosInfos[i]["upload_date_time"];
       var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
       indents.push(
-        <div key={i} className="max-w-[25%] h-auto mb-2">
+        <div key={i} className="max-w-[25%] h-auto mb-2 ">
           <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
   
           <div className="relative">
