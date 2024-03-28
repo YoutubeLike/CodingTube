@@ -49,14 +49,9 @@ export default function LiveFromUser() {
               playing={false}
               pip={false}
             />
-            <img
-              className="bottom-96"
-              style={{ position: "relative" }}
-              src="/live/offline.jpg"
-            />
           </div>
 
-          <p>{UserSize}bonjour les gens </p>
+          <p> {UserSize} </p>
         </div>
 
         <Chat user={user} socket={Socket} />
