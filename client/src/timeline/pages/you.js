@@ -19,9 +19,11 @@ export default function You() {
         <div className="flex">
           <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
           <div>
+          
           <div className="channel-info relative left-[400px] relative top-[80px] flex flex-col items-start">
             <h1 className="text-start text-2xl font-bold mt-4">B R A S C O</h1>
             <a href="/PageChannel" className="text-start mt-4">@Itachi Budoke - View Channel</a>
+            <a href="/changeTitle" className="text-start mt-4">gestionnaire de stream</a>
           </div>
           <img
               src={img}
