@@ -5,7 +5,6 @@ import TimelineHistory from "../component/HistoryTimeline";
 import React, { useEffect, useState } from "react";
 
 export default function History() {
-  
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "History - CodingTube";

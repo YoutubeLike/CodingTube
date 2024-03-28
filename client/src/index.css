@@ -20,15 +20,20 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  /* .video-container{
+    width: w-1/2 !important;
+    height: auto !important;
+  } */
+  .video-container2{
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 
 .video-container 
 {
-  /* height: 60px; */
-  /* position: absolute; */
   display: flex;
-  /* width: 500px; */
-  gap: 20px;
+  gap: 20px;  
 }
 
 .video img

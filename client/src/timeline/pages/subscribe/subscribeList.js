@@ -6,7 +6,6 @@ import "../../styles/Timeline.css";
 import React, { useEffect, useState } from "react";
 
 export default function ListSubscribe() {
-
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "Subscriptions - CodingTube";
@@ -46,7 +45,7 @@ export default function ListSubscribe() {
         </div>
       </div>
 
-       {/* PAGE CONTENT */}
+      {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
         <div class="flex ml-[3%] flex-col content-center">

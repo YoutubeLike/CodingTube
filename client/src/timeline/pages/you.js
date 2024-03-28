@@ -65,52 +65,56 @@ export default function You() {
             </div>
           </div>
           <div>
-            <a
-              href="/history"
-              className="flex flex-row relative top-[15px] md:block"
-            >
-              <img
-                className="md:relative left-[220px] w-10 h-10"
-                src="history.png"
-              />
-              <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
-                History
-              </button>
-            </a>
-          </div>
-          <div className="flex">
-            <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
-              <div className="flex flex-wrap">
-                <TimelineHistoryYou />
+            <div className="flex-col">
+              <Link
+                to="/history"
+                className="flex flex-row top-[15px] md:block"
+              >
+                <img
+                  className="md:relative left-[220px] w-10 h-10"
+                  src="history.png"
+                />
+                <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
+                  History
+                </button>
+              </Link>
+            </div>
+            <div className="flex">
+              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+                <div className="flex md:flex-wrap ">
+                  <TimelineHistoryYou />
+                </div>
               </div>
             </div>
           </div>
-          <div className="">
-            <div className="flex flex-row relative top-[15px] md:block">
-              <img
-                className="md:relative left-[220px] w-10 h-10"
-                src="likedvideo.png"
-              />
-              <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
-                Liked Videos
-              </button>
-              <a href="/likedVideos">
-                <button className="relative left-[265px] relative top-[-32px] font-black">
+          <div>
+            <div className="flex-col">
+              <Link
+                to="/likedVideos"
+                className="flex flex-row top-[15px] md:block"
+              >
+                <img
+                  className="md:relative left-[220px] w-10 h-10"
+                  src="history.png"
+                />
+                <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                   Liked Videos
                 </button>
-              </a>
+              </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
-                <div className="flex flex-wrap">
+              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+                <div className="flex md:flex-wrap ">
                   <LikePageYou />
                 </div>
               </div>
             </div>
-            <div className="">
-              <a
-                href="/playlist"
-                className="flex flex-row relative top-[15px] md:block"
+          </div>
+          <div>
+            <div className="flex-col">
+              <Link
+                to="/playlist"
+                className="flex flex-row top-[15px] md:block"
               >
                 <img
                   className="md:relative left-[220px] w-10 h-10"
@@ -119,11 +123,11 @@ export default function You() {
                 <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
                   Playlist
                 </button>
-              </a>
+              </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] flex-wrap relative top-[-20px]">
-                <div className="flex flex-wrap">
+              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+                <div className="flex md:flex-wrap ">
                   <PlaylistYou />
                 </div>
               </div>

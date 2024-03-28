@@ -2,180 +2,278 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const ProfilePage = () => {
-// State for managing edit mode for each field in profile
-const [isEditing, setIsEditing] = useState({
-  name: false,
-  mail: false,
-  birthdate: false,
-  country: false,
-  gender: false,
-  password: false,
-});
+  // State for managing edit mode for each field in profile
+  const [isEditing, setIsEditing] = useState({
+    username: false,
+    name: false,
+    mail: false,
+    birthdate: false,
+    country: false,
+    gender: false,
+    password: false,
+    errorUpdate: null,
+    goodUpdate: null,
+  });
 
-// State for storing profile data
-const [profileData, setProfileData] = useState({
-  first_name: "",
-  last_name: "",
-  mail: "",
-  birthdate: "",
-  country: "",
-  gender: "",
-  password: "",
-});
+  // State for storing profile data
+  const [profileData, setProfileData] = useState({
+    username: "",
+    first_name: "",
+    last_name: "",
+    mail: "",
+    birthdate: "",
+    country: "",
+    gender: "",
+    currentPassword: "",
+    newPassword:"",
+    newConfirmPassword:"",
 
-// Function to update user data
-const updateUser = async () => {
-  try {
+  });
+
+  const [formClickedMap, setFormClickedMap] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [goodMessage, setGoodMessage] = useState("");
+
+  const handleFormSubmit = async (e, formKey) => {
+    e.preventDefault();
+    handleEditToggle(formKey);
+
+    try {
+      // Check if the form corresponding to formKey has been clicked once
+      if (formClickedMap[formKey]) {
+        // If yes, call the user update function
+        await updateUser(formKey);
+      } else {
+        // If no, update the state to indicate that the form has been clicked once
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: true,
+        }));
+      }
+
+      // Reset state after successful submission
+      if (formClickedMap[formKey]) {
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: false,
+        }));
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Handle error and display appropriate error message to the user
+      setErrorMessage(error.response.data.error);
+    }
+  };
+
+  // Function to update user data
+  const updateUser = async () => {
+    setGoodMessage("");
+    setErrorMessage("");
+
+    if (!profileData.username.trim()) {
+      setErrorMessage(
+        "Please enter at least one character for the new username."
+      );
+      return; // Stop function execution if field is empty
+    }
+
+    if (!profileData.mail.trim()) {
+      setErrorMessage("Please enter at least on character for the new mail");
+      return; // Stop program
+    }
+
     const response = await axios.post(
       "http://localhost:5000/api/profil/userUpdate",
       {
+        username: profileData.username,
+        username: profileData.username,
         first_name: profileData.first_name,
         last_name: profileData.last_name,
         mail: profileData.mail,
         birthdate: profileData.birthdate,
         country: profileData.country,
         gender: profileData.gender,
-      }
+      },{withCredentials: true} 
     );
+    setGoodMessage("Information updated");
     console.log(response.data);
-  } catch (error) {
-    console.error("Error updating user:", error);
-    console.log("Error connecting to the backend");
-  }
-};
+  };
 
-// Function to update password
-const updatePassword = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/profil/updatePswrd",
-      {
-        id: profileData.id,
-        password: newPassword,
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/profil/check-session",
+          {
+            withCredentials: true,
+          }
+        );
+
+        const loggedIn = response.data.loggedIn;
+
+        // Update the profileData state with isLoggedIn
+        setProfileData((prevProfileData) => ({
+          ...prevProfileData,
+          isLoggedIn: loggedIn,
+        }));
+
+        if (!loggedIn) {
+          window.location.href = "/login";
+        }
+      } catch (error) {
+        console.log("Erreur lors de la vérification du login:", error);
       }
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error("Error updating password:", error);
-    console.log("Couldn't connect to the backend");
-  }
-};
+    };
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/profil/userData/`,
+          { withCredentials: true }
+        );
+        setProfileData(response.data);
+      } catch (error) {
+        console.error("Data retrieval error", error);
+      }
+    };
 
-// Fetch user data on component mount
-useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
+    fetchData();
+    fetchUserData();
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
+  // Toggle edit mode for a field
+  const handleEditToggle = (field) => {
+    setIsEditing((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
+  // Handle input change for profile fields
+  const handleInputChange = (e, field) => {
+    setProfileData((prevState) => ({
+      ...prevState,
+      [field]: e.target.value,
+    }));
+  };
+
+  // Format date for display
+  const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
+  // State for managing active tab
+  const [toggleState, setToggleState] = useState(1);
+
+  // Toggle between tabs
+  const toggleTab = (index) => {
+    setToggleState(index);
+  };
+
+  // Handle password change
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+
+    setErrorMessage("");
+    setGoodMessage("");
+
+    // Check if password field is empty
+    if (!newPassword.trim()) {
+      setErrorMessage(
+        "Please enter at least one character for the new password."
       );
-      setProfileData(response.data);
+      return; // Stop function execution if field is empty
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/profil/updatePswrd",
+        {
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        }, {withCredentials: true}
+
+      );
+
+      console.log(response.data); // Handle response as necessary
+
+      // If request is successful, display success message
+      setGoodMessage("Password updated successfully");
     } catch (error) {
-      console.error("Data retrieval error", error);
+      // If an error occurs, display appropriate error message
+      setErrorMessage(error.response.data.error);
+
+      console.error("Error updating password:", error);
+    }
+
+    // After handling the request, you can close the password editor
+    handleEditToggle("password");
+  };
+
+  // State and functions for managing password fields
+  const [showPassword, setShowPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [channelExists, setChannelExists] = useState(false);
+  const [identifier, setIdentifier] = useState(null); // State to hold identifier_channel
+  const [follower, setFollower] = useState(null);
+  const [pseudo, sePseudo] = useState(null);
+  // Assume isChannelAvailable is a state indicating whether the session has a channel
+  useEffect(() => {
+    const fetchChannelInfo = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/profil/getInfoChannel/`
+          , {  withCredentials: true,}
+        );
+        const channelInfo = response.data;
+
+        console.log("Session ID:", response.headers["set-cookie"]);
+
+        // Check if identifier_channel is null
+        if (channelInfo && channelInfo.identifier_channel === null) {
+          setChannelExists(false); // No channel exists
+        } else {
+          setChannelExists(true); // Channel exists
+          setIdentifier(channelInfo.identifier_channel);
+          setFollower(channelInfo.nb_follower);
+          sePseudo(channelInfo.pseudo);
+        }
+      } catch (error) {
+        console.error("Error fetching channel info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChannelInfo();
+  }, []);
+
+  const handleClick = () => {
+    if (channelExists) {
+      window.location.href = "/channel?identifier=/${identifier}";
+    } else {
+      window.location.href = "/new-channel";
     }
   };
 
-  fetchUserData();
-}, []);
-
-// Toggle edit mode for a field
-const handleEditToggle = (field) => {
-  setIsEditing((prevState) => ({
-    ...prevState,
-    [field]: !prevState[field],
-  }));
-};
-
-// Handle input change for profile fields
-const handleInputChange = (e, field) => {
-  setProfileData((prevState) => ({
-    ...prevState,
-    [field]: e.target.value,
-  }));
-};
-
-// Format date for display
-const formatDateForDisplay = (dateString) => {
-  const date = new Date(dateString);
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-};
-
-// State for managing active tab
-const [toggleState, setToggleState] = useState(1);
-
-// Toggle between tabs
-const toggleTab = (index) => {
-  setToggleState(index);
-};
-
-// Handle password change
-const handlePasswordChange = async (e) => {
-  e.preventDefault();
-  handleEditToggle("password");
-
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/profil/userData/`,{ WithCredentials: true}
-    );
-    const userData = response.data;
-    const fetchedPassword = userData["password"];
-    
-    if (currentPassword === fetchedPassword) {
-      if (newPassword === confirmPassword) {
-        updatePassword();
-        console.log("Password updated successfully!");
-      } else {
-        console.log("New password and confirmation password do not match!");
-      }
-    } else {
-      console.log("Current password is incorrect!");
-    }
-  } catch (error) {
-    console.error("Error fetching data", error);
-  }
-};
-
-// State and functions for managing password fields
-const [showPassword, setShowPassword] = useState(false);
-const [currentPassword, setCurrentPassword] = useState("");
-const [newPassword, setNewPassword] = useState("");
-const [confirmPassword, setConfirmPassword] = useState("");
-
   return (
-    <div>
+    <div className="pl-0">
       {/* banner */}
 
-      <div className=" from-lime-300 to-green-500 shadow-inner rounded-t-md ml-56 mr-14 bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto w-auto mt-4">
-        <div className="flex justify-end">
-          {/* the button that alow us to change the banner and the */}
-
-          <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-            <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md  flex justify-center items-center">
-              {" "}
-              {/* icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-9 h-9"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+      <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
         <div className=" py-10 flex space-x-10">
           {/* profile picture */}
 
-          <div className=" ml-10 border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]  w-52 h-52 rounded-full ">
+          <div className=" border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] w-52 h-full rounded-full ">
             <img
               src="https://t4.ftcdn.net/jpg/01/17/00/39/360_F_117003938_TrPAYiOgFFLnIwKsjUjtqoe4W2RDzytI.jpg"
-              class=" h-48 w-52 rounded-full"
+              className="h-auto w-full rounded-full"
               alt="..."
             />
             <button class="absolute h-10 w-10 rounded-md bg-white  bottom-0 right-0 flex justify-center align-middle">
@@ -203,22 +301,25 @@ const [confirmPassword, setConfirmPassword] = useState("");
 
           {/* pseudo and the buttons to create a channel  */}
 
-          <div className=" rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] ">
-            <p className=" text-center text-2xl font-bold">CodingTube</p>
+          <div className="w-60 rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]">
+            <p className=" text-center text-2xl font-bold">{pseudo}</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
               @{profileData.first_name}
-              {profileData.last_name} ·0·
+              {profileData.last_name} ·{follower} Followers·
             </p>
-            <div class=" mt-10 relative inline-flex  group">
-              <div class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <a
-                href="#"
-                title="Get channel now"
-                class="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
+
+            <div className="mt-10 relative inline-flex group">
+              <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+              <button
+                onClick={handleClick}
+                className="relative inline-flex items-center text-nowrap justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
-                Create a channel
-              </a>
+                {isLoading
+                  ? "Loading..."
+                  : channelExists
+                  ? "Go to Channel"
+                  : "Create a Channel"}
+              </button>
             </div>
           </div>
         </div>
@@ -226,9 +327,9 @@ const [confirmPassword, setConfirmPassword] = useState("");
 
       {/* information part */}
 
-      <div className="ml-52 mr-10">
-        <div className="p-1 mx-4 w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
-          <div className="flex space-x-4 border-b-2 border-gray-300 sticky mx-5 bg-white top-0">
+      <div className="w-full md:w-auto md:mx-20">
+        <div className="p-1  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
+          <div className="flex space-x-4 border-b-2 border-gray-300 sticky z-50 mx-5 bg-white top-0">
             <div
               className={
                 toggleState === 1
@@ -254,60 +355,139 @@ const [confirmPassword, setConfirmPassword] = useState("");
               </h1>
             </div>
           </div>
+          <div className="align-content: center">
+            {isEditing.errorUpdate && (
+              <p className="!mt-2 text-red-600">{isEditing.errorUpdate}</p>
+            )}
+            {isEditing.goodUpdate && (
+              <p className="!mt-2 text-green-600">{isEditing.goodUpdate}</p>
+            )}
+          </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
+            {/*username*/}
+            <p className="text-green-600 ml-5">{goodMessage}</p>
+            <p className="text-red-600 ml-5">{errorMessage}</p>
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => handleFormSubmit(e, "username")}
+            >
+              <div className="flex items-center">
+                <p className="text-xl text-center font-semibold ml-5 text-nowrap">
+                  {" "}
+                  Username{" "}
+                </p>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.username ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
+              </div>
+              <div className="flex mx-5 flex-col md:flex-row">
+                <label>
+                  <span className="text-sm text-gray-500">Username</span>:
+                  {isEditing.username ? (
+                    <input
+                      type="text"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.username}
+                      onChange={(e) => {
+                        handleInputChange(e, "username");
+                      }}
+                    />
+                  ) : (
+                    <b className=" ml-2 mr-5">{profileData.username} </b>
+                  )}
+                </label>
+              </div>
+
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
             {/* name */}
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("fullName");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "fullName")}
             >
-              <p className="text-xl font-semibold ml-5"> Full Name</p>
-
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button
-                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                  type="submit"
-                >
-                  {isEditing.fullName ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-4 h-4"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+              <div className="flex items-center">
+                <p className="text-xl text-center font-semibold ml-5 text-nowrap">
+                  {" "}
+                  Full Name
+                </p>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.fullName ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className="flex mx-5">
+              <div className="flex mx-5 flex-col md:flex-row">
                 <div className=" my-5 flex items-center">
                   <label>
                     <span class="text-sm text-gray-500">First Name</span>:{""}
@@ -349,71 +529,70 @@ const [confirmPassword, setConfirmPassword] = useState("");
             {/* mail */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("mail");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "mail")}
             >
-              <p className="text-xl font-semibold ml-5">Mail Address</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Mail Address</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button
-                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                  type="submit"
-                >
-                  {isEditing.mail ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.mail ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Mail</span>:
-                  {isEditing.mail ? (
-                    <input
-                      type="email"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.mail}
-                      onChange={(e) => {
-                        handleInputChange(e, "mail");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.mail} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex flex-col md:flex-row ">
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Mail</span>:
+                    {isEditing.mail ? (
+                      <input
+                        type="email"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.mail}
+                        onChange={(e) => {
+                          handleInputChange(e, "mail");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.mail} </b>
+                    )}
+                  </label>
+                </div>
               </div>
               <hr className="mt-4 mb-8 mx-5" />
             </form>
@@ -421,53 +600,50 @@ const [confirmPassword, setConfirmPassword] = useState("");
             {/* birthdate */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("birthdate");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "birthdate")}
             >
-              <p className="text-xl font-semibold ml-5">Birthdate</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Birthdate</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.birthdate ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.birthdate ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
+              <div className=" mx-5 flex flex-col md:flex-row">
                 <label>
                   <span className="text-sm text-gray-500">Birthdate</span>:
                   {isEditing.birthdate ? (
@@ -492,68 +668,67 @@ const [confirmPassword, setConfirmPassword] = useState("");
             {/* country */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("country");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "country")}
             >
-              <p className="text-xl font-semibold ml-5">Country</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Country</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.country ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.country ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Country</span>:
-                  {isEditing.country ? (
-                    <input
-                      type="text"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.country}
-                      onChange={(e) => {
-                        handleInputChange(e, "country");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.country} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex flex-col md:flex-row">
+                <div className=" mx-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Country</span>:
+                    {isEditing.country ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.country}
+                        onChange={(e) => {
+                          handleInputChange(e, "country");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.country} </b>
+                    )}
+                  </label>
+                </div>
               </div>
               <hr className="mt-4 mb-8 mx-5" />
             </form>
@@ -562,70 +737,68 @@ const [confirmPassword, setConfirmPassword] = useState("");
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("gender");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "gender")}
             >
-              <p className="text-xl font-semibold ml-5">Gender</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Gender</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.gender ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.gender ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex-col items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Gender</span>:
-                  {isEditing.gender ? (
-                    <input
-                      type="text"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.gender}
-                      onChange={(e) => {
-                        handleInputChange(e, "gender");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.gender} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex-col flex-col md:flex-row">
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Gender</span>:
+                    {isEditing.gender ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.gender}
+                        onChange={(e) => {
+                          handleInputChange(e, "gender");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.gender} </b>
+                    )}
+                  </label>
+                </div>
               </div>
-
-              <hr className="mt-4 mb-8 mx-5" />
+              <hr className="mt-4 mb-8 mx-5 md: hidden" />
             </form>
           </div>
 
@@ -638,6 +811,8 @@ const [confirmPassword, setConfirmPassword] = useState("");
                 <button
                   className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-8 rounded-md  flex justify-center items-center"
                   onClick={(e) => {
+                    setGoodMessage("");
+                    setErrorMessage("");
                     e.preventDefault();
                     handleEditToggle("password");
                   }}
@@ -677,7 +852,8 @@ const [confirmPassword, setConfirmPassword] = useState("");
                 </button>
               </div>
             </div>
-
+            <p className="text-red-600 ml-5">{errorMessage}</p>
+            <p className="text-green-600 ml-5">{goodMessage}</p>
             <form
               className="mt-5 flex flex-col"
               onSubmit={(e) => {
@@ -799,6 +975,28 @@ const [confirmPassword, setConfirmPassword] = useState("");
               )}
             </button>
           </div>
+        </div>
+      </div>
+      <div className="w-full md:w-auto md:mx-20 p-4  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
+        <div className="relative inline-flex group">
+          <button
+            onClick={async () => {
+              console.log("looguto");
+              try {
+                window.location.href = "/login";
+                const response = await axios.get(
+                  "http://localhost:5000/api/profil/logout",
+                  { withCredentials: true }
+                );
+                console.log("Logout successful");
+              } catch (error) {
+                console.error("An error occurred during logout: ", error);
+              }
+            }}
+            className=""
+          >
+            Log Out
+          </button>
         </div>
       </div>
     </div>

@@ -1,10 +1,11 @@
 const mariadb = require("../src/database.js");
 
-const timelineRequest = (req, res) => {
+const yourVideosTimelineRequest = (req, res) => {
+  const userId = req.session.userId;
   // SQL Request : get the video's informations and send it
   mariadb.pool
     .query(
-      "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id ORDER BY video.number_view DESC;"
+      "SELECT channel.pseudo, user.PP, video.* FROM video LEFT JOIN channel ON video.channel_id = channel.id LEFT JOIN user ON user.id = channel.user_id WHERE user.id = ? ORDER BY video.number_view DESC;",[userId]
     )
     .then((value) => {
       res.send(value);
@@ -16,5 +17,5 @@ const timelineRequest = (req, res) => {
 };
 
 module.exports = {
-  timelineRequest,
+  yourVideosTimelineRequest,
 };

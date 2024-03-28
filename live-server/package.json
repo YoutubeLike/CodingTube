@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-media-server": "^2.6.2"
+    "bcryptjs": "^2.4.3",
+    "node-media-server": "^2.6.2",
+    "sync-mysql": "^3.0.1"
   }
 }

@@ -1,12 +1,11 @@
 //  PAGE DISPLAYING THE GRID OF SUBSCRIPTIONS
- 
+
 import NonDisplayedBurgerMenu from "../../component/nonDisplayedBurgerMenu";
 import GridSubscriptionTimeLine from "../../component/subscribe/subscriptionTimelineGrid";
 import "../../styles/Timeline.css";
 import React, { useEffect, useState } from "react";
 
 export default function GridSubscribe() {
-
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "Subscriptions - CodingTube";
