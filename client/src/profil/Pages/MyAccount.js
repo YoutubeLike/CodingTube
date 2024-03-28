@@ -24,7 +24,10 @@ const ProfilePage = () => {
     birthdate: "",
     country: "",
     gender: "",
-    password: "",
+    currentPassword: "",
+    newPassword:"",
+    newConfirmPassword:"",
+
   });
 
   const [formClickedMap, setFormClickedMap] = useState({});
@@ -303,6 +306,14 @@ const ProfilePage = () => {
                 Password
               </h1>
             </div>
+          </div>
+          <div className="align-content: center">
+            {isEditing.errorUpdate && (
+              <p className="!mt-2 text-red-600">{isEditing.errorUpdate}</p>
+            )}
+            {isEditing.goodUpdate && (
+              <p className="!mt-2 text-green-600">{isEditing.goodUpdate}</p>
+            )}
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
             {/*username*/}
