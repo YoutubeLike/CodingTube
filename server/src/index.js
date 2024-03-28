@@ -27,13 +27,7 @@ app.use(
   })
 );
 
-app.use(
-  session({
-    secret: "secret",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+
 
 /* Handle all POST requests with different kind of bodies */
 app.use(express.json());
@@ -49,7 +43,7 @@ const io = new socketio.Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
-});
+})
 
 app.get("/", (req, res) => {
   console.log(req.session);
@@ -64,12 +58,12 @@ io.on("connection", (socket) => {
   console.log("Listening for chat-message event"); // Add this line
 
   //WIDGET
-
-  socket.on("send", () => {
-    io.emit("widget-message");
-  });
-
-  //WIDGET
+  
+  socket.on('send', () => {
+     io.emit("widget-message")
+  })
+  
+  //WIDGET 
   // Handle chat messages
   socket.on("chat-message", async (msg) => {
     console.log(
@@ -95,7 +89,7 @@ io.on("connection", (socket) => {
         );
       }
     } else {
-      const room = socket.rooms.values();
+      const room = socket.rooms.values()
       room.next();
       const currentRoom = room.next();
 
@@ -113,18 +107,14 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected");
 
-    console.log(socket.adapter.rooms);
-
     socket.adapter.rooms.forEach((value, key) => {
-      console.log(key);
-      if (io.sockets.adapter.rooms.get(key)) {
-        io.sockets
-          .to(key)
-          .emit("user-count", { size: io.sockets.adapter.rooms.get(key).size });
+      if(io.sockets.adapter.rooms.get(key))
+      {
+        io.sockets.to(key).emit("user-count", { size: io.sockets.adapter.rooms.get(key).size })
       }
     });
     // io.adapter
-  });
+  })
 
   //Handle connection to room
   socket.on("connect-to-room", (arg) => {
@@ -145,7 +135,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-app.use("/api", routes);
 
 server.listen(5000, () => {
   console.log("server listening on port 5000");
