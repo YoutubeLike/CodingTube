@@ -153,7 +153,6 @@ module.exports = {
     updateTitle,
     GetTitle,
     getUserId,
-    GetLiveKey
-    generateLiveKey,
+    GetLiveKey,
     create
 }
