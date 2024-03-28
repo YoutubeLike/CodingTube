@@ -1,21 +1,19 @@
 // File containing all the HTML content to be displayed
 
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import {SetScoresTrendings} from "../functions/TrendingsScoreCalculator.js";
-import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
-
-
+import axios from "axios";
+import { SetScoresTrendings } from "../functions/TrendingsScoreCalculator.js";
+import { GetTimeElapsed, TimeOfVideo } from "../functions/VideoTiming.js";
 
 export default function MusicsTimeLine() {
-
   // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/timeline/category-request`,{
+          `http://localhost:5000/api/timeline/category-request`,
+          {
             params: {
               categoryStrParam: "Musics",
             },
@@ -23,16 +21,15 @@ export default function MusicsTimeLine() {
         );
         setVideosInfos(response.data);
       } catch (error) {
-        console.error('Error fetching videos:', error);
+        console.error("Error fetching videos:", error);
       }
     };
     fetchVideos();
   }, []);
 
-  
   videosInfos = SetScoresTrendings(videosInfos);
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
-  
+
   if (videosInfos.length > 10) {
     videosInfos.slice(10, videosInfos.length);
   }
@@ -52,7 +49,7 @@ export default function MusicsTimeLine() {
 
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
     indents.push(
       <div key={i} className="mb-10 sm:block md:flex content-center">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>

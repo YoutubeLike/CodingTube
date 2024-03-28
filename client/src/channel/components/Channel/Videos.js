@@ -3,54 +3,62 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 export default function Video() {
-	const [channelId, setChannelId] = useState(0); // Channel id
-	const [uploadVideoUrl, setUploadVideoUrl] = useState([]); // Video number
-	const [title, setTitle] = useState([]); // Title
-	const [video, setVideo] = useState(); // Title
-	const [idVideo, setIdVideo] = useState();
+	const [channelId, setChannelId] = useState(); // Channel id
+	const [video, setVideo] = useState(); // Video
+    const [thumbnailFile, setThumbnailFile] = useState(null);
 
 	useEffect(() => {
 		const fetchVideos = async () => {
 			try {
-				// Requête vers les infos de la chaîne
+				// Query to retrieve string information
+				const urlParams = new URLSearchParams(window.location.search);
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/videos"
+					"http://localhost:5000/api/channel/infosId",
+					{ params: { identifier: urlParams.get("identifier") } }
 				);
+				// const responseThumbnailPath = await axios.get('http://localhost:5000/api/channel/thumbnailPath?idVideo=' + urlParams.get("id"))
 
-				// Ajouter le résultat de la requête dans la variable vidéo
-				console.log(response.data);
-				setVideo(response.data);
+				// Attribution of information
+				setChannelId(response.data.id);
+				try {
+					// Query for channel information
+					const videos = await axios.get(
+						"http://localhost:5000/api/channel/videos",
+						{ params: { idVideoOnTab: response.data.id } }
+					);
+
+					// Add query result into video variable
+					setVideo(videos.data);
+				} catch (error) {
+					console.error("Erreur :", error);
+				}
 			} catch (error) {
-				console.error("Erreur :", error);
+				console.error(
+					"Erreur lors de la récupération des informations de la chaîne :",
+					error
+				);
 			}
 		};
 
 		fetchVideos();
 	}, []);
 
-	const sendVideo = () => {
-
-	}
-
-	video && console.log(video);
 
 	return (
 		<div className="flex justify-center">
 			<div className="flex flex-wrap w-auto">
 				{video &&
 					video.map((data) => (
-						<Link	
-							to={`/video/${data.id}`}
+						<Link
+							to={`/video?id=${data.id}`}
 							className="flex flex-col mr-4 justify-between"
 						>
 							<img
-								src={data.thumbnail}
-								className="w-[270px] min-h-[155px] rounded-xl bg-black"
+								src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + data.id}
+								className="object-cover w-[270px] min-h-[155px] rounded-xl bg-black"
 							/>
 							<div className="h-full flex flex-col justify-between">
-								<p className="w-[270px] text-start font-bold">
-									{data.title}
-								</p>
+								<p className="w-[270px] text-start font-bold">{data.title}</p>
 								<p className="w-[270px] text-start text-xs">
 									{data.number_view} vues - {data.upload_date_time}
 								</p>

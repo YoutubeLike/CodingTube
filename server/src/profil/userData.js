@@ -1,4 +1,5 @@
 const mariadb = require("../src/database"); /*Connexion to database */
+
 console.error("Début du traitement...");
 
 const userData = (req, res) => {

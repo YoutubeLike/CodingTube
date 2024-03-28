@@ -21,10 +21,14 @@ services:
         source: ./server/src
         target: /app/back/src
       - ./server/env:/app/back/.env
+      - ./server/uploads/thumbnails:/uploads/thumbnails # Ajout du volume pour les miniatures
+      - ./server/uploads/videos:/uploads/videos # Ajout du volume pour les vidéos
+      - ./server/uploads/shorts:/uploads/shorts # Ajout du volume pour les shorts
     networks:
       - bdd-back
     ports:
       - "5000:5000"
+    
   bdd:
     image: mariadb
     networks:
@@ -51,6 +55,7 @@ services:
       - bdd-back
     volumes:
       - ./live-server/app.js:/app/live/app.js
+      - ./live-server/database.js:/app/live/database.js
     command: node app.js
     ports: 
     - 1936:1936

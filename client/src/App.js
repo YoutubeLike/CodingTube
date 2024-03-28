@@ -7,13 +7,12 @@ import ChannelHeader from "./channel/components/Header/Header";
 import DisplayedBurgerMenu from "./timeline/component/displayedBurgerMenu";
 import PageChaineban from "./channel/components/Channel/PageChaineban";
 import Upload from "./channel/pages/Upload";
-
 function App() {
 	return (
 		<>
 			<div>
 				<Header/>
-				<Outlet />
+				<Outlet/>
 				{/* <Upload /> */}
 			</div>
 		</>

@@ -24,6 +24,20 @@ router.get("/userData/:info_user", userData);
 router.post("/userUpdate", userUpdate);
 
 
+const { getInfoChannel } = require("./getInfoChannel.js");
+
+
+router.post("/updatePswrd", updatePassword);
+
+// Endpoint to get user data based on user ID
+router.get("/userData", userData);
+
+// Endpoint to update user data
+router.post("/userUpdate", userUpdate);
+
+//
+router.get("/getInfoChannel/:userId", getInfoChannel);
+
 // Route for user registration
 router.post("/register", async (req, res) => {
   const registerData = req.body.registerData; // Extracting registration data from request body
@@ -88,17 +102,20 @@ router.post("/register", async (req, res) => {
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
           const userId = await GetUserId(registerData.mail);
-            req.session.userId = userId;
-            req.session.save();
-            console.log(req.session.userId + " logged in");
-            return res.json({message: 'registered !'});
+          req.session.userId = userId;
+          req.session.save();
+          res.cookie("CodingTube", req.session, {
+            sameSite: "none",
+            secure: true,
+          });
+          return res.json(req.session);
         } else {
           return res.status(400).json({ error: "Passwords do not match" });
         }
-      } 
-    } else {
-        return res.status(400).json({ error: "Fields can't be empty" });
       }
+    } else {
+      return res.status(400).json({ error: "Fields can't be empty" });
+    }
   } catch (error) {
     console.error("Error during user registration:", error);
     return res.sendStatus(500);
@@ -115,35 +132,27 @@ router.post("/login", async (req, res) => {
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
 
-    // Get password associated with username or email from the database
-    const passwordFromDb = await GetPasswordFromUsernameOrEmail(
-      loginData.usernameOrMail
-    );
+    const passwordFromDb = await GetPasswordFromUsernameOrEmail(loginData.usernameOrMail);
+    const isPasswordMatch = await CheckIfPasswordMatch(loginData.password, passwordFromDb)
 
-    // Check if password matches with the one in the database
-    const isPasswordMatch = await CheckIfPasswordMatch(
-      loginData.password,
-      passwordFromDb
-    );
+    if (loginData.usernameOrMail != "" && loginData.password != "") {
+    // Get password associated with username or email from the database
+
     if (loginData.usernameOrMail != "" || loginData.password != "") {
       if (usernameExist || mailExist) {
         if (isPasswordMatch) {
-            // Create a session and save the id of the user to it
-            const userId = await GetUserId(loginData.usernameOrMail);
-            res.setHeader('Content-Type', 'text/html')
-            // res.setHeader('Set-Cookie: ')
+          // Create a session and save the id of the user to it
+          const userId = await GetUserId(loginData.usernameOrMail);
+          res.setHeader("Content-Type", "text/html");
+          // res.setHeader('Set-Cookie: ')
 
-            req.session.userId = userId ;
-            await req.session.save()
-            console.log(req.sessionID)
-            console.log(req.session.userId + " logged in");
-            console.log(req.session)
-            res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
-            return res.json(req.session);
-
-            //return res.status(400).json({ error: "User logged In Successfully!" });
-            //return res.status(200).json({ redirectTo: '/' });
-
+          req.session.userId = userId;
+          req.session.save();
+          res.cookie("CodingTube", req.session, {
+            sameSite: "none",
+            secure: true,
+          });
+          return res.json(req.session);
 
         } else {
           return res.status(400).json({ error: "Incorrect password" });
@@ -154,18 +163,22 @@ router.post("/login", async (req, res) => {
     } else {
       return res.status(400).json({ error: "Fields can't be empty" });
     }
+  }
   } catch (error) {
-
     console.error("Error during user login:", error);
 
     return res.sendStatus(500);
   }
 });
 
-router.post("/check-session", async (req, res) => {
+router.get("/check-session", async (req, res) => {
   try {
+    console.log('session :')
+    console.log(req.sessionID)
+    console.log(req.session.userId)
+    console.log("")
     if (req.session.userId) {
-      return res.status(200).json({ loggedIn: true, userId: userId });
+      return res.status(200).json({ loggedIn: true });
     } else {
       return res.status(200).json({ loggedIn: false });
     }
@@ -179,16 +192,42 @@ router.post("/check-session", async (req, res) => {
 module.exports = router; // Exporting the router
 
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(req.session.userId + " logged in");
-      return res.json({ message: 'logout' });
-    }
-  });
+  if(req.session.userId){
+    req.session.destroy();
+  }else{
+    console.log("pas connecté")
+  }
 });
 
-
-
 module.exports = router; // Exporting the router module
+
+// Endpoint to get channel information based on user ID
+router.get("/api/channel-info/:userId", async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    // Establishing a database connection
+    const result = await mariadb.pool.query(
+      "SELECT identifier_channel FROM user WHERE user_id = ?",
+      [userId]
+    );
+
+    // Releasing the database connection
+    conn.release();
+
+    // Check if user has a channel and send the response accordingly
+    if (result.length > 0) {
+      res.status(200).json({
+        identifier_channel: result[0].identifier_channel,
+      });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    // Handling errors if any occur during the database operation
+    console.error("Error fetching channel info:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+module.exports = router;

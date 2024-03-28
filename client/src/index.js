@@ -2,8 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App" 
-import Short from "./short/index"
+import App from "./App";
+import Short from "./short/short";
 import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import GridSubscribe from "./timeline/pages/subscribe/subscribeGrid";
@@ -25,6 +25,7 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
+import MyAccount from './profil/Pages/MyAccount';
 import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
@@ -32,6 +33,9 @@ import Live from './live/index'
 import UserLive, { loader as LoaderLive } from "./live/UserLive";
 import Test from "./live/widget";
 import You from "./timeline/pages/you";
+import ChangeTitle from "./live/ChangeTitle"
+//import PageChannel from "./channel/pages/Channel";
+
 import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
@@ -45,7 +49,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <Authentification />
+    element: <Authentification />,
+  },
+  {
+    path: "/profil",
+    element: <MyAccount />
   },
   {
     path: "/live/widget",
@@ -57,7 +65,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Mainpage />
+        element: <Mainpage />,
       },
       {
         path: "live",
@@ -73,7 +81,7 @@ const router = createBrowserRouter([
         element: <History />,
       },
       {
-        path: "/shorts",
+        path: "/short",
         element: <Short />,
       },
       {
@@ -122,7 +130,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/watch",
-        element: <Watch />
+        element: <Watch />,
       },
       {
 				path: "new-channel",
@@ -144,6 +152,10 @@ const router = createBrowserRouter([
 				path: "/you",
 				element: <You />,
 			},
+      {
+        path: "changeTitle",
+        element: <ChangeTitle />,
+      },
       {
 				path: "/playlist",
 				element: <PlaylistPage />,
