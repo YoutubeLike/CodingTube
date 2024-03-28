@@ -8,7 +8,16 @@ import Mainpage from "./timeline/pages/mainpage";
 import History from "./timeline/pages/history";
 import GridSubscribe from "./timeline/pages/subscribe/subscribeGrid";
 import ListSubscribe from "./timeline/pages/subscribe/subscribeList";
-import Trends from "./timeline/pages/trends";
+
+import Trends from "./timeline/pages/categories/trends";
+import Cultivations from "./timeline/pages/categories/cultivations";
+import Musics from "./timeline/pages/categories/musics";
+import News from "./timeline/pages/categories/news";
+import Podcasts from "./timeline/pages/categories/podcasts";
+import Sports from "./timeline/pages/categories/sports";
+import VideoGames from "./timeline/pages/categories/videoGames";
+
+
 import Yourvideos from "./timeline/pages/yourVideos";
 import Watch from "./timeline/pages/watch";
 import CreateChannel from "./channel/pages/NewChannel";
@@ -17,6 +26,7 @@ import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
 import MyAccount from './profil/Pages/MyAccount';
+import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
 import Live from './live/index'
@@ -26,6 +36,7 @@ import You from "./timeline/pages/you";
 import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
+import LikedPage from "./timeline/pages/likePage";
 
 const router = createBrowserRouter([
   {
@@ -78,6 +89,30 @@ const router = createBrowserRouter([
         element: <Trends />,
       },
       {
+        path: "/cultivations",
+        element: <Cultivations />,
+      },
+      {
+        path: "/musics",
+        element: <Musics />,
+      },
+      {
+        path: "/news",
+        element: <News />,
+      },
+      {
+        path: "/podcasts",
+        element: <Podcasts />,
+      },
+      {
+        path: "/sports",
+        element: <Sports />,
+      },
+      {
+        path: "/video-games",
+        element: <VideoGames />,
+      },
+      {
         path: "/channel",
         element: <Channel />,
       },
@@ -116,6 +151,14 @@ const router = createBrowserRouter([
       {
 				path: "/showPlaylist",
 				element: <ShowPlaylistPage />,
+			},
+      {
+				path: "/likedVideos",
+				element: <LikedPage />,
+			},
+      {
+				path: "*",
+				element: <Error />,
 			},
     ]
   },

@@ -4,13 +4,23 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
+import { useLocation } from "react-router-dom";
 
 export default function TimelineRightSide() {
   var [videosInfos, setVideosInfos] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const videoId = searchParams.get("video_id");
+
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/timeline-request');
+        const response = await axios.get('http://localhost:5000/api/timeline/rightSide-timeline',{
+        params: {
+          videoIdParam: videoId,
+        }
+      });
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching videos:', error);
@@ -23,6 +33,7 @@ export default function TimelineRightSide() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
@@ -30,10 +41,10 @@ export default function TimelineRightSide() {
     indents.push(
       <div key={i} className="h-auto mb-2 ">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div class="flex flex-row">
+          <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
-                class="h-20 rounded-lg"
+                class="sm:max-w-auto sm:h-auto md:h-20 rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />
@@ -52,7 +63,6 @@ export default function TimelineRightSide() {
               <h4 className="text-gray text-[90%]">
                 {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
-              <p className="font-bold text-purple-700">Score: {videosInfos[i]["score"]}</p>
             </div>
           </div>
         </a>

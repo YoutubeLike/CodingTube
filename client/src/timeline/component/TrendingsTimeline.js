@@ -30,23 +30,36 @@ export default function TrendingsTimeLine() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
   
   if (videosInfos.length > 10) {
-    videosInfos.slice(10, videosInfos.length);
+    videosInfos = videosInfos.slice(0, 10);
   }
 
   var indents = [];
+
+  // If in BDD there is no video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          No video in BDD... Publish a video to become the first!
+        </p>
+      </div>
+    );
+  }
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
+    const color = ["bg-orange-500","bg-gray-500","bg-orange-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900","bg-gray-900"]
     indents.push(
-      <div key={i} className="mb-10 flex content-center">
-        <div className="bg-orange-500 min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
+      <div key={i} className="mb-10 sm:block md:flex content-center">
+        <div className={`${color[i]} min-w-[6%] pt-2 pb-2 rounded-xl mr-2`}>
           <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">🔥 {i+1}</h1>
         </div>
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div class="flex flex-row">
+          <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
-                class="thumbnail-trendings-list"
+                className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />

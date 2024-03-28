@@ -4,26 +4,51 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const axiosSession = axios.create({ baseURL: "http://localhost:5000/", WithCredentials: true})
+
+  //State for the search input field
   const [searchValue, setSearchValue] = useState("");
+
+  //State to store most viewed search results
   const [mostview, setMostView] = useState([]);
+
+  //State to store user's search history
   const [userhistory, setUserHistory] = useState([]);
+
+  //State to indicate wether the menu is open or closed
   const [menuOpen, setMenuOpen] = useState(false);
+
+  //Ref to the menu element
   const menuRef = useRef(null);
+
+  //Ref to the input element
   const inputRef = useRef("");
+
+  //Hook for navigation
   const navigate = useNavigate();
 
+
+  /**
+   * Function to submit a search request
+   * @async
+   */
   const submit = async () => {
     if (inputRef.current != "") {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/search/request/" + inputRef.current
-        );
-      } catch (error) {
+          await fetch("http://localhost:5000/api/search/request/" + inputRef.current,{
+            method: "GET",
+            headers: {"content-type": "application/json"},
+            credentials: 'include'
+          })
+        }catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     }
   };
 
+  /**
+   * Function to display the most popular search
+   */
   const mostResearch = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     try {
@@ -39,12 +64,21 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to display the user history
+   */
   const history = async () => {
     try {
-      const resultHistory = await axios.get(
-        "http://localhost:5000/api/search/history/1"
-      );
-      setUserHistory(resultHistory.data);
+    await fetch("http://localhost:5000/api/search/history" , {
+        method: "GET",
+        headers: {"content-type": "application/json"},
+        credentials: 'include'
+      }).then(response =>{
+        return response.json()
+      })
+      .then(data => {
+        setUserHistory(data)
+      })
     } catch (error) {
       console.error(
         "An error occurred while searching research most view: ",
@@ -53,22 +87,33 @@ export default function Header() {
     }
   };
 
+  /**
+   * Function to diplay the user history based on the user input
+   */
   const history_onChange = async () => {
     if (inputRef.current === "") {
       history();
     } else {
       try {
-        const resultHistory_onChange = await axios.get(
-          "http://localhost:5000/api/search/history_onChange/1/" +
-            inputRef.current
-        );
-        setUserHistory(resultHistory_onChange.data);
+        await fetch("http://localhost:5000/api/search/history_onChange/" + inputRef.current, {
+          method: "GET",
+          headers: {"Content-Type": "application/json"},
+          credentials: 'include'
+        }).then(response =>{
+          return response.json()
+        })
+        .then(data => {
+          setUserHistory(data)
+        })
       } catch (error) {
         console.error("An error in history_onChange: ", error);
       }
     }
   };
 
+  /**
+   * Function to diplay the most popular search based on the user input
+   */
   const mostResearch_onChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     if (inputRef.current === "") {
@@ -86,21 +131,37 @@ export default function Header() {
     }
   };
 
+  /**
+   * Handles change in the input
+   * @param {object} e - change event
+   */
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
     inputRef.current = e.target.value;
   };
 
+  /**
+   * Handles search by clicking on the research or history div
+   * @param {string} search - selected search term
+   */
   const handleClickSearch = (search) => {
     setSearchValue(search);
     inputRef.current = search;
   };
+
+  /**
+   * Handles click outside the menu
+   * @param {Object} e - Click event.
+   */
   const handleClickOutsideMenu = (e) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
       setMenuOpen(false);
     }
   };
 
+  /**
+   * Effect that listen to click in the menu
+   */
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutsideMenu);
     return () => {
@@ -108,6 +169,11 @@ export default function Header() {
     };
   }, []);
 
+  /**
+   * Function to delete the user history
+   * @param {string} id - id of the search to delete 
+   * @param {object} e - click event 
+   */
   async function deleteHistory(id, e) {
     e.preventDefault();
     try {
@@ -119,12 +185,13 @@ export default function Header() {
 
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white">
+    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 bg-white">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
-        <div className="flex w-[99%] h-6 ml-2 mt-0.5">
+        <div 
+         className="flex w-[99%] h-6 ml-2 mt-0.5">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
-          <p>CODITUBE</p>
+          <p className="hidden md:block">CODITUBE</p>
         </div>
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
@@ -134,17 +201,22 @@ export default function Header() {
           onSubmit={(e) => {
             e.preventDefault();
             submit(searchValue);
-            navigate({
-              pathname: "/search",
-              search: "?videoName=" + searchValue,
-            });
+            if (inputRef.current != "") {
+              window.location.href = "http://localhost:3000/search?videoName=" + searchValue
+            }
+            else {
+              navigate({
+                pathname: '/',
+              });
+            }
           }}
         >
           <div
-            className="display-block w-[100%] h-7 z-20 relative"
+            className="w-[100%] display-block h-7 z-20 relative"
             ref={menuRef}
           >
             <input
+            maxLength={255}
               autocomplete="off"
               className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
@@ -167,13 +239,13 @@ export default function Header() {
               }}
             />
             {menuOpen && (
-              <div className="w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
+              <div className="overflow-hidden w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
                   {userhistory.map((result, index) => (
                     <div key={index} className="flex justify-between">
                       <div className=" items-center hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left">
                         <div
-                          onClick={() => {
+                          onMouseDown={() => {
                             handleClickSearch(result.name_search);
                           }}
                         >
@@ -208,7 +280,7 @@ export default function Header() {
                     <button
                       className="flex hover:bg-gray-100 py-3 hover:rounded-lg w-full text-left"
                       key={index}
-                      onClick={() => {
+                      onMouseDown={() => {
                         handleClickSearch(result.name_search);
                       }}
                     >
@@ -224,7 +296,7 @@ export default function Header() {
                           d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5q0-2.725 1.888-4.612T9.5 3q2.725 0 4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5q0-1.875-1.312-3.187T9.5 5Q7.625 5 6.313 6.313T5 9.5q0 1.875 1.313 3.188T9.5 14"
                         ></path>
                       </svg>
-                      <span>{result.name_search}</span>
+                      <span className="w-[100%]">{result.name_search}</span>
                     </button>
                   ))}
                 </ul>
@@ -242,20 +314,6 @@ export default function Header() {
               <path
                 fill="currentColor"
                 d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5q0-2.725 1.888-4.612T9.5 3q2.725 0 4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5q0-1.875-1.312-3.187T9.5 5Q7.625 5 6.313 6.313T5 9.5q0 1.875 1.313 3.188T9.5 14"
-              ></path>
-            </svg>
-          </button>
-          <button>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-            >
-              <path
-                className="ml-2 h-7 bg-gray-200 rounded-full z-20 relative"
-                fill="currentColor"
-                d="M8 24q-.425 0-.712-.288T7 23q0-.425.288-.712T8 22q.425 0 .713.288T9 23q0 .425-.288.713T8 24m4 0q-.425 0-.712-.288T11 23q0-.425.288-.712T12 22q.425 0 .713.288T13 23q0 .425-.288.713T12 24m4 0q-.425 0-.712-.288T15 23q0-.425.288-.712T16 22q.425 0 .713.288T17 23q0 .425-.288.713T16 24m-4-10q-1.25 0-2.125-.875T9 11V5q0-1.25.875-2.125T12 2q1.25 0 2.125.875T15 5v6q0 1.25-.875 2.125T12 14m-1 7v-3.1q-2.6-.35-4.3-2.312T5 11h2q0 2.075 1.463 3.538T12 16q2.075 0 3.538-1.463T17 11h2q0 2.625-1.7 4.588T13 17.9V21z"
               ></path>
             </svg>
           </button>

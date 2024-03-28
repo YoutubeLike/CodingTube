@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function NonDisplayedBurgerMenu() { 
     return( 
-      <div className="text-black bg-white w-20 h-screen flex flex-col items-center text-xs space-y-8">
-        <div className="absolute inset-y-0 left-20 w-1 bg-black transition-transform duration-300"></div>
+      <div className="text-black bg-white w-20 h-screen  flex-col items-center text-xs space-y-8 pt-12 hidden md:flex">
         <div>
             <Link to="/">
             <svg
