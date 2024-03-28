@@ -213,6 +213,16 @@ const removeShortCommentDislike = (req, res) => {
     });
 };
 
+const getLoggedUserProfileInfo = (req, res) => {
+  mariadb.pool
+    .query("SELECT * FROM user WHERE id = ?;", [
+      req.session.userId,
+    ])
+    .then((value) => {
+      res.send(value[0]);
+    });
+};
+
 module.exports = {
   addCommentAndGetId,
   addReplyAndGetId,
@@ -226,4 +236,5 @@ module.exports = {
   checkShortCommentDislike,
   addShortCommentDislike,
   removeShortCommentDislike,
+  getLoggedUserProfileInfo,
 };

@@ -6,6 +6,7 @@ class CommentBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loggedUserInfos: {},
       commentsIds: [],
       userInput: "",
     };
@@ -27,6 +28,20 @@ class CommentBar extends React.Component {
       );
       this.setState({
         commentsIds: response.data.map((element) => element.id),
+      });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+    // Get logged user infos
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-logged-user-profle-info",
+        {
+          withCredentials: true,
+        }
+      );
+      this.setState({
+        loggedUserInfos: response.data,
       });
     } catch (error) {
       console.error("Error fetching videos:", error);
@@ -71,6 +86,7 @@ class CommentBar extends React.Component {
   }
 
   render() {
+    console.log(this.state.loggedUserInfos)
     return (
       <div className="flex flex-col justify-between shadow-2xl translate-y-px h-[80vh] w-[45vh] rounded-[0.7vh] rounded-r-lg">
         {/* Upper title section */}
@@ -103,6 +119,7 @@ class CommentBar extends React.Component {
             <Comment
               key={id}
               id={id}
+              loggedUserInfos={this.state.loggedUserInfos}
               uploader={this.props.shortInfos.uploader_id}
               shortInfos={this.props.shortInfos}
               superlikePP={this.props.PP}
@@ -113,7 +130,7 @@ class CommentBar extends React.Component {
         {/* Comment insert section */}
         <div className="flex flex-row items-center p-[1.8vh] border-t-[1px]">
           <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-            <img src={this.state.senderPP} />
+            <img src={this.state.loggedUserInfos.PP} />
           </div>
 
           <input

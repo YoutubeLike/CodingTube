@@ -286,11 +286,11 @@ class Comment extends React.Component {
         </div>
         {this.state.isReplying && (
           <div
-            className="flex items-center p-[1.8vh] border-t-[1px]"
+            className="flex p-[1.8vh] border-t-[1px] "
             ref={this.inputFieldRef}
           >
             <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-              <img src={this.state.senderPP} />
+              <img src={this.props.loggedUserInfos.PP} />
             </div>
 
             <input

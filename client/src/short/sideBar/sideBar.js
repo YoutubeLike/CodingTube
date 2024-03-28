@@ -87,7 +87,7 @@ class SideBar extends React.Component {
 
   render() {
     return (
-      <div className="ml-[0.95vh] mt-[32vh] h-[48vh] flex flex-col justify-end justify-between items-center">
+      <div className="ml-[0.95vh] mt-[36.5vh] h-[42vh] flex flex-col justify-end justify-between items-center">
         <LikeButton
           id={this.props.id}
           isDisliked={this.state.isDisliked}
@@ -110,7 +110,7 @@ class SideBar extends React.Component {
         />
         <ShareButton id={this.props.id} />
         <OptionsButton setState={this.props.setState} />
-        <SoundButton />
+        {/* <SoundButton /> */}
       </div>
     );
   }
