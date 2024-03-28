@@ -37,25 +37,21 @@ export default function LiveFromUser() {
       <p> {user} </p>
       <div className="section-live-chat flex flex-col items-start md:flex-row w-full h-screen">
         <div
-          //   style={{ width: "640px", height: "360px" }}
+          style={{ width: "100%", height: "auto" }}
           class="video-container w-auto flex flex-col"
         >
           <div>
             <ReactPlayer
-              style={{ position: "absolute", zIndex: "2" }}
-              className="video-container"
+              style={{}}
+              className="video-container2 bg-slate-400 relative"
               url={"http://localhost:8090/live/" + user + ".flv"}
               controls={false}
               playing={false}
               pip={false}
             />
-            <img
-              style={{ position: "relative", top: "0" }}
-              src="/live/offline.jpg"
-            />
           </div>
 
-          <p>{UserSize}bonjour les gens </p>
+          <p> {UserSize} </p>
         </div>
 
         <Chat user={user} socket={Socket} />
