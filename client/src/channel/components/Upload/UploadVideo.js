@@ -46,7 +46,7 @@ export default function UploadVideo() {
         formData.append('video', videoFile);
 		formData.append('thumbnail', thumbnailFile)
 
-        axios.post('http://localhost:5000/api/channel/submitVideo', formData)
+        axios.post('http://localhost:5000/api/channel/submitVideo', formData , {withCredentials:true})
             .then(response => {
                 console.log('Server response:', response.data);
                 setTitle("");

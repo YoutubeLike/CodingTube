@@ -16,7 +16,7 @@ export default function Video() {
 					"http://localhost:5000/api/channel/infosId",
 					{ params: { identifier: urlParams.get("identifier") } }
 				);
-				const responseThumbnailPath = await axios.get('http://localhost:5000/api/channel/thumbnailPath?idVideo=' + urlParams.get("id"))
+				// const responseThumbnailPath = await axios.get('http://localhost:5000/api/channel/thumbnailPath?idVideo=' + urlParams.get("id"))
 
 				// Attribution of information
 				setChannelId(response.data.id);
@@ -43,7 +43,6 @@ export default function Video() {
 		fetchVideos();
 	}, []);
 
-	const sendVideo = () => {};
 
 	return (
 		<div className="flex justify-center">

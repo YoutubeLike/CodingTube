@@ -85,8 +85,8 @@ const submit = (req, res) => {
 		});
 };
 
-const submitVideo = (req, res) => {
-	uploadVideo(req, res, (err) => {
+const submitVideo = async(req, res) => {
+	uploadVideo(req, res, async(err) => {
 		if (err) {
 			console.error("Error uploading files:", err);
 			return res.status(500).send("Internal Server Error");
@@ -105,7 +105,17 @@ const submitVideo = (req, res) => {
 		const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
 		const videoURL = path.join(source, "videos", videoFile.originalname);
 
-		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
+		// Récupérer l'id de la chaîne
+		const userId = req.session.userId
+		const channelId = await mariadb.pool.query(
+			"SELECT id FROM channel WHERE user_id = ?",
+			[req.session.userId]
+		);
+		console.log("ID USER :", req.session.userId)
+		// console.log("ID CHANNEL :", channelId)
+
+		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id, upload_date_time) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)', 
+		[title, description, category, thumbnailURL, videoURL, channelId[0].id])
 			.then(() => {
 				res.status(200).send("Data submitted successfully!");
 			})
@@ -256,7 +266,6 @@ const getVideo = (req, res) => {
 
 //export functions
 module.exports = {
-	getIdentifier,
 	selectChannel,
 	selectChannelIdentifier,
 	submit,
@@ -270,6 +279,7 @@ module.exports = {
 	getFollow,
 	follow,
 	getVideo,
+	getIdentifier,
 
 };
 
