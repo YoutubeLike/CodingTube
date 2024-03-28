@@ -123,7 +123,7 @@ const submitVideo = (req, res) => {
       return res.status(500).send("Internal Server Error");
     }
 
-    const { title, description, category, isShort, filters } = req.body;
+    const { title, description, category, isShort, text, filters } = req.body;
     const thumbnailFile = req.files["thumbnail"][0];
     const videoFile = req.files["video"][0];
 
@@ -147,8 +147,8 @@ const submitVideo = (req, res) => {
     if (isShort == "true") {
       mariadb.pool
         .query(
-          "INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, filters, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, ?, CURRENT_TIMESTAMP)",
-          [title, description, category, thumbnailURL, videoURL, filters]
+          "INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, text, filters, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, ?, ?, CURRENT_TIMESTAMP)",
+          [title, description, category, thumbnailURL, videoURL, text, filters]
         )
         .then(() => {
           res.status(200).send("Data submitted successfully!");
