@@ -1,9 +1,9 @@
 // File containing all the HTML content to be displayed
 
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
-import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
+import axios from "axios";
+import { SetScores } from "../functions/AdvancedTimelineCalculator.js";
+import { GetTimeElapsed, TimeOfVideo } from "../functions/VideoTiming.js";
 import { useLocation } from "react-router-dom";
 
 export default function TimelineRightSide() {
@@ -12,18 +12,20 @@ export default function TimelineRightSide() {
   const searchParams = new URLSearchParams(location.search);
   const videoId = searchParams.get("video_id");
 
-
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/rightSide-timeline',{
-        params: {
-          videoIdParam: videoId,
-        }
-      });
+        const response = await axios.get(
+          "http://localhost:5000/api/timeline/rightSide-timeline",
+          {
+            params: {
+              videoIdParam: videoId,
+            },
+          }
+        );
         setVideosInfos(response.data);
       } catch (error) {
-        console.error('Error fetching videos:', error);
+        console.error("Error fetching videos:", error);
       }
     };
     fetchVideos();
@@ -36,7 +38,7 @@ export default function TimelineRightSide() {
 
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
 
     indents.push(
       <div key={i} className="h-auto mb-2 ">
@@ -61,7 +63,8 @@ export default function TimelineRightSide() {
                 {videosInfos[i]["pseudo"]}
               </h4>
               <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views - {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                {videosInfos[i]["number_view"]} views -{" "}
+                {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
             </div>
           </div>

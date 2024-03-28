@@ -8,7 +8,6 @@ import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 
 export default function Watch() {
-
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "Watch - CodingTube";
@@ -23,7 +22,8 @@ export default function Watch() {
       try {
         if (videoId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/addView-request`, {
+            `http://localhost:5000/api/timeline/addView-request`,
+            {
               params: {
                 videoIdParam: videoId,
               },
@@ -39,7 +39,6 @@ export default function Watch() {
     fetchData();
   }, [videoId]);
 
-
   // Execute the SQL Request whitch adds the video's history
   const [errorHistory, setErrorHistory] = useState([]);
   useEffect(() => {
@@ -49,13 +48,13 @@ export default function Watch() {
           const response = await axios.get(
             `http://localhost:5000/api/timeline/addHistory-request`,
             {
-                withCredentials: true,
-                params: {
-                    videoIdParam: videoId,
-                },
+              withCredentials: true,
+              params: {
+                videoIdParam: videoId,
+              },
             }
-        );
-        
+          );
+
           console.log("History added successfully");
         }
       } catch (errorHistory) {

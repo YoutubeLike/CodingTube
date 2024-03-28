@@ -5,8 +5,6 @@ import axios from "axios";
 
 // Function witchs adds scores to videos for the advanced timeline
 export function SetScoresTrendings(videosInfos) {
-
-
   for (var i = 0; i < videosInfos.length; i++) {
     videosInfos[i]["score"] = 0;
 
@@ -31,8 +29,7 @@ export function SetScoresTrendings(videosInfos) {
     // Removes score with likes
     videosInfos[i]["score"] += videosInfos[i]["nb_dislike"] / 10;
 
-    console.log("score:",videosInfos[i]["score"]);
-
+    console.log("score:", videosInfos[i]["score"]);
   }
 
   return videosInfos;

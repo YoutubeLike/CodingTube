@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
-import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
+import axios from "axios";
+import { SetScores } from "../functions/AdvancedTimelineCalculator.js";
 import { useLocation } from "react-router-dom";
-import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
-
+import { GetTimeElapsed, TimeOfVideo } from "../functions/VideoTiming.js";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
 function getTimeElapsed(uploadDateTime) {
@@ -42,33 +41,32 @@ function timeOfVideo(totalSeconds) {
 
   // Seconds
   if (seconds < 10) {
-    resultSeconds =  `0${seconds}`
+    resultSeconds = `0${seconds}`;
   } else {
-    resultSeconds =  `${seconds}`
+    resultSeconds = `${seconds}`;
   }
   // Minutes
   if (minutes < 10) {
-    resultMinutes =  `0${minutes}:`
+    resultMinutes = `0${minutes}:`;
   } else {
-    resultMinutes =  `${minutes}:`
+    resultMinutes = `${minutes}:`;
   }
   // Hours
   if (hours > 0) {
     if (hours < 10) {
-      resultHours =  `0${hours}:`
+      resultHours = `0${hours}:`;
     } else {
-      resultHours =  `${hours}:`
+      resultHours = `${hours}:`;
     }
   } else {
-    resultHours =  ``
+    resultHours = ``;
   }
-  
-  result = `${resultHours}${resultMinutes}${resultSeconds}`
+
+  result = `${resultHours}${resultMinutes}${resultSeconds}`;
   return result;
 }
 
 export default function ShowPlaylist() {
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const playlistId = searchParams.get("playlist_id");
@@ -79,10 +77,11 @@ export default function ShowPlaylist() {
       try {
         if (playlistId) {
           const response = await axios.get(
-            `http://localhost:5000/api/timeline/showPlaylist-request`, {
-                params: {
-                    playlistIdParam: playlistId,
-                },
+            `http://localhost:5000/api/timeline/showPlaylist-request`,
+            {
+              params: {
+                playlistIdParam: playlistId,
+              },
             }
           );
           setVideosInfos(response.data);
@@ -97,15 +96,17 @@ export default function ShowPlaylist() {
   }, [playlistId]);
 
   var indents = [];
-  
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
-   
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
+
     indents.push(
       <div key={i} className="mb-10 sm:block md:flex content-center">
         <div className="min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
-          <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">{i+1}</h1>
+          <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">
+            {i + 1}
+          </h1>
         </div>
         <a href={`/watch?video_id=${videosInfos[i]["id_video"]}`}>
           <div class="sm:block md:flex md:flex-row">
