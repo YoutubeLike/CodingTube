@@ -40,8 +40,13 @@ import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
 import LikedPage from "./timeline/pages/likePage";
+import MyAccount from './profil/Pages/MyAccount'
 
 const router = createBrowserRouter([
+  {
+    path: "/profil" ,
+    element: <MyAccount/>
+  },
   {
     path: "/login",
     element: <Authentification />,

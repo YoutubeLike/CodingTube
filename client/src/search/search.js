@@ -274,7 +274,7 @@ export default function Search() {
         </div>
           {videosInfos && videosInfos.map((result, index) => (
               <div key={index}>
-                <a href={`/watch?video_id=${result.id}`}>
+                <a href={`/video?id=${result.id}`}>
                   <div className="flex flex-row">
                     <div className="relative w-[20%]">
                       <img
