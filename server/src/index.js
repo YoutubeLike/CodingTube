@@ -31,10 +31,20 @@ app.use(
 );
 
 app.use(
+  cors({
+    // better way (browsers are now happy)
+    origin: (origin, callback) => {
+      callback(null, true);
+    },
+    credentials: true, // authorize cookie
+  })
+);
+
+app.use(
   session({
     secret: "secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 
@@ -50,6 +60,7 @@ app.use("/api", routes);
 const io = new socketio.Server(server, {
   cors: {
     origin: "*",
+    methods: ["GET", "POST"],
   },
 });
 
@@ -99,27 +110,48 @@ io.on("connection", (socket) => {
     } else {
       const room = socket.rooms.values();
       room.next();
-      socket.broadcast.to(room.next().value).emit("chat-message", {
+      const currentRoom = room.next();
+
+      socket.broadcast.to(currentRoom.value).emit("chat-message", {
         sender: msg.sender,
         time: msg.time,
         message: msg.message,
         profilePicture: msg.profilePicture,
       });
     }
-    console.log("Message received: " + msg.message);
-    console.log("PP of the message received: " + msg.profilePicture);
   });
 
   // Handle disconnections
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
-  });
 
-  console.log(io.engine.clientsCount);
-  console.log(socket.rooms);
+    socket.adapter.rooms.forEach((value, key) => {
+      if(io.sockets.adapter.rooms.get(key))
+      {
+        io.sockets.to(key).emit("user-count", { size: io.sockets.adapter.rooms.get(key).size })
+      }
+    });
+    // io.adapter
+  })
 
+  //Handle connection to room
   socket.on("connect-to-room", (arg) => {
     socket.join(arg);
+    console.log("connect user to room " + arg);
+  });
+
+  // Verify the number of person in current room
+  socket.on("AskUserCount", (arg) => {
+    console.log(arg.user);
+    if (io.sockets.adapter.rooms.get(arg.user)) {
+      console.log("bonjour");
+      io.sockets
+        .to(arg.user)
+        .emit("user-count", {
+          size: io.sockets.adapter.rooms.get(arg.user).size,
+        });
+    }
   });
 });
 

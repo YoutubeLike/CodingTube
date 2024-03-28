@@ -7,7 +7,6 @@ import "../styles/Timeline.css";
 import React, { useEffect, useState } from "react";
 
 export default function Mainpage() {
-
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "Home - CodingTube";
