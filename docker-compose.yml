@@ -21,10 +21,13 @@ services:
         source: ./server/src
         target: /app/back/src
       - ./server/env:/app/back/.env
+      - ./server/uploads/thumbnails:/uploads/thumbnails # Ajout du volume pour les miniatures
+      - ./server/uploads/videos:/uploads/videos # Ajout du volume pour les vidéos
     networks:
       - bdd-back
     ports:
       - "5000:5000"
+    
   bdd:
     image: mariadb
     networks:

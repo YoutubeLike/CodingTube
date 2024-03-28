@@ -1,29 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-export default function Accueil() {
+export default function Video() {
+	const [channelId, setChannelId] = useState(); // Channel id
+	const [video, setVideo] = useState(); // Video
+
+	useEffect(() => {
+		const fetchVideosAccueil = async () => {
+			try {
+				// Query to retrieve string information
+				const urlParams = new URLSearchParams(window.location.search);
+				const response = await axios.get(
+					"http://localhost:5000/api/channel/infosId?identifier=" + urlParams.get("identifier"));
+
+				// Attribution of information
+				setChannelId(response.data.id);
+				try {
+					// Query for channel information
+					const videos = await axios.get(
+						"http://localhost:5000/api/channel/videos",
+						{ params: { idVideoOnTab: response.data.id } }
+					);
+
+					// Add query result into video variable
+					setVideo(videos.data);
+				} catch (error) {
+					console.error("Erreur :", error);
+				}
+			} catch (error) {
+				console.error(
+					"Erreur lors de la récupération des informations de la chaîne:",
+					error
+				);
+			}
+		};
+
+		fetchVideosAccueil();
+	}, []);
+
+	const sendVideo = () => {};
+	const firstFourVideos = video ? video.slice(0, 4) : [];
+
 	return (
-		<>
-			{/* Contenu */}
-			<div className="content p-4">
-				{/* Insérer le contenu ici */}
-				<div>
-					<h2 className="text-xl font-bold mb-4 flex border-b-2">Pour vous</h2>
-					<p className="flex">Affichage des dernières vidéos postés</p>
-				</div>
-				<div>
-					<h2 className="text-xl font-bold mb-4 flex border-b-2">Vidéos</h2>
-					<p className="flex">Affichage des vidéos</p>
-				</div>
-				<div>
-					<h2 className="text-xl font-bold mb-4 flex border-b-2">Shorts</h2>
-					<p className="flex">Affichage des shorts</p>
-				</div>
-				<div>
-					<h2 className="text-xl font-bold mb-4 flex border-b-2">Playlists</h2>
-					<p className="flex">Affichage des playlists</p>
-				</div>
+		<div className="flex justify-center">
+			<div className="flex flex-wrap w-auto">
+				{firstFourVideos.map((data) => (
+					<Link
+						to={`/video?id=${data.id}`}
+						className="flex flex-col mr-4 justify-between"
+						key={data.id}
+					>
+						<img
+							src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + data.id}
+							className="object-cover w-[270px] min-h-[155px] rounded-xl bg-black"
+						/>
+						<div className="h-full flex flex-col justify-between">
+							<p className="w-[270px] text-start font-bold">{data.title}</p>
+							<p className="w-[270px] text-start text-xs">
+								{data.number_view} vues - {data.upload_date_time}
+							</p>
+						</div>
+					</Link>
+				))}
 			</div>
-			{/* Liste des contenus */}
-		</>
+		</div>
 	);
 }
