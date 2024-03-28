@@ -290,7 +290,13 @@ export default function Header() {
             ></path>
           </svg>
         </button>
-        <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
+        <button
+        
+          onClick={ () => {
+            window.location.href = "/profil";
+          }}
+          className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full"
+        >
           <svg
             className="h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"

@@ -89,7 +89,7 @@ const ProfilePage = () => {
         birthdate: profileData.birthdate,
         country: profileData.country,
         gender: profileData.gender,
-      }
+      },{withCredentials: true} 
     );
     setGoodMessage("Information updated");
     console.log(response.data);
@@ -97,10 +97,35 @@ const ProfilePage = () => {
 
   // Fetch user data on component mount
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/profil/check-session",
+          {
+            withCredentials: true,
+          }
+        );
+
+        const loggedIn = response.data.loggedIn;
+
+        // Update the profileData state with isLoggedIn
+        setProfileData((prevProfileData) => ({
+          ...prevProfileData,
+          isLoggedIn: loggedIn,
+        }));
+
+        if (!loggedIn) {
+          window.location.href = "/login";
+        }
+      } catch (error) {
+        console.log("Erreur lors de la vérification du login:", error);
+      }
+    };
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/profil/userData/6`
+          `http://localhost:5000/api/profil/userData/`,
+          { withCredentials: true }
         );
         setProfileData(response.data);
       } catch (error) {
@@ -108,8 +133,9 @@ const ProfilePage = () => {
       }
     };
 
+    fetchData();
     fetchUserData();
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   // Toggle edit mode for a field
   const handleEditToggle = (field) => {
@@ -163,7 +189,8 @@ const ProfilePage = () => {
           currentPassword,
           newPassword,
           confirmPassword,
-        }
+        }, {withCredentials: true}
+
       );
 
       console.log(response.data); // Handle response as necessary
@@ -187,16 +214,6 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/profil/logout"
-      );
-      window.location.href = "/login"; // Redirect to the login page
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
 
   return (
     <div className="pl-0">
@@ -903,11 +920,21 @@ const ProfilePage = () => {
       </div>
       <div className="w-full md:w-auto md:mx-20 p-4  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
         <div className="relative inline-flex group">
-          <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-gray-600 via-[#737373] to-gray-600 rounded-md blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
           <button
-            onClick={handleLogout}
-            className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-600 font-pj rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-            title="ARE U SURE ABOUT THAT"
+            onClick={async () => {
+              console.log("looguto");
+              try {
+                window.location.href = "/login";
+                const response = await axios.get(
+                  "http://localhost:5000/api/profil/logout",
+                  { withCredentials: true }
+                );
+                console.log("Logout successful");
+              } catch (error) {
+                console.error("An error occurred during logout: ", error);
+              }
+            }}
+            className=""
           >
             Log Out
           </button>

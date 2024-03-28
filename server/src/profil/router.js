@@ -20,7 +20,7 @@ const { updatePassword } = require("./updatePswrd.js"); // Importing updatePassw
 router.post("/updatePswrd", updatePassword);
 
 // Endpoint to get user data based on user ID
-router.get("/userData/:info_user", userData);
+router.get("/userData", userData);
 
 // Endpoint to update user data
 router.post("/userUpdate", userUpdate);
@@ -165,17 +165,29 @@ router.post("/login", async (req, res) => {
 });
 
 
-module.exports = router; // Exporting the router
+router.get("/check-session", async (req, res) => {
+  try {
+    console.log('session :')
+    console.log(req.sessionID)
+    console.log(req.session.userId)
+    console.log("")
+    if (req.session.userId) {
+      return res.status(200).json({ loggedIn: true });
+    } else {
+      return res.status(200).json({ loggedIn: false });
+    }
+  } catch (error) {
+    console.error("Error checking session:", error);
+    return res.sendStatus(500);
+  }
+});
 
 router.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(req.session.userId + " logged in");
-      return res.json({ message: 'logout' });
-    }
-  });
+  if(req.session.userId){
+    req.session.destroy();
+  }else{
+    console.log("pas connecté")
+  }
 });
 
 

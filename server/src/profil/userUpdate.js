@@ -17,15 +17,16 @@ const formatDateForBackend = (dateString) => {
 };
 
 const userUpdate = async (req, res) => {
+  console.log(req.session.userId)
   try {
     const updatedUserData = req.body;
     const userId = req.session.userId;
     const formattedBirthdate = formatDateForBackend(updatedUserData.birthdate);
-
+    console.log(updatedUserData)
     // Get the current user data from the database
     const currentUserData = await mariadb.pool.query(
       "SELECT username, mail FROM user WHERE id = ?",
-      [6]
+      [userId]
     );
 
     const currentUsername = currentUserData[0].username;
@@ -65,7 +66,7 @@ const userUpdate = async (req, res) => {
         formattedBirthdate,
         updatedUserData.country,
         updatedUserData.gender,
-        6,
+        userId,
       ]
     );
 

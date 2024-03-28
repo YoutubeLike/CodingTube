@@ -2,22 +2,26 @@ const mariadb = require("../src/database"); /* Connexion to database */
 const bcrypt = require("bcryptjs");
 console.error("Début du traitement de updatePswrd"); // Logging start of processing
 
+
+
 const updatePassword = async (req, res) => {
+  console.log(req.session.userId + "helloworld ")
   try {
-    const { id, currentPassword, newPassword, confirmPassword } = req.body;
+    const {currentPassword, newPassword, confirmPassword } = req.body;
+    const userId = req.session.userId;
+    console.log("coucou" + userId)
     console.log("on récup les infos")
     // Check if the new password matches the confirmed password
     if (newPassword !== confirmPassword) {
       return res
         .status(400)
         .json({ error: "New password and confirm password do not match" });
-        
     }
 
     // Fetch user data from the database
     const userData = await mariadb.pool.query(
       "SELECT * FROM user WHERE id = ?",
-      [6]
+      [userId]
     );
     console.log("on récup les infos du user")
 
@@ -41,7 +45,7 @@ const updatePassword = async (req, res) => {
     // Update the user's password in the database
     await mariadb.pool.query("UPDATE user SET password = ? WHERE id = ?", [
       hashedPassword,
-      6,
+      userId,
     ]);
 
     // Respond with success message
