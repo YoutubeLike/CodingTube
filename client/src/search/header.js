@@ -117,25 +117,6 @@ export default function Header() {
 		}
 	}
 
-	async function GoToChannel() {
-		try {
-			const response = await axios.get(
-				"http://localhost:5000/api/channel/get-identifier",
-				{ withCredentials: true }
-			);
-			const identifier = response.data.identifier_channel;
-			window.location.href =
-				identifier != null
-					? "http://localhost:3000/channel?identifier=" + identifier
-					: "http://localhost:3000/new-channel";
-		} catch (error) {
-			console.error(
-				"An error occurred while searching research most view: ",
-				error
-			);
-		}
-	}
-
 	return (
 		// Header component containing search bar and buttons
 		<div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 z-12 bg-white">
@@ -308,10 +289,7 @@ export default function Header() {
 						></path>
 					</svg>
 				</button>
-				<button
-					onClick={GoToChannel}
-					className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full"
-				>
+				<button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
 					<svg
 						className="h-5 w-5"
 						xmlns="http://www.w3.org/2000/svg"

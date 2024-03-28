@@ -121,7 +121,7 @@ const submitVideo = (req, res) => {
 const getIdentifier = ((req, res) => {
 	console.log(req.session.userId);
 	mariadb.pool
-		.query("SELECT identifier_channel FROM channel WHERE id = ?", [
+		.query("SELECT identifier_channel FROM channel WHERE user_id = ?", [
 			req.session.userId,
 		])
 		.then((value) => {
