@@ -2,7 +2,7 @@ const mariadb = require("../src/database.js");
 
 const addViewTimelineRequest = (req, res) => {
   const videoId = req.query.videoIdParam;
-  // SQL Request : change the video's views values with the videoID
+  // SQL Request : add one view of a video with the videoId parameter. The history is added to another file (controllerAddHistory), the userId is used there.
   mariadb.pool
     .query("UPDATE video SET number_view = number_view + 1 WHERE id = ?", [
       videoId,
