@@ -218,17 +218,6 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/profil/logout"
-      );
-      window.location.href = "/login"; // Redirect to the login page
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
-
   const [isLoading, setIsLoading] = useState(true);
   const [channelExists, setChannelExists] = useState(false);
   const [identifier, setIdentifier] = useState(null); // State to hold identifier_channel
