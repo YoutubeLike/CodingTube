@@ -12,9 +12,7 @@ export default function Video() {
 				// Query to retrieve string information
 				const urlParams = new URLSearchParams(window.location.search);
 				const response = await axios.get(
-					"http://localhost:5000/api/channel/infosId",
-					{ params: { identifier: urlParams.get("identifier") } }
-				);
+					"http://localhost:5000/api/channel/infosId?identifier=" + urlParams.get("identifier"));
 
 				// Attribution of information
 				setChannelId(response.data.id);
@@ -32,7 +30,7 @@ export default function Video() {
 				}
 			} catch (error) {
 				console.error(
-					"Erreur lors de la récupération des informations de la chaîne :",
+					"Erreur lors de la récupération des informations de la chaîne:",
 					error
 				);
 			}

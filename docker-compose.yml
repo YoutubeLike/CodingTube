@@ -47,7 +47,18 @@ services:
       - bdd-back
     ports:
       - 8080:8080
-
+  live:
+    build: ./live-server
+    working_dir: /app/live
+    networks:
+      - bdd-back
+    volumes:
+      - ./live-server/app.js:/app/live/app.js
+    command: node app.js
+    ports: 
+    - 1936:1936
+    - 8090:8090
+    
 networks:
   bdd-back:
     driver: bridge

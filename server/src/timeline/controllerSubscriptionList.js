@@ -2,10 +2,13 @@ const mariadb = require("../src/database.js");
 
 const subscriptionList = ((req, res) =>  
 {
+  const userId = req.query.userIdParam;
   // SQL Request : get the video's informations and send it
     mariadb.pool
     .query(
-      "SELECT * FROM follow WHERE follower_id = 1;"
+      "SELECT * FROM follow WHERE follower_id = ?;", [
+        userId
+      ]
     )
     .then((value) => {
       res.send(value);

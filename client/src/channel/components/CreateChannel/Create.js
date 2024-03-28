@@ -15,22 +15,22 @@ export default function Create() {
 	const [banner, setBannerPreview] = useState(null);
 	const [message, setMessage] = useState(null);
 
-
-	console.log(banner);
-
 	const submit = async (event) => {
 		event.preventDefault();
 		try {
-			const message = await axios.post("http://localhost:5000/api/channel/submitChannel", {
-				name: name,
-				identifier: identifier,
-				bio: bio,
-				banner: banner,
-				profile_picture: imagePreview,
+			const message = await axios.get("http://localhost:5000/api/channel/submitChannel", {
+				withCredentials: true,
+				params: {
+					name: name,
+					identifier: identifier,
+					bio: bio,
+					banner: banner,
+					profile_picture: imagePreview,
+				}
 			});
 			if (message.data == "Channel created") {
 				try {
-					const request = await axios.get("http://localhost:5000/api/channel/id", {params: {identifier: identifier}})
+					const request = await axios.get("http://localhost:5000/api/channel/id", { params: { identifier: identifier } })
 					// session = request.data.id
 					window.location.href = 'http://localhost:3000/channel?identifier=' + identifier;
 				} catch (error) {

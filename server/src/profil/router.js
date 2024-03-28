@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const sessionData = require('../index')
 const {
   // Importing functions from authentication module
   InsertUser,
@@ -71,10 +70,11 @@ router.post("/register", async (req, res) => {
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
-          const  userId = await GetUserId(registerData.username);
-          sessionData.userId = userId;
-            console.log(sessionData.userId + " logged in");
-            return res.status(200).json({ redirectTo: '/' });
+          const userId = await GetUserId(registerData.mail);
+            req.session.userId = userId;
+            req.session.save();
+            console.log(req.session.userId + " logged in");
+            return res.json({message: 'registered !'});
         } else {
           return res.status(400).json({ error: "Passwords do not match" });
         }
@@ -95,7 +95,6 @@ router.post("/login", async (req, res) => {
     // Check if username or email exists in the database
     const usernameExist = await CheckIfUsernameExist(loginData.usernameOrMail);
     const mailExist = await CheckIfMailExist(loginData.usernameOrMail);
-    const userId = await GetUserId(loginData.usernameOrMail);
 
     // Get password associated with username or email from the database
     const passwordFromDb = await GetPasswordFromUsernameOrEmail(
@@ -110,9 +109,21 @@ router.post("/login", async (req, res) => {
     if (loginData.usernameOrMail != "" || loginData.password != "") {
       if (usernameExist || mailExist) {
         if (isPasswordMatch) {
-            sessionData.userId = userId;
-            console.log(sessionData.userId + " logged in");
-            return res.status(200).json({ redirectTo: '/' });
+            // Create a session and save the id of the user to it
+            const userId = await GetUserId(loginData.usernameOrMail);
+            res.setHeader('Content-Type', 'text/html')
+            // res.setHeader('Set-Cookie: ')
+
+            req.session.userId = userId ;
+            await req.session.save()
+            console.log(req.sessionID)
+            console.log(req.session.userId + " logged in");
+            console.log(req.session)
+            res.cookie("CodingTube", req.session, {sameSite: "none", secure: true})
+            return res.json(req.session);
+
+            //return res.status(400).json({ error: "User logged In Successfully!" });
+            //return res.status(200).json({ redirectTo: '/' });
 
         } else {
           return res.status(400).json({ error: "Incorrect password" });
@@ -130,9 +141,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/check-session", async (req, res) => {
   try {
-    console.log(sessionData.userId);
-    if (sessionData.userId) {
-      return res.status(200).json({ loggedIn: true, userId: sessionData.userId });
+    if (req.session.userId) {
+      return res.status(200).json({ loggedIn: true, userId: userId });
     } else {
       return res.status(200).json({ loggedIn: false });
     }
@@ -143,12 +153,12 @@ router.post("/check-session", async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  sessionData.destroy((err) => {
+  req.session.destroy((err) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(sessionData.userId + " logged in");
-      return res.status(200).json({ redirectTo: '/login' });
+      console.log(req.session.userId + " logged in");
+      return res.json({ message: 'logout' });
     }
   });
 });

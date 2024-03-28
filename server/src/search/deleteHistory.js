@@ -8,4 +8,5 @@ try {
         res.status(500).send(error.message);
     }
 }
+
 module.exports = {deleteHistory}

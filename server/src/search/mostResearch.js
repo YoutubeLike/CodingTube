@@ -8,4 +8,5 @@ const mostResearch = async (req, res) => {
         res.status(500).send("Une erreur est survenue lors du traitement.");
     }
 }
+
 module.exports = {mostResearch}

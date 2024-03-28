@@ -9,56 +9,70 @@ import "../../index.css";
 class Authentification extends React.Component {
   constructor(props) {
     super(props);
+    // Initialisation de l'état local
     this.state = {
-      isLogin: true,
+      isLogin: true, // Indique si l'utilisateur est en train de se connecter (true) ou de s'inscrire (false)
       RegisterData: {
         mail: "",
         username: "",
         password: "",
         confirmPassword: "",
-      },
+      }, // Données pour le formulaire d'inscription
       LoginData: {
         usernameOrMail: "",
         password: "",
-      },
-      errorLogin: null,
-      errorRegister: null,
-      goodLogin: null,
-      goodRegister: null,
-      heightBiggerThanWidth: true,
-      darkMode: false,
+      }, // Données pour le formulaire de connexion
+      errorLogin: null, // Message d'erreur pour la connexion
+      errorRegister: null, // Message d'erreur pour l'inscription
+      goodLogin: null, // Message de succès pour la connexion
+      goodRegister: null, // Message de succès pour l'inscription
+      heightBiggerThanWidth: true, // Indique si la hauteur est plus grande que la largeur
+      darkMode: false, // Indique si le mode sombre est activé ou non
     };
   }
 
+  // Méthode appelée lors du changement de taille de la fenêtre
   checkHeightWidthRatio = () => {
+    // Vérifie si la hauteur est plus grande que la largeur
     const heightBiggerThanWidth = window.innerHeight > window.innerWidth;
+    // Met à jour l'état correspondant
     this.setState({ heightBiggerThanWidth });
   };
 
   componentDidMount() {
+    // Ajoute un écouteur d'événement pour détecter les changements de taille de la fenêtre
     window.addEventListener("resize", this.checkHeightWidthRatio);
+    // Vérifie initialement la taille de la fenêtre
     this.checkHeightWidthRatio();
   }
 
   componentWillUnmount() {
+    // Supprime l'écouteur d'événement lors du démontage du composant pour éviter les fuites de mémoire
     window.removeEventListener("resize", this.checkHeightWidthRatio);
   }
 
+  // Méthode pour basculer entre le formulaire de connexion et d'inscription
   toggleForm = () => {
+    // Inverse la valeur de isLogin pour basculer entre le formulaire de connexion et d'inscription
     this.setState((prevState) => ({
       isLogin: !prevState.isLogin,
     }));
   };
 
+  // Méthode pour basculer entre le mode sombre et le mode clair
   toggleDarkMode = () => {
+    // Inverse la valeur de darkMode pour basculer entre le mode sombre et le mode clair
     this.setState((prevState) => ({
       darkMode: !prevState.darkMode,
     }));
   };
 
+  // Méthode appelée lors de la saisie dans les champs de formulaire
   onChange = (e) => {
     const { name, value } = e.target;
+    // Détermine quelles données de formulaire doivent être mises à jour en fonction de l'état actuel (connexion ou inscription)
     const formType = this.state.isLogin ? "LoginData" : "RegisterData";
+    // Met à jour les données du formulaire correspondantes avec la nouvelle valeur
     this.setState((prevState) => ({
       [formType]: {
         ...prevState[formType],
@@ -67,24 +81,26 @@ class Authentification extends React.Component {
     }));
   };
 
+  // Méthode appelée lors de la soumission du formulaire
   handleSubmit = async (e) => {
-    console.log("submit");
-    e.preventDefault();
+    e.preventDefault(); // Empêche le comportement par défaut du formulaire (rechargement de la page)
+    // Crée un objet formData contenant les données du formulaire, le type de formulaire (connexion ou inscription) et les données de connexion ou d'inscription
     const formData = {
       isLogin: this.state.isLogin,
       loginData: this.state.LoginData,
       registerData: this.state.RegisterData,
     };
-    console.log(formData);
-    // Back de l'inscription ici
+
+    // Gestion de l'inscription ou de la connexion en fonction de l'état du formulaire
     if (!this.state.isLogin) {
       try {
+        // Envoie les données d'inscription au serveur
         const response = await axios.post(
           "http://localhost:5000/api/profil/register",
           formData
-        );
-        console.log("Utilisateur inséré avec succès");
-        window.location.href = response.data.redirectTo;
+        )
+      
+        // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodRegister: response.data.message,
           errorRegister: null,
@@ -98,6 +114,7 @@ class Authentification extends React.Component {
           },
         });
       } catch (error) {
+        // En cas d'erreur, met à jour l'état avec le message d'erreur
         this.setState({
           errorRegister: error.response.data.error,
           goodRegister: null,
@@ -107,12 +124,18 @@ class Authentification extends React.Component {
       }
     } else {
       try {
+        // Envoie les données de connexion au serveur
         const response = await axios.post(
           "http://localhost:5000/api/profil/login",
-          formData
-        );
-        window.location.href = response.data.redirectTo;
-        console.log("Utilisateur connecté avec succès");
+          formData,
+          {
+            withCredentials: true,
+          }
+        )
+        // const { Cookies } = require('react-cookie')
+        // new Cookies().set("SuperCookie", response.data)
+        //window.location.href = response.data.redirectTo;
+        // Met à jour l'état avec le message de succès et réinitialise les données du formulaire
         this.setState({
           goodLogin: response.data.message,
           errorLogin: null,
@@ -124,6 +147,7 @@ class Authentification extends React.Component {
           },
         });
       } catch (error) {
+        // En cas d'erreur, met à jour l'état avec le message d'erreur
         this.setState({
           errorLogin: error.response.data.error,
           goodRegister: null,

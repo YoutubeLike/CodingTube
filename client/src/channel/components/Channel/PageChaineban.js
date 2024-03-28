@@ -6,7 +6,6 @@ import Accueil from "./Accueil";
 import Video from "./Videos";
 import Shorts from "./Shorts";
 import Playlists from "./Playlists";
-import CheckSession from "../../../session";
 
 const App = () => {
 	const [idChannel, setIdChannel] = useState(); // Id Channel
@@ -71,22 +70,6 @@ const App = () => {
 	//Updates the active tab using the setActiveTab function
 	const handleTabClick = (tabName) => {
 		setActiveTab(tabName);
-	};
-
-	//Returns the correct active tab
-	const renderContent = () => {
-		switch (activeTab) {
-			case "Accueil":
-				return <Accueil />;
-			case "Vidéos":
-				return <Video />;
-			case "Shorts":
-				return <Shorts />;
-			case "Playlists":
-				return <Playlists />;
-			default:
-				return null;
-		}
 	};
 
 	//Enable/disable the pop-up

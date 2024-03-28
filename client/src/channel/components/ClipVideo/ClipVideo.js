@@ -17,13 +17,13 @@ export default function Video() {
 	const [number_view, setNumber_view] = useState(0)
 	const [follower, setFollower] = useState(0);
 	const [buttonSubscribe, setbuttonSubscribe] = useState("");
-  const [idVideo, setIdVideo] = useState()
+  const [videoId, setVideoId] = useState(null)
 
   console.log(uploadVideo)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    setIdVideo(urlParams.get("id"))
+    setVideoId(urlParams.get("id"))
     
     const fetchTest = async () => {
       try {
@@ -31,11 +31,10 @@ export default function Video() {
         const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
         const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', { params: { channelId: 1, userId: 1 } });
         const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers', { params: { channelId: 1 } });
-        const responseVideoPath = await axios.get('http://localhost:5000/api/channel/videoPath?idVideo=' + urlParams.get("id"))
 
         // Récupérer la vidéo
-        const videoUrl = responseVideoPath.data.upload_video_url;
-        setUploadVideo(videoUrl);
+        // const videoUrl = responseVideoPath.data.upload_video_url;
+        // setUploadVideo(videoUrl);
         
         // Attribution des informations de la vidéo
         setTitle(responseVideo.data.title);
@@ -85,8 +84,6 @@ export default function Video() {
       console.error(err)
     }
   }
-
-
   return (
     <>
       <div className="pl-10 mt-8 w-3/4  ">
@@ -94,7 +91,8 @@ export default function Video() {
           <video rounded-md
             width="100%"
             height="680"
-            src={'http://localhost:5000/api/channel/videoPath?idVideo=' + idVideo}
+            // src={uploadVideo}
+            src={"http://localhost:5000/api/channel/videoPath?idVideo=" + videoId}
             type="video/mp4"
             controls
             autoPlay
