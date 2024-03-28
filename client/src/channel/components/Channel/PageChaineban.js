@@ -106,7 +106,7 @@ const App = () => {
 				<div className="channel-info ml-4 flex flex-col items-start h-48 justify-around">
 					<h1 className="text-start text-5xl font-bold">{pseudo}</h1>
 					<p className="text-start">
-						{identifier} - {follower} abonnés - {numberVideo} vidéos
+						{identifier} - {follower} followers - {numberVideo} vidéos
 					</p>
 					{/*Pop-up of the biography*/}
 					<div>
@@ -115,7 +115,7 @@ const App = () => {
 							{isOpen && (
 								<div className="z-10 h-[500px] w-[400px] absolute inset-y-0 left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]  flex items-center justify-center bg-opacity-50">
 									<div className="bg-gray-600 w-full h-full rounded shadow-lg text-white text-justify pl-4 pt-4">
-										<h2 className="text-xl font-bold mb-4">A propos</h2>
+										<h2 className="text-xl font-bold mb-4">About me</h2>
 										<p className="text-lg">{bio}</p>
 									</div>
 								</div>
@@ -124,7 +124,7 @@ const App = () => {
 					</div>
 					{/*Subscribe button*/}
 					<button className="font-bold bg-neutral-900 text-white px-8  rounded-full">
-						S'abonner
+						Follow
 					</button>
 				</div>
 			</div>
@@ -140,7 +140,7 @@ const App = () => {
 							}`}
 							onClick={() => handleTabClick("Accueil")}
 						>
-							Accueil
+							Home
 						</a>
 						<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500 transition-all duration-300 origin-left scale-x-0"></div>
 					</li>
@@ -153,7 +153,7 @@ const App = () => {
 							}`}
 							onClick={() => handleTabClick("Vidéos")}
 						>
-							Vidéos
+							Videos
 						</a>
 						<div className="absolute bottom-0 left-0 w-full h-1 bg-red-500 transition-all duration-300 origin-left scale-x-0"></div>
 					</li>
