@@ -32,6 +32,9 @@ import Live from './live/index'
 import UserLive, { loader as LoaderLive } from "./live/UserLive";
 import Test from "./live/widget";
 import You from "./timeline/pages/you";
+import ChangeTitle from "./live/ChangeTitle"
+//import PageChannel from "./channel/pages/Channel";
+
 import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
@@ -139,6 +142,10 @@ const router = createBrowserRouter([
 				path: "/you",
 				element: <You />,
 			},
+      {
+        path: "changeTitle",
+        element: <ChangeTitle />,
+      },
       {
 				path: "/playlist",
 				element: <PlaylistPage />,

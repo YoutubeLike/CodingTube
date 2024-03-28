@@ -19,7 +19,6 @@ const { userName } = require("./controllerPseudoUser.js");
 const { rightSideTimelineRequest } = require("./controllerRightSideTimeline.js");
 const { yourVideosTimelineRequest } = require("./controllerYourVideosTimelineRequest.js");
 
-
 // Get the videos infos to show timeline
 router.get("/timeline-request", timelineRequest);
 
