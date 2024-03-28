@@ -1,4 +1,13 @@
 const NodeMediaServer = require('node-media-server');
+var MySql = require('sync-mysql');
+
+var connection = new MySql({
+  host: 'bdd',
+  user: 'admin',
+  password: 'admin',
+  database: 'coditube'
+});
+
 
 const config = {
   rtmp: {
@@ -27,3 +36,14 @@ const config = {
 
 var nms = new NodeMediaServer(config)
 nms.run();
+
+nms.on('prePublish', (id, streamPath, args) => {
+  const session = nms.getSession(id);
+
+  const result = connection.query("SELECT pseudo, stream_key FROM channel WHERE stream_key = '" + streamPath.replace('/live/', "") + "'");
+  session.publishStreamPath = "/live/" + result[0].pseudo
+  if(result.length < 1)
+  {
+    session.reject();
+  }
+});

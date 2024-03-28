@@ -13,20 +13,21 @@ app.use(express.json);
 
 // Import des fonctions
 const { selectChannel, 
-       	selectChannelIdentifier,
-        videoOnTab, 
-        NumberVideo, 
-        submit,  
-       	submitChannel,
-       	submitVideo,
-        getNbFollowers, 
-        getFollow, 
-        follow, 
-       	selectId,
-       	selectVideo,
-	    UserChannel,
-		getIdentifier,
-        getVideo,
+    selectChannelIdentifier,
+    videoOnTab, 
+    NumberVideo, 
+    submit,  
+    submitChannel,
+    submitVideo,
+    getNbFollowers, 
+    getFollow, 
+    follow, 
+    selectId,
+    selectVideo,
+    UserChannel,
+    getIdentifier,
+    getVideo,
+    getThumbnail,
 } = require("./controller");
 
 
@@ -56,8 +57,8 @@ const {
 
 // Configuration de la route
 router.get('/get-nb-followers', getNbFollowers)
-router.get('/get-follow', getFollow)
-router.get('/follow', follow)
+router.get('/get-follow/:idChannel', getFollow)
+router.get('/follow/:idChannel', follow)
 
 // Configuration de la route
 router.get("/get-identifier", getIdentifier);
@@ -72,6 +73,7 @@ router.get("/nombreVideo", NumberVideo);
 
 router.get("/get-identifier", getIdentifier);
 router.get("/videoPath", getVideo);
+router.get("/thumbnail", getThumbnail);
  
 router.get('/get-video-likes', getVideoLikes)
 router.get('/get-video-dislikes', getVideoDislikes)
@@ -109,14 +111,11 @@ const BASE_URL = "https://imgs.digyx.co/i/";
 // const dataStore = require('./store');
 // const store = dataStore.store;
 
-router.get('/tout', (req,res) => {
-    res.send('coucou')
-})
 
 
 /* Server Routes */
 router.post('/test', upload.single('img'), async (req, res) => {
-   
+
     var access = null;
 
     // if (!req.body.key) {
@@ -159,7 +158,5 @@ router.post('/test', upload.single('img'), async (req, res) => {
         return res.status(200).json({ infos: { api_public: access.api_public, url } });
     })
 });
-
-
 
 module.exports = router;

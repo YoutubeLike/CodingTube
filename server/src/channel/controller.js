@@ -7,73 +7,53 @@ const multer = require("multer");
 const express = require("express");
 const app = express();
 
+
+
 app.use(express.json);
 
-// Get the number of users subscribed to a channel
-const getNbFollowers = (req, res) => {
-  mariadb.pool
-    .query("SELECT * FROM follow WHERE channel_id=?", [req.query.channelId])
-    .then((result) => {
-      res.send(result);
-    });
-};
 
-const getFollow = (req, res) => {
-  mariadb.pool
-    .query("SELECT * FROM follow WHERE channel_id=? AND follower_id=?", [
-      req.query.channelId,
-      req.query.userId,
-    ])
-    .then((result) => {
-      res.send(result[0]);
-    });
-};
+const getNbFollowers = ((req, res) => {
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.params.idChannel])
+		.then((result) => {
+			res.send(result)
+		})
+}
+);
+
+const getFollow = ((req, res) => {
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel,req.session.userId])
+		.then((result) => {
+			res.send(result[0])
+		})
+}
+);
 // ABONNEMENT //
-// Ajout ou enlèvement d'un abonnement
-const follow = (req, res) => {
-  mariadb.pool
-    .query("SELECT * FROM follow WHERE channel_id=? AND follower_id=?", [
-      req.query.channelId,
-      req.query.userId,
-    ])
-    .then((result) => {
-      if (result[0]) {
-        mariadb.pool
-          .query(
-            "DELETE FROM follow WHERE channel_id = ? AND follower_id = ?",
-            [req.query.channelId, req.query.userId]
-          )
-          .then(() => {
-            res.status(200).send("Données supprimées avec succès !");
-          })
-          .catch((error) => {
-            console.error("Erreur lors de la soumission des données :", error);
-            res
-              .status(500)
-              .send(
-                "Une erreur est survenue lors de la soumission des données."
-              );
-          });
-      } else {
-        mariadb.pool
-          .query("INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)", [
-            req.query.channelId,
-            req.query.userId,
-          ])
-          .then(() => {
-            res.status(200).send("Données insérées avec succès !");
-          })
-          .catch((error) => {
-            console.error("Erreur lors de la soumission des données :", error);
-            res
-              .status(500)
-              .send(
-                "Une erreur est survenue lors de la soumission des données."
-              );
-          });
-      }
-    });
-};
+// Ajout ou enlèvement d'un abonnement 
+const follow = ((req, res) => {
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel, req.session.userId])
+		.then((result) => {
+			if (result[0]) {
+				mariadb.pool.query('DELETE FROM follow WHERE channel_id = ? AND follower_id = ?', [req.params.idChannel, req.session.userId])
+					.then(() => {
+						res.status(200).send("Données supprimées avec succès !");
+					})
+					.catch(error => {
+						console.error("Erreur lors de la soumission des données :", error);
+						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+					});
+			} else {
+				mariadb.pool.query('INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)', [req.params.idChannel,req.session.userId])
+					.then(() => {
+						res.status(200).send("Données insérées avec succès !");
+					})
+					.catch(error => {
+						console.error("Erreur lors de la soumission des données :", error);
+						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+					});
+			}
+		})
+}
+);
 
 // PAth to docker source
 const source = path.join(__dirname, "../../../..", "uploads");
@@ -179,16 +159,17 @@ const submitVideo = (req, res) => {
 };
 
 // Permet de s'identifier vers la chaîne
-const getIdentifier = (req, res) => {
-  console.log(req.session.userId);
-  mariadb.pool
-    .query("SELECT identifier_channel FROM channel WHERE id = ?", [
-      req.session.userId,
-    ])
-    .then((value) => {
-      res.send(value[0]);
-    });
-};
+
+const getIdentifier = ((req, res) => {
+	console.log(req.session.userId);
+	mariadb.pool
+		.query("SELECT identifier_channel FROM channel WHERE user_id = ?", [
+			req.session.userId,
+		])
+		.then((value) => {
+			res.send(value[0]);
+		});
+});
 
 // Retrieve channel information
 const selectChannel = (req, res) => {
@@ -326,20 +307,56 @@ const getVideo = (req, res) => {
     });
 };
 
+const getThumbnail = (req, res) => {
+    const thumbnailId = req.query.idThumbnail;
+
+    mariadb.pool
+        .query('SELECT thumbnail FROM video WHERE id = ?', [thumbnailId])
+        .then((result) => {
+            if (result.length > 0) {
+                const thumbnailPath = result[0].thumbnail;
+                const thumbnailStream = fs.createReadStream(path.join(__dirname, '../../../..', thumbnailPath));
+
+                const extension = path.extname(thumbnailPath).toLowerCase();
+                let contentType = 'image/jpeg'; // Par défaut à jpeg
+                if (extension === '.png') {
+                    contentType = 'image/png';
+                } else if (extension === '.gif') {
+                    contentType = 'image/gif';
+                } else if (extension === '.jpg'){
+                    contentType === 'image/jpg'
+                }
+
+                // Définir le type de contenu pour la réponse
+                res.setHeader('Content-Type', contentType);
+
+                // Envoyer l'image en tant que flux dans le corps de la réponse HTTP
+                thumbnailStream.pipe(res);
+            } else {
+                res.status(404).json({ message: "Thumbnail non trouvé" });
+            }
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la récupération du thumbnail :", error);
+            res.status(500).json({ message: "Erreur lors de la récupération du thumbnail" });
+        });
+};
+
 //export functions
 module.exports = {
-  getIdentifier,
-  selectChannel,
-  selectChannelIdentifier,
-  submit,
-  selectId,
-  videoOnTab,
-  NumberVideo,
-  submitChannel,
-  submitVideo,
-  selectVideo,
-  getNbFollowers,
-  getFollow,
-  follow,
-  getVideo,
+	selectChannel,
+	selectChannelIdentifier,
+	submit,
+	selectId,
+	videoOnTab,
+	NumberVideo,
+	submitChannel,
+	submitVideo,
+	selectVideo,
+	getNbFollowers,
+	getFollow,
+	follow,
+	getVideo,
+	getIdentifier,
+	getThumbnail,
 };

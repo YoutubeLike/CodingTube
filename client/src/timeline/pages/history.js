@@ -5,7 +5,6 @@ import TimelineHistory from "../component/HistoryTimeline";
 import React, { useEffect, useState } from "react";
 
 export default function History() {
-  
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "History - CodingTube";
@@ -20,7 +19,7 @@ export default function History() {
       {/* PAGE CONTENT */}
       <div className="flex">
         <NonDisplayedBurgerMenu /> {/* Burger menu unfolded */}
-        <div class="flex ml-[3%] flex-wrap">
+        <div class="sm:block md:flex ml-[3%] md:flex-wrap">
           <TimelineHistory /> {/* Showing Timeline History */}
         </div>
       </div>

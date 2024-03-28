@@ -55,6 +55,7 @@ services:
       - bdd-back
     volumes:
       - ./live-server/app.js:/app/live/app.js
+      - ./live-server/database.js:/app/live/database.js
     command: node app.js
     ports: 
     - 1936:1936

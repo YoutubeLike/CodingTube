@@ -84,43 +84,47 @@ export default function UploadVideo() {
     setIsShort(!isShort);
   }
 
-  return (
-    <div className="flex flex-col items-center w-full px-[15vw] bg-white p-8 rounded-lg shadow-xl hover:bg-white-300 transition-colors my-4">
-      <form className="w-full" onSubmit={handleSubmit}>
-        <h2 className="font-bold text-2xl mb-4">Détails</h2>
-        <div className="flex">
-          <div className="w-3/5">
-            <div className="flex mb-4">
-              <div className="border-solid border-2 border-gray-500 rounded-md w-full mr-4">
-                <label htmlFor="title" className="pl-2">
-                  Titre
-                </label>
-                <input
-                  name="title"
-                  type="text"
-                  className="outline-none p-2 w-full rounded-md font-bold text-xl"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
+        axios.post('http://localhost:5000/api/channel/submitVideo', formData , {withCredentials:true})
+            .then(response => {
+                console.log('Server response:', response.data);
+                setTitle("");
+                setDescription("");
+                setCategory("");
+                setThumbnailFile(null);
+                setVideoFile(null);
+                setVideoPreview(null);
+                setImagePreview(null);
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+            });
+    }
 
-              <div className="border-solid border-2 border-gray-500 rounded-md flex flex-col px-2">
-                <label>Catégorie</label>
-                <select
-                  className="h-full bg-transparent font-bold"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value="">Sélectionner une catégorie</option>
-                  <option value="Music">Musique</option>
-                  <option value="VideoGames">Jeux vidéo</option>
-                  <option value="News">Actualités</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Culture">Culture</option>
-                  <option value="Podcasts">Podcasts</option>
-                </select>
-              </div>
-            </div>
+    return (
+        <div className="flex flex-col items-center w-full px-[15vw] bg-white p-8 rounded-lg shadow-xl hover:bg-white-300 transition-colors my-4">
+            <form className="w-full" onSubmit={handleSubmit}>
+                <h2 className="font-bold text-2xl mb-4">Détails</h2>
+                <div className="flex">
+                    <div className="w-3/5">
+                        <div className="flex mb-4">
+                            <div className="border-solid border-2 border-gray-500 rounded-md w-full mr-4">
+                                <label htmlFor="title" className="pl-2">Title</label>
+                                <input name="title" type="text" className="outline-none p-2 w-full rounded-md font-bold text-xl" value={title} onChange={(e) => setTitle(e.target.value)} />
+                            </div>
+
+                            <div className="border-solid border-2 border-gray-500 rounded-md flex flex-col px-2">
+                                <label>Category</label>
+                                <select className="h-full bg-transparent font-bold" value={category} onChange={(e) => setCategory(e.target.value)}>
+                                    <option value="">Select a category</option>
+                                    <option value="Music">Music</option>
+                                    <option value="VideoGames">Video games</option>
+                                    <option value="News">News</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Culture">Culture</option>
+                                    <option value="Podcasts">Podcasts</option>
+                                </select>
+                            </div>
+                        </div>
 
             <div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
               <label htmlFor="description" className="flex flex-cols pl-2">
@@ -135,31 +139,26 @@ export default function UploadVideo() {
             </div>
           </div>
 
-          <div className="w-2/5 h-1/1 ml-4">
-            {videoPreview ? (
-              <div className="h-full flex flex-col justify-around">
-                <video
-                  src={videoPreview}
-                  controls
-                  className="w-full border-solid border-2 border-gray-600"
-                />
-                <label htmlFor="videoInput">Changer la vidéo</label>
-                <input
-                  id="videoInput"
-                  type="file"
-                  name="video"
-                  accept="video/*"
-                  onChange={handleVideoChange}
-                  className="border-none cursor-pointer bg-blue-500 text-white py-input px-6 rounded-md hover:bg-blue-600 transition-colors"
-                />
-              </div>
-            ) : (
-              <div className="h-full flex flex-col justify-between">
-                <div
-                  className="text-white flex items-center justify-center font-bold bg-black w-full aspect-[16/9] cursor-pointer"
-                  onClick={() => document.getElementById("videoInput").click()}
-                >
-                  <p className="text-6xl mb-4 mr-2">+</p>
+                    <div className="w-2/5 h-1/1 ml-4">
+                        {videoPreview ? (
+                            <div className="h-full flex flex-col justify-around">
+                                <video src={videoPreview} controls className="w-full border-solid border-2 border-gray-600" />
+                                <label htmlFor="videoInput">Change video</label>
+                                <input id="videoInput" type="file" name="video" accept="video/*" onChange={handleVideoChange} className="border-none cursor-pointer bg-blue-500 text-white py-input px-6 rounded-md hover:bg-blue-600 transition-colors" />
+                            </div>
+                        ) : (
+                            <div className="h-full flex flex-col justify-between">
+                                <div className="text-white flex items-center justify-center font-bold bg-black w-full aspect-[16/9] cursor-pointer" onClick={() => document.getElementById('videoInput').click()}>
+                                    <p className="text-6xl mb-4 mr-2">+</p>
+                                </div>
+                                <p>File name :</p>
+                                <label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
+                                    Importer
+                                    <input type="file" name="video" accept="video/*" className="hidden" onChange={handleVideoChange} />
+                                </label>
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <p>Nom du fichier :</p>
                 <label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
@@ -306,6 +305,7 @@ export default function UploadVideo() {
                       <label for="hueRotate180">Hue Rotate Opposite</label>
                     </li>
                   </ul>
+
                 </div>
               </div>
             )}

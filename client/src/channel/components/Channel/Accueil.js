@@ -52,8 +52,8 @@ export default function Video() {
 						key={data.id}
 					>
 						<img
-							src={data.thumbnail}
-							className="w-[270px] min-h-[155px] rounded-xl bg-black"
+							src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + data.id}
+							className="object-cover w-[270px] min-h-[155px] rounded-xl bg-black"
 						/>
 						<div className="h-full flex flex-col justify-between">
 							<p className="w-[270px] text-start font-bold">{data.title}</p>
