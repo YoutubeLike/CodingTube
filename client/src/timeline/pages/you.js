@@ -98,7 +98,7 @@ export default function You() {
                   src="history.png"
                 />
                 <button className="md:relative left-[265px] md:relative top-[-32px] font-black">
-                  likedVideos
+                  Liked Videos
                 </button>
               </Link>
             </div>

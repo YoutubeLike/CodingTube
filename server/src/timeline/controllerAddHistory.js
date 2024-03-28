@@ -15,8 +15,6 @@ const addHistoryRequest = (req, res) => {
           "INSERT INTO watched_video (video_id, user_id, watch_date) VALUES (?, ?, CURRENT_TIMESTAMP)",
           [videoId, userId]
         );
-      } else {
-        res.send("History updated successfully");
       }
     })
     .then(() => {
