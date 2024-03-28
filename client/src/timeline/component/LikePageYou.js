@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
@@ -90,34 +91,34 @@ export default function LikePageYou() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0">
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-
-        <div className="relative">
-            <img
-                className="max-w-[90%] h-auto rounded-lg"
-                src={videosInfos[i]["thumbnail"]}
-                alt="Thumbnail"
-            />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
-        </div>
-          <div className="flex flew-row mt-2.5">
-            <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
-            <div className="ml-2.5">
-              <h3 className="text-black font-bold text-[100%]">
-                {videosInfos[i]["title"]}
-              </h3>
-              <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["pseudo"]}
-              </h4>
-              <h4 className="text-gray text-[90%]">
-                {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
-                
-              </h4>
-            </div>
+      <div key={i} className="md:max-w-[25%] md:h-auto md:mb-0">
+          <Link href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+  
+          <div className="relative">
+              <img
+                  className="max-w-[90%] h-auto rounded-lg"
+                  src={videosInfos[i]["thumbnail"]}
+                  alt="Thumbnail"
+              />
+              <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
           </div>
-        </a>
-      </div>
+            <div className="flex flew-row mt-2.5">
+              <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
+              <div className="ml-2.5">
+                <h3 className="text-black font-bold text-[100%]">
+                  {videosInfos[i]["title"]}
+                </h3>
+                <h4 className="text-gray text-[90%]">
+                  {videosInfos[i]["pseudo"]}
+                </h4>
+                <h4 className="text-gray text-[90%]">
+                  {videosInfos[i]["number_view"]} views - {getTimeElapsed(videosInfos[i]["upload_date_time"])} ago
+                  
+                </h4>
+              </div>
+            </div>
+          </Link>
+        </div>
     );
   }
 
