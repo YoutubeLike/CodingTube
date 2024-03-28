@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
@@ -90,12 +91,12 @@ export default function Header() {
   /**
    * Function to diplay the user history based on the user input
    */
-  const history_onChange = async () => {
+  const historyOnChange = async () => {
     if (inputRef.current === "") {
       history();
     } else {
       try {
-        await fetch("http://localhost:5000/api/search/history_onChange/" + inputRef.current, {
+        await fetch("http://localhost:5000/api/search/historyOnChange/" + inputRef.current, {
           method: "GET",
           headers: {"Content-Type": "application/json"},
           credentials: 'include'
@@ -106,7 +107,7 @@ export default function Header() {
           setUserHistory(data)
         })
       } catch (error) {
-        console.error("An error in history_onChange: ", error);
+        console.error("An error in historyOnChange: ", error);
       }
     }
   };
@@ -114,19 +115,19 @@ export default function Header() {
   /**
    * Function to diplay the most popular search based on the user input
    */
-  const mostResearch_onChange = async () => {
+  const mostResearchOnChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     if (inputRef.current === "") {
       mostResearch();
     } else {
       try {
-        const resultMostResearch_onChange = await axios.get(
-          "http://localhost:5000/api/search/mostResearch_onChange/" +
+        const resultMostResearchOnChange = await axios.get(
+          "http://localhost:5000/api/search/mostResearchOnChange/" +
             inputRef.current
         );
-        setMostView(resultMostResearch_onChange.data);
+        setMostView(resultMostResearchOnChange.data);
       } catch (error) {
-        console.error("An error in mostResearch_onChange: ", error);
+        console.error("An error in mostResearchOnChange: ", error);
       }
     }
   };
@@ -189,11 +190,13 @@ export default function Header() {
     <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 bg-white">
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
-        <div 
-         className="flex w-[99%] h-6 ml-2 mt-0.5">
-          <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
-          <p className="hidden md:block">CODITUBE</p>
-        </div>
+        <Link to="/">
+          <div 
+            className="flex w-[99%] h-6 ml-2 mt-0.5">
+            <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
+            <p className="hidden md:block">CODITUBE</p>
+          </div>
+        </Link>
       </div>
       <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
         <form
@@ -225,8 +228,8 @@ export default function Header() {
               value={inputRef.current}
               onChange={(e) => {
                 handleInputChange(e);
-                history_onChange();
-                mostResearch_onChange();
+                historyOnChange();
+                mostResearchOnChange();
               }}
               onClick={(e) => {
                 setMenuOpen(true);
@@ -234,8 +237,8 @@ export default function Header() {
                   mostResearch(e);
                   history(e);
                 } else {
-                  history_onChange();
-                  mostResearch_onChange();
+                  historyOnChange();
+                  mostResearchOnChange();
                 }
               }}
             />
