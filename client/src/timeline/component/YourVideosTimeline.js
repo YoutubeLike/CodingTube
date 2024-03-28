@@ -39,7 +39,7 @@ export default function YourVideosTimeline() {
     indents.push(
       <div>
         <p className="p-5 bg-red-700 text-white rounded-lg">
-          No news video in BDD... Publish a videos or you're not logged-in.
+          No video in BDD... Publish a videos or you're not logged-in.
         </p>
       </div>
     );
