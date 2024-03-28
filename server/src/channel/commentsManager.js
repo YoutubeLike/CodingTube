@@ -14,7 +14,7 @@ const addCommentAndGetId = (req, res) => {
     mariadb.pool
         .query(
             "INSERT INTO comment_video (user_id, video_id, text) VALUES (?, ?, ?);",
-            [req.query.id, req.query.videoId, req.query.text]
+            [req.session.userId, req.query.videoId, req.query.text]
         )
         .then(() => {
             mariadb.pool
@@ -67,7 +67,7 @@ const checkVideoCommentLike = (req, res) => {
     mariadb.pool
         .query(
             "SELECT * FROM like_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         )
         .then((value) => {
             res.send(value);
@@ -77,20 +77,20 @@ const checkVideoCommentLike = (req, res) => {
 const addVideoCommentLike = async (req, res) => {
     let checkExistance = await mariadb.pool.query(
         "SELECT * FROM like_video_comment WHERE id_user = ? AND id_comment = ?;",
-        [req.query.id, req.query.commentId]
+        [req.session.userId, req.query.commentId]
     );
 
     if (checkExistance[0] == null) {
         let checkExistance = await mariadb.pool.query(
             "SELECT * FROM dislike_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         );
 
         if (checkExistance[0] == null) {
             mariadb.pool
                 .query(
                     "INSERT INTO like_video_comment (id_user, id_comment) VALUES (?, ?);",
-                    [req.query.id, req.query.commentId]
+                    [req.session.userId, req.query.commentId]
                 )
                 .catch((error) => {
                     console.error("Error inserting like:", error);
@@ -108,7 +108,7 @@ const removeVideoCommentLike = (req, res) => {
     mariadb.pool
         .query(
             "DELETE FROM like_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         )
         .then((value) => {
             res.send(value);
@@ -123,7 +123,7 @@ const checkVideoCommentDislike = (req, res) => {
     mariadb.pool
         .query(
             "SELECT * FROM dislike_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         )
         .then((value) => {
             res.send(value);
@@ -133,20 +133,20 @@ const checkVideoCommentDislike = (req, res) => {
 const addVideoCommentDislike = async (req, res) => {
     let checkExistance = await mariadb.pool.query(
         "SELECT * FROM like_video_comment WHERE id_user = ? AND id_comment = ?;",
-        [req.query.id, req.query.commentId]
+        [req.session.userId, req.query.commentId]
     );
 
     if (checkExistance[0] == null) {
         let checkExistance = await mariadb.pool.query(
             "SELECT * FROM dislike_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         );
 
         if (checkExistance[0] == null) {
             mariadb.pool
                 .query(
                     "INSERT INTO dislike_video_comment (id_user, id_comment) VALUES (?, ?);",
-                    [req.query.id, req.query.commentId]
+                    [req.session.userId, req.query.commentId]
                 )
                 .catch((error) => {
                     console.error("Error inserting dislike:", error);
@@ -164,7 +164,7 @@ const removeVideoCommentDislike = (req, res) => {
     mariadb.pool
         .query(
             "DELETE FROM dislike_video_comment WHERE id_user = ? AND id_comment = ?;",
-            [req.query.id, req.query.commentId]
+            [req.session.userId, req.query.commentId]
         )
         .then((value) => {
             res.send(value);

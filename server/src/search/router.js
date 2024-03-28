@@ -17,10 +17,12 @@ router.get('/history', history)
 router.get('/deleteHistory/:deleteHistory', deleteHistory)
 
 
+
 router.get('/mostResearch_onChange/:researchInput', mostResearchOnChange)  
 router.get('/history_onChange/:researchInput', historyOnChange)
 router.get('/displaySearchPage/:researchInput', displaySearchPage)  
 router.get('/filters/:buttonValue/:videoSearch', filters)
+
 
 
 module.exports = router

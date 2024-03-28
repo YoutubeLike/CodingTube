@@ -301,6 +301,7 @@ const ProfilePage = () => {
 
           {/* pseudo and the buttons to create a channel  */}
 
+
           <div className="w-60 rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]">
             <p className=" text-center text-2xl font-bold">{pseudo}</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
@@ -326,6 +327,7 @@ const ProfilePage = () => {
       </div>
 
       {/* information part */}
+
 
       <div className="w-full md:w-auto md:mx-20">
         <div className="p-1  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
@@ -811,6 +813,7 @@ const ProfilePage = () => {
                 <button
                   className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-8 rounded-md  flex justify-center items-center"
                   onClick={(e) => {
+
                     setGoodMessage("");
                     setErrorMessage("");
                     e.preventDefault();
@@ -852,6 +855,7 @@ const ProfilePage = () => {
                 </button>
               </div>
             </div>
+
             <p className="text-red-600 ml-5">{errorMessage}</p>
             <p className="text-green-600 ml-5">{goodMessage}</p>
             <form

@@ -1,6 +1,7 @@
 // Importing the mariadb module
 const mariadb = require("../src/database");
 
+
 // Importing functions from authentication module
 const { CheckIfMailExist, CheckIfUsernameExist } = require("./authentication");
 

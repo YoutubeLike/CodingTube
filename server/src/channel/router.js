@@ -8,7 +8,7 @@ const cors = require('cors');
 const multer = require('multer');
 
 const app = express();
-app.use(cors);
+//app.use(cors);
 app.use(express.json);
 
 // Import des fonctions
