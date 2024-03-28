@@ -5,18 +5,16 @@ import axios from "axios";
 import { SetScoresTrendings } from "../functions/TrendingsScoreCalculator.js";
 import { GetTimeElapsed, TimeOfVideo } from "../functions/VideoTiming.js";
 
-export default function NewsTimeLine() {
+export default function YourVideosTimeline() {
   // Get the informations of the SQL Request by the URL
   var [videosInfos, setVideosInfos] = useState([]);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/timeline/category-request`,
+          `http://localhost:5000/api/timeline/yourVideos-request`,
           {
-            params: {
-              categoryStrParam: "News",
-            },
+            withCredentials: true,
           }
         );
         setVideosInfos(response.data);
@@ -41,7 +39,7 @@ export default function NewsTimeLine() {
     indents.push(
       <div>
         <p className="p-5 bg-red-700 text-white rounded-lg">
-          No news video in BDD... Publish a news video to become the first!
+          No video in BDD... Publish a videos or you're not logged-in.
         </p>
       </div>
     );
