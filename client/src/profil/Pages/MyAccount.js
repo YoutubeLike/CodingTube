@@ -4,16 +4,20 @@ import React, { useEffect, useState } from "react";
 const ProfilePage = () => {
   // State for managing edit mode for each field in profile
   const [isEditing, setIsEditing] = useState({
+    username: false,
     name: false,
     mail: false,
     birthdate: false,
     country: false,
     gender: false,
     password: false,
+    errorUpdate: null,
+    goodUpdate: null,
   });
 
   // State for storing profile data
   const [profileData, setProfileData] = useState({
+    username: "",
     first_name: "",
     last_name: "",
     mail: "",
@@ -21,28 +25,62 @@ const ProfilePage = () => {
     country: "",
     gender: "",
     password: "",
-    isLoggedIn: false, // Added isLoggedIn state
   });
+
+  const [formClickedMap, setFormClickedMap] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [goodMessage, setGoodMessage] = useState("");
+
+  const handleFormSubmit = async (e, formKey) => {
+    e.preventDefault();
+    handleEditToggle(formKey);
+
+    setErrorMessage("");
+    setGoodMessage("");
+
+    try {
+      // Vérifiez si le formulaire correspondant à la clé formKey a été cliqué une fois
+      if (formClickedMap[formKey]) {
+        // Si oui, appelez la fonction de mise à jour de l'utilisateur
+        await updateUser(formKey);
+      } else {
+        // Si non, mettez à jour l'état pour indiquer que le formulaire a été cliqué une fois
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: true,
+        }));
+      }
+
+      // Réinitialisez l'état après une soumission réussie
+      if (formClickedMap[formKey]) {
+        setFormClickedMap((prevState) => ({
+          ...prevState,
+          [formKey]: false,
+        }));
+        setGoodMessage("Information updated");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Gérez l'erreur et affichez le message d'erreur approprié à l'utilisateur
+      setErrorMessage(error.response.data.error);
+    }
+  };
 
   // Function to update user data
   const updateUser = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/profil/userUpdate",
-        {
-          first_name: profileData.first_name,
-          last_name: profileData.last_name,
-          mail: profileData.mail,
-          birthdate: profileData.birthdate,
-          country: profileData.country,
-          gender: profileData.gender,
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating user:", error);
-      console.log("Error connecting to the backend");
-    }
+    const response = await axios.post(
+      "http://localhost:5000/api/profil/userUpdate",
+      {
+        username: profileData.username,
+        first_name: profileData.first_name,
+        last_name: profileData.last_name,
+        mail: profileData.mail,
+        birthdate: profileData.birthdate,
+        country: profileData.country,
+        gender: profileData.gender,
+      }
+    );
+    console.log(response.data);
   };
 
   // Function to update password
@@ -64,33 +102,19 @@ const ProfilePage = () => {
 
   // Fetch user data on component mount
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/profil/check-session",
-          {
-            withCredentials: true,
-          }
+          `http://localhost:5000/api/profil/userData/1`
         );
-
-        const loggedIn = response.data.loggedIn;
-
-        // Update the profileData state with isLoggedIn
-        setProfileData((prevProfileData) => ({
-          ...prevProfileData,
-          isLoggedIn: loggedIn,
-        }));
-
-        if (!loggedIn) {
-          window.location.href = "/login";
-        }
+        setProfileData(response.data);
       } catch (error) {
-        console.log("Erreur lors de la vérification du login:", error);
+        console.error("Data retrieval error", error);
       }
     };
 
-    fetchData();
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+    fetchUserData();
+  }, []);
 
   // Toggle edit mode for a field
   const handleEditToggle = (field) => {
@@ -128,24 +152,16 @@ const ProfilePage = () => {
     handleEditToggle("password");
 
     try {
+      console.log("ici");
+      console.log(e);
       const response = await axios.get(
-        "http://localhost:5000/api/profil/userData/",
-        { withCredentials: true }
+        `http://localhost:5000/api/profil/userData/1`
       );
       const userData = response.data;
       const fetchedPassword = userData["password"];
-
-      if (currentPassword === fetchedPassword) {
-        if (newPassword === confirmPassword) {
-          updatePassword();
-          console.log("Password updated successfully!");
-        } else {
-          console.log("New password and confirmation password do not match!");
-        }
-      } else {
-        console.log("Current password is incorrect!");
-      }
     } catch (error) {
+      setErrorMessage("Current password is incorrect!");
+
       console.error("Error fetching data", error);
     }
   };
@@ -156,12 +172,68 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/profil/logout"
+      );
+      window.location.href = "/login"; // Redirect to the login page
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [channelExists, setChannelExists] = useState(false);
+  const [identifier, setIdentifier] = useState(null); // State to hold identifier_channel
+  const [follower, setFollower] = useState(null);
+  const [pseudo, sePseudo] = useState(null);
+  // Assume isChannelAvailable is a state indicating whether the session has a channel
+  useEffect(() => {
+    const fetchChannelInfo = async () => {
+      try {
+        const userId = 1;
+        const response = await axios.get(
+          `http://localhost:5000/api/profil/getInfoChannel/${userId}`
+          //, {  withCredentials: true,}
+        );
+        const channelInfo = response.data;
+
+        console.log("Session ID:", response.headers["set-cookie"]);
+
+        // Check if identifier_channel is null
+        if (channelInfo && channelInfo.identifier_channel === null) {
+          setChannelExists(false); // No channel exists
+        } else {
+          setChannelExists(true); // Channel exists
+          setIdentifier(channelInfo.identifier_channel);
+          setFollower(channelInfo.nb_follower);
+          sePseudo(channelInfo.pseudo);
+        }
+      } catch (error) {
+        console.error("Error fetching channel info:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChannelInfo();
+  }, []);
+
+  const handleClick = () => {
+    if (channelExists) {
+      window.location.href = "/channel?identifier=/${identifier}";
+    } else {
+      window.location.href = "/new-channel";
+    }
+  };
+
   return (
-    <div>
+    <div className="pl-0">
       {/* banner */}
 
-      <div className=" from-lime-300 to-green-500 shadow-inner rounded-t-md ml-56 mr-14 bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto w-auto mt-4">
-        <div className="flex justify-end">
+      <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
+        <div className="py-10 flex flex-col md:flex-row  md: items-center">
           {/* the button that alow us to change the banner and the */}
 
           <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
@@ -188,10 +260,10 @@ const ProfilePage = () => {
         <div className=" py-10 flex space-x-10">
           {/* profile picture */}
 
-          <div className=" ml-10 border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]  w-52 h-52 rounded-full ">
+          <div className=" border-8 border-opacity-25 border-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] w-52 h-full rounded-full ">
             <img
               src="https://t4.ftcdn.net/jpg/01/17/00/39/360_F_117003938_TrPAYiOgFFLnIwKsjUjtqoe4W2RDzytI.jpg"
-              class=" h-48 w-52 rounded-full"
+              className="h-auto w-full rounded-full"
               alt="..."
             />
             <button class="absolute h-10 w-10 rounded-md bg-white  bottom-0 right-0 flex justify-center align-middle">
@@ -219,22 +291,25 @@ const ProfilePage = () => {
 
           {/* pseudo and the buttons to create a channel  */}
 
-          <div className=" rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] ">
-            <p className=" text-center text-2xl font-bold">CodingTube</p>
+          <div className="w-60 rounded-lg p-5 bg-opacity-25 bg-white drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)]">
+            <p className=" text-center text-2xl font-bold">{pseudo}</p>
             <p className=" text-sm font-semibold text-center text-gray-400">
               @{profileData.first_name}
-              {profileData.last_name} ·0·
+              {profileData.last_name} ·{follower} Followers·
             </p>
-            <div class=" mt-10 relative inline-flex  group">
-              <div class="absolute transitiona-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
-              <a
-                href="#"
-                title="Get channel now"
-                class="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                role="button"
+
+            <div className="mt-10 relative inline-flex group">
+              <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-red-600 via-[#c12099] to-red-600 rounded-full blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+              <button
+                onClick={handleClick}
+                className="relative inline-flex items-center text-nowrap justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-red-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
-                Create a channel
-              </a>
+                {isLoading
+                  ? "Loading..."
+                  : channelExists
+                  ? "Go to Channel"
+                  : "Create a Channel"}
+              </button>
             </div>
           </div>
         </div>
@@ -242,9 +317,9 @@ const ProfilePage = () => {
 
       {/* information part */}
 
-      <div className="ml-52 mr-10">
-        <div className="p-1 mx-4 w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
-          <div className="flex space-x-4 border-b-2 border-gray-300 sticky mx-5 bg-white top-0">
+      <div className="w-full md:w-auto md:mx-20">
+        <div className="p-1  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
+          <div className="flex space-x-4 border-b-2 border-gray-300 sticky z-50 mx-5 bg-white top-0">
             <div
               className={
                 toggleState === 1
@@ -271,59 +346,130 @@ const ProfilePage = () => {
             </div>
           </div>
           <div className={toggleState === 1 ? "visible" : "hidden"}>
+            {/*username*/}
+            <p className="text-green-600 ml-5">{goodMessage}</p>
+            <p className="text-red-600 ml-5">{errorMessage}</p>
+            <form
+              className=" mt-5 flex items-center"
+              onSubmit={(e) => handleFormSubmit(e, "username")}
+            >
+              <div className="flex items-center">
+                <p className="text-xl text-center font-semibold ml-5 text-nowrap">
+                  {" "}
+                  Username{" "}
+                </p>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.username ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
+              </div>
+              <div className="flex mx-5 flex-col md:flex-row">
+                <label>
+                  <span className="text-sm text-gray-500">Username</span>:
+                  {isEditing.username ? (
+                    <input
+                      type="text"
+                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                      value={profileData.username}
+                      onChange={(e) => {
+                        handleInputChange(e, "username");
+                      }}
+                    />
+                  ) : (
+                    <b className=" ml-2 mr-5">{profileData.username} </b>
+                  )}
+                </label>
+              </div>
+
+              <hr className="mt-4 mb-8 mx-5" />
+            </form>
             {/* name */}
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("fullName");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "fullName")}
             >
-              <p className="text-xl font-semibold ml-5"> Full Name</p>
-
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button
-                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                  type="submit"
-                >
-                  {isEditing.fullName ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-4 h-4"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+              <div className="flex items-center">
+                <p className="text-xl text-center font-semibold ml-5 text-nowrap">
+                  {" "}
+                  Full Name
+                </p>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.fullName ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className="flex mx-5">
+              <div className="flex mx-5 flex-col md:flex-row">
                 <div className=" my-5 flex items-center">
                   <label>
                     <span class="text-sm text-gray-500">First Name</span>:{""}
@@ -365,71 +511,70 @@ const ProfilePage = () => {
             {/* mail */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("mail");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "mail")}
             >
-              <p className="text-xl font-semibold ml-5">Mail Address</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Mail Address</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button
-                  className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
-                  type="submit"
-                >
-                  {isEditing.mail ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button
+                    className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center"
+                    type="submit"
+                  >
+                    {isEditing.mail ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Mail</span>:
-                  {isEditing.mail ? (
-                    <input
-                      type="email"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.mail}
-                      onChange={(e) => {
-                        handleInputChange(e, "mail");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.mail} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex flex-col md:flex-row ">
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Mail</span>:
+                    {isEditing.mail ? (
+                      <input
+                        type="email"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.mail}
+                        onChange={(e) => {
+                          handleInputChange(e, "mail");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.mail} </b>
+                    )}
+                  </label>
+                </div>
               </div>
               <hr className="mt-4 mb-8 mx-5" />
             </form>
@@ -437,53 +582,50 @@ const ProfilePage = () => {
             {/* birthdate */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("birthdate");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "birthdate")}
             >
-              <p className="text-xl font-semibold ml-5">Birthdate</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Birthdate</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.birthdate ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.birthdate ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
+              <div className=" mx-5 flex flex-col md:flex-row">
                 <label>
                   <span className="text-sm text-gray-500">Birthdate</span>:
                   {isEditing.birthdate ? (
@@ -508,68 +650,67 @@ const ProfilePage = () => {
             {/* country */}
 
             <form
-              className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("country");
-                updateUser();
-              }}
+              className=" mt-5 flex flex-col md:flex-row justify-start"
+              onSubmit={(e) => handleFormSubmit(e, "country")}
             >
-              <p className="text-xl font-semibold ml-5">Country</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Country</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.country ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.country ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Country</span>:
-                  {isEditing.country ? (
-                    <input
-                      type="text"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.country}
-                      onChange={(e) => {
-                        handleInputChange(e, "country");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.country} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex flex-col md:flex-row">
+                <div className=" mx-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Country</span>:
+                    {isEditing.country ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.country}
+                        onChange={(e) => {
+                          handleInputChange(e, "country");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.country} </b>
+                    )}
+                  </label>
+                </div>
               </div>
               <hr className="mt-4 mb-8 mx-5" />
             </form>
@@ -578,70 +719,68 @@ const ProfilePage = () => {
 
             <form
               className=" mt-5 flex items-center"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleEditToggle("gender");
-                updateUser();
-              }}
+              onSubmit={(e) => handleFormSubmit(e, "username")}
             >
-              <p className="text-xl font-semibold ml-5">Gender</p>
+              <div className="flex items-center">
+                <p className="text-xl font-semibold ml-5">Gender</p>
 
-              <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-                <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
-                  {isEditing.gender ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  )}
-                  {/* icon */}
-                </button>
+                <div className="m-5 transform h-5 bg-red-600 w-5 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
+                  <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-5 h-5 rounded-md  flex justify-center items-center">
+                    {isEditing.gender ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    )}
+                    {/* icon */}
+                  </button>
+                </div>
               </div>
-
-              <div className=" mx-5 flex-col items-center">
-                <label>
-                  <span className="text-sm text-gray-500">Gender</span>:
-                  {isEditing.gender ? (
-                    <input
-                      type="text"
-                      className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
-                      value={profileData.gender}
-                      onChange={(e) => {
-                        handleInputChange(e, "gender");
-                      }}
-                    />
-                  ) : (
-                    <b className=" ml-2 mr-5">{profileData.gender} </b>
-                  )}
-                </label>
+              <div className=" mx-5 flex-col flex-col md:flex-row">
+                <div className=" my-5 flex items-center">
+                  <label>
+                    <span className="text-sm text-gray-500">Gender</span>:
+                    {isEditing.gender ? (
+                      <input
+                        type="text"
+                        className="ml-2 mr-5 px-3 py-2 border rounded-md focus:outline-none focus:border-red-600"
+                        value={profileData.gender}
+                        onChange={(e) => {
+                          handleInputChange(e, "gender");
+                        }}
+                      />
+                    ) : (
+                      <b className=" ml-2 mr-5">{profileData.gender} </b>
+                    )}
+                  </label>
+                </div>
               </div>
-
-              <hr className="mt-4 mb-8 mx-5" />
+              <hr className="mt-4 mb-8 mx-5 md: hidden" />
             </form>
           </div>
 
@@ -654,6 +793,8 @@ const ProfilePage = () => {
                 <button
                   className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-8 rounded-md  flex justify-center items-center"
                   onClick={(e) => {
+                    setGoodMessage("");
+                    setErrorMessage("");
                     e.preventDefault();
                     handleEditToggle("password");
                   }}
@@ -693,7 +834,8 @@ const ProfilePage = () => {
                 </button>
               </div>
             </div>
-
+            <p className="text-red-600 ml-5">{errorMessage}</p>
+            <p className="text-green-600 ml-5">{goodMessage}</p>
             <form
               className="mt-5 flex flex-col"
               onSubmit={(e) => {
@@ -815,6 +957,18 @@ const ProfilePage = () => {
               )}
             </button>
           </div>
+        </div>
+      </div>
+      <div className="w-full md:w-auto md:mx-20 p-4  w-auto drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] rounded-b-md bg-white">
+        <div className="relative inline-flex group">
+          <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-gray-600 via-[#737373] to-gray-600 rounded-md blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
+          <button
+            onClick={handleLogout}
+            className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-gray-600 font-pj rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+            title="ARE U SURE ABOUT THAT"
+          >
+            Log Out
+          </button>
         </div>
       </div>
     </div>
