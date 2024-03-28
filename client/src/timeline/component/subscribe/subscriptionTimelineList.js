@@ -4,12 +4,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {GetTimeElapsed, TimeOfVideo} from "../../functions/VideoTiming";
 
-import CheckSession from "../../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
-
-
 export default function ListSubscriptionTimeLine() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
@@ -18,11 +12,7 @@ export default function ListSubscriptionTimeLine() {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/timeline/subscription-timeline-request"
-          ,{
-            params: {
-              userIdParam: userId,
-            },
-          }
+          , { withCredentials: true}
         );
         setVideosInfos(response.data);
       } catch (error) {
@@ -45,14 +35,14 @@ export default function ListSubscriptionTimeLine() {
 
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="mb-10">
+      <div key={i} className="mb-10 sm:block md:flex content-center">
         <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
-          <div class="flex flex-row">
+          <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
-                class="thumbnail-subscribe-list"
+                className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
               />
@@ -61,7 +51,7 @@ export default function ListSubscriptionTimeLine() {
               </p>
             </div>
 
-            <div className="ml-2.5 w-[55%]">
+            <div className="ml-2.5 w-[85%]">
               <h3 className="text-black font-bold text-[120%]">
                 {videosInfos[i]["title"]}
               </h3>
@@ -75,9 +65,6 @@ export default function ListSubscriptionTimeLine() {
                   {videosInfos[i]["pseudo"]}
                 </h4>
               </div>
-              <p className="mt-2 text-balance truncate text-xs">
-                {videosInfos[i]["description"]}
-              </p>
             </div>
           </div>
         </a>

@@ -5,18 +5,22 @@ import { useLocation } from "react-router-dom";
 import DisplayedBurgerMenu from "../component/displayedBurgerMenu";
 import axios from "axios";
 import ShowPlaylist from "../component/ShowPlaylist";
+import ShowPlaylistInfos from "../component/ShowPlaylistInfos";
 
 export default function ShowPlaylistPage() {
   useEffect(() => {
     document.title = "PlaylistList - CodingTube";
   }, []);
+
   return (
     <>
-      <DisplayedBurgerMenu />
       <div>
-        <h1 className="text-3xl font-bold underline">Playlist</h1>
-        <div class="flex inset-y-0 left-0 flex-col">
-          <ShowPlaylist />
+        <div className="flex flex-row mt-5">
+          <ShowPlaylistInfos />
+
+          <div class="flex inset-y-0 left-0 flex-col md:ml-[450px] mt-5">
+            <ShowPlaylist />
+          </div>
         </div>
       </div>
     </>

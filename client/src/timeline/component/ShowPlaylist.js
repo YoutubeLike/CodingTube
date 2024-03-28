@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import {SetScores} from "../functions/AdvancedTimelineCalculator.js";
 import { useLocation } from "react-router-dom";
+import {GetTimeElapsed, TimeOfVideo} from "../functions/VideoTiming.js";
 
 
 // Fonction pour calculer le temps écoulé depuis la date d'upload
@@ -94,35 +95,45 @@ export default function ShowPlaylist() {
 
     fetchData();
   }, [playlistId]);
-  console.log(videosInfos);
+
   var indents = [];
+  
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
-    var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
+    var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
+   
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0">
-        <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
-
-        <div className="relative">
-            <img
-                className="max-w-[90%] h-auto rounded-lg"
+      <div key={i} className="mb-10 sm:block md:flex content-center">
+        <div className="min-w-[6%] pt-2 pb-2 rounded-xl mr-2">
+          <h1 className="text-xl text-amber-50 text-center font-extrabold inline-bloc align-middle">{i+1}</h1>
+        </div>
+        <a href={`/watch?video_id=${videosInfos[i]["id_video"]}`}>
+          <div class="sm:block md:flex md:flex-row">
+            <div class="relative">
+              <img
+                className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
                 src={videosInfos[i]["thumbnail"]}
                 alt="Thumbnail"
-            />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">Playlist</p>
-        </div>
+              />
+              <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+                {videoLenght}
+              </p>
+            </div>
 
-
-
-          <div className="flex flew-row mt-2.5">
-            <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
-            <div className="ml-2.5">
-              <h3 className="text-black font-bold text-[100%]">
+            <div className="ml-2.5 w-[85%]">
+              <h3 className="text-black font-bold text-[120%]">
                 {videosInfos[i]["title"]}
               </h3>
-              <h4 className="text-gray text-[120%]">
-                {videosInfos[i]["pseudo"]}
+              <h4 className="text-gray text-[90%]">
+                {videosInfos[i]["number_view"]} views -{" "}
+                {GetTimeElapsed(videosInfos[i]["upload_date_time"])} ago
               </h4>
+              <div className="flex flex-row mt-2 items-center">
+                <img className="pp mr-2" src={videosInfos[i]["PP"]} alt="PP" />
+                <h4 className="text-gray text-[90%] text-center font-medium">
+                  {videosInfos[i]["pseudo"]}
+                </h4>
+              </div>
             </div>
           </div>
         </a>

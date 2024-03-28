@@ -3,12 +3,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import CheckSession from "../../session"
-//const { isLoggedIn, userId } = CheckSession();
-
-var userId = 1;
-
-
 // Function witchs adds scores to videos for the advanced timeline
 export function SetScoresTrendings(videosInfos) {
 

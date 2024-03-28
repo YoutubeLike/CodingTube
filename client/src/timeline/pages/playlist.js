@@ -14,8 +14,7 @@ export default function PlaylistPage() {
       </div>
 
       <div className="flex">
-        <NonDisplayedBurgerMenu />
-        <div class="flex ml-[3%] flex-wrap">
+        <div class="flex flex-col items-center ml-[3%] md:items-start">
           <Playlist />
         </div>
       </div>

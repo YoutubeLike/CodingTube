@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import Header from "./header";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import axios from "axios";
 import NonDisplayedBurgerMenu from "../timeline/component/nonDisplayedBurgerMenu";
 
-// Fonction pour calculer le temps écoulé depuis la date d'upload
+/**
+ * Function to calculate the time elapsed since the upload date
+ * @param {string} uploadDateTime - upload date and time in string format
+ * @returns {string} elapsed time in a human-readable format
+ */
 function getTimeElapsed(uploadDateTime) {
   const uploadDate = new Date(uploadDateTime);
   const currentDate = new Date();
@@ -26,6 +30,11 @@ function getTimeElapsed(uploadDateTime) {
   }
 }
 
+/**
+ * Function to calculate the duration of a video 
+ * @param {int} totalSeconds - total of second to convert 
+ * @returns {string} Time formatted as Hours : Minutes : Seconds
+ */
 function timeOfVideo(totalSeconds) {
   var hours;
   var minutes;
@@ -66,32 +75,203 @@ function timeOfVideo(totalSeconds) {
   return result;
 }
 
+/**
+ * Component for displaying search results.
+ * @returns {JSX.Element} Search results component.
+ */
 export default function Search() {
   // Get the informations of the SQL Request by the URL
   const [videosInfos, setVideosInfos] = useState([]);
+  const inputRef = useRef("");
 
   useEffect(() => {
+    // Function to fetch search results based on the query parameter
     const displaySearchPage = async () => {
+      // Extracting the video name from the URL query parameters
       const queryParameters = new URLSearchParams(window.location.search);
       const video = queryParameters.get("videoName");
       try {
+        // Fetching search results from the server
         const response = await axios.get(
           "http://localhost:5000/api/search/displaySearchPage/" + video
         );
         setVideosInfos(response.data);
-        console.log(videosInfos)
       } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     };
 
     displaySearchPage(); // Appeler la fonction ici pour qu'elle soit exécutée au montage du composant
-  }, []); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
+  },[]); // [] assure que le useEffect ne s'exécute qu'une seule fois au montage
+
+
+    const handleClickFilters = async (e) => {
+        const buttonValue = e.target.value;
+        const queryParameters = new URLSearchParams(window.location.search);
+        const video_search = queryParameters.get("videoName")
+
+        try{
+          console.log(video_search)
+          const applyFilters = await axios.get(
+            "http://localhost:5000/api/search/filters/" + buttonValue + '/' + video_search );
+            setVideosInfos(applyFilters.data)
+            console.log('Le filtre ' + buttonValue + ' est appliqué')
+        } catch(error){
+          console.error("An error occurred while applying filter: ", error)
+        }
+    }
 
   return (
       <div className="flex">
         <NonDisplayedBurgerMenu />
         <div className="flex ml-[3%] flex-wrap mt-[5%]">
+        <div className="flex w-[100]">
+          <div className="flex flex-row h-2">
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "All"
+                onClick={(e) => {
+                
+                  handleClickFilters(e);
+                }}
+              >
+              All
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Videos"
+                onClick={(e) => {
+                 
+                  handleClickFilters(e);
+                }}
+              >
+              Videos
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Shorts"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Shorts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Recently-uploaded"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Recently uploaded
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Live"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Live
+              </button>
+            </div>
+          </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Music"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Music
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Gaming"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Gaming
+              </button>
+            </div>
+          <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Cultivations"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Cultivations
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Podcasts"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Podcasts
+              </button>
+            </div>
+            <div>
+              <button 
+                type="submit" 
+                className="justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-lg font-bold"
+                value= "Sports"
+                onClick={(e) => {
+                  
+                  handleClickFilters(e);
+                }}
+              >
+              Sports
+              </button>
+            </div>
+          {/* <div className="">
+            <div className="">
+              <button 
+              type="submit" 
+              className=" flex gap-2 justify-center items-center ml-5 h-10 px-5 w-35 min-w-35 bg-gray-200 rounded-full font-bold"
+              onClick={(e) => {
+
+              }}
+              >
+              Filters <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" viewBox="0 0 16 16"><path fill="currentColor" d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5zM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11zM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75m-3-2.75H8.5v1.5H2.75a.75.75 0 0 1 0-1.5M4 3H2.75a.75.75 0 0 0 0 1.5H4zm-1.25 8.5H4V13H2.75a.75.75 0 0 1 0-1.5"></path></svg>
+              </button>
+            </div>
+          </div> */}
+        </div>
           {videosInfos && videosInfos.map((result, index) => (
               <div key={index}>
                 <a href={`/watch?video_id=${result.id}`}>
@@ -123,6 +303,14 @@ export default function Search() {
               </div>
           ))}
         </div>
+        {/* <div className="bg-green-800 opacity-100 z-80 flex flex-col">
+          <p className="text-lg">Filtres de recherche</p>
+          <div className="flex flex-row justify-between gap-4">
+            <p className="text-base">DATE D'AJOUT</p>
+            <p className="text-base">TYPE</p>
+            <p className="text-base">DURÉE</p>
+            <p className="text-base">TRIER PAR</p>
+          </div> */}         
     </div>
   );
 }

@@ -71,7 +71,9 @@ export default function Playlist() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request');
+        const response = await axios.get('http://localhost:5000/api/timeline/playlist-request', {
+          withCredentials: true,
+        });
         setVideosInfos(response.data);
       } catch (error) {
         console.error('Error fetching playlist:', error);
@@ -86,11 +88,24 @@ export default function Playlist() {
   videosInfos = videosInfos.slice().sort((a, b) => b.score - a.score);
 
   var indents = [];
+
+  // If in BDD there is no music video
+  if (videosInfos.length === 0) {
+    indents.push(
+      <div>
+        <p className="p-5 bg-red-700 text-white rounded-lg">
+          You have no playlist or you're not logged-in
+        </p>
+      </div>
+    );
+  }
+
+
   for (var i = 0; i < videosInfos.length; i++) {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0">
+      <div key={i} className="md:max-w-[25%] h-auto mb-0">
         <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">
@@ -101,9 +116,6 @@ export default function Playlist() {
             />
             <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">Playlist</p>
         </div>
-
-
-
           <div className="flex flew-row mt-2.5">
             <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />
             <div className="ml-2.5">

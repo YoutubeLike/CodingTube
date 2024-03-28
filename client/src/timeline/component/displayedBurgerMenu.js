@@ -432,16 +432,18 @@ const DisplayedBurgerMenu = () => {
       }
       .showMenuNav {
         display: block;
-        position: absolute;
+        position: fixed;
         width: 15%;
         height: 100vh;
         top: 0;
         left: 0;
         background: white;
-        z-index: 12;
+        z-index: 14;
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow: scroll;
+        @media (max-width: 1000px) { width: 100%; z-index: 22;  }
       }
     `}</style>
 			</div>
