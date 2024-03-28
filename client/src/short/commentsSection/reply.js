@@ -281,7 +281,7 @@ class Reply extends React.Component {
 
           <input
             id={"commentsInputField" + this.props.id}
-            className="mx-[2vh] text-[2vh]"
+            className="mx-[2vh] text-[2vh] w-[50%]"
             maxLength="1024"
             placeholder="Add a comment..."
             type="text"
