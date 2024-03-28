@@ -77,7 +77,8 @@ const generateLiveKey = (async (req, res) =>
 {
   if(req.session.userId != undefined)
   {
-    mariadb.pool.query("UPDATE channel set stream_key = '" + (await bcrypt.hash(Math.random().toString(36), 10)).replace('/', "") + "' WHERE user_id = '" + req.session.userId + "'")
+    const key = (await bcrypt.hash(Math.random().toString(36), 10)).replace("/", "")
+    mariadb.pool.query("UPDATE channel set stream_key = '" + key.replace("/", "") + "' WHERE user_id = '" + req.session.userId + "'")
     res.send('Enregistré')
   } else {
     res.send("Vous n'êtes pas connecté")
@@ -116,6 +117,27 @@ const GetTitle = async (req, res) => {
   }
 };
 
+const GetLiveKey = async (req, res) => {
+  const userId = req.session.userId;
+  try {
+    const connection = await mariadb.pool.getConnection();
+    const result = await connection.query(
+      "SELECT stream_key FROM channel WHERE id = ?",[userId]
+    );
+    connection.release();
+    if (result.length > 0) {
+      console.log(result[0].stream_key)
+      res.json({ liveKey: result[0].stream_key });
+    } else {
+      res.json({ liveKey: null });
+    }
+  } catch (err) {
+    console.error(err);
+    res.json({ liveKey: null });
+  }
+};
+
+
 module.exports = {
     saveThumbnail,
     sendThumbnail,
@@ -126,5 +148,5 @@ module.exports = {
     updateTitle,
     GetTitle,
     getUserId,
-    generateLiveKey
+    GetLiveKey
 }
