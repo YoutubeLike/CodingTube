@@ -13,8 +13,6 @@ export default function UploadVideo() {
   const [videoFile, setVideoFile] = useState(null);
   const [isShort, setIsShort] = useState(false);
 
-  console.log(isShort);
-
   function handleVideoChange(event) {
     const file = event.target.files[0];
     if (file) {
@@ -73,6 +71,7 @@ export default function UploadVideo() {
         setVideoPreview(null);
         setImagePreview(null);
         setIsShort(false);
+        document.getElementById("short").checked = false;
       })
       .catch((error) => {
         console.error("Error submitting form:", error);

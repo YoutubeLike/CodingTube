@@ -140,7 +140,6 @@ class Reply extends React.Component {
   }
 
   reply() {
-    console.log(this.state.senderUsername);
     document.getElementById("commentsInputField" + this.props.id).value =
       "@" + this.state.senderUsername;
     this.setState({ isReplying: true });

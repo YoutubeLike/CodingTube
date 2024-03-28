@@ -26,7 +26,6 @@ const getShortInfos = (req, res) => {
 };
 
 const getShortVideo = (req, res) => {
-  console.log(req.query.shortId);
   mariadb.pool
     .query("SELECT upload_video_url FROM short WHERE id = ?", [
       req.query.shortId,
@@ -34,9 +33,6 @@ const getShortVideo = (req, res) => {
     .then((result) => {
       if (result[0].upload_video_url != null && result[0].upload_video_url != "") {
         const videoPath = result[0].upload_video_url;
-        console.log(
-          "CHEMIN   " + path.join(__dirname, "../../../..", videoPath)
-        );
         const videoStream = fs.createReadStream("../../../.." + videoPath);
         res.setHeader("Content-Type", "video/mp4");
         videoStream.pipe(res);
