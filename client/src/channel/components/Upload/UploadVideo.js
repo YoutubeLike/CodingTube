@@ -40,7 +40,9 @@ export default function UploadVideo() {
   function handleSubmit(event) {
     event.preventDefault();
 
+    let addedText = "";
     if (isShort) {
+      addedText = document.getElementById("addedText").value;
       var filters = "";
       document.querySelectorAll("input:checked").forEach((filter) => {
         if (filter.value != "on") {
@@ -56,7 +58,7 @@ export default function UploadVideo() {
     formData.append("video", videoFile);
     formData.append("thumbnail", thumbnailFile);
     formData.append("isShort", isShort);
-    formData.append("text", document.getElementById("addedText").value);
+    formData.append("text", addedText);
     formData.append("filters", filters);
 
     axios
@@ -225,7 +227,12 @@ export default function UploadVideo() {
               <div>
                 <div>
                   <h2 className="font-bold text-2xl mb-4 pt-4">Added text</h2>
-                  <input type="text" id="addedText" />
+                  <input
+                    type="text"
+                    id="addedText"
+                    placeholder="Add e text..."
+                    className="border-[1px] border-black"
+                  />
                 </div>
                 <div>
                   <h2 className="font-bold text-2xl mb-4 pt-4">Filters</h2>
