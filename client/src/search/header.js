@@ -4,7 +4,10 @@ import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const axiosSession = axios.create({ baseURL: "http://localhost:5000/", WithCredentials: true})
+  const axiosSession = axios.create({
+    baseURL: "http://localhost:5000/",
+    WithCredentials: true,
+  });
 
   //State for the search input field
   const [searchValue, setSearchValue] = useState("");
@@ -27,7 +30,6 @@ export default function Header() {
   //Hook for navigation
   const navigate = useNavigate();
 
-
   /**
    * Function to submit a search request
    * @async
@@ -35,12 +37,15 @@ export default function Header() {
   const submit = async () => {
     if (inputRef.current != "") {
       try {
-          await fetch("http://localhost:5000/api/search/request/" + inputRef.current,{
+        await fetch(
+          "http://localhost:5000/api/search/request/" + inputRef.current,
+          {
             method: "GET",
-            headers: {"content-type": "application/json"},
-            credentials: 'include'
-          })
-        }catch (error) {
+            headers: { "content-type": "application/json" },
+            credentials: "include",
+          }
+        );
+      } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     }
@@ -69,16 +74,17 @@ export default function Header() {
    */
   const history = async () => {
     try {
-    await fetch("http://localhost:5000/api/search/history" , {
+      await fetch("http://localhost:5000/api/search/history", {
         method: "GET",
-        headers: {"content-type": "application/json"},
-        credentials: 'include'
-      }).then(response =>{
-        return response.json()
+        headers: { "content-type": "application/json" },
+        credentials: "include",
       })
-      .then(data => {
-        setUserHistory(data)
-      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setUserHistory(data);
+        });
     } catch (error) {
       console.error(
         "An error occurred while searching research most view: ",
@@ -95,16 +101,21 @@ export default function Header() {
       history();
     } else {
       try {
-        await fetch("http://localhost:5000/api/search/history_onChange/" + inputRef.current, {
-          method: "GET",
-          headers: {"Content-Type": "application/json"},
-          credentials: 'include'
-        }).then(response =>{
-          return response.json()
-        })
-        .then(data => {
-          setUserHistory(data)
-        })
+        await fetch(
+          "http://localhost:5000/api/search/history_onChange/" +
+            inputRef.current,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            setUserHistory(data);
+          });
       } catch (error) {
         console.error("An error in history_onChange: ", error);
       }
@@ -171,8 +182,8 @@ export default function Header() {
 
   /**
    * Function to delete the user history
-   * @param {string} id - id of the search to delete 
-   * @param {object} e - click event 
+   * @param {string} id - id of the search to delete
+   * @param {object} e - click event
    */
   async function deleteHistory(id, e) {
     e.preventDefault();
@@ -183,19 +194,17 @@ export default function Header() {
     }
   }
 
-
   return (
     // Header component containing search bar and buttons
-    <div className="w-[99%] justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 bg-white">
-      <div className="flex w-[33%] h-7 ">
+    <div className="w-[99%] h-10 justify-between flex space-x-3 space-y-0.5 ml-2 mt-2 bg-[white]	">
+      <div className="flex w-[33%] h-full items-center">
         <DisplayedBurgerMenu />
-        <div 
-         className="flex w-[99%] h-6 ml-2 mt-0.5">
+        <div className="flex w-[99%] h-6 ml-4 mt-0.5">
           <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
-          <p className="hidden md:block">CODITUBE</p>
+          <p className="hidden md:block font-semibold	pl-2">CODITUBE</p>
         </div>
       </div>
-      <div className="h-7 w-[33%] flex justify-right items-right border-solid border-black rounded-lg z-20 relative">
+      <div className=" w-[33%] flex justify-right items-right border-solid border-black rounded-3xl z-20 relative">
         <form
           autocomplete="off"
           className="flex w-[100%]"
@@ -203,23 +212,23 @@ export default function Header() {
             e.preventDefault();
             submit(searchValue);
             if (inputRef.current != "") {
-              window.location.href = "http://localhost:3000/search?videoName=" + searchValue
-            }
-            else {
+              window.location.href =
+                "http://localhost:3000/search?videoName=" + searchValue;
+            } else {
               navigate({
-                pathname: '/',
+                pathname: "/",
               });
             }
           }}
         >
           <div
-            className="w-[100%] display-block h-7 z-20 relative"
+            className="w-[100%] h-full display-block h-7 z-20 relative"
             ref={menuRef}
           >
             <input
-            maxLength={255}
+              maxLength={255}
               autocomplete="off"
-              className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
+              className="w-[100%] h-[100%] bg-gray-200 rounded-l-3xl z-20 relative indent-3.5 text-base		"
               type="text"
               placeholder="Search"
               value={inputRef.current}
@@ -240,7 +249,7 @@ export default function Header() {
               }}
             />
             {menuOpen && (
-              <div className="overflow-hidden w-[100%] rounded-lg border-solid border-black bg-gray-200 z-20 relative">
+              <div className="overflow-hidden w-full rounded-lg border-solid border-black bg-gray-200 z-20 relative">
                 <ul role="listbox" className="z-20 relative">
                   {userhistory.map((result, index) => (
                     <div key={index} className="flex justify-between">
@@ -252,7 +261,7 @@ export default function Header() {
                         >
                           {" "}
                           <svg
-                            className="h-6 z-20 relative"
+                            className="h-6 z-20 relative "
                             xmlns="http://www.w3.org/2000/svg"
                             width="1em"
                             height="1em"
@@ -286,7 +295,7 @@ export default function Header() {
                       }}
                     >
                       <svg
-                        className="h-6 z-20 relative"
+                        className="h-6 z-20 relative "
                         xmlns="http://www.w3.org/2000/svg"
                         width="1em"
                         height="1em"
@@ -304,9 +313,9 @@ export default function Header() {
               </div>
             )}
           </div>
-          <button type="submit">
-          <svg
-              className="h-7 bg-gray-200 rounded-e-lg z-20 relative"
+          <button type="submit" className="w-10">
+            <svg
+              className="h-full w-full bg-gray-200 rounded-r-3xl z-20 relative p-2"
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
               height="1em"
@@ -321,7 +330,11 @@ export default function Header() {
         </form>
       </div>
       <div className="flex justify-end space-x-2 w-[33%]">
-        <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
+        <button
+          data-ripple-light="true"
+          data-tooltip-target="tooltip"
+          className="flex justify-center items-center ml-2 h-10 w-10 bg-gray-200 rounded-full"
+        >
           <svg
             className="h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -335,7 +348,8 @@ export default function Header() {
             ></path>
           </svg>
         </button>
-        <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
+
+        <button className="flex justify-center items-center ml-2 h-10 w-10 bg-gray-200 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="1em"
@@ -348,13 +362,15 @@ export default function Header() {
             ></path>
           </svg>
         </button>
-        <button className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
+
+        <button className="flex justify-center items-center ml-2 h-10 w-10 bg-gray-200 rounded-full">
           <svg
             className="h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
             width="1em"
             height="1em"
-            viewBox="0 0 16 16">
+            viewBox="0 0 16 16"
+          >
             <path
               fill="currentColor"
               d="M16 7.992C16 3.58 12.416 0 8 0S0 3.58 0 7.992c0 2.43 1.104 4.62 2.832 6.09c.016.016.032.016.032.032c.144.112.288.224.448.336c.08.048.144.111.224.175A7.98 7.98 0 0 0 8.016 16a7.98 7.98 0 0 0 4.48-1.375c.08-.048.144-.111.224-.16c.144-.111.304-.223.448-.335c.016-.016.032-.016.032-.032c1.696-1.487 2.8-3.676 2.8-6.106m-8 7.001c-1.504 0-2.88-.48-4.016-1.279c.016-.128.048-.255.08-.383a4.17 4.17 0 0 1 .416-.991c.176-.304.384-.576.64-.816c.24-.24.528-.463.816-.639c.304-.176.624-.304.976-.4A4.15 4.15 0 0 1 8 10.342a4.185 4.185 0 0 1 2.928 1.166c.368.368.656.8.864 1.295c.112.288.192.592.24.911A7.03 7.03 0 0 1 8 14.993m-2.448-7.4a2.49 2.49 0 0 1-.208-1.024c0-.351.064-.703.208-1.023c.144-.32.336-.607.576-.847c.24-.24.528-.431.848-.575c.32-.144.672-.208 1.024-.208c.368 0 .704.064 1.024.208c.32.144.608.336.848.575c.24.24.432.528.576.847c.144.32.208.672.208 1.023c0 .368-.064.704-.208 1.023a2.84 2.84 0 0 1-.576.848a2.84 2.84 0 0 1-.848.575a2.715 2.715 0 0 1-2.064 0a2.84 2.84 0 0 1-.848-.575a2.526 2.526 0 0 1-.56-.848zm7.424 5.306c0-.032-.016-.048-.016-.08a5.22 5.22 0 0 0-.688-1.406a4.883 4.883 0 0 0-1.088-1.135a5.207 5.207 0 0 0-1.04-.608a2.82 2.82 0 0 0 .464-.383a4.2 4.2 0 0 0 .624-.784a3.624 3.624 0 0 0 .528-1.934a3.71 3.71 0 0 0-.288-1.47a3.799 3.799 0 0 0-.816-1.199a3.845 3.845 0 0 0-1.2-.8a3.72 3.72 0 0 0-1.472-.287a3.72 3.72 0 0 0-1.472.288a3.631 3.631 0 0 0-1.2.815a3.84 3.84 0 0 0-.8 1.199a3.71 3.71 0 0 0-.288 1.47c0 .352.048.688.144 1.007c.096.336.224.64.4.927c.16.288.384.544.624.784c.144.144.304.271.48.383a5.12 5.12 0 0 0-1.04.624c-.416.32-.784.703-1.088 1.119a4.999 4.999 0 0 0-.688 1.406c-.016.032-.016.064-.016.08C1.776 11.636.992 9.91.992 7.992C.992 4.14 4.144.991 8 .991s7.008 3.149 7.008 7.001a6.96 6.96 0 0 1-2.032 4.907"
