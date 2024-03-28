@@ -10,6 +10,7 @@ const {
   test,
   adminDuLive,
   generateLiveKey,
+  banUser,
 } = require("./controller.js");
 
 router.post("/save", saveThumbnail);
@@ -20,5 +21,6 @@ router.get("/username", GetUsername);
 router.get("/testa", test);
 router.get("/LiveStreamKey", generateLiveKey);
 router.get("/admind", adminDuLive);
+router.get("/ban", banUser);
 
 module.exports = router;

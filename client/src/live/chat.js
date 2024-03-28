@@ -27,7 +27,6 @@ export default function Chat(props) {
   const banDuration = 60000; // 1 minute en milliseconds
   const [isAdmin, setIsAdmin] = useState(false); // Variable qui me sert à être modérateur si je suis l'hote du stream
   const chatContainerRef = useRef(null);
-  const [isStreamer, setIsStreamer] = useState("");
 
   // Le useEffect prock lorsque le composant s'initialise
   useEffect(() => {
@@ -61,6 +60,15 @@ export default function Chat(props) {
       } else {
       }
     });
+
+    socketInstance.on("ban-message", (data) => {
+      setIsBanned(data.banned);
+      if (data.banned) {
+        // Ici vous pouvez utiliser data.sender, data.message, etc. pour afficher des informations à l'utilisateur
+        alert(`User ${data.sender} has been banned for: ${data.message}`);
+      }
+    });
+
     const pseudo = props.user;
 
     const fetchAdminStatus = async (userId, pseudo) => {
@@ -127,20 +135,22 @@ export default function Chat(props) {
       const bannedWordFound = bannedWords.some((word) =>
         inputMessage.toLowerCase().includes(word)
       );
+
       if (bannedWordFound) {
         setIsBanned(true);
         setTimeout(() => setIsBanned(false), banDuration);
-        socket.emit("ban-message", { banned: true });
-        alert(
-          `You are banned from chatting for 1 minute due to using a banned word.`
-        );
+        // Appeler la fonction banUser avec les informations nécessaires pour bannir l'utilisateur
+        const userId = userId; // Remplacez par la logique pour obtenir l'ID de l'utilisateur
+        const profilePicture = await getUserProfilePicture(userId);
+        const pseudo = await getUserPseudo(userId);
+        banUser(pseudo, inputMessage, profilePicture);
       } else {
-        const userId = 2;
+        const userId = 2; // Remplacez par la logique pour obtenir l'ID de l'utilisateur
         const profilePicture = await getUserProfilePicture(userId);
         const pseudo = await getUserPseudo(userId);
         const newMessage = {
           message: inputMessage,
-          sender: pseudo,
+          sender: pseudo, // Envoyer le pseudo de l'utilisateur qui envoie le message
           time: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -148,16 +158,34 @@ export default function Chat(props) {
           userId,
           profilePicture,
         };
-        // Emit le nouveau message
+        // Émettre l'événement "chat-message" avec le nouveau message
         socket.emit("chat-message", newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
-        // Réinitialise l'input du message
+        // Réinitialiser l'input du message
         setInputMessage("");
       }
     } else {
       alert("Please enter a non-empty message");
     }
   };
+
+  const banUser = async (sender, message, pseudo) => {
+    console.log("Banning user:", sender);
+    console.log("User's pseudo:", pseudo);
+    try {
+      const response = await axios.get("http://localhost:5000/api/live/ban", {
+        sender,
+        message,
+      });
+      if (response.status === 200) {
+        console.log("User banned successfully" + sender);
+        // Ici, vous pouvez mettre à jour l'état ou effectuer toute autre action
+      }
+    } catch (error) {
+      console.error("Error banning user:", error);
+    }
+  };
+
   // Quand on envoie le message via la touche entré
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -166,11 +194,6 @@ export default function Chat(props) {
     }
   };
 
-  const banUser = (userId) => {
-    console.log("j'ai cliquer sur ban là gros");
-    // Envoyer une demande au serveur pour bannir l'utilisateur
-    socket.emit("ban-user", { userId });
-  };
   // Mise à jour du scroll lorsque de nouveaux messages sont ajoutés :
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -223,7 +246,9 @@ export default function Chat(props) {
               {/* Bouton d'administration, par exemple "Ban" */}
               {isAdmin && (
                 <button
-                  onClick={() => banUser(message.userId)}
+                  onClick={() =>
+                    banUser(message.sender, message.message, message.sender)
+                  }
                   className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
                 >
                   Ban
@@ -249,9 +274,6 @@ export default function Chat(props) {
         >
           Send
         </button>
-        <div>
-          <h1>Streamer: {isStreamer}</h1>
-        </div>
       </div>
     </div>
   );

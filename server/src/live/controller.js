@@ -136,6 +136,17 @@ const generateLiveKey = async (req, res) => {
   }
 };
 
+const banUser = async (req, res) => {
+  const { sender, message } = req.query;
+  try {
+    const result = await banUser(sender, message);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in banUser:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   saveThumbnail,
   sendThumbnail,
@@ -145,4 +156,5 @@ module.exports = {
   test,
   generateLiveKey,
   adminDuLive,
+  banUser,
 };
