@@ -254,12 +254,7 @@ const getVideo = (req, res) => {
 		});
 };
 
-<<<<<<< HEAD
-
-
-=======
 //export functions
->>>>>>> ea20a5b239fcb1f6b723e29055c6f8f33e41af30
 module.exports = {
 	getIdentifier,
 	selectChannel,
