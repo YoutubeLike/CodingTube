@@ -17,9 +17,14 @@ const { likePageYouRequest } = require("./controllerLikePageYou.js");
 const { userInfo } = require("./controllerYouPage.js");
 const { userName } = require("./controllerPseudoUser.js");
 const { rightSideTimelineRequest } = require("./controllerRightSideTimeline.js");
+const { yourVideosTimelineRequest } = require("./controllerYourVideosTimelineRequest.js");
+
 
 // Get the videos infos to show timeline
 router.get("/timeline-request", timelineRequest);
+
+// Get the videos infos to show timeline by the userId
+router.get("/yourVideos-request", yourVideosTimelineRequest);
 
 // Get the videos infos to show category's timeline
 router.get("/category-request", categoryTimelineRequest);
