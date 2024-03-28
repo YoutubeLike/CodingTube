@@ -70,17 +70,17 @@ export default function UploadVideo() {
                     <div className="w-3/5">
                         <div className="flex mb-4">
                             <div className="border-solid border-2 border-gray-500 rounded-md w-full mr-4">
-                                <label htmlFor="title" className="pl-2">Titre</label>
+                                <label htmlFor="title" className="pl-2">Title</label>
                                 <input name="title" type="text" className="outline-none p-2 w-full rounded-md font-bold text-xl" value={title} onChange={(e) => setTitle(e.target.value)} />
                             </div>
 
                             <div className="border-solid border-2 border-gray-500 rounded-md flex flex-col px-2">
-                                <label>Catégorie</label>
+                                <label>Category</label>
                                 <select className="h-full bg-transparent font-bold" value={category} onChange={(e) => setCategory(e.target.value)}>
-                                    <option value="">Sélectionner une catégorie</option>
-                                    <option value="Music">Musique</option>
-                                    <option value="VideoGames">Jeux vidéo</option>
-                                    <option value="News">Actualités</option>
+                                    <option value="">Select a category</option>
+                                    <option value="Music">Music</option>
+                                    <option value="VideoGames">Video games</option>
+                                    <option value="News">News</option>
                                     <option value="Sports">Sports</option>
                                     <option value="Culture">Culture</option>
                                     <option value="Podcasts">Podcasts</option>
@@ -98,7 +98,7 @@ export default function UploadVideo() {
                         {videoPreview ? (
                             <div className="h-full flex flex-col justify-around">
                                 <video src={videoPreview} controls className="w-full border-solid border-2 border-gray-600" />
-                                <label htmlFor="videoInput">Changer la vidéo</label>
+                                <label htmlFor="videoInput">Change video</label>
                                 <input id="videoInput" type="file" name="video" accept="video/*" onChange={handleVideoChange} className="border-none cursor-pointer bg-blue-500 text-white py-input px-6 rounded-md hover:bg-blue-600 transition-colors" />
                             </div>
                         ) : (
@@ -106,7 +106,7 @@ export default function UploadVideo() {
                                 <div className="text-white flex items-center justify-center font-bold bg-black w-full aspect-[16/9] cursor-pointer" onClick={() => document.getElementById('videoInput').click()}>
                                     <p className="text-6xl mb-4 mr-2">+</p>
                                 </div>
-                                <p>Nom du fichier :</p>
+                                <p>File name :</p>
                                 <label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
                                     Importer
                                     <input type="file" name="video" accept="video/*" className="hidden" onChange={handleVideoChange} />
@@ -118,7 +118,7 @@ export default function UploadVideo() {
 
                 <div className="mb-4 w-full">
                     <h2 className="font-bold text-2xl mb-4 pt-4">Miniature</h2>
-                    <p>Sélectionnez ou importez une image ou une vidéo qui donne un aperçu du contenu.</p>
+                    <p>Select or import picture or video</p>
                     <div className="mt-4 max-h-52 max-w-64">
                         {imagePreview ? (
                             <img src={imagePreview} alt="Preview" className="" />
@@ -129,7 +129,7 @@ export default function UploadVideo() {
                 </div>
                 <div className="w-full">
                     <button type="submit" className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors w-30 mt-10">
-                        Valider
+                        Validate
                     </button>
                     <input type="file" accept="image/*" id="thumbnailInput" className="hidden" onChange={(e)=>{handleThumbnailChange(e)}}/>
                 </div>
