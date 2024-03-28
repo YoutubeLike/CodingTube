@@ -1,88 +1,70 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from 'axios';
 import logo from "../../assets/logo.jpg";
 import noir from "../../assets/fondNoir.avif";
 
 export default function UploadVideo() {
-  const [videoPreview, setVideoPreview] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [videoFile, setVideoFile] = useState(null);
-  const [isShort, setIsShort] = useState(false);
+    const [videoPreview, setVideoPreview] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("");
+    const [thumbnailFile, setThumbnailFile] = useState(null);
+    const [videoFile, setVideoFile] = useState(null);
+    const [isShort, setIsShort] = useState(false);
 
-  function handleVideoChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setVideoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setVideoFile(file);
-    }
-  }
 
-  function handleThumbnailChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-      setThumbnailFile(file);
-    }
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    let addedText = "";
-    if (isShort) {
-      addedText = document.getElementById("addedText").value;
-      var filters = "";
-      document.querySelectorAll("input:checked").forEach((filter) => {
-        if (filter.value != "on") {
-          filters += filter.value + " ";
+    function handleVideoChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setVideoPreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+            setVideoFile(file);
         }
-      });
     }
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("category", category);
-    formData.append("video", videoFile);
-    formData.append("thumbnail", thumbnailFile);
-    formData.append("isShort", isShort);
-    formData.append("text", addedText);
-    formData.append("filters", filters);
+    function handleThumbnailChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+            setThumbnailFile(file);
+        }
+    }
 
-    axios
-      .post("http://localhost:5000/api/channel/submitVideo", formData)
-      .then((response) => {
-        console.log("Server response:", response.data);
-        setTitle("");
-        setDescription("");
-        setCategory("");
-        setThumbnailFile(null);
-        setVideoFile(null);
-        setVideoPreview(null);
-        setImagePreview(null);
-        setIsShort(false);
-        document.getElementById("short").checked = false;
-      })
-      .catch((error) => {
-        console.error("Error submitting form:", error);
-      });
-  }
+    function toggleShort() {
+      setIsShort(!isShort);
+    }
 
-  function toggleShort() {
-    setIsShort(!isShort);
-  }
+    function handleSubmit(event) {
+        event.preventDefault();
+
+        let addedText = "";
+        if (isShort) {
+          addedText = document.getElementById("addedText").value;
+          var filters = "";
+          document.querySelectorAll("input:checked").forEach((filter) => {
+            if (filter.value != "on") {
+              filters += filter.value + " ";
+            }
+          });
+        }
+    
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("category", category);
+        formData.append("video", videoFile);
+        formData.append("thumbnail", thumbnailFile);
+        formData.append("isShort", isShort);
+        formData.append("text", addedText);
+        formData.append("filters", filters);
 
         axios.post('http://localhost:5000/api/channel/submitVideo', formData , {withCredentials:true})
             .then(response => {
@@ -94,6 +76,8 @@ export default function UploadVideo() {
                 setVideoFile(null);
                 setVideoPreview(null);
                 setImagePreview(null);
+                setIsShort(false);
+                document.getElementById("short").checked = false;
             })
             .catch(error => {
                 console.error('Error submitting form:', error);
@@ -126,18 +110,11 @@ export default function UploadVideo() {
                             </div>
                         </div>
 
-            <div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
-              <label htmlFor="description" className="flex flex-cols pl-2">
-                Description
-              </label>
-              <textarea
-                name="description"
-                className="outline-none p-2 h-[80%] w-full resize-none font-bold"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-          </div>
+                        <div className="border-solid border-2 border-gray-600 rounded-md w-full h-60">
+                            <label htmlFor="description" className="flex flex-cols pl-2">Description</label>
+                            <textarea name="description" className="outline-none p-2 h-[80%] w-full resize-none font-bold" value={description} onChange={(e) => setDescription(e.target.value)} />
+                        </div>
+                    </div>
 
                     <div className="w-2/5 h-1/1 ml-4">
                         {videoPreview ? (
@@ -160,64 +137,26 @@ export default function UploadVideo() {
                         )}
                     </div>
                 </div>
-                <p>Nom du fichier :</p>
-                <label className="cursor-pointer bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors max-w-28 text-center">
-                  Importer
-                  <input
-                    type="file"
-                    name="video"
-                    accept="video/*"
-                    className="hidden"
-                    onChange={handleVideoChange}
-                  />
-                </label>
-              </div>
-            )}
-          </div>
-        </div>
 
-        <div className="flex">
-          <div>
-            <div className="mb-4 w-full">
-              <h2 className="font-bold text-2xl mb-4 pt-4">Miniature</h2>
-              <p>
-                Sélectionnez ou importez une image ou une vidéo qui donne un
-                aperçu du contenu.
-              </p>
-              <div className="mt-4 max-h-52 max-w-64">
-                {imagePreview ? (
-                  <img src={imagePreview} alt="Preview" className="" />
-                ) : (
-                  <img
-                    src={noir}
-                    alt="Default"
-                    className="rounded-md cursor-pointer"
-                    onClick={() =>
-                      document.getElementById("thumbnailInput").click()
-                    }
-                  />
-                )}
-              </div>
-            </div>
-            <div className="w-full">
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors w-30 mt-10"
-              >
-                Valider
-              </button>
-              <input
-                type="file"
-                accept="image/*"
-                id="thumbnailInput"
-                className="hidden"
-                onChange={(e) => {
-                  handleThumbnailChange(e);
-                }}
-              />
-            </div>
-          </div>
-          <div className="ml-4">
+                <div className="mb-4 w-full">
+                    <h2 className="font-bold text-2xl mb-4 pt-4">Miniature</h2>
+                    <p>Select or import picture or video</p>
+                    <div className="mt-4 max-h-52 max-w-64">
+                        {imagePreview ? (
+                            <img src={imagePreview} alt="Preview" className="" />
+                        ) : (
+                            <img src={noir} alt="Default" className="rounded-md cursor-pointer" onClick={() => document.getElementById('thumbnailInput').click()} />
+                        )}
+                    </div>
+                </div>
+                <div className="w-full">
+                    <button type="submit" className="bg-blue-500 text-white py-2 px-6 rounded-md hover:bg-blue-600 transition-colors w-30 mt-10">
+                        Validate
+                    </button>
+                    <input type="file" accept="image/*" id="thumbnailInput" className="hidden" onChange={(e)=>{handleThumbnailChange(e)}}/>
+                </div>
+
+            <div className="ml-4">
             <h2 className="font-bold text-2xl mb-4 pt-4">Short</h2>
             <input type="checkbox" id="short" onChange={toggleShort} />
             <label for="short">Short</label>
@@ -229,7 +168,7 @@ export default function UploadVideo() {
                   <input
                     type="text"
                     id="addedText"
-                    placeholder="Add e text..."
+                    placeholder="Add a text..."
                     className="border-[1px] border-black"
                   />
                 </div>
@@ -305,13 +244,12 @@ export default function UploadVideo() {
                       <label for="hueRotate180">Hue Rotate Opposite</label>
                     </li>
                   </ul>
-
                 </div>
               </div>
             )}
           </div>
+            </form>
         </div>
-      </form>
-    </div>
-  );
+    );
 }
+

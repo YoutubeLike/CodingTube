@@ -97,7 +97,7 @@ const submit = (req, res) => {
 };
 
 const submitVideo = (req, res) => {
-  uploadVideo(req, res, (err) => {
+  uploadVideo(req, res, async(err) => {
     if (err) {
       console.error("Error uploading files:", err);
       return res.status(500).send("Internal Server Error");
@@ -124,11 +124,16 @@ const submitVideo = (req, res) => {
       `${date}_${videoFile.originalname}`
     );
 
+    const channelId = await mariadb.pool.query(
+      "SELECT id FROM channel WHERE user_id = ?",
+      [req.session.userId]
+  );
+
     if (isShort == "true") {
       mariadb.pool
         .query(
-          "INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, text, filters, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, ?, ?, CURRENT_TIMESTAMP)",
-          [title, description, category, thumbnailURL, videoURL, text, filters]
+          "INSERT INTO short (title, description, category, thumbnail, upload_video_url, channel_id, text, filters, upload_date_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
+          [title, description, category, thumbnailURL, videoURL, channelId[0].id, text, filters]
         )
         .then(() => {
           res.status(200).send("Data submitted successfully!");
@@ -142,8 +147,8 @@ const submitVideo = (req, res) => {
     } else {
       mariadb.pool
         .query(
-          "INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id, upload_date_time) VALUES (?, ?, ?, ?, ?, 1, CURRENT_TIMESTAMP)",
-          [title, description, category, thumbnailURL, videoURL]
+          "INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id, upload_date_time) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
+          [title, description, category, thumbnailURL, videoURL, channelId[0].id,]
         )
         .then(() => {
           res.status(200).send("Data submitted successfully!");

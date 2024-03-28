@@ -24,9 +24,6 @@ router.get("/userData/:info_user", userData);
 router.post("/userUpdate", userUpdate);
 
 
-const { userData } = require("./userData.js"); // Importing userData function
-const { userUpdate } = require("./userUpdate.js"); // Importing userUpdate function
-const { updatePassword } = require("./updatePswrd.js"); // Importing updatePassword function
 const { getInfoChannel } = require("./getInfoChannel.js");
 
 
