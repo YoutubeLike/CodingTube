@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 export default function Video() {
 	const [channelId, setChannelId] = useState(); // Channel id
 	const [video, setVideo] = useState(); // Video
+    const [thumbnailFile, setThumbnailFile] = useState(null);
 
 	useEffect(() => {
 		const fetchVideos = async () => {
@@ -15,6 +16,7 @@ export default function Video() {
 					"http://localhost:5000/api/channel/infosId",
 					{ params: { identifier: urlParams.get("identifier") } }
 				);
+				// const responseThumbnailPath = await axios.get('http://localhost:5000/api/channel/thumbnailPath?idVideo=' + urlParams.get("id"))
 
 				// Attribution of information
 				setChannelId(response.data.id);
@@ -41,7 +43,6 @@ export default function Video() {
 		fetchVideos();
 	}, []);
 
-	const sendVideo = () => {};
 
 	return (
 		<div className="flex justify-center">
@@ -53,8 +54,8 @@ export default function Video() {
 							className="flex flex-col mr-4 justify-between"
 						>
 							<img
-								src={data.thumbnail}
-								className="w-[270px] min-h-[155px] rounded-xl bg-black"
+								src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + data.id}
+								className="object-cover w-[270px] min-h-[155px] rounded-xl bg-black"
 							/>
 							<div className="h-full flex flex-col justify-between">
 								<p className="w-[270px] text-start font-bold">{data.title}</p>

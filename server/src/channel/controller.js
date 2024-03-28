@@ -85,8 +85,8 @@ const submit = (req, res) => {
 		});
 };
 
-const submitVideo = (req, res) => {
-	uploadVideo(req, res, (err) => {
+const submitVideo = async(req, res) => {
+	uploadVideo(req, res, async(err) => {
 		if (err) {
 			console.error("Error uploading files:", err);
 			return res.status(500).send("Internal Server Error");
@@ -105,7 +105,17 @@ const submitVideo = (req, res) => {
 		const thumbnailURL = path.join(source, "thumbnails", thumbnailFile.originalname);
 		const videoURL = path.join(source, "videos", videoFile.originalname);
 
-		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id) VALUES (?, ?, ?, ?, ?, 1)', [title, description, category, thumbnailURL, videoURL])
+		// Récupérer l'id de la chaîne
+		const userId = req.session.userId
+		const channelId = await mariadb.pool.query(
+			"SELECT id FROM channel WHERE user_id = ?",
+			[req.session.userId]
+		);
+		console.log("ID USER :", req.session.userId)
+		// console.log("ID CHANNEL :", channelId)
+
+		mariadb.pool.query('INSERT INTO video (title, description, category, thumbnail, upload_video_url, channel_id, upload_date_time) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)', 
+		[title, description, category, thumbnailURL, videoURL, channelId[0].id])
 			.then(() => {
 				res.status(200).send("Data submitted successfully!");
 			})
@@ -254,6 +264,41 @@ const getVideo = (req, res) => {
 		});
 };
 
+const getThumbnail = (req, res) => {
+    const thumbnailId = req.query.idThumbnail;
+
+    mariadb.pool
+        .query('SELECT thumbnail FROM video WHERE id = ?', [thumbnailId])
+        .then((result) => {
+            if (result.length > 0) {
+                const thumbnailPath = result[0].thumbnail;
+                const thumbnailStream = fs.createReadStream(path.join(__dirname, '../../../..', thumbnailPath));
+
+                const extension = path.extname(thumbnailPath).toLowerCase();
+                let contentType = 'image/jpeg'; // Par défaut à jpeg
+                if (extension === '.png') {
+                    contentType = 'image/png';
+                } else if (extension === '.gif') {
+                    contentType = 'image/gif';
+                } else if (extension === '.jpg'){
+                    contentType === 'image/jpg'
+                }
+
+                // Définir le type de contenu pour la réponse
+                res.setHeader('Content-Type', contentType);
+
+                // Envoyer l'image en tant que flux dans le corps de la réponse HTTP
+                thumbnailStream.pipe(res);
+            } else {
+                res.status(404).json({ message: "Thumbnail non trouvé" });
+            }
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la récupération du thumbnail :", error);
+            res.status(500).json({ message: "Erreur lors de la récupération du thumbnail" });
+        });
+};
+
 //export functions
 module.exports = {
 	selectChannel,
@@ -270,6 +315,7 @@ module.exports = {
 	follow,
 	getVideo,
 	getIdentifier,
+	getThumbnail,
 
 };
 
