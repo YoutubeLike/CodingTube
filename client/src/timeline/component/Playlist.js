@@ -105,7 +105,7 @@ export default function Playlist() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="max-w-[25%] h-auto mb-0">
+      <div key={i} className="md:max-w-[25%] h-auto mb-0">
         <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
 
         <div className="relative">

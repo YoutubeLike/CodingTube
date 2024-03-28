@@ -131,11 +131,10 @@ var divContent3 = [];
           </div>
           {divContent1}
           <div className="border-b-2 border-black min-w-[100%] mt-2"></div>
-          <div className="hover:bg-gray-100 min-w-[100%] flex space-x-4 items-center-1 mt-1">
-            <Link to="/you" className="pl-2">
+          <div className="hover:bg-gray-100 min-w-[100%]  mt-1">
+            <Link to="/you" className="pl-2 flex space-x-4 items-center-1">
               You
-            </Link>
-            <svg
+              <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1.5em"
               height="1.5em"
@@ -146,6 +145,7 @@ var divContent3 = [];
                 d="m14 18l-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45L14 6l6 6z"
               ></path>
             </svg>
+            </Link>
           </div>
           {divContent2}
           <div className="border-b-2 border-black min-w-[100%] mt-2"></div>
