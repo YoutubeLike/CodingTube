@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Header from "../../search/header";
 
 const ProfilePage = () => {
   // State for managing edit mode for each field in profile
@@ -265,6 +266,7 @@ const ProfilePage = () => {
   return (
     <div className="pl-0">
       {/* banner */}
+      <Header/>	
 
       <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
         <div className=" py-10 flex space-x-10">
