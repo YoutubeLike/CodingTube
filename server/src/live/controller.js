@@ -137,6 +137,11 @@ const GetLiveKey = async (req, res) => {
   }
 };
 
+const create = ((req, res) => {
+  //Insert necessary live
+  mariadb.pool.query("INSERT INTO live(title, user_id) value (?, ?)", ["default", req.session.userId])
+  generateLiveKey(req, res)
+})
 
 module.exports = {
     saveThumbnail,
@@ -149,4 +154,6 @@ module.exports = {
     GetTitle,
     getUserId,
     GetLiveKey
+    generateLiveKey,
+    create
 }

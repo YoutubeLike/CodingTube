@@ -20,6 +20,7 @@ export default function Create() {
             identifier: identifier, 
             bio: bio,
         });
+        await axios.get("http://localhost:5000/api/live/create")
         console.log('Requête envoyée');
         redirectLinkRef.current.click(); // Déclenchez un clic sur le lien de redirection
     } catch (error) {
