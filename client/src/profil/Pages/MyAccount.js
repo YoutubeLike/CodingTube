@@ -14,18 +14,6 @@ const ProfilePage = () => {
     errorUpdate: null,
     goodUpdate: null,
   });
-  // State for managing edit mode for each field in profile
-  const [isEditing, setIsEditing] = useState({
-    username: false,
-    name: false,
-    mail: false,
-    birthdate: false,
-    country: false,
-    gender: false,
-    password: false,
-    errorUpdate: null,
-    goodUpdate: null,
-  });
 
   // State for storing profile data
   const [profileData, setProfileData] = useState({
@@ -160,21 +148,7 @@ const ProfilePage = () => {
       [field]: !prevState[field],
     }));
   };
-  // Toggle edit mode for a field
-  const handleEditToggle = (field) => {
-    setIsEditing((prevState) => ({
-      ...prevState,
-      [field]: !prevState[field],
-    }));
-  };
 
-  // Handle input change for profile fields
-  const handleInputChange = (e, field) => {
-    setProfileData((prevState) => ({
-      ...prevState,
-      [field]: e.target.value,
-    }));
-  };
   // Handle input change for profile fields
   const handleInputChange = (e, field) => {
     setProfileData((prevState) => ({
@@ -188,21 +162,10 @@ const ProfilePage = () => {
     const date = new Date(dateString);
     return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   };
-  // Format date for display
-  const formatDateForDisplay = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  };
 
   // State for managing active tab
   const [toggleState, setToggleState] = useState(1);
-  // State for managing active tab
-  const [toggleState, setToggleState] = useState(1);
 
-  // Toggle between tabs
-  const toggleTab = (index) => {
-    setToggleState(index);
-  };
   // Toggle between tabs
   const toggleTab = (index) => {
     setToggleState(index);
@@ -275,10 +238,9 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchChannelInfo = async () => {
       try {
-        const userId = 1;
         const response = await axios.get(
-          `http://localhost:5000/api/profil/getInfoChannel/${userId}`
-          //, {  withCredentials: true,}
+          `http://localhost:5000/api/profil/getInfoChannel/`
+          , {  withCredentials: true,}
         );
         const channelInfo = response.data;
 
@@ -316,30 +278,6 @@ const ProfilePage = () => {
       {/* banner */}
 
       <div className=" md:pl-10 from-lime-300 justify-center to-green-500 shadow-inner rounded-t-md bg-[url('https://preview.redd.it/high-resolution-old-youtube-banner-v0-vjppkzbfg4ob1.png?auto=webp&s=3093b41bacf1bff614c3269df1163a6ba9e13342')] bg-no-repeat h-auto  mt-4 w-full md:w-auto md:mx-20">
-        <div className="py-10 flex flex-col md:flex-row  md: items-center">
-          {/* the button that alow us to change the banner and the */}
-
-          <div className="m-5 transform h-10 bg-red-600 w-10 rounded-md transition duration-500 hover:scale-125 hover:bg-red-600 flex justify-center items-center">
-            <button className="drop-shadow-[0_0px_10px_rgba(0,0,0,0.25)] bg-white w-10 h-10 rounded-md  flex justify-center items-center">
-              {" "}
-              {/* icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-9 h-9"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
         <div className=" py-10 flex space-x-10">
           {/* profile picture */}
 

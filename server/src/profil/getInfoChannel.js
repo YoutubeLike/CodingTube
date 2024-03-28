@@ -4,7 +4,7 @@ console.error("start of processing..."); // Logging start of processing
 
 const getInfoChannel = (req, res) => {
   // Extract the user ID from the session
-  const userId = req.params.userId;
+  const userId = req.session.userId;
 
   // Execute a SQL query to fetch channel information based on the user ID
   mariadb.pool
