@@ -28,7 +28,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Home</span>
 		</Link>,
-		<Link to="/shorts" className="flex items-center">
+		<Link to="/short" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"

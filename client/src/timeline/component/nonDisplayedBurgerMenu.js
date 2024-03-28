@@ -20,7 +20,7 @@ export default function NonDisplayedBurgerMenu() {
         </Link>
       </div>
       <div>
-        <Link to="/shorts">
+        <Link to="/short">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="3em"
