@@ -30,48 +30,68 @@ const checkVideoLike = (req, res) => {
 };
 
 const addVideoLike = async (req, res) => {
-  let checkExistance = await mariadb.pool.query(
-    "SELECT * FROM like_video WHERE id_user = ? AND id_video = ?;",
-    [req.session.userId, req.query.videoId]
-  );
-
-  if (checkExistance[0] == null) {
+  if (req.session.userId) {
     let checkExistance = await mariadb.pool.query(
-      "SELECT * FROM dislike_video WHERE id_user = ? AND id_video = ?;",
+      "SELECT * FROM like_video WHERE id_user = ? AND id_video = ?;",
       [req.session.userId, req.query.videoId]
     );
 
     if (checkExistance[0] == null) {
-      mariadb.pool
-        .query("INSERT INTO like_video (id_user, id_video) VALUES (?, ?);", [
-          req.session.userId,
-          req.query.videoId,
-        ])
-        .catch((error) => {
-          console.error("Error updating view count:", error);
-          res.status(500).send("Error updating view count");
-        });
+      let checkExistance = await mariadb.pool.query(
+        "SELECT * FROM dislike_video WHERE id_user = ? AND id_video = ?;",
+        [req.session.userId, req.query.videoId]
+      );
+
+      if (checkExistance[0] == null) {
+        mariadb.pool
+          .query("UPDATE video SET nb_like = nb_like + 1 WHERE id = ?;", [
+            req.query.videoId,
+          ])
+          .catch((error) => {
+            console.error("Error updating view count:", error);
+            res.status(500).send("Error updating view count");
+          });
+        mariadb.pool
+          .query("INSERT INTO like_video (id_user, id_video) VALUES (?, ?);", [
+            req.session.userId,
+            req.query.videoId,
+          ])
+          .catch((error) => {
+            console.error("Error updating view count:", error);
+            res.status(500).send("Error updating view count");
+          });
+      } else {
+        res.send("User already disliked");
+      }
     } else {
-      res.send("User already disliked");
+      res.send("User already liked");
     }
-  } else {
-    res.send("User already liked");
   }
 };
 
 const removeVideoLike = (req, res) => {
-  mariadb.pool
-    .query("DELETE FROM like_video WHERE id_user = ? AND id_video = ?;", [
-      req.session.userId,
-      req.query.videoId,
-    ])
-    .then((value) => {
-      res.send(value);
-    })
-    .catch((error) => {
-      console.error("Error updating view count:", error);
-      res.status(500).send("Error updating view count");
-    });
+  if (req.session.userId) {
+    mariadb.pool
+      .query("UPDATE video SET nb_like = nb_like - 1 WHERE id = ?;", [
+        req.query.videoId,
+      ])
+      .catch((error) => {
+        console.error("Error updating view count:", error);
+        res.status(500).send("Error updating view count");
+      });
+    mariadb.pool
+      .query("DELETE FROM like_video WHERE id_user = ? AND id_video = ?;", [
+        req.session.userId,
+        req.query.videoId,
+      ])
+      .then((value) => {
+        res.send(value);
+      })
+      .catch((error) => {
+        console.error("Error updating view count:", error);
+        res.status(500).send("Error updating view count");
+      });
+  }
 };
 
 const checkVideoDislike = (req, res) => {
@@ -86,36 +106,54 @@ const checkVideoDislike = (req, res) => {
 };
 
 const addVideoDislike = async (req, res) => {
-  let checkExistance = await mariadb.pool.query(
-    "SELECT * FROM like_video WHERE id_user = ? AND id_video = ?;",
-    [req.session.userId, req.query.videoId]
-  );
-
-  if (checkExistance[0] == null) {
+  if (req.session.userId) {
     let checkExistance = await mariadb.pool.query(
-      "SELECT * FROM dislike_video WHERE id_user = ? AND id_video = ?;",
+      "SELECT * FROM like_video WHERE id_user = ? AND id_video = ?;",
       [req.session.userId, req.query.videoId]
     );
 
     if (checkExistance[0] == null) {
-      mariadb.pool
-        .query("INSERT INTO dislike_video (id_user, id_video) VALUES (?, ?);", [
-          req.session.userId,
-          req.query.videoId,
-        ])
-        .catch((error) => {
-          console.error("Error updating view count:", error);
-          res.status(500).send("Error updating view count");
-        });
+      let checkExistance = await mariadb.pool.query(
+        "SELECT * FROM dislike_video WHERE id_user = ? AND id_video = ?;",
+        [req.session.userId, req.query.videoId]
+      );
+
+      if (checkExistance[0] == null) {
+        mariadb.pool
+          .query("UPDATE video SET nb_dislike = nb_dislike + 1 WHERE id = ?;", [
+            req.query.videoId,
+          ])
+          .catch((error) => {
+            console.error("Error updating view count:", error);
+            res.status(500).send("Error updating view count");
+          });
+        mariadb.pool
+          .query(
+            "INSERT INTO dislike_video (id_user, id_video) VALUES (?, ?);",
+            [req.session.userId, req.query.videoId]
+          )
+          .catch((error) => {
+            console.error("Error updating view count:", error);
+            res.status(500).send("Error updating view count");
+          });
+      } else {
+        res.send("User already disliked");
+      }
     } else {
-      res.send("User already disliked");
+      res.send("User already liked");
     }
-  } else {
-    res.send("User already liked");
   }
 };
 
 const removeVideoDislike = (req, res) => {
+  mariadb.pool
+    .query("UPDATE video SET nb_dislike = nb_dislike - 1 WHERE id = ?;", [
+      req.query.videoId,
+    ])
+    .catch((error) => {
+      console.error("Error updating view count:", error);
+      res.status(500).send("Error updating view count");
+    });
   mariadb.pool
     .query("DELETE FROM dislike_video WHERE id_user = ? AND id_video = ?;", [
       req.session.userId,

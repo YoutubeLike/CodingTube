@@ -5,7 +5,7 @@ import likeImg from "../../assets/like.png";
 import shareImg from "../../assets/share.png";
 
 export default function LikeDislike() {
-  const [video_id, setVideo_id] = useState(1);
+  const [video_id, setVideo_id] = useState(6);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [nb_like, setNb_like] = useState(0);
@@ -13,6 +13,8 @@ export default function LikeDislike() {
 
   useEffect(() => {
     const setInitialValues = async () => {
+      const searchedId = new URLSearchParams(window.location.search).get("id");
+      setVideo_id(searchedId)
       // Set isLiked and isDisliked states with database datas
       try {
         const response = await axios.get(
@@ -20,7 +22,7 @@ export default function LikeDislike() {
           {
             withCredentials: true,
             params: {
-              videoId: video_id,
+              videoId: searchedId,
             },
           }
         );
@@ -33,7 +35,7 @@ export default function LikeDislike() {
               {
                 withCredentials: true,
                 params: {
-                  videoId: video_id,
+                  videoId: searchedId,
                 },
               }
             );
@@ -54,7 +56,7 @@ export default function LikeDislike() {
           "http://localhost:5000/api/channel/get-video-likes",
           {
             params: {
-              videoId: video_id,
+              videoId: searchedId,
             },
           }
         );
@@ -69,7 +71,7 @@ export default function LikeDislike() {
           "http://localhost:5000/api/channel/get-video-dislikes",
           {
             params: {
-              videoId: video_id,
+              videoId: searchedId,
             },
           }
         );
