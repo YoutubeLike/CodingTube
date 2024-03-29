@@ -279,7 +279,7 @@ export default function Search() {
                     <div className="relative w-[20%]">
                       <img
                         className="max-w-[90%] h-auto rounded-lg"
-                        src={result.thumbnail}
+                        src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + result.id}
                         alt="Thumbnail"
                       />
                       <p className="absolute bottom-[5%] right-[12%] z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{timeOfVideo(result.video_duration)}</p>
