@@ -14,7 +14,7 @@ app.use(express.json);
 
 
 const getNbFollowers = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.params.idChannel])
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.query.channelId])
 		.then((result) => {
 			res.send(result)
 		})
@@ -22,7 +22,12 @@ const getNbFollowers = ((req, res) => {
 );
 
 const getFollow = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel,req.session.userId])
+  // const idVideo = req.params.idVideo;
+  // const channelId = await mariadb.pool.query('SELECT channel_id FROM video WHERE id=?', 
+  //   [idVideo]
+  // )
+
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.query.channelId, req.session.userId])
 		.then((result) => {
 			res.send(result[0])
 		})
@@ -31,29 +36,32 @@ const getFollow = ((req, res) => {
 // ABONNEMENT //
 // Ajout ou enlèvement d'un abonnement 
 const follow = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel, req.session.userId])
-		.then((result) => {
-			if (result[0]) {
-				mariadb.pool.query('DELETE FROM follow WHERE channel_id = ? AND follower_id = ?', [req.params.idChannel, req.session.userId])
-					.then(() => {
-						res.status(200).send("Données supprimées avec succès !");
-					})
-					.catch(error => {
-						console.error("Erreur lors de la soumission des données :", error);
-						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
-					});
-			} else {
-				mariadb.pool.query('INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)', [req.params.idChannel,req.session.userId])
-					.then(() => {
-						res.status(200).send("Données insérées avec succès !");
-					})
-					.catch(error => {
-						console.error("Erreur lors de la soumission des données :", error);
-						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
-					});
-			}
-		})
-}
+  if (req.session.userId) {
+
+    mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.query.channelId, req.session.userId])
+      .then((result) => {
+        if (result[0]) {
+          mariadb.pool.query('DELETE FROM follow WHERE channel_id = ? AND follower_id = ?', [req.query.channelId, req.session.userId])
+            .then(() => {
+              res.status(200).send("Données supprimées avec succès !");
+            })
+            .catch(error => {
+              console.error("Erreur lors de la soumission des données :", error);
+              res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+            });
+        } else {
+          mariadb.pool.query('INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)', [req.query.channelId,req.session.userId])
+            .then(() => {
+              res.status(200).send("Données insérées avec succès !");
+            })
+            .catch(error => {
+              console.error("Erreur lors de la soumission des données :", error);
+              res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+            });
+        }
+      })
+    }
+  }
 );
 
 // PAth to docker source

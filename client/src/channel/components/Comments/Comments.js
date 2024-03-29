@@ -60,7 +60,7 @@ export default function Comments() {
         {commentsIds.length <= 1 ? "commentaire" : "commentaires"}
       </p>
 
-      {/*Mettre un commentaire*/}
+      {/* Mettre un commentaire
       <div className="flex items-center ">
         <img src={img} className="w-12 mr-4" />
         <div class="relative h-11 w-full min-w-[200px]">
@@ -79,7 +79,7 @@ export default function Comments() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
                         {/*Mettre un commentaire*/}
                         <div className='flex items-center '>

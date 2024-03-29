@@ -29,14 +29,15 @@ export default function Video() {
       try {
         // Requête vers les infos de la chaîne
         const responseVideo = await axios.get("http://localhost:5000/api/channel/video", { params: { idVideo: urlParams.get("id") } });
-        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {idChannel:1, withCredentials: true });
-        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers',{ idChannel: 1 });
+        const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow?channelId=' + responseVideo.data.channel_id , {withCredentials: true });
+        const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers?channelId=' +  responseVideo.data.channel_id);
 
         // Récupérer la vidéo
         // const videoUrl = responseVideoPath.data.upload_video_url;
         // setUploadVideo(videoUrl);
         
         // Attribution des informations de la vidéo
+        console.log("TITRE VIDEO",responseVideo.data.title)
         setTitle(responseVideo.data.title);
         setDescription(responseVideo.data.description);
         setNumber_view(responseVideo.data.number_view);
@@ -44,7 +45,7 @@ export default function Video() {
         setNb_like(responseVideo.data.nb_like);
         setDate(responseVideo.data.upload_date_time);
 
-		// Attribution des informations de Follopw
+		  // Attribution des informations de Follopw
         setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         setFollower(responseNbFollowers.data.length);
         
@@ -54,7 +55,6 @@ export default function Video() {
           
           // Attribution des informations
           setPseudo(responseChannel.data.pseudo);
-          setFollower(responseChannel.data.nb_follower);
           setProfilePicture(responseChannel.data.profilePicture);
         
         } catch (error) {
@@ -77,14 +77,16 @@ export default function Video() {
   async function handleSubscribe() {
     try {
      
-      await axios.get('http://localhost:5000/api/channel/follow/' + "1", { withCredentials: true});
-      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow/' + "1", {withCredentials: true } );
+      await axios.get('http://localhost:5000/api/channel/follow?channelId=' + channelId , { withCredentials: true});
+      const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow?channelId=' + channelId, {withCredentials: true } );
       setbuttonSubscribe(responseSubscribe.data.length == 0 ? "Follow" : "Unfollow");
       //call a function which will get the number of followers
     } catch (err) {
       console.error(err)
     }
   }
+
+  console.log(title)
   return (
     <>
       <div className="pl-10 mt-8 w-3/4  ">
