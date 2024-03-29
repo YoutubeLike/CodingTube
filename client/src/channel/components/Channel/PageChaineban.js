@@ -6,6 +6,7 @@ import Accueil from "./Accueil";
 import Video from "./Videos";
 import Shorts from "./Shorts";
 import Playlists from "./Playlists";
+import { Link } from "react-router-dom";
 
 const App = () => {
 	const [idChannel, setIdChannel] = useState(); // Id Channel
@@ -188,6 +189,13 @@ const App = () => {
 			{activeTab == "Vidéos" && <Video />}
 			{activeTab == "Shorts" && <Shorts />}
 			{activeTab == "Playlists" && <Playlists />}
+			<div className="text-center mt-8">
+			<Link to="/upload">
+				<button className="upload-btn font-bold bg-red-500 text-white px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-110 hover:bg-red-600">
+					Upload
+				</button>
+			</Link>
+</div>
 		</div>
 	);
 };
