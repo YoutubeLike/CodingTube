@@ -35,8 +35,8 @@ const App = () => {
 
 				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {channelId:1, withCredentials: true });
 				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers?channelId=' + response.data.id);
-				const responseBtn = await axios.get('http://localhost:5000/api/channel/showFollow?id=' + response.data.id, {withCredentials: true}); 
-				console.log('REPONSE ', responseBtn.data)
+				const responseBtnFollow = await axios.get('http://localhost:5000/api/channel/showFollow?id=' + response.data.id, {withCredentials: true}); 
+
 				// Attribution of information
 				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
@@ -44,7 +44,8 @@ const App = () => {
 				setBio(response.data.bio);
 				setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         		setFollower(responseNbFollowers.data.length);
-				setYourChannel(responseBtn.data);
+				setYourChannel(responseBtnFollow.data);
+				console.log(responseBtnFollow.data)
         
 
 				try {
@@ -207,13 +208,16 @@ const App = () => {
 			{activeTab == "Vidéos" && <Video />}
 			{activeTab == "Shorts" && <Shorts />}
 			{activeTab == "Playlists" && <Playlists />}
-			<div className="text-center mt-8">
-			<Link to="/upload">
-				<button className="upload-btn font-bold bg-red-500 text-white px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-110 hover:bg-red-600">
-					Upload
-				</button>
-			</Link>
-</div>
+			{ yourChannel && (
+				<div className="text-center mt-8">
+					<Link to="/upload">
+						<button className="upload-btn font-bold bg-red-500 text-white px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-110 hover:bg-red-600">
+							Upload
+						</button>
+					</Link>
+				</div>
+			)}
+
 		</div>
 	);
 };
