@@ -91,12 +91,12 @@ export default function Header() {
   /**
    * Function to diplay the user history based on the user input
    */
-  const historyOnChange = async () => {
+  const history_onChange = async () => {
     if (inputRef.current === "") {
       history();
     } else {
       try {
-        await fetch("http://localhost:5000/api/search/historyOnChange/" + inputRef.current, {
+        await fetch("http://localhost:5000/api/search/history_onChange/" + inputRef.current, {
           method: "GET",
           headers: {"Content-Type": "application/json"},
           credentials: 'include'
@@ -107,7 +107,7 @@ export default function Header() {
           setUserHistory(data)
         })
       } catch (error) {
-        console.error("An error in historyOnChange: ", error);
+        console.error("An error in history_onChange: ", error);
       }
     }
   };
@@ -115,19 +115,19 @@ export default function Header() {
   /**
    * Function to diplay the most popular search based on the user input
    */
-  const mostResearchOnChange = async () => {
+  const mostResearch_onChange = async () => {
     // Suppression de l'argument e car il n'est pas utilisé
     if (inputRef.current === "") {
       mostResearch();
     } else {
       try {
-        const resultMostResearchOnChange = await axios.get(
-          "http://localhost:5000/api/search/mostResearchOnChange/" +
+        const resultMostResearch_OnChange = await axios.get(
+          "http://localhost:5000/api/search/mostResearch_onChange/" +
             inputRef.current
         );
-        setMostView(resultMostResearchOnChange.data);
+        setMostView(resultMostResearch_OnChange.data);
       } catch (error) {
-        console.error("An error in mostResearchOnChange: ", error);
+        console.error("An error in mostResearch_onChange: ", error);
       }
     }
   };
@@ -227,8 +227,8 @@ export default function Header() {
               value={inputRef.current}
               onChange={(e) => {
                 handleInputChange(e);
-                historyOnChange();
-                mostResearchOnChange();
+                history_onChange();
+                mostResearch_onChange();
               }}
               onClick={(e) => {
                 setMenuOpen(true);
@@ -236,8 +236,8 @@ export default function Header() {
                   mostResearch(e);
                   history(e);
                 } else {
-                  historyOnChange();
-                  mostResearchOnChange();
+                  history_onChange();
+                  mostResearch_onChange();
                 }
               }}
             />
