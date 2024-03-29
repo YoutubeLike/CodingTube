@@ -103,7 +103,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <TimelineHistoryYou />
                 </div>
@@ -126,7 +126,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <LikePageYou />
                 </div>
@@ -149,7 +149,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <PlaylistYou />
                 </div>
