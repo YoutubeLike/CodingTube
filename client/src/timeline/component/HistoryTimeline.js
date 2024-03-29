@@ -44,12 +44,12 @@ export default function TimelineHistory() {
       var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
       indents.push(
         <div key={i} className="md:max-w-[24%] h-auto inline-block md:mr-[1%] mb-[4%]">
-          <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+          <a href={`/video?id=${videosInfos[i]["id"]}`}>
   
           <div className="relative">
               <img
                   className="max-w-auto h-auto rounded-lg"
-                  src={videosInfos[i]["thumbnail"]}
+                  src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
                   alt="Thumbnail"
               />
               <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>

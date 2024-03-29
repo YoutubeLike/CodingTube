@@ -52,12 +52,12 @@ export default function NewsTimeLine() {
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"]);
     indents.push(
       <div key={i} className="mb-10 sm:block md:flex content-center">
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+        <a href={`/video?id=${videosInfos[i]["id"]}`}>
           <div class="sm:block md:flex md:flex-row">
             <div class="relative">
               <img
                 className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
-                src={videosInfos[i]["thumbnail"]}
+                src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
                 alt="Thumbnail"
               />
               <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">

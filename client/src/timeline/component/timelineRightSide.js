@@ -47,7 +47,7 @@ export default function TimelineRightSide() {
             <div class="relative">
               <img
                 class="sm:max-w-auto sm:h-auto md:h-20 rounded-lg"
-                src={videosInfos[i]["thumbnail"]}
+                src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
                 alt="Thumbnail"
               />
               <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
