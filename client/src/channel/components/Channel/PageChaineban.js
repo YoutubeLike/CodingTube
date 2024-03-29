@@ -74,6 +74,18 @@ const App = () => {
 		fetchChannelInfo();
 	}, []);
 
+	async function handleSubscribe() {
+		try {
+		 
+		  await axios.get('http://localhost:5000/api/channel/follow?channelId=' + idChannel , { withCredentials: true});
+		  const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow?channelId=' + idChannel, {withCredentials: true } );
+		  setbuttonSubscribe(responseSubscribe.data.length == 0 ? "Follow" : "Unfollow");
+		  //call a function which will get the number of followers
+		} catch (err) {
+		  console.error(err)
+		}
+	  }
+
 	// Mettez à jour l'état lorsque le bouton est cliqué
 	const handleFollowClick = () => {
 		setIsFollowing(!isFollowing);
@@ -141,7 +153,7 @@ const App = () => {
 					{/*Subscribe button*/}
 					
 					{ !yourChannel && (
-						<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleFollowClick}>
+						<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleSubscribe}>
 							{isFollowing ? 'Unfollow' : 'Follow'}
 						</button>
 					)}
