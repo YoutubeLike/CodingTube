@@ -356,21 +356,21 @@ const getThumbnail = (req, res) => {
         });
 };
 
-app.get('/upload', async (req, res) => {
+const redirectUpload = async(req,res) => {
   try {
       const channelExists = await mariadb.pool.query("SELECT * FROM channel WHERE user_id = ?", [req.session.userId]);
       if (!channelExists || channelExists.length === 0) {
-          res.redirect('/profil');
-          return;
+        res.send(true);
+      } else {
+        res.send(false);
       }
-
       // Afficher la page d'upload si l'utilisateur a une chaîne
       res.sendFile(path.join(__dirname, 'path_to_upload_page.html'));
   } catch (error) {
       console.error("Error checking channel existence:", error);
       res.status(500).send("Internal Server Error");
   }
-});
+};
 
 
 //export functions
@@ -390,4 +390,5 @@ module.exports = {
 	getVideo,
 	getIdentifier,
 	getThumbnail,
+  redirectUpload,
 };

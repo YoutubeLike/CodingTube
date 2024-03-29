@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import logo from "../../assets/logo.jpg";
 import noir from "../../assets/fondNoir.avif";
@@ -16,6 +16,14 @@ export default function UploadVideo() {
     const [isShort, setIsShort] = useState(false);
     const [userHasChannel, setUserHasChannel] = useState(false); // Définissez ou récupérez la valeur de userHasChannel depuis votre backend
 
+    useEffect( async() => {
+      const response = await axios.get('http://localhost:5000/api/channel/redirectUpload', {withCredentials: true} )
+      if (response.data) {
+        window.location.href = 'http://localhost:3000/'
+      }
+
+
+    })
 
     function handleVideoChange(event) {
         const file = event.target.files[0];
@@ -58,7 +66,7 @@ export default function UploadVideo() {
             }
           });
         }
-    
+  
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);

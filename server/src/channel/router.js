@@ -28,6 +28,7 @@ const { selectChannel,
     getIdentifier,
     getVideo,
     getThumbnail,
+    redirectUpload,
 } = require("./controller");
 
 
@@ -67,6 +68,7 @@ router.get("/infosId", selectChannelIdentifier);
 router.get("/id", selectId);
 router.get("/video", selectVideo);
 router.get("/submitChannel", submitChannel);
+router.get("/redirectUpload", redirectUpload);
 
 router.get("/videos", videoOnTab);
 router.get("/nombreVideo", NumberVideo);

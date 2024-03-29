@@ -33,13 +33,12 @@ const App = () => {
 				);
 
 				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {idChannel:1, withCredentials: true });
-				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers',{ idChannel: 1 });
+				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers?channelId=' + response.data.id);
 				
 				// Attribution of information
 				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
-				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
 				setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         		setFollower(responseNbFollowers.data.length);
