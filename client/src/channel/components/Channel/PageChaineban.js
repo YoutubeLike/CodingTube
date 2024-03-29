@@ -6,18 +6,22 @@ import Accueil from "./Accueil";
 import Video from "./Videos";
 import Shorts from "./Shorts";
 import Playlists from "./Playlists";
+import { Link } from "react-router-dom";
 
 const App = () => {
 	const [idChannel, setIdChannel] = useState(); // Id Channel
 	const [pseudo, setPseudo] = useState(""); // Pseudo
 	const [follower, setFollower] = useState(0); // Subscriber number
+	const [buttonSubscribe, setbuttonSubscribe] = useState("");
 	const [bio, setBio] = useState(""); // Bio
 	const [identifier, setIdentifier] = useState(""); // Identifier
 	const [numberVideo, setNumberVideo] = useState(); // video number
 	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 	const [isOpen, setIsOpen] = useState(false);
-
+	const [yourChannel, setYourChannel] = useState();
+	// Ajoutez un état pour suivre l'état actuel du bouton Follow
+	const [isFollowing, setIsFollowing] = useState(false);
 	useEffect(() => {
 		const fetchChannelInfo = async () => {
 			try {
@@ -29,12 +33,20 @@ const App = () => {
 					{ params: { identifier: urlParams.get("identifier") } }
 				);
 
+				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {channelId:1, withCredentials: true });
+				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers?channelId=' + response.data.id);
+				const responseBtnFollow = await axios.get('http://localhost:5000/api/channel/showFollow?id=' + response.data.id, {withCredentials: true}); 
+
 				// Attribution of information
 				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
-				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
+				setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
+        		setFollower(responseNbFollowers.data.length);
+				setYourChannel(responseBtnFollow.data);
+				console.log(responseBtnFollow.data)
+        
 
 				try {
 					// Request to retrieve the number of channel videos
@@ -62,6 +74,22 @@ const App = () => {
 		fetchChannelInfo();
 	}, []);
 
+	async function handleSubscribe() {
+		try {
+		 
+		  await axios.get('http://localhost:5000/api/channel/follow?channelId=' + idChannel , { withCredentials: true});
+		  const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow?channelId=' + idChannel, {withCredentials: true } );
+		  setbuttonSubscribe(responseSubscribe.data.length == 0 ? "Follow" : "Unfollow");
+		  //call a function which will get the number of followers
+		} catch (err) {
+		  console.error(err)
+		}
+	  }
+
+	// Mettez à jour l'état lorsque le bouton est cliqué
+	const handleFollowClick = () => {
+		setIsFollowing(!isFollowing);
+	};
 	//Updates the active tab
 	const togglePopup = () => {
 		setIsOpen(!isOpen);
@@ -123,9 +151,13 @@ const App = () => {
 						</button>
 					</div>
 					{/*Subscribe button*/}
-					<button className="font-bold bg-neutral-900 text-white px-8  rounded-full">
-						Follow
-					</button>
+					
+					{ !yourChannel && (
+						<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleSubscribe}>
+							{isFollowing ? 'Unfollow' : 'Follow'}
+						</button>
+					)}
+
 				</div>
 			</div>
 
@@ -188,6 +220,16 @@ const App = () => {
 			{activeTab == "Vidéos" && <Video />}
 			{activeTab == "Shorts" && <Shorts />}
 			{activeTab == "Playlists" && <Playlists />}
+			{ yourChannel && (
+				<div className="text-center mt-8">
+					<Link to="/upload">
+						<button className="upload-btn font-bold bg-red-500 text-white px-8 py-3 rounded-full transition duration-300 ease-in-out transform hover:scale-110 hover:bg-red-600">
+							Upload
+						</button>
+					</Link>
+				</div>
+			)}
+
 		</div>
 	);
 };

@@ -60,45 +60,26 @@ export default function Comments() {
         {commentsIds.length <= 1 ? "commentaire" : "commentaires"}
       </p>
 
-      {/*Mettre un commentaire*/}
-      <div className="flex items-center ">
-        <img src={img} className="w-12 mr-4" />
-        <div class="relative h-11 w-full min-w-[200px]">
-          <input
-            id="textField"
-            placeholder="Ajoutez un commentaire"
-            class=" peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-          />
-          <label class="after:content[' '] pointer-events-none absolute left-0  -top-2.5 flex h-full w-full select-none !overflow-visible truncate text-sm font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-2.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:leading-tight peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"></label>
-          <div className="pt-2 pb-10">
-            <button
-              onClick={postComment}
-              className="font-bold bg-blue-600 hover:bg-neutral-600 text-white px-6 pt-2 pb-2 rounded-full "
-            >
-              Poster le commentaire
-            </button>
-          </div>
-        </div>
-      </div>
 
-                        {/*Mettre un commentaire*/}
-                        <div className='flex items-center '>
-                                <img src={img} className="w-12 mr-4" />
-                                <div class="relative h-11 w-full min-w-[200px]">
-                                        <input id='textField' placeholder="Add a comment"
-                                                class=" peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
-                                        <label
-                                                class="after:content[' '] pointer-events-none absolute left-0  -top-2.5 flex h-full w-full select-none !overflow-visible truncate text-sm font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-2.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:leading-tight peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                                        </label>
-                                        <div className='pt-2 pb-10'>
-                                                <button onClick={postComment} className='font-bold bg-blue-600 hover:bg-neutral-600 text-white px-6 pt-2 pb-2 rounded-full '> Post comment</button>
-                                        </div>
+
+                {/*Mettre un commentaire*/}
+                <div className='flex items-center '>
+                        <img src={img} className="w-12 mr-4" />
+                        <div class="relative h-11 w-full min-w-[200px]">
+                                <input id='textField' placeholder="Add a comment"
+                                        class=" peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50" />
+                                <label
+                                        class="after:content[' '] pointer-events-none absolute left-0  -top-2.5 flex h-full w-full select-none !overflow-visible truncate text-sm font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-2.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:leading-tight peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                                </label>
+                                <div className='pt-2 pb-10'>
+                                        <button onClick={postComment} className='font-bold bg-blue-600 hover:bg-neutral-600 text-white px-6 pt-2 pb-2 rounded-full '> Post comment</button>
                                 </div>
                         </div>
-
-
-                        {commentsIds.map(element => <Comment commentId={element} />)}
                 </div>
+
+
+            {commentsIds.map(element => <Comment commentId={element} />)}
+        </div>
 
         )
 }

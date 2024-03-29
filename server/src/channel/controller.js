@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 
+
 const express = require("express");
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(express.json);
 
 
 const getNbFollowers = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.params.idChannel])
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=?', [req.query.channelId])
 		.then((result) => {
 			res.send(result)
 		})
@@ -21,38 +22,42 @@ const getNbFollowers = ((req, res) => {
 );
 
 const getFollow = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel,req.session.userId])
+	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.query.channelId, req.session.userId])
 		.then((result) => {
 			res.send(result[0])
 		})
 }
 );
+
 // ABONNEMENT //
 // Ajout ou enlèvement d'un abonnement 
 const follow = ((req, res) => {
-	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.params.idChannel, req.session.userId])
-		.then((result) => {
-			if (result[0]) {
-				mariadb.pool.query('DELETE FROM follow WHERE channel_id = ? AND follower_id = ?', [req.params.idChannel, req.session.userId])
-					.then(() => {
-						res.status(200).send("Données supprimées avec succès !");
-					})
-					.catch(error => {
-						console.error("Erreur lors de la soumission des données :", error);
-						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
-					});
-			} else {
-				mariadb.pool.query('INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)', [req.params.idChannel,req.session.userId])
-					.then(() => {
-						res.status(200).send("Données insérées avec succès !");
-					})
-					.catch(error => {
-						console.error("Erreur lors de la soumission des données :", error);
-						res.status(500).send("Une erreur est survenue lors de la soumission des données.");
-					});
-			}
-		})
-}
+  if (req.session.userId) {
+
+    mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.query.channelId, req.session.userId])
+      .then((result) => {
+        if (result[0]) {
+          mariadb.pool.query('DELETE FROM follow WHERE channel_id = ? AND follower_id = ?', [req.query.channelId, req.session.userId])
+            .then(() => {
+              res.status(200).send("Données supprimées avec succès !");
+            })
+            .catch(error => {
+              console.error("Erreur lors de la soumission des données :", error);
+              res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+            });
+        } else {
+          mariadb.pool.query('INSERT INTO follow (channel_id, follower_id) VALUES (?, ?)', [req.query.channelId,req.session.userId])
+            .then(() => {
+              res.status(200).send("Données insérées avec succès !");
+            })
+            .catch(error => {
+              console.error("Erreur lors de la soumission des données :", error);
+              res.status(500).send("Une erreur est survenue lors de la soumission des données.");
+            });
+        }
+      })
+    }
+  }
 );
 
 // PAth to docker source
@@ -347,6 +352,40 @@ const getThumbnail = (req, res) => {
         });
 };
 
+const redirectUpload = async(req,res) => {
+  try {
+    const channelExists = await mariadb.pool.query("SELECT * FROM channel WHERE user_id = ?", [req.session.userId]);
+    if (!channelExists || channelExists.length === 0) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {
+    console.error("Error checking channel existence:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const showFollow = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const channel = await mariadb.pool.query("SELECT id FROM channel WHERE user_id = ?", [userId]);
+    const isUserOwner = channel.length > 0 && channel[0].id == req.query.id;
+    console.log(channel)
+    console.log(req.query.id)
+    console.log(isUserOwner)
+
+    res.send(isUserOwner);
+  } catch (error) {
+    console.error("Error checking user ownership:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+
+
+
 //export functions
 module.exports = {
 	selectChannel,
@@ -364,4 +403,6 @@ module.exports = {
 	getVideo,
 	getIdentifier,
 	getThumbnail,
+  redirectUpload,
+  showFollow,
 };
