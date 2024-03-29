@@ -12,13 +12,15 @@ const App = () => {
 	const [idChannel, setIdChannel] = useState(); // Id Channel
 	const [pseudo, setPseudo] = useState(""); // Pseudo
 	const [follower, setFollower] = useState(0); // Subscriber number
+	const [buttonSubscribe, setbuttonSubscribe] = useState("");
 	const [bio, setBio] = useState(""); // Bio
 	const [identifier, setIdentifier] = useState(""); // Identifier
 	const [numberVideo, setNumberVideo] = useState(); // video number
 	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 	const [isOpen, setIsOpen] = useState(false);
-
+	// Ajoutez un état pour suivre l'état actuel du bouton Follow
+	const [isFollowing, setIsFollowing] = useState(false);
 	useEffect(() => {
 		const fetchChannelInfo = async () => {
 			try {
@@ -30,12 +32,18 @@ const App = () => {
 					{ params: { identifier: urlParams.get("identifier") } }
 				);
 
+				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {idChannel:1, withCredentials: true });
+				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers',{ idChannel: 1 });
+				
 				// Attribution of information
 				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
 				setPseudo(response.data.pseudo);
 				setFollower(response.data.nb_follower);
 				setBio(response.data.bio);
+				setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
+        		setFollower(responseNbFollowers.data.length);
+        
 
 				try {
 					// Request to retrieve the number of channel videos
@@ -63,6 +71,10 @@ const App = () => {
 		fetchChannelInfo();
 	}, []);
 
+	// Mettez à jour l'état lorsque le bouton est cliqué
+	const handleFollowClick = () => {
+		setIsFollowing(!isFollowing);
+	};
 	//Updates the active tab
 	const togglePopup = () => {
 		setIsOpen(!isOpen);
@@ -124,8 +136,8 @@ const App = () => {
 						</button>
 					</div>
 					{/*Subscribe button*/}
-					<button className="font-bold bg-neutral-900 text-white px-8  rounded-full">
-						Follow
+					<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleFollowClick}>
+							{isFollowing ? 'Unfollow' : 'Follow'}
 					</button>
 				</div>
 			</div>

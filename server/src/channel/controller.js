@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 
+
 const express = require("express");
 const app = express();
 
@@ -346,6 +347,23 @@ const getThumbnail = (req, res) => {
             res.status(500).json({ message: "Erreur lors de la récupération du thumbnail" });
         });
 };
+
+app.get('/upload', async (req, res) => {
+  try {
+      const channelExists = await mariadb.pool.query("SELECT * FROM channel WHERE user_id = ?", [req.session.userId]);
+      if (!channelExists || channelExists.length === 0) {
+          res.redirect('/profil');
+          return;
+      }
+
+      // Afficher la page d'upload si l'utilisateur a une chaîne
+      res.sendFile(path.join(__dirname, 'path_to_upload_page.html'));
+  } catch (error) {
+      console.error("Error checking channel existence:", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
 
 //export functions
 module.exports = {

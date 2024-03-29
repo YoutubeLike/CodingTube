@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from 'axios';
 import logo from "../../assets/logo.jpg";
 import noir from "../../assets/fondNoir.avif";
+import { Redirect } from 'react-router-dom';
+
 
 export default function UploadVideo() {
     const [videoPreview, setVideoPreview] = useState(null);
@@ -12,6 +14,7 @@ export default function UploadVideo() {
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
     const [isShort, setIsShort] = useState(false);
+    const [userHasChannel, setUserHasChannel] = useState(false); // Définissez ou récupérez la valeur de userHasChannel depuis votre backend
 
 
     function handleVideoChange(event) {
@@ -83,7 +86,6 @@ export default function UploadVideo() {
                 console.error('Error submitting form:', error);
             });
     }
-
     return (
         <div className="flex flex-col items-center w-full px-[15vw] bg-white p-8 rounded-lg shadow-xl hover:bg-white-300 transition-colors my-4">
             <form className="w-full" onSubmit={handleSubmit}>
