@@ -9,6 +9,29 @@ import axios from "axios";
 import GetUserPseudo from "../component/GetUserPseudo";
 
 export default function You() {
+  useEffect(() => {
+		const fetchData = async () => {
+		  try {
+			const response = await axios.get(
+			  "http://localhost:5000/api/profil/check-session",
+			  {
+				withCredentials: true,
+			  }
+			);
+	
+			const loggedIn = response.data.loggedIn;
+	
+			if (!loggedIn) {
+			  window.location.href = "/login";
+			}
+		  } catch (error) {
+			console.log("Erreur lors de la vérification du login:", error);
+		  }
+		};
+	
+		fetchData();
+		  }, []);
+
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "You - CodingTube";
