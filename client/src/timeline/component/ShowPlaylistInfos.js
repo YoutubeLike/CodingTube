@@ -41,11 +41,15 @@ export default function ShowPlaylistInfos() {
 
   return (
     <div className="invisible md:visible fixed flex flex-col ml-[3%] h-[700px] w-[400px] bg-center bg-purple-800 bg-opacity-75 rounded-lg">
-      <div class="flex justify-center items-center mt-3">
+      <div class="sm:block md:flex md:flex-row"></div>
+
+      <div class="flex justify-center items-center mt-3  w-640 h-360 bg-purple-200 rounded-lg">
         <img
           className="max-w-[90%] h-auto rounded-lg justify-center blur-none"
           src={playlistInfos[0]["thumbnail"]}
           alt="Thumbnail"
+          width="640"
+          height="360"
         />
       </div>
 

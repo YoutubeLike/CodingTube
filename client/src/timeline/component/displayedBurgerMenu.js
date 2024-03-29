@@ -139,7 +139,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Trending</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/musics" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -153,7 +153,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Music</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/video-games" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -199,7 +199,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Live</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/news" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -213,7 +213,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">News</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/sports" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -229,7 +229,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Sports</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/cultivations" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -243,7 +243,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Cultivations</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/podcasts" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -257,7 +257,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Podcasts</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/premium" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"

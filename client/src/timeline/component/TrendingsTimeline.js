@@ -66,16 +66,19 @@ export default function TrendingsTimeLine() {
         </div>
         <a href={`/video?id=${videosInfos[i]["id"]}`}>
           <div class="sm:block md:flex md:flex-row">
-            <div class="relative">
-              <img
-                className="md:max-w-[300px] sm:max-w-auto h-auto rounded-lg"
-                src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
-                alt="Thumbnail"
-              />
-              <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
-                {videoLenght}
-              </p>
-            </div>
+          <div className="relative w-640 h-360 bg-gray-200 rounded-lg">
+            <img
+              className="rounded-lg aspect-video object-cover"
+
+              src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
+              alt="Thumbnail"
+              width="640"
+              height="360"
+            />
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+              {videoLenght}
+            </p>
+          </div>
 
             <div className="ml-2.5 w-[85%]">
               <h3 className="text-black font-bold text-[120%]">
