@@ -17,8 +17,6 @@ const playlistRequest = (req, res) => {
     });
 };
 
-console.log("router controller playlist");
-
 module.exports = {
   playlistRequest,
 };

@@ -10,8 +10,6 @@ const history = async (req, res) => {
         } catch (error) {erreur
             res.status(500).send(error.message);
         }
-    }else {
-        console.log("vous n'etes pas connecté Cyka bliat for History")
     }
 }
 

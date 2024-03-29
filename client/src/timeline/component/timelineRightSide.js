@@ -10,7 +10,7 @@ export default function TimelineRightSide() {
   var [videosInfos, setVideosInfos] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const videoId = searchParams.get("video_id");
+  const videoId = searchParams.get("id");
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -42,15 +42,20 @@ export default function TimelineRightSide() {
 
     indents.push(
       <div key={i} className="h-auto mb-2 ">
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+        <a href={`/video?id=${videosInfos[i]["id"]}`}>
           <div class="sm:block md:flex md:flex-row">
-            <div class="relative">
+            <div className="relative w-320 h-180 bg-gray-200 rounded-lg">
               <img
-                class="sm:max-w-auto sm:h-auto md:h-20 rounded-lg"
-                src={videosInfos[i]["thumbnail"]}
+                className="rounded-lg aspect-video object-cover"
+                src={
+                  "http://localhost:5000/api/channel/thumbnail?idThumbnail=" +
+                  videosInfos[i]["id"]
+                }
                 alt="Thumbnail"
+                width="320"
+                height="180"
               />
-              <p class="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+              <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
                 {videoLenght}
               </p>
             </div>

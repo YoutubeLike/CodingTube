@@ -40,9 +40,12 @@ export default function LiveFromUser() {
           style={{ width: "100%", height: "auto" }}
           class="video-container w-auto flex flex-col"
         >
-          <div>
+          <div 
+            style={{width: "100%"}}
+          >
             <ReactPlayer
-              style={{}}
+              width="100%"
+              height="auto"
               className="video-container2 bg-slate-400 relative"
               url={"http://localhost:8090/live/" + user + ".flv"}
               controls={false}

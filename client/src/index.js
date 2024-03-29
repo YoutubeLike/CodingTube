@@ -25,7 +25,6 @@ import Video from "./channel/pages/Video";
 import Upload from "./channel/pages/Upload";
 import Channel from "./channel/pages/Channel";
 import Authentification from "./profil/Pages/Authentification";
-import MyAccount from './profil/Pages/MyAccount';
 import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
@@ -40,15 +39,16 @@ import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
 import LikedPage from "./timeline/pages/likePage";
+import MyAccount from "./profil/Pages/MyAccount"
 
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Authentification />,
+    path: "/profil" ,
+    element: <MyAccount/>
   },
   {
-    path: "/profil",
-    element: <MyAccount />
+    path: "/login",
+    element: <Authentification />,
   },
   {
     path: "/live/widget",

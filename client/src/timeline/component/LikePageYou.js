@@ -91,16 +91,21 @@ export default function LikePageYou() {
     var date = videosInfos[i]["upload_date_time"];
     var videoLenght = timeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
-      <div key={i} className="md:max-w-[25%] md:h-auto md:mb-0">
-          <Link href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+      <div key={i} className="md:max-w-[38%] h-auto inline-block md:mr-[1%] mb-[4%]">
+          <Link href={`/video?id=${videosInfos[i]["id"]}`}>
   
-          <div className="relative">
-              <img
-                  className="max-w-[90%] h-auto rounded-lg"
-                  src={videosInfos[i]["thumbnail"]}
-                  alt="Thumbnail"
-              />
-              <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
+          <div className="relative w-640 h-360 bg-gray-200 rounded-lg">
+            <img
+              className="rounded-lg aspect-video object-cover"
+
+              src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
+              alt="Thumbnail"
+              width="640"
+              height="360"
+            />
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+              {videoLenght}
+            </p>
           </div>
             <div className="flex flew-row mt-2.5">
               <img className="pp" src={videosInfos[i]["PP"]} alt="PP" />

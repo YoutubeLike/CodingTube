@@ -8,10 +8,10 @@ import axios from "axios";
 import CheckSession from "../../session";
 //const { isLoggedIn, userId } = CheckSession();
 
-var userId = 1;
 
 const DisplayedBurgerMenu = () => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
+  
 
 	var iconsMenu = [
 		<Link to="/" className="flex items-center">
@@ -28,7 +28,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Home</span>
 		</Link>,
-		<Link to="/shorts" className="flex items-center">
+		<Link to="/short" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -139,7 +139,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Trending</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/musics" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -153,7 +153,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Music</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/video-games" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -199,7 +199,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Live</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/news" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -213,7 +213,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">News</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/sports" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -229,7 +229,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Sports</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/cultivations" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -243,7 +243,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Cultivations</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/podcasts" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -257,7 +257,7 @@ const DisplayedBurgerMenu = () => {
 			</svg>
 			<span className="pl-4">Podcasts</span>
 		</Link>,
-		<Link to="/trends" className="flex items-center">
+		<Link to="/premium" className="flex items-center">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="2em"
@@ -300,133 +300,131 @@ const DisplayedBurgerMenu = () => {
 		);
 	}
 
-	var [subscribeListInfos, setSubscribeListInfos] = useState([]);
-	useEffect(() => {
-		const fetch = async () => {
-			try {
-				const response = await axios.get(
-					`http://localhost:5000/api/timeline/subscribe-list-request-menu`,
-					{
-						params: {
-							userIdParam: userId,
-						},
-					}
-				);
-				setSubscribeListInfos(response.data);
-			} catch (error) {
-				console.error("Error fetching subscribe list:", error);
-			}
-		};
-		fetch();
-	}, []);
+  var [subscribeListInfos, setSubscribeListInfos] = useState([]);
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/timeline/subscribe-list-request-menu`,
+          {
+            withCredentials: true,
+          }
+        );
+        setSubscribeListInfos(response.data);
+      } catch (error) {
+        console.error("Error fetching subscribe list:", error);
+      }
+    };
+    fetch();
+  }, []);
 
-	var menuSub = [];
-	for (var i = 0; i < subscribeListInfos.length; i++) {
-		var profilePicture = subscribeListInfos[i]["PP"];
-		var pseudo = subscribeListInfos[i]["pseudo"];
+  var menuSub = [];
+  for (var i = 0; i < subscribeListInfos.length; i++) {
+    var profilePicture = subscribeListInfos[i]["PP"];
+    var pseudo = subscribeListInfos[i]["pseudo"];
 
-		menuSub.push(
-			<div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
-				<div className="w-[2em] h-[2em]">
-					<img className="rounded-full" src={profilePicture} />
-				</div>
-				<div className="pl-4">{pseudo}</div>
-			</div>
-		);
-	}
+    menuSub.push(
+      <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
+        <div className="w-[2em] h-[2em]">
+          <img className="rounded-full" src={profilePicture} />
+        </div>
+        <div className="pl-4">{pseudo}</div>
+      </div>
+    );
+  }
 
-	async function GoToChannel() {
-		try {
-			const response = await axios.get(
-				"http://localhost:5000/api/channel/get-identifier",
-				{ withCredentials: true }
-			);
-			const identifier = response.data.identifier_channel;
-			window.location.href =
-				identifier != null
-					? "http://localhost:3000/channel?identifier=" + identifier
-					: "http://localhost:3000/new-channel";
-		} catch (error) {
-			console.error(
-				"An error occurred while searching research most view: ",
-				error
-			);
-		}
-	}
+  async function GoToChannel() {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/channel/get-identifier",
+        { withCredentials: true }
+      );
+      const identifier = response.data.identifier_channel;
+      window.location.href =
+        identifier != null
+          ? "http://localhost:3000/channel?identifier=" + identifier
+          : "http://localhost:3000/new-channel";
+    } catch (error) {
+      console.error(
+        "An error occurred while searching research most view: ",
+        error
+      );
+    }
+  }
 
-	return (
-		<>
-			<div
-				className="HAMBURGER-ICON space-y-2"
-				onClick={() => setIsNavOpen((prev) => !prev)} // toggle isNavOpen state on click so the menu will open
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					className="h-8 w-8"
-					viewBox="0 0 24 24"
-				>
-					<path
-						fill="currentColor"
-						d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
-					></path>
-				</svg>
-			</div>
-			<div className="overflow-auto">
-				<div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
-					<div
-						className="HAMBURGER-ICON space-y-2 flex items-center justify-center"
-						onClick={() => setIsNavOpen(false)} // toggle isNavOpen state on click so the menu will close
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-8 w-8"
-							viewBox="0 0 24 24"
-						>
-							<path
-								fill="currentColor"
-								d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
-							></path>
-						</svg>
-						<div className="flex w-[100%] h-6 ml-2 mt-0.5">
-							<img
-								className="w-6 h-6 mr-0.5"
-								src="favicon.png"
-								alt="favicon"
-							></img>
-							<p>CODITUBE</p>
-						</div>
-					</div>
-					{divContent1}
-					<div className="border-b-2 border-black min-w-[100%] mt-2"></div>
-					<div className="hover:bg-gray-100 min-w-[100%] flex space-x-4 items-center-1 mt-1">
-						<Link to="/you" className="pl-2">
-							You
-						</Link>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="1.5em"
-							height="1.5em"
-							viewBox="0 0 24 24"
-						>
-							<path
-								fill="currentColor"
-								d="m14 18l-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45L14 6l6 6z"
-							></path>
-						</svg>
-					</div>
-					{divContent2}
-					<div className="border-b-2 border-black min-w-[100%] mt-2"></div>
-					<div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
-						Explore
-					</div>
-					{divContent3}
-					<div className="border-b-2 border-black min-w-[100%] mt-2"></div>
-					<div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
-						Subscription
-					</div>
-					{menuSub}
-				</div>
-				<style>{`
+  return (
+    <>
+      <div
+        className="HAMBURGER-ICON space-y-2"
+        onClick={() => setIsNavOpen((prev) => !prev)} // toggle isNavOpen state on click so the menu will open
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
+          ></path>
+        </svg>
+      </div>
+      <div className="overflow-auto">
+        <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
+          <div
+            className="HAMBURGER-ICON space-y-2 flex items-center justify-center"
+            onClick={() => setIsNavOpen(false)} // toggle isNavOpen state on click so the menu will close
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
+              ></path>
+            </svg>
+            <div className="flex w-[100%] h-6 ml-2 mt-0.5">
+              <img
+                className="w-6 h-6 mr-0.5"
+                src="favicon.png"
+                alt="favicon"
+              ></img>
+              <p>CODITUBE</p>
+            </div>
+          </div>
+          {divContent1}
+          <div className="border-b-2 border-black min-w-[100%] mt-2"></div>
+          <div className="hover:bg-gray-100 min-w-[100%] flex space-x-4 items-center-1 mt-1">
+            <Link to="/you" className="pl-2">
+              You
+            </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.5em"
+              height="1.5em"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="m14 18l-1.4-1.45L16.15 13H4v-2h12.15L12.6 7.45L14 6l6 6z"
+              ></path>
+            </svg>
+          </div>
+          {divContent2}
+          <div className="border-b-2 border-black min-w-[100%] mt-2"></div>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
+            Explore
+          </div>
+          {divContent3}
+          <div className="border-b-2 border-black min-w-[100%] mt-2"></div>
+          <div className="hover:bg-gray-100 min-w-[100%] flex items-center pl-2 mt-1">
+            Subscription
+          </div>
+          {menuSub}
+        </div>
+        <style>{`
       .hideMenuNav {
         display: none;
       }
@@ -446,9 +444,9 @@ const DisplayedBurgerMenu = () => {
         @media (max-width: 1000px) { width: 100%; z-index: 22;  }
       }
     `}</style>
-			</div>
-		</>
-	);
+      </div>
+    </>
+  );
 };
 
 export default DisplayedBurgerMenu;
