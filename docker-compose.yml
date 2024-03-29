@@ -23,6 +23,7 @@ services:
       - ./server/env:/app/back/.env
       - ./server/uploads/thumbnails:/uploads/thumbnails # Ajout du volume pour les miniatures
       - ./server/uploads/videos:/uploads/videos # Ajout du volume pour les vidéos
+      - ./server/uploads/shorts:/uploads/shorts # Ajout du volume pour les shorts
     networks:
       - bdd-back
     ports:

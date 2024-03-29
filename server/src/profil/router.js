@@ -11,10 +11,19 @@ const {
   GetPasswordFromUsernameOrEmail,
   GetUserId,
 } = require("./authentication");
-
 const { userData } = require("./userData.js"); // Importing userData function
 const { userUpdate } = require("./userUpdate.js"); // Importing userUpdate function
 const { updatePassword } = require("./updatePswrd.js"); // Importing updatePassword function
+
+router.post("/updatePswrd", updatePassword);
+
+// Endpoint to get user data based on user ID
+router.get("/userData/:info_user", userData);
+
+// Endpoint to update user data
+router.post("/userUpdate", userUpdate);
+
+
 const { getInfoChannel } = require("./getInfoChannel.js");
 
 
@@ -33,6 +42,7 @@ router.get("/getInfoChannel/:userId", getInfoChannel);
 router.post("/register", async (req, res) => {
   const registerData = req.body.registerData; // Extracting registration data from request body
   try {
+
     if (
       registerData.username != "" ||
       registerData.mail != "" ||
@@ -77,6 +87,7 @@ router.post("/register", async (req, res) => {
         registerData.confirmPassword &&
         registerData.username &&
         registerData.mail
+
       ) {
         // Validation of password using regular expression
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$/;
@@ -86,6 +97,7 @@ router.post("/register", async (req, res) => {
             error:
               "Password must contain at least 8 characters, 1 uppercase, 1 special character, and 1 digit",
           });
+
         }
         if (registerData.password == registerData.confirmPassword) {
           await InsertUser(registerData);
@@ -109,6 +121,7 @@ router.post("/register", async (req, res) => {
     return res.sendStatus(500);
   }
 });
+
 
 // Route for user login
 router.post("/login", async (req, res) => {
@@ -141,8 +154,6 @@ router.post("/login", async (req, res) => {
           });
           return res.json(req.session);
 
-          //return res.status(400).json({ error: "User logged In Successfully!" });
-          //return res.status(200).json({ redirectTo: '/' });
         } else {
           return res.status(400).json({ error: "Incorrect password" });
         }
@@ -173,9 +184,12 @@ router.get("/check-session", async (req, res) => {
     }
   } catch (error) {
     console.error("Error checking session:", error);
+
     return res.sendStatus(500);
   }
 });
+
+module.exports = router; // Exporting the router
 
 router.get('/logout', (req, res) => {
   if(req.session.userId){

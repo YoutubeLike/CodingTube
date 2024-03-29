@@ -20,6 +20,12 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .behind {
+    z-index: -1;
+  }
+
+  .textStroke {
+    -webkit-text-stroke: 0.2vh black;
   /* .video-container{
     width: w-1/2 !important;
     height: auto !important;
@@ -45,4 +51,5 @@
 .video:hover img
 {
   border-radius: 0px;
+}
 }

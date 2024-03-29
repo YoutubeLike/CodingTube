@@ -11,6 +11,8 @@ export default function UploadVideo() {
     const [category, setCategory] = useState("");
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
+    const [isShort, setIsShort] = useState(false);
+
 
     function handleVideoChange(event) {
         const file = event.target.files[0];
@@ -36,15 +38,33 @@ export default function UploadVideo() {
         }
     }
 
+    function toggleShort() {
+      setIsShort(!isShort);
+    }
+
     function handleSubmit(event) {
         event.preventDefault();
 
+        let addedText = "";
+        if (isShort) {
+          addedText = document.getElementById("addedText").value;
+          var filters = "";
+          document.querySelectorAll("input:checked").forEach((filter) => {
+            if (filter.value != "on") {
+              filters += filter.value + " ";
+            }
+          });
+        }
+    
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('category', category);
-        formData.append('video', videoFile);
-		formData.append('thumbnail', thumbnailFile)
+        formData.append("title", title);
+        formData.append("description", description);
+        formData.append("category", category);
+        formData.append("video", videoFile);
+        formData.append("thumbnail", thumbnailFile);
+        formData.append("isShort", isShort);
+        formData.append("text", addedText);
+        formData.append("filters", filters);
 
         axios.post('http://localhost:5000/api/channel/submitVideo', formData , {withCredentials:true})
             .then(response => {
@@ -56,6 +76,8 @@ export default function UploadVideo() {
                 setVideoFile(null);
                 setVideoPreview(null);
                 setImagePreview(null);
+                setIsShort(false);
+                document.getElementById("short").checked = false;
             })
             .catch(error => {
                 console.error('Error submitting form:', error);
@@ -133,9 +155,101 @@ export default function UploadVideo() {
                     </button>
                     <input type="file" accept="image/*" id="thumbnailInput" className="hidden" onChange={(e)=>{handleThumbnailChange(e)}}/>
                 </div>
+
+            <div className="ml-4">
+            <h2 className="font-bold text-2xl mb-4 pt-4">Short</h2>
+            <input type="checkbox" id="short" onChange={toggleShort} />
+            <label for="short">Short</label>
+
+            {isShort && (
+              <div>
+                <div>
+                  <h2 className="font-bold text-2xl mb-4 pt-4">Added text</h2>
+                  <input
+                    type="text"
+                    id="addedText"
+                    placeholder="Add a text..."
+                    className="border-[1px] border-black"
+                  />
+                </div>
+                <div>
+                  <h2 className="font-bold text-2xl mb-4 pt-4">Filters</h2>
+                  <ul>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="grayscale"
+                        value="grayscale(1)"
+                      />
+                      <label for="grayscale">Grayscale</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" id="invert" value="invert(1)" />
+                      <label for="invert">Invert</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" id="blur" value="blur(1vh)" />
+                      <label for="blur">Blur</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="darken"
+                        value="brightness(0.5)"
+                      />
+                      <label for="darken">Darken</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="desaturate"
+                        value="saturate(50%)"
+                      />
+                      <label for="desaturate">Desaturate</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="transparency"
+                        value="opacity(50%)"
+                      />
+                      <label for="transparency">Transparency</label>
+                    </li>
+                    <li>
+                      <input type="checkbox" id="sepia" value="sepia(1)" />
+                      <label for="sepia">Sepia</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="hueRotate90"
+                        value="hue-rotate(90deg)"
+                      />
+                      <label for="hueRotate90">Hue Rotate Clockwise</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="hueRotate-90"
+                        value="hue-rotate(-90deg)"
+                      />
+                      <label for="hueRotate-90">Hue Rotate Anticlockwise</label>
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        id="hueRotate180"
+                        value="hueRotate(180deg)"
+                      />
+                      <label for="hueRotate180">Hue Rotate Opposite</label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
             </form>
         </div>
     );
 }
-
 
