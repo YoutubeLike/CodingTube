@@ -5,15 +5,12 @@ const history_onChange = async (req, res) => {
 
     const userId = req.session.userId;
     const inputSearch = req.params.researchInput;
-    console.log(req.session)
     try {
         const results = await mariadb.pool.query("SELECT name_search, search_history.id FROM search JOIN search_history ON search.id=search_history.search_id WHERE search_history.user_id = ? AND name_search LIKE ? ORDER BY search_history.research_date LIMIT 10;", [userId, '%'+inputSearch+'%']);
         res.status(200).json(results); 
     } catch (error) {erreur
         res.status(500).send(error.message);
     }
-}else {
-    console.log("vous n'etes pas connecté Cyka bliat For HistoryChange")
 }
 }
 module.exports = {history_onChange}
