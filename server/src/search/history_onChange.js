@@ -1,6 +1,6 @@
 const mariadb = require('../src/database');
 
-const historyOnChange = async (req, res) => {
+const history_onChange = async (req, res) => {
     if (req.session.userId){
 
     const userId = req.session.userId;
@@ -16,4 +16,4 @@ const historyOnChange = async (req, res) => {
     console.log("vous n'etes pas connecté Cyka bliat For HistoryChange")
 }
 }
-module.exports = {historyOnChange}
+module.exports = {history_onChange}
