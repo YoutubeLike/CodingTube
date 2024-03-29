@@ -87,7 +87,6 @@ class Video extends React.Component {
 
       if (this.props.isPlaying) {
         if (this.props.newPlay) {
-          shortPlayer.currentTime = 250;
           shortPlayer.play();
           shortPlayer.muted = this.props.isMuted;
           document.title = this.state.shortInfos.title + " - Shorts";
