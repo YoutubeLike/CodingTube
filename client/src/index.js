@@ -17,7 +17,6 @@ import Podcasts from "./timeline/pages/categories/podcasts";
 import Sports from "./timeline/pages/categories/sports";
 import VideoGames from "./timeline/pages/categories/videoGames";
 
-
 import Yourvideos from "./timeline/pages/yourVideos";
 import Watch from "./timeline/pages/watch";
 import CreateChannel from "./channel/pages/NewChannel";
@@ -28,23 +27,25 @@ import Authentification from "./profil/Pages/Authentification";
 import Error from "./timeline/pages/error";
 
 import Search from "./search/search";
-import Live from './live/index'
+import Live from "./live/index";
 import UserLive, { loader as LoaderLive } from "./live/UserLive";
 import Test from "./live/widget";
 import You from "./timeline/pages/you";
-import ChangeTitle from "./live/ChangeTitle"
+import ChangeTitle from "./live/ChangeTitle";
 //import PageChannel from "./channel/pages/Channel";
 
 import Playlist from "./timeline/component/Playlist";
 import PlaylistPage from "./timeline/pages/playlist";
 import ShowPlaylistPage from "./timeline/pages/showPlaylistPage";
 import LikedPage from "./timeline/pages/likePage";
-import MyAccount from './profil/Pages/MyAccount'
+import MyAccount from "./profil/Pages/MyAccount";
+
+import YoutubePremiumPage from "./premium/YoutubePremiumView";
 
 const router = createBrowserRouter([
   {
-    path: "/profil" ,
-    element: <MyAccount/>
+    path: "/profil",
+    element: <MyAccount />,
   },
   {
     path: "/login",
@@ -52,11 +53,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/profil",
-    element: <MyAccount />
+    element: <MyAccount />,
   },
   {
     path: "/live/widget",
-    element: <Test />
+    element: <Test />,
   },
   {
     path: "/",
@@ -68,12 +69,12 @@ const router = createBrowserRouter([
       },
       {
         path: "live",
-        element: <Live />
+        element: <Live />,
       },
       {
         path: "live/:user",
         element: <UserLive />,
-        loader: LoaderLive
+        loader: LoaderLive,
       },
       {
         path: "/history",
@@ -132,51 +133,55 @@ const router = createBrowserRouter([
         element: <Watch />,
       },
       {
-				path: "new-channel",
-				element: <CreateChannel />,
-			},
-			{
-				path: "video",
-				element: <Video />,
-			},
-			{
-				path: "upload",
-				element: <Upload />,
-			},
-      {
-				path: "/search",
-				element: <Search />,
+        path: "new-channel",
+        element: <CreateChannel />,
       },
       {
-				path: "/you",
-				element: <You />,
-			},
+        path: "video",
+        element: <Video />,
+      },
+      {
+        path: "upload",
+        element: <Upload />,
+      },
+      {
+        path: "/search",
+        element: <Search />,
+      },
+      {
+        path: "/you",
+        element: <You />,
+      },
       {
         path: "changeTitle",
         element: <ChangeTitle />,
       },
       {
-				path: "/playlist",
-				element: <PlaylistPage />,
-			},
+        path: "/playlist",
+        element: <PlaylistPage />,
+      },
       {
-				path: "/showPlaylist",
-				element: <ShowPlaylistPage />,
-			},
+        path: "/showPlaylist",
+        element: <ShowPlaylistPage />,
+      },
       {
-				path: "/likedVideos",
-				element: <LikedPage />,
-			},
+        path: "/likedVideos",
+        element: <LikedPage />,
+      },
       {
-				path: "*",
-				element: <Error />,
-			},
-    ]
+        path: "*",
+        element: <Error />,
+      },
+      {
+        path: "premium",
+        element: <YoutubePremiumPage />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	// <React.StrictMode>
-		<RouterProvider router={router} />
-	// </React.StrictMode>
+  // <React.StrictMode>
+  <RouterProvider router={router} />
+  // </React.StrictMode>
 );

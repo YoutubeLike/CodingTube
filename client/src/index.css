@@ -4,11 +4,17 @@
 
 
 @layer base{
+  
     * {
         @apply font-roboto;
+        @apply text-white
     }
     h1,h2,button{
         @apply font-bold
+    }
+    .bgCard {
+        @apply w-36;
+        @apply h-24;
     }
 }
 

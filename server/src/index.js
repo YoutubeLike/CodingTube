@@ -50,7 +50,7 @@ app.use(
 
 /* Handle all POST requests with different kind of bodies */
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.raw({ type: "application/vnd.custom-type" }));
 app.use(express.text({ type: "text/html" }));
 
@@ -127,13 +127,14 @@ io.on("connection", (socket) => {
     console.log("Client disconnected");
 
     socket.adapter.rooms.forEach((value, key) => {
-      if(io.sockets.adapter.rooms.get(key))
-      {
-        io.sockets.to(key).emit("user-count", { size: io.sockets.adapter.rooms.get(key).size })
+      if (io.sockets.adapter.rooms.get(key)) {
+        io.sockets
+          .to(key)
+          .emit("user-count", { size: io.sockets.adapter.rooms.get(key).size });
       }
     });
     // io.adapter
-  })
+  });
 
   //Handle connection to room
   socket.on("connect-to-room", (arg) => {
@@ -146,11 +147,9 @@ io.on("connection", (socket) => {
     console.log(arg.user);
     if (io.sockets.adapter.rooms.get(arg.user)) {
       console.log("bonjour");
-      io.sockets
-        .to(arg.user)
-        .emit("user-count", {
-          size: io.sockets.adapter.rooms.get(arg.user).size,
-        });
+      io.sockets.to(arg.user).emit("user-count", {
+        size: io.sockets.adapter.rooms.get(arg.user).size,
+      });
     }
   });
 });
@@ -191,7 +190,6 @@ app.get("/loginDiscord", async (req, res) => {
     const usernameExist = await CheckIfUsernameExist(user.username);
     const discordAccount = await CheckIfDiscordAccount(user.email);
 
-
     if (emailExist) {
       if (discordAccount) {
         ModifyDiscordStatus(user.email);
@@ -203,8 +201,8 @@ app.get("/loginDiscord", async (req, res) => {
     } else {
       if (usernameExist) {
         const randomNumber = Math.floor(1000 + Math.random() * 9000);
-        
-        InsertDiscordUser(user.username + "#" +randomNumber, user.email);
+
+        InsertDiscordUser(user.username + "#" + randomNumber, user.email);
       } else {
         InsertDiscordUser(user.username, user.email);
       }
@@ -214,9 +212,7 @@ app.get("/loginDiscord", async (req, res) => {
       res.cookie("CodingTube", req.session, { sameSite: "none", secure: true });
     }
 
-    
     return res.redirect(`http://localhost:3000`);
-      
   } catch (error) {
     console.log("Error", error);
     return res.send("Some error occurred! ");

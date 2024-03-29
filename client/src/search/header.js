@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import DisplayedBurgerMenu from "../timeline/component/displayedBurgerMenu";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const axiosSession = axios.create({ baseURL: "http://localhost:5000/", WithCredentials: true})
+  const axiosSession = axios.create({
+    baseURL: "http://localhost:5000/",
+    WithCredentials: true,
+  });
 
   //State for the search input field
   const [searchValue, setSearchValue] = useState("");
@@ -28,7 +31,6 @@ export default function Header() {
   //Hook for navigation
   const navigate = useNavigate();
 
-
   /**
    * Function to submit a search request
    * @async
@@ -36,12 +38,15 @@ export default function Header() {
   const submit = async () => {
     if (inputRef.current != "") {
       try {
-          await fetch("http://localhost:5000/api/search/request/" + inputRef.current,{
+        await fetch(
+          "http://localhost:5000/api/search/request/" + inputRef.current,
+          {
             method: "GET",
-            headers: {"content-type": "application/json"},
-            credentials: 'include'
-          })
-        }catch (error) {
+            headers: { "content-type": "application/json" },
+            credentials: "include",
+          }
+        );
+      } catch (error) {
         console.error("An error occurred while searching: ", error);
       }
     }
@@ -70,16 +75,17 @@ export default function Header() {
    */
   const history = async () => {
     try {
-    await fetch("http://localhost:5000/api/search/history" , {
+      await fetch("http://localhost:5000/api/search/history", {
         method: "GET",
-        headers: {"content-type": "application/json"},
-        credentials: 'include'
-      }).then(response =>{
-        return response.json()
+        headers: { "content-type": "application/json" },
+        credentials: "include",
       })
-      .then(data => {
-        setUserHistory(data)
-      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setUserHistory(data);
+        });
     } catch (error) {
       console.error(
         "An error occurred while searching research most view: ",
@@ -96,16 +102,21 @@ export default function Header() {
       history();
     } else {
       try {
-        await fetch("http://localhost:5000/api/search/historyOnChange/" + inputRef.current, {
-          method: "GET",
-          headers: {"Content-Type": "application/json"},
-          credentials: 'include'
-        }).then(response =>{
-          return response.json()
-        })
-        .then(data => {
-          setUserHistory(data)
-        })
+        await fetch(
+          "http://localhost:5000/api/search/historyOnChange/" +
+            inputRef.current,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            setUserHistory(data);
+          });
       } catch (error) {
         console.error("An error in historyOnChange: ", error);
       }
@@ -172,8 +183,8 @@ export default function Header() {
 
   /**
    * Function to delete the user history
-   * @param {string} id - id of the search to delete 
-   * @param {object} e - click event 
+   * @param {string} id - id of the search to delete
+   * @param {object} e - click event
    */
   async function deleteHistory(id, e) {
     e.preventDefault();
@@ -190,9 +201,12 @@ export default function Header() {
       <div className="flex w-[33%] h-7 ">
         <DisplayedBurgerMenu />
         <Link to="/">
-          <div 
-            className="flex w-[99%] h-6 ml-2 mt-0.5">
-            <img className="w-6 h-6 mr-0.5" src="favicon.png" alt="favicon"></img>
+          <div className="flex w-[99%] h-6 ml-2 mt-0.5">
+            <img
+              className="w-6 h-6 mr-0.5"
+              src="favicon.png"
+              alt="favicon"
+            ></img>
             <p className="hidden md:block">CODITUBE</p>
           </div>
         </Link>
@@ -205,11 +219,11 @@ export default function Header() {
             e.preventDefault();
             submit(searchValue);
             if (inputRef.current != "") {
-              window.location.href = "http://localhost:3000/search?videoName=" + searchValue
-            }
-            else {
+              window.location.href =
+                "http://localhost:3000/search?videoName=" + searchValue;
+            } else {
               navigate({
-                pathname: '/',
+                pathname: "/",
               });
             }
           }}
@@ -219,7 +233,7 @@ export default function Header() {
             ref={menuRef}
           >
             <input
-            maxLength={255}
+              maxLength={255}
               autocomplete="off"
               className="w-[100%] h-[100%] text-xs bg-gray-200 rounded-s-lg z-20 relative"
               type="text"
@@ -324,10 +338,11 @@ export default function Header() {
       </div>
       <div className="flex justify-end space-x-2 w-[33%]">
         <button
-        onClick={()=>{
-          window.location.href = "/upload"
-        }
-        } className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full">
+          onClick={() => {
+            window.location.href = "/upload";
+          }}
+          className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full"
+        >
           <svg
             className="h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -356,7 +371,7 @@ export default function Header() {
         </button>
 
         <button
-          onClick={ () => {
+          onClick={() => {
             window.location.href = "/profil";
           }}
           className="flex justify-center items-center ml-2 h-7 w-7 bg-gray-200 rounded-full"
