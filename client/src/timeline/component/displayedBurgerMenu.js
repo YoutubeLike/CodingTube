@@ -11,7 +11,7 @@ import CheckSession from "../../session";
 
 const DisplayedBurgerMenu = () => {
 	const [isNavOpen, setIsNavOpen] = useState(false);
-
+  
   var iconsMenu = [
     <Link to="/" className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19h3v-6h6v6h3v-9l-6-4.5L6 10zm-2 2V9l8-6l8 6v12h-7v-6h-2v6zm8-8.75"></path></svg><span className="pl-4">Home</span></Link>,
     <Link to="/shorts" className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em"viewBox="0 0 16 16"><path fill="currentColor"d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Z"></path><path fill="currentColor" d="M6 10.559V5.442a.25.25 0 0 1 .379-.215l4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559"></path></svg><span className="pl-4">Shorts</span></Link>,
@@ -57,6 +57,7 @@ const DisplayedBurgerMenu = () => {
       </div>
     );
   }
+
 
   var [subscribeListInfos, setSubscribeListInfos] = useState([]);
   useEffect(() => {

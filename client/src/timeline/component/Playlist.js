@@ -108,13 +108,16 @@ export default function Playlist() {
     indents.push(
       <div key={i} className="md:max-w-[25%] h-auto mb-0">
         <a href={`/showPlaylist?playlist_id=${videosInfos[i]["id"]}`}>
-          <div className="relative">
+        <div className="relative w-1280 h-720 bg-gray-200 rounded-lg">
             <img
-              className="max-w-[90%] h-auto rounded-lg"
+              className="rounded-lg aspect-video object-cover"
+
               src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
               alt="Thumbnail"
+              width="1280"
+              height="720"
             />
-            <p className="absolute bottom-2 right-12 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
               Playlist
             </p>
           </div>
