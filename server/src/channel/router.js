@@ -29,6 +29,7 @@ const { selectChannel,
     getVideo,
     getThumbnail,
     redirectUpload,
+    showFollow,
 } = require("./controller");
 
 
@@ -60,6 +61,7 @@ const {
 router.get('/get-nb-followers', getNbFollowers)
 router.get('/get-follow', getFollow)
 router.get('/follow', follow)
+router.get('/showFollow', showFollow)
 
 // Configuration de la route
 router.get("/get-identifier", getIdentifier);

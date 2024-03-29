@@ -22,17 +22,13 @@ const getNbFollowers = ((req, res) => {
 );
 
 const getFollow = ((req, res) => {
-  // const idVideo = req.params.idVideo;
-  // const channelId = await mariadb.pool.query('SELECT channel_id FROM video WHERE id=?', 
-  //   [idVideo]
-  // )
-
 	mariadb.pool.query('SELECT * FROM follow WHERE channel_id=? AND follower_id=?', [req.query.channelId, req.session.userId])
 		.then((result) => {
 			res.send(result[0])
 		})
 }
 );
+
 // ABONNEMENT //
 // Ajout ou enlèvement d'un abonnement 
 const follow = ((req, res) => {
@@ -358,19 +354,34 @@ const getThumbnail = (req, res) => {
 
 const redirectUpload = async(req,res) => {
   try {
-      const channelExists = await mariadb.pool.query("SELECT * FROM channel WHERE user_id = ?", [req.session.userId]);
-      if (!channelExists || channelExists.length === 0) {
-        res.send(true);
-      } else {
-        res.send(false);
-      }
-      // Afficher la page d'upload si l'utilisateur a une chaîne
-      res.sendFile(path.join(__dirname, 'path_to_upload_page.html'));
+    const channelExists = await mariadb.pool.query("SELECT * FROM channel WHERE user_id = ?", [req.session.userId]);
+    if (!channelExists || channelExists.length === 0) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
   } catch (error) {
-      console.error("Error checking channel existence:", error);
-      res.status(500).send("Internal Server Error");
+    console.error("Error checking channel existence:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
+const showFollow = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    const channel = await mariadb.pool.query("SELECT id FROM channel WHERE user_id = ?", [userId]);
+    const isUserOwner = channel.length > 0 && channel[0].id == req.query.id;
+    console.log(channel)
+    console.log(req.query.id)
+    console.log(isUserOwner)
+
+    res.send(isUserOwner);
+  } catch (error) {
+    console.error("Error checking user ownership:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 
 
 //export functions
@@ -391,4 +402,5 @@ module.exports = {
 	getIdentifier,
 	getThumbnail,
   redirectUpload,
+  showFollow,
 };

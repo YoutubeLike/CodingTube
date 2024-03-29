@@ -19,6 +19,7 @@ const App = () => {
 	const [banner, setBanner] = useState(""); // banner
 	const [activeTab, setActiveTab] = useState("Accueil"); // Onglet actif
 	const [isOpen, setIsOpen] = useState(false);
+	const [yourChannel, setYourChannel] = useState();
 	// Ajoutez un état pour suivre l'état actuel du bouton Follow
 	const [isFollowing, setIsFollowing] = useState(false);
 	useEffect(() => {
@@ -32,9 +33,10 @@ const App = () => {
 					{ params: { identifier: urlParams.get("identifier") } }
 				);
 
-				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {idChannel:1, withCredentials: true });
+				const responseSubscribe = await axios.get('http://localhost:5000/api/channel/get-follow', {channelId:1, withCredentials: true });
 				const responseNbFollowers = await axios.get('http://localhost:5000/api/channel/get-nb-followers?channelId=' + response.data.id);
-				
+				const responseBtn = await axios.get('http://localhost:5000/api/channel/showFollow?id=' + response.data.id, {withCredentials: true}); 
+				console.log('REPONSE ', responseBtn.data)
 				// Attribution of information
 				setIdChannel(response.data.id);
 				setBanner(response.data.banner);
@@ -42,6 +44,7 @@ const App = () => {
 				setBio(response.data.bio);
 				setbuttonSubscribe(responseSubscribe.data.length == 0 ? "S'abonner" : "Abonné")
         		setFollower(responseNbFollowers.data.length);
+				setYourChannel(responseBtn.data);
         
 
 				try {
@@ -135,9 +138,13 @@ const App = () => {
 						</button>
 					</div>
 					{/*Subscribe button*/}
-					<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleFollowClick}>
+					
+					{ !yourChannel && (
+						<button className="font-bold bg-neutral-900 text-white px-8 rounded-full" onClick={handleFollowClick}>
 							{isFollowing ? 'Unfollow' : 'Follow'}
-					</button>
+						</button>
+					)}
+
 				</div>
 			</div>
 
