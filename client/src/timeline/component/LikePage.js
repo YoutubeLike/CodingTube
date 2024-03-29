@@ -38,16 +38,21 @@ export default function LikePage() {
     var videoLenght = TimeOfVideo(videosInfos[i]["video_duration"])
     indents.push(
       <div key={i} className="md:max-w-[24%] h-auto inline-block mr-[1%] mb-[4%]">
-        <a href={`/watch?video_id=${videosInfos[i]["id"]}`}>
+        <a href={`/video?id=${videosInfos[i]["id"]}`}>
 
-        <div className="relative">
+        <div className="relative w-1280 h-720 bg-gray-200 rounded-lg">
             <img
-                className="max-w-auto h-auto rounded-lg"
-                src={videosInfos[i]["thumbnail"]}
-                alt="Thumbnail"
+              className="rounded-lg aspect-video object-cover"
+
+              src={"http://localhost:5000/api/channel/thumbnail?idThumbnail=" + videosInfos[i]["id"]}
+              alt="Thumbnail"
+              width="1280"
+              height="720"
             />
-            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">{videoLenght}</p>
-        </div>
+            <p className="absolute bottom-1 right-1 z-10 mt-4 ml-4 text-white bg-black bg-opacity-60 pl-1 pr-1 rounded">
+              {videoLenght}
+            </p>
+          </div>
 
 
 

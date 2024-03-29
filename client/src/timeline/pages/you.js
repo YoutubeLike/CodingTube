@@ -9,6 +9,29 @@ import axios from "axios";
 import GetUserPseudo from "../component/GetUserPseudo";
 
 export default function You() {
+  useEffect(() => {
+		const fetchData = async () => {
+		  try {
+			const response = await axios.get(
+			  "http://localhost:5000/api/profil/check-session",
+			  {
+				withCredentials: true,
+			  }
+			);
+	
+			const loggedIn = response.data.loggedIn;
+	
+			if (!loggedIn) {
+			  window.location.href = "/login";
+			}
+		  } catch (error) {
+			console.log("Erreur lors de la vérification du login:", error);
+		  }
+		};
+	
+		fetchData();
+		  }, []);
+
   /* Page title (displayed on tab) */
   useEffect(() => {
     document.title = "You - CodingTube";
@@ -80,7 +103,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <TimelineHistoryYou />
                 </div>
@@ -103,7 +126,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <LikePageYou />
                 </div>
@@ -126,7 +149,7 @@ export default function You() {
               </Link>
             </div>
             <div className="flex">
-              <div className="flex ml-[10%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
+              <div className="flex ml-[20%] md:flex-wrap md:relative top-[-20px] overflow-x-scroll md:overflow-x-hidden">
                 <div className="flex md:flex-wrap ">
                   <PlaylistYou />
                 </div>
