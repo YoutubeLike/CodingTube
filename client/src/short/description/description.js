@@ -4,27 +4,7 @@ import axios from "axios";
 class Description extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      likes: 0,
-    };
     this.closeDescription = this.closeDescription.bind(this);
-  }
-
-  async componentDidMount() {
-    // Get likes count
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/short/get-short-likes",
-        {
-          params: {
-            shortId: this.props.shortInfos.id,
-          },
-        }
-      );
-      this.setState({ likes: response.data.length });
-    } catch (error) {
-      console.error("Error fetching videos:", error);
-    }
   }
 
   closeDescription() {
@@ -32,8 +12,21 @@ class Description extends React.Component {
   }
 
   render() {
-    const date = new Date(this.props.shortInfos.date)
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const date = new Date(this.props.shortInfos.date);
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return (
       <div className="flex flex-col shadow-2xl translate-y-px h-[80vh] w-[45vh] rounded-[0.7vh] rounded-r-lg text-[2vh]">
         {/* Upper title section */}
@@ -54,28 +47,33 @@ class Description extends React.Component {
         </div>
 
         <div id="descriptionContent" className="flex flex-col mx-[2vh]">
-          <div id="description" className="mb-[20px] max-h-[30vh] w-[100%] break-words overflow-y-auto no-scrollbar">
-            <p>
-                {this.props.shortInfos.description}
-            </p>
-
+          <div
+            id="description"
+            className="mb-[20px] max-h-[30vh] w-[100%] break-words overflow-y-auto no-scrollbar"
+          >
+            <p>{this.props.shortInfos.description}</p>
           </div>
 
-          <div id="border" className="flex border-b-[1px] justify-between w-[100%]">
-          </div>
+          <div
+            id="border"
+            className="flex border-b-[1px] justify-between w-[100%]"
+          ></div>
 
-          <div id="metadataSection" className="flex flex-row justify-center content-center mt-[20px] mb-[5vh]">
-
+          <div
+            id="metadataSection"
+            className="flex flex-row justify-center content-center mt-[20px] mb-[5vh]"
+          >
             <div className="flex flex-col mx-[2vh] justify-between items-center">
-                <strong className="mx-[2vh]">{this.state.likes}</strong>
-                <p>{this.state.likes <= 1 ? "Like" : "Likes"}</p>
+              <strong className="mx-[2vh]">{this.props.likes}</strong>
+              <p>{this.props.likes <= 1 ? "Like" : "Likes"}</p>
             </div>
 
             <div className="flex flex-col mx-[2vh] justify-between items-center">
-                <strong className="mx-[2vh]">{this.props.shortInfos.number_view}</strong>
-                <p>{this.state.number_view <= 1 ? "View" : "Views"}</p>
+              <strong className="mx-[2vh]">
+                {this.props.shortInfos.number_view}
+              </strong>
+              <p>{this.props.shortInfos.number_view <= 1 ? "View" : "Views"}</p>
             </div>
-                
 
             <div className="flex flex-col mx-[2vh] justify-between items-center">
               <strong>{months[date.getMonth()] + " " + date.getDate()}</strong>

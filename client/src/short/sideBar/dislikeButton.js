@@ -56,22 +56,22 @@ class DislikeButton extends React.Component {
   dislike() {
     if (!this.props.isDisliked) {
       if (this.props.isLiked) {
+        this.props.setIsLiked(false);
         this.props.setState((state) => ({
           likes: state.likes - 1,
-          isLiked: false,
         }));
         this.removeLike();
       }
 
+      this.props.setIsDisliked(true);
       this.props.setState((state) => ({
         dislikes: state.dislikes + 1,
-        isDisliked: true,
       }));
       this.addDislike();
     } else {
+      this.props.setIsDisliked(false);
       this.props.setState((state) => ({
         dislikes: state.dislikes - 1,
-        isDisliked: false,
       }));
       this.removeDislike();
     }

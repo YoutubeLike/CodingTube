@@ -11,10 +11,11 @@ class Video extends React.Component {
     super(props);
     this.state = {
       shortInfos: {},
-      videoURL: "",
       commentCount: 0,
       commentsShown: false,
       descriptionShown: false,
+      likes: 0,
+      dislikes: 0,
     };
   }
 
@@ -25,7 +26,9 @@ class Video extends React.Component {
         "http://localhost:5000/api/short/get-short-infos",
         { params: { shortId: this.props.id } }
       );
-      this.setState({ shortInfos: response.data });
+      this.setState({
+        shortInfos: response.data,
+      });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -37,6 +40,36 @@ class Video extends React.Component {
         { params: { shortId: this.props.id } }
       );
       this.setState({ commentCount: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Get likes count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-short-likes",
+        {
+          params: {
+            shortId: this.props.id,
+          },
+        }
+      );
+      this.setState({ likes: response.data.length });
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+
+    // Get dislikes count
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/short/get-short-dislikes",
+        {
+          params: {
+            shortId: this.props.id,
+          },
+        }
+      );
+      this.setState({ dislikes: response.data.length });
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
@@ -53,9 +86,14 @@ class Video extends React.Component {
       );
 
       if (this.props.isPlaying) {
-        document.title = this.state.shortInfos.title + " - Shorts";
-        shortPlayer.play();
-        shortPlayer.muted = this.props.isMuted;
+        if (this.props.newPlay) {
+          shortPlayer.currentTime = 250;
+          shortPlayer.play();
+          shortPlayer.muted = this.props.isMuted;
+          document.title = this.state.shortInfos.title + " - Shorts";
+          this.state.shortInfos.number_view += 1;
+          this.props.setState({ newPlay: false });
+        }
       } else {
         shortPlayer.pause();
         shortPlayer.currentTime = 0;
@@ -79,7 +117,6 @@ class Video extends React.Component {
             id={"shortPlayer" + this.state.shortInfos.id}
             className={"h-full w-full object-cover absolute behind"}
             muted
-            loop
           />
 
           <strong className="w-full px-[4vh] pt-[2.5vh] absolute text-center text-white text-[4vh] textStroke break-words behind">
@@ -106,6 +143,8 @@ class Video extends React.Component {
                   <SideBar
                     id={this.state.shortInfos.id}
                     commentCount={this.state.commentCount}
+                    likes={this.state.likes}
+                    dislikes={this.state.dislikes}
                     setState={(p) => {
                       this.setState(p);
                     }}
@@ -121,6 +160,8 @@ class Video extends React.Component {
           <SideBar
             id={this.state.shortInfos.id}
             commentCount={this.state.commentCount}
+            likes={this.state.likes}
+            dislikes={this.state.dislikes}
             setState={(p) => {
               this.setState(p);
             }}
@@ -134,8 +175,9 @@ class Video extends React.Component {
           />
         ) : (
           <Description
-            setState={(p) => this.setState(p)}
             shortInfos={this.state.shortInfos}
+            likes={this.state.likes}
+            setState={(p) => this.setState(p)}
           />
         )}
       </div>

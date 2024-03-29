@@ -5,17 +5,16 @@ import DislikeButton from "./dislikeButton.js";
 import CommentsButton from "./commentsButton.js";
 import ShareButton from "./shareButton.js";
 import OptionsButton from "./optionsButton.js";
-import SoundButton from "./soundButton.js";
 
 class SideBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      likes: 0,
       isLiked: false,
-      dislikes: 0,
       isDisliked: false,
     };
+    this.setIsDisliked = this.setIsDisliked.bind(this);
+    this.setIsLiked = this.setIsLiked.bind(this);
   }
 
   async componentDidMount() {
@@ -53,36 +52,14 @@ class SideBar extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
+  }
 
-    // Get likes count
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/short/get-short-likes",
-        {
-          params: {
-            shortId: this.props.id,
-          },
-        }
-      );
-      this.setState({ likes: response.data.length });
-    } catch (error) {
-      console.error("Error fetching videos:", error);
-    }
+  setIsLiked(state) {
+    this.setState({ isLiked: state });
+  }
 
-    // Get dislikes count
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/short/get-short-dislikes",
-        {
-          params: {
-            shortId: this.props.id,
-          },
-        }
-      );
-      this.setState({ dislikes: response.data.length });
-    } catch (error) {
-      console.error("Error fetching videos:", error);
-    }
+  setIsDisliked(state) {
+    this.setState({ isDisliked: state });
   }
 
   render() {
@@ -91,18 +68,22 @@ class SideBar extends React.Component {
         <LikeButton
           id={this.props.id}
           isDisliked={this.state.isDisliked}
-          dislikes={this.state.dislikes}
+          dislikes={this.props.dislikes}
           isLiked={this.state.isLiked}
-          likes={this.state.likes}
-          setState={(p) => this.setState(p)}
+          likes={this.props.likes}
+          setIsDisliked={this.setIsDisliked}
+          setIsLiked={this.setIsLiked}
+          setState={this.props.setState}
         />
         <DislikeButton
           id={this.props.id}
           isLiked={this.state.isLiked}
-          likes={this.state.likes}
+          likes={this.props.likes}
           isDisliked={this.state.isDisliked}
-          dislikes={this.state.dislikes}
-          setState={(p) => this.setState(p)}
+          dislikes={this.props.dislikes}
+          setIsDisliked={this.setIsDisliked}
+          setIsLiked={this.setIsLiked}
+          setState={this.props.setState}
         />
         <CommentsButton
           setState={this.props.setState}

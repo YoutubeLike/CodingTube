@@ -9,9 +9,11 @@ class Short extends React.Component {
       loadedVideos: [],
       currentIndex: 0,
       isMuted: true,
+      newPlay: true,
     };
     this.loadShorts = this.loadShorts.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
+    this.replay = this.replay.bind(this);
   }
 
   async componentDidMount() {
@@ -70,14 +72,39 @@ class Short extends React.Component {
     }
 
     document
+      .getElementById(
+        "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+      )
+      .addEventListener("ended", this.replay);
+
+    document
       .getElementById("shortsSection")
       .addEventListener("scrollend", this.handleScroll);
   }
 
   componentWillUnmount() {
     document
+      .getElementById(
+        "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+      )
+      .removeEventListener("ended", this.replay);
+
+    document
       .getElementById("shortsSection")
       .removeEventListener("scrollend", this.handleScroll);
+  }
+
+  async replay() {
+    try {
+      await axios.get("http://localhost:5000/api/short/add-view", {
+        params: {
+          shortId: this.state.loadedVideos[this.state.currentIndex],
+        },
+      });
+    } catch (error) {
+      console.error("Error updating datas:", error);
+    }
+    this.setState({ newPlay: true });
   }
 
   async handleScroll() {
@@ -98,6 +125,22 @@ class Short extends React.Component {
         console.error("Error updating datas:", error);
       }
 
+      // Remove old replay eventListener
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+        )
+        .removeEventListener("ended", this.replay);
+
+      // Add new replay eventListener
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex - 1]
+        )
+        .addEventListener("ended", this.replay);
+
+      this.setState({ newPlay: true });
+
       // Change URL
       window.history.replaceState(
         null,
@@ -117,6 +160,22 @@ class Short extends React.Component {
       } catch (error) {
         console.error("Error updating datas:", error);
       }
+
+      // Remove old replay eventListener
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+        )
+        .removeEventListener("ended", this.replay);
+
+      // Add new replay eventListener
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex + 1]
+        )
+        .addEventListener("ended", this.replay);
+
+      this.setState({ newPlay: true });
 
       // Change URL
       window.history.replaceState(
@@ -184,6 +243,7 @@ class Short extends React.Component {
             key={element}
             id={element}
             isMuted={this.state.isMuted}
+            newPlay={this.state.newPlay}
             isPlaying={
               this.state.loadedVideos[this.state.currentIndex] == element
             }
