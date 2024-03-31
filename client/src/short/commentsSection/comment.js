@@ -270,6 +270,8 @@ class Comment extends React.Component {
                 <strong className="text-[1.75vh]">Reply</strong>
               </button>
 
+              {console.log(this.state.isSuperLiked)}
+
               {this.state.isSuperLiked && (
                 <div className="relative">
                   <img

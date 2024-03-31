@@ -16,14 +16,7 @@ class Reply extends React.Component {
       dislikes: 0,
       isDisliked: false,
       isSuperLiked: false,
-      userInput: "",
-      isReplying: false,
     };
-    this.inputFieldRef = React.createRef();
-    this.reply = this.reply.bind(this);
-    this.postReply = this.postReply.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   async componentDidMount() {
@@ -52,8 +45,8 @@ class Reply extends React.Component {
       const response = await axios.get(
         "http://localhost:5000/api/short/check-short-comment-like",
         {
-          withCredentials: true,
           params: {
+            id: 1,
             commentId: this.props.id,
           },
         }
@@ -65,8 +58,8 @@ class Reply extends React.Component {
           const response = await axios.get(
             "http://localhost:5000/api/short/check-short-comment-dislike",
             {
-              withCredentials: true,
               params: {
+                id: 1,
                 commentId: this.props.id,
               },
             }
@@ -88,7 +81,7 @@ class Reply extends React.Component {
         "http://localhost:5000/api/short/check-short-comment-like",
         {
           params: {
-            id: this.props.shortInfos.uploader_id,
+            id: this.props.uploader,
             commentId: this.props.id,
           },
         }
@@ -131,58 +124,6 @@ class Reply extends React.Component {
     } catch (error) {
       console.error("Error fetching videos:", error);
     }
-
-    document.addEventListener("mousedown", this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
-  }
-
-  reply() {
-    document.getElementById("commentsInputField" + this.props.id).value =
-      "@" + this.state.senderUsername;
-    this.setState({ isReplying: true });
-  }
-
-  handleChange(event) {
-    this.setState({ userInput: event.target.value });
-  }
-
-  handleClickOutside(event) {
-    if (
-      this.inputFieldRef.current &&
-      !this.inputFieldRef.current.contains(event.target)
-    ) {
-      this.setState({ isReplying: false });
-    }
-  }
-
-  async postReply() {
-    if (this.state.userInput != "") {
-      // Insert comment into database
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/short/add-short-reply",
-          {
-            withCredentials: true,
-            params: {
-              shortId: this.props.shortInfos.id,
-              text: this.state.userInput,
-              replyId: this.props.initialCommentId,
-            },
-          }
-        );
-        this.props.setState((state) => ({
-          repliesIds: state.repliesIds.concat(response.data.id),
-        }));
-      } catch (error) {
-        console.error("Error fetching videos:", error);
-      }
-
-      document.getElementById("commentsInputField").value = "";
-      this.setState({ userInput: "", isReplying: false });
-    }
   }
 
   render() {
@@ -210,50 +151,44 @@ class Reply extends React.Component {
           (secondes < 63072000 ? " year ago" : " years ago");
 
     return (
-      <div className="my-[1vh] flex flex-col">
-        <div className="flex">
-          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-            <img src={this.state.senderPP} />
+      <div className="my-[1vh] flex">
+        <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
+          <img src={this.state.senderPP} />
+        </div>
+
+        <div className="px-[2vh] w-[35vh]">
+          <div className="mb-[0.3vh] space-x-[0.5vh]">
+            <strong className="text-[2vh]">@{this.state.senderUsername}</strong>
+            <span className="text-[#525252] text-[1.5vh]">{time}</span>
           </div>
 
-          <div className="px-[2vh] w-[35vh]">
-            <div className="mb-[0.3vh] space-x-[0.5vh]">
-              <strong className="text-[2vh]">
-                @{this.state.senderUsername}
-              </strong>
-              <span className="text-[#525252] text-[1.5vh]">{time}</span>
+          <p>{this.state.text}</p>
+
+          <div className="flex items-center">
+            <div className="flex items-center justify-between space-x-[1vh]">
+              <CommentLikeButton
+                id={this.props.id}
+                likes={this.state.likes}
+                isLiked={this.state.isLiked}
+                dislikes={this.state.dislikes}
+                isDisliked={this.state.isDisliked}
+                setState={(p) => this.setState(p)}
+              />
+              <CommentDislikeButton
+                id={this.props.id}
+                likes={this.state.likes}
+                isLiked={this.state.isLiked}
+                dislikes={this.state.dislikes}
+                isDisliked={this.state.isDisliked}
+                setState={(p) => this.setState(p)}
+              />
             </div>
 
-            <p>{this.state.text}</p>
+            <button className="ml-[1vh] hover:bg-[#e5e5e5] rounded-full px-[1.5vh] py-[0.95vh]" onClick={this.reply}>
+              <strong className="text-[1.75vh]"> Reply </strong>
+            </button>
 
-            <div className="flex items-center">
-              <div className="flex items-center justify-between space-x-[1vh]">
-                <CommentLikeButton
-                  id={this.props.id}
-                  likes={this.state.likes}
-                  isLiked={this.state.isLiked}
-                  dislikes={this.state.dislikes}
-                  isDisliked={this.state.isDisliked}
-                  setState={(p) => this.setState(p)}
-                />
-                <CommentDislikeButton
-                  id={this.props.id}
-                  likes={this.state.likes}
-                  isLiked={this.state.isLiked}
-                  dislikes={this.state.dislikes}
-                  isDisliked={this.state.isDisliked}
-                  setState={(p) => this.setState(p)}
-                />
-              </div>
-
-              <button
-                className="ml-[1vh] rounded-full px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
-                onClick={this.reply}
-              >
-                <strong className="text-[1.75vh]">Reply</strong>
-              </button>
-
-              {this.state.isSuperLiked && (
+            {this.state.isSuperLiked && (
                 <div className="relative">
                   <img
                     src={this.props.superlikePP}
@@ -264,35 +199,7 @@ class Reply extends React.Component {
                   </span>
                 </div>
               )}
-            </div>
           </div>
-        </div>
-        <div
-          ref={this.inputFieldRef}
-          className={
-            "flex items-center p-[1.8vh] border-t-[1px] " +
-            (!this.state.isReplying && "hidden")
-          }
-        >
-          <div className="rounded-full h-[4.5vh] w-[4.5vh] overflow-hidden">
-            <img src={this.state.senderPP} />
-          </div>
-
-          <input
-            id={"commentsInputField" + this.props.id}
-            className="mx-[2vh] text-[2vh] w-[50%]"
-            maxLength="1024"
-            placeholder="Add a comment..."
-            type="text"
-            onChange={this.handleChange}
-          />
-
-          <button
-            onClick={this.postReply}
-            className="rounded-full border-[1px] text-[2vh] px-[1.5vh] py-[0.95vh] transition ease-in-out hover:bg-[#e5e5e5]"
-          >
-            <strong>Post</strong>
-          </button>
         </div>
       </div>
     );
