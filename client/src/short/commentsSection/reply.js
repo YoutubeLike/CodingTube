@@ -115,7 +115,7 @@ class Reply extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
-    // Get comment's like count
+    // Get comment's dislike count
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-short-comment-dislikes",

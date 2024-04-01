@@ -47,8 +47,8 @@ const addReplyAndGetId = (req, res) => {
           });
       })
       .catch((error) => {
-        console.error("Error inserting comment:", error);
-        res.status(500).send("Error inserting comment");
+        console.error("Error inserting reply:", error);
+        res.status(500).send("Error inserting reply");
       });
   }
 };

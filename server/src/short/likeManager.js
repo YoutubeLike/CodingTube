@@ -34,8 +34,8 @@ const addShortLike = async (req, res) => {
             res.status(200).send("Data inserted sucessfully");
           })
           .catch((error) => {
-            console.error("Error updating view count:", error);
-            res.status(500).send("Error updating view count");
+            console.error("Error updating like count:", error);
+            res.status(500).send("Error updating like count");
           });
       } else {
         res.send("User already disliked");
@@ -57,8 +57,8 @@ const removeShortLike = (req, res) => {
         res.status(200).send("Data deleted sucessfully");
       })
       .catch((error) => {
-        console.error("Error updating view count:", error);
-        res.status(500).send("Error updating view count");
+        console.error("Error updating like count:", error);
+        res.status(500).send("Error updating like count");
       });
   }
 };
@@ -97,8 +97,8 @@ const addShortDislike = async (req, res) => {
             res.status(200).send("Data inserted sucessfully");
           })
           .catch((error) => {
-            console.error("Error updating view count:", error);
-            res.status(500).send("Error updating view count");
+            console.error("Error updating dislike count:", error);
+            res.status(500).send("Error updating dislike count");
           });
       } else {
         res.send("User already disliked");
@@ -120,8 +120,8 @@ const removeShortDislike = (req, res) => {
         res.status(200).send("Data deleted sucessfully");
       })
       .catch((error) => {
-        console.error("Error updating view count:", error);
-        res.status(500).send("Error updating view count");
+        console.error("Error updating dislike count:", error);
+        res.status(500).send("Error updating dislike count");
       });
   }
 };
