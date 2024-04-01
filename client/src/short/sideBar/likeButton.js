@@ -56,22 +56,22 @@ class LikeButton extends React.Component {
   like() {
     if (!this.props.isLiked) {
       if (this.props.isDisliked) {
+        this.props.setIsDisliked(false);
         this.props.setState((state) => ({
           dislikes: state.dislikes - 1,
-          isDisliked: false,
         })); // DISLIKE button already pressed
         this.removeDislike();
       }
 
+      this.props.setIsLiked(true);
       this.props.setState((state) => ({
         likes: state.likes + 1,
-        isLiked: true,
       }));
       this.addLike();
     } else {
+      this.props.setIsLiked(false);
       this.props.setState((state) => ({
         likes: state.likes - 1,
-        isLiked: false,
       })); // LIKE button unpressed
       this.removeLike();
     }
