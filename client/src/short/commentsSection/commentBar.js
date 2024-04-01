@@ -86,7 +86,6 @@ class CommentBar extends React.Component {
   }
 
   render() {
-    console.log(this.state.loggedUserInfos)
     return (
       <div className="flex flex-col justify-between shadow-2xl translate-y-px h-[80vh] w-[45vh] rounded-[0.7vh] rounded-r-lg">
         {/* Upper title section */}

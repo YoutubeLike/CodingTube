@@ -71,27 +71,31 @@ class Short extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
-    document
-      .getElementById(
-        "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
-      )
-      .addEventListener("ended", this.replay);
+    if (this.state.loadedVideos.length > 0) {
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+        )
+        .addEventListener("ended", this.replay);
 
-    document
-      .getElementById("shortsSection")
-      .addEventListener("scrollend", this.handleScroll);
+      document
+        .getElementById("shortsSection")
+        .addEventListener("scrollend", this.handleScroll);
+    }
   }
 
   componentWillUnmount() {
-    document
-      .getElementById(
-        "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
-      )
-      .removeEventListener("ended", this.replay);
+    if (this.state.loadedVideos.length > 0) {
+      document
+        .getElementById(
+          "shortPlayer" + this.state.loadedVideos[this.state.currentIndex]
+        )
+        .removeEventListener("ended", this.replay);
 
-    document
-      .getElementById("shortsSection")
-      .removeEventListener("scrollend", this.handleScroll);
+      document
+        .getElementById("shortsSection")
+        .removeEventListener("scrollend", this.handleScroll);
+    }
   }
 
   async replay() {
@@ -217,9 +221,9 @@ class Short extends React.Component {
   }
 
   render() {
-    const renderedShortsIds = [];
-
     if (this.state.loadedVideos.length > 0) {
+      const renderedShortsIds = [];
+
       if (this.state.currentIndex > 0)
         renderedShortsIds.push(
           this.state.loadedVideos[this.state.currentIndex - 1]
@@ -231,27 +235,29 @@ class Short extends React.Component {
         renderedShortsIds.push(
           this.state.loadedVideos[this.state.currentIndex + 1]
         );
-    }
 
-    return (
-      <div
-        id="shortsSection"
-        className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
-      >
-        {renderedShortsIds.map((element) => (
-          <Video
-            key={element}
-            id={element}
-            isMuted={this.state.isMuted}
-            newPlay={this.state.newPlay}
-            isPlaying={
-              this.state.loadedVideos[this.state.currentIndex] == element
-            }
-            setState={(p) => this.setState(p)}
-          />
-        ))}
-      </div>
-    );
+      return (
+        <div
+          id="shortsSection"
+          className="mt-[5vh] h-[80vh] w-full overflow-auto snap-y snap-mandatory no-scrollbar"
+        >
+          {renderedShortsIds.map((element) => (
+            <Video
+              key={element}
+              id={element}
+              isMuted={this.state.isMuted}
+              newPlay={this.state.newPlay}
+              isPlaying={
+                this.state.loadedVideos[this.state.currentIndex] == element
+              }
+              setState={(p) => this.setState(p)}
+            />
+          ))}
+        </div>
+      );
+    } else {
+      return <p className="mt-[5vh] ml-[5vh]">No shorts available</p>;
+    }
   }
 }
 

@@ -1,8 +1,6 @@
 const mariadb = require("../src/database");
 const fs = require("fs");
 const path = require("path");
-const { videoOnTab } = require("../channel/controller");
-const { Console } = require("console");
 
 const getTenNextShorts = (req, res) => {
   mariadb.pool
