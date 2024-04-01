@@ -12,9 +12,6 @@ class VideoButtons extends React.Component {
       .getElementById("soundButton" + this.props.id)
       .addEventListener("click", this.handleMute);
 
-    document.addEventListener("keydown", this.preventSpaceBarDefault);
-    document.addEventListener("keyup", this.handleSpaceBar);
-
     document
       .getElementById("playButton" + this.props.id)
       .addEventListener("click", this.handlePauseButton);
@@ -55,7 +52,7 @@ class VideoButtons extends React.Component {
 
   render() {
     return (
-      <div className="p-[1.5vh] flex justify-between items-start bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition ease-in-out">
+      <div className="p-[1.5vh] flex justify-between items-start bg-gradient-to-b from-black to-transparent opacity-0 group-hover:opacity-100 transition ease-in-out z-10">
         {/* Play button */}
         <button id={"playButton" + this.props.id} className="h-[4vh] w-[4vh]">
           <img src="playButton.png" id={"playButtonImg" + this.props.id} />

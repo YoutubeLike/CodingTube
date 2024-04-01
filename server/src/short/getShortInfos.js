@@ -1,8 +1,6 @@
 const mariadb = require("../src/database");
 const fs = require("fs");
 const path = require("path");
-const { videoOnTab } = require("../channel/controller");
-const { Console } = require("console");
 
 const getTenNextShorts = (req, res) => {
   mariadb.pool
@@ -37,14 +35,14 @@ const getShortVideo = (req, res) => {
         res.setHeader("Content-Type", "video/mp4");
         videoStream.pipe(res);
       } else {
-        res.status(404).json({ message: "Vidéo non trouvée" });
+        res.status(404).json({ message: "Short not found" });
       }
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération de la vidéo :", error);
+      console.error("Error while getting short :", error);
       res
         .status(500)
-        .json({ message: "Erreur lors de la récupération de la vidéo" });
+        .json({ message: "Error while getting short" });
     });
 };
 

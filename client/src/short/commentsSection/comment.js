@@ -233,7 +233,7 @@ class Comment extends React.Component {
             <img src={this.state.senderPP} />
           </div>
 
-          <div className="px-[2vh] w-[35vh]">
+          <div className="px-[2vh] max-w-[35vh]">
             <div className="mb-[0.3vh] space-x-[0.5vh]">
               <strong className="text-[2vh]">
                 @{this.state.senderUsername}
@@ -295,7 +295,7 @@ class Comment extends React.Component {
 
             <input
               id="commentsInputField"
-              className="mx-[2vh] text-[2vh]"
+              className="mx-[2vh] text-[2vh] w-[21vh]"
               maxLength="1024"
               placeholder="Add a comment..."
               type="text"

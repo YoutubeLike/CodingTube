@@ -115,7 +115,7 @@ class Reply extends React.Component {
       console.error("Error fetching videos:", error);
     }
 
-    // Get comment's like count
+    // Get comment's dislike count
     try {
       const response = await axios.get(
         "http://localhost:5000/api/short/get-short-comment-dislikes",
@@ -216,7 +216,7 @@ class Reply extends React.Component {
             <img src={this.state.senderPP} />
           </div>
 
-          <div className="px-[2vh] w-[35vh]">
+          <div className="px-[2vh] max-w-[27vh]">
             <div className="mb-[0.3vh] space-x-[0.5vh]">
               <strong className="text-[2vh]">
                 @{this.state.senderUsername}
@@ -270,7 +270,7 @@ class Reply extends React.Component {
         <div
           ref={this.inputFieldRef}
           className={
-            "flex items-center p-[1.8vh] border-t-[1px] " +
+            "flex items-center m-[0.9vh] p-[0.9vh] border-t-[1px] " +
             (!this.state.isReplying && "hidden")
           }
         >
@@ -280,7 +280,7 @@ class Reply extends React.Component {
 
           <input
             id={"commentsInputField" + this.props.id}
-            className="mx-[2vh] text-[2vh] w-[50%]"
+            className="mx-[2vh] text-[2vh] w-[16vh]"
             maxLength="1024"
             placeholder="Add a comment..."
             type="text"
